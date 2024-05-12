@@ -8,6 +8,7 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUI
 {
+    [DefaultExecutionOrder(-10)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SelectorButton : UdonSharpBehaviour
     {
