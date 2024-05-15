@@ -43,7 +43,7 @@ namespace DrBlackRat.VRC.ModernUI
 
         private void MoveSeparator(Vector2 prevPos, Vector2 newPos, float transition)
         {
-            transform.anchoredPosition = Vector2.Lerp(prevPos, newPos, transition);
+            transform.anchoredPosition = Vector2.LerpUnclamped(prevPos, newPos, transition);
         }
     }
 }

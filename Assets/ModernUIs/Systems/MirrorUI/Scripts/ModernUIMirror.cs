@@ -28,8 +28,8 @@ namespace DrBlackRat.VRC.ModernUI
         [SerializeField] private SelectorButton playerButton;
         [SerializeField] private SelectorButton offButton;
         
-        [Header("Selector Movement")]
-        [SerializeField] private AnimationCurve selectorCurve;
+        [Header("UI Animation")]
+        [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
 
         private RectTransform selectorTransform;
@@ -53,10 +53,10 @@ namespace DrBlackRat.VRC.ModernUI
             
             ToggleMirrors();
             
-            highButton.Setup(null, normalColor, selectedColor, selectorCurve, movementDuration);
-            lowButton.Setup(null, normalColor, selectedColor, selectorCurve, movementDuration);
-            playerButton.Setup(null, normalColor, selectedColor, selectorCurve, movementDuration);
-            offButton.Setup(null, normalColor, selectedColor, selectorCurve, movementDuration);
+            highButton.Setup(null, normalColor, selectedColor, animationCurve, movementDuration);
+            lowButton.Setup(null, normalColor, selectedColor, animationCurve, movementDuration);
+            playerButton.Setup(null, normalColor, selectedColor, animationCurve, movementDuration);
+            offButton.Setup(null, normalColor, selectedColor, animationCurve, movementDuration);
         }
 
         private void Update()
@@ -158,9 +158,9 @@ namespace DrBlackRat.VRC.ModernUI
         {
             movementElapsedTime += Time.deltaTime;
             var percentageComplete = movementElapsedTime / movementDuration;
-            var smoothPercentageComplete = selectorCurve.Evaluate(percentageComplete);
+            var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
             // Set Selector Position
-            selectorTransform.position = Vector3.Lerp(startPos, endPos, smoothPercentageComplete);
+            selectorTransform.position = Vector3.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
             // Move Separator
             separatorScript._AnimateSeparator(smoothPercentageComplete);
             

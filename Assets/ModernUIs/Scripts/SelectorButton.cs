@@ -17,6 +17,9 @@ namespace DrBlackRat.VRC.ModernUI
         [SerializeField] private GameObject buttonObj;
         [SerializeField] private Vector2 buttonNormalScale;
         [SerializeField] private Vector2 buttonSelectedScale;
+        [Space(10)]
+        [SerializeField] private float buttonNormalPixelPerUnit;
+        [SerializeField] private float buttonSelectedPixelPerUnit;
 
         [Header("Icon")]
         [SerializeField] private GameObject iconObj;
@@ -30,6 +33,7 @@ namespace DrBlackRat.VRC.ModernUI
         
         private Button button;
         private RectTransform buttonTransform;
+        private Image buttonImage;
         private Image icon;
         private RectTransform iconTransform;
         private TextMeshProUGUI text;
@@ -39,12 +43,14 @@ namespace DrBlackRat.VRC.ModernUI
         private float elapsedTime;
 
         private Vector2 prevButtonScale;
+        private float prevButtonPixelPerUnit;
         private Vector2 prevIconPos;
         private Color prevIconColor;
         private Vector2 prevTextPos;
         private Color prevTextColor;
         
         private Vector2 newButtonScale;
+        private float newButtonPixelPerUnit;
         private Vector2 newIconPos;
         private Color newIconColor;
         private Vector2 newTextPos;
@@ -59,12 +65,23 @@ namespace DrBlackRat.VRC.ModernUI
 
         private void Start()
         {
-            button = buttonObj.GetComponent<Button>();
-            buttonTransform = buttonObj.GetComponent<RectTransform>();
-            icon = iconObj.GetComponent<Image>();
-            iconTransform = iconObj.GetComponent<RectTransform>();
-            text = textObj.GetComponent<TextMeshProUGUI>();
-            textTransform = textObj.GetComponent<RectTransform>();
+            if (buttonObj != null)
+            {
+                button = buttonObj.GetComponent<Button>();
+                buttonTransform = buttonObj.GetComponent<RectTransform>();
+                buttonImage = buttonObj.GetComponent<Image>();
+            }
+            if (iconObj != null)
+            {
+                icon = iconObj.GetComponent<Image>();
+                iconTransform = iconObj.GetComponent<RectTransform>();
+            }
+            if (textObj != null)
+            {
+                text = textObj.GetComponent<TextMeshProUGUI>();
+                textTransform = textObj.GetComponent<RectTransform>();
+            }
+
         }
         private void Update()
         {
@@ -107,15 +124,17 @@ namespace DrBlackRat.VRC.ModernUI
         #region UI
         private void UpdateUIState()
         {
-            prevButtonScale = buttonTransform.sizeDelta;
-            prevIconPos = iconTransform.anchoredPosition;
-            prevIconColor = icon.color;
-            prevTextPos = textTransform.anchoredPosition;
-            prevTextColor = text.color;
+            if (buttonTransform) prevButtonScale = buttonTransform.sizeDelta;
+            if (buttonImage) prevButtonPixelPerUnit = buttonImage.pixelsPerUnitMultiplier;
+            if (iconTransform) prevIconPos = iconTransform.anchoredPosition;
+            if (icon) prevIconColor = icon.color;
+            if (textTransform) prevTextPos = textTransform.anchoredPosition;
+            if (text) prevTextColor = text.color;
 
             if (selected)
             {
                 newButtonScale = buttonSelectedScale;
+                newButtonPixelPerUnit = buttonSelectedPixelPerUnit;
                 newIconPos = iconSelectedPos;
                 newIconColor = selectedColor;
                 newTextPos = textSelectedPos;
@@ -124,6 +143,7 @@ namespace DrBlackRat.VRC.ModernUI
             else
             {
                 newButtonScale = buttonNormalScale;
+                newButtonPixelPerUnit = buttonNormalPixelPerUnit;
                 newIconPos = iconNormalPos;
                 newIconColor = normalColor;
                 newTextPos = textNormalPos;
@@ -143,12 +163,13 @@ namespace DrBlackRat.VRC.ModernUI
         }
         private void UpdateUI(float transition)
         {
-            icon.color = Color.Lerp(prevIconColor, newIconColor, transition);
-            text.color = Color.Lerp(prevTextColor, newTextColor, transition);
+            if (icon) icon.color = Color.LerpUnclamped(prevIconColor, newIconColor, transition);
+            if (text) text.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
             
-            buttonTransform.sizeDelta = Vector2.Lerp(prevButtonScale, newButtonScale, transition);
-            iconTransform.anchoredPosition = Vector2.Lerp(prevIconPos, newIconPos, transition);
-            textTransform.anchoredPosition = Vector2.Lerp(prevTextPos, newTextPos, transition);
+            if (buttonTransform) buttonTransform.sizeDelta = Vector2.LerpUnclamped(prevButtonScale, newButtonScale, transition);
+            if (buttonImage) buttonImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevButtonPixelPerUnit, newButtonPixelPerUnit, transition);
+            if (iconTransform) iconTransform.anchoredPosition = Vector2.LerpUnclamped(prevIconPos, newIconPos, transition);
+            if (textTransform) textTransform.anchoredPosition = Vector2.LerpUnclamped(prevTextPos, newTextPos, transition);
         }
         #endregion
 
