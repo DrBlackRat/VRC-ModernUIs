@@ -8,6 +8,16 @@ https://vrchat.com/home/world/wrld_9da99c69-cbc1-49bf-8a9c-05f0fc7a329a/info
 ### Here is a small show case video:
 https://youtu.be/tWuWguQOmP8
 
+## Settings:
+This is what the Settings look like!
+
+![grafik](https://github.com/user-attachments/assets/0144bb07-d994-4e7c-b2a2-98ce59f31dc1)
+![grafik](https://github.com/user-attachments/assets/205a6d45-ea8b-47f3-87bb-b240d9f4ddaa)
+
+## How to use:
+If you want to try it out you can download the releases section.
+To use this in your world you just need to import it in your project and grab the prefab you want to use from the ModernUIs folder! You can also take a look at the included example scene.
+
 ## Credits:
 #### This Asset was made by DrBlackRat:
 https://drblackrat.xyz
