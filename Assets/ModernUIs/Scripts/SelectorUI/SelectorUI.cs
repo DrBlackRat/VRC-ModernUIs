@@ -14,6 +14,11 @@ namespace DrBlackRat.VRC.ModernUIs
         [Header("Settings:")]
         [Tooltip("This is the default state the multi select will be in.")]
         [SerializeField] protected int selectedState;
+        [Space(10)] 
+        [Tooltip("When enabled, clicking on an activated button again will make the selection go back to the default state.")]
+        [SerializeField] protected bool doubleClickToDefault;
+        [Tooltip("Default State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
+        [SerializeField] protected int doubleClickDefaultState;
         
         [Header("Toggles:")]
         [Tooltip("Objects that should be turned on / off. The same order as buttons will be used.")]
@@ -108,10 +113,27 @@ namespace DrBlackRat.VRC.ModernUIs
         
         public virtual void _UpdateSelection(int newButtonId, bool fromStorage, bool skipCheck)
         {
-            // Change State
-            if (newButtonId == selectedState && !skipCheck) return;
-            prevSelectedState = selectedState;
-            selectedState = newButtonId;
+            if (doubleClickToDefault && !skipCheck)
+            {
+                if (newButtonId == selectedState)
+                {
+                    if (newButtonId == doubleClickDefaultState) return;
+                    prevSelectedState = selectedState;
+                    selectedState = doubleClickDefaultState;
+                }
+                else
+                {
+                    prevSelectedState = selectedState;
+                    selectedState = newButtonId;
+                }
+
+            }
+            else
+            {
+                if (newButtonId == selectedState && !skipCheck) return;
+                prevSelectedState = selectedState;
+                selectedState = newButtonId;
+            }
 
             ChangeExternalSelection(selectedState, false);
             
