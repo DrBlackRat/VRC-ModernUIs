@@ -31,6 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs
         
         public void _UpdateWhitelist(string whitelist)
         {
+            allowedUsers = whitelist;
             whitelistNames = whitelist.Split(new string[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries);
 
             MUIDebug.Log($"Whitelist Updated");
