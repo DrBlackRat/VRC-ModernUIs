@@ -58,7 +58,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         protected int prevSelectedState;
         
-        protected void Start()
+        protected virtual void Start()
         {
             selectorTransform = selector.GetComponent<RectTransform>();
 
@@ -67,7 +67,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 selectorUIButtons[i].Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
             }
             
-            _UpdateSelection(selectedState, true, true);
+            _UpdateSelection(selectedState, true, true, false);
         }
         
         public override void OnPlayerRestored(VRCPlayerApi player)
@@ -75,9 +75,8 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!player.isLocal || !usePersistence) return;
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
-                _UpdateSelection(value, true, false);
+                _UpdateSelection(value, true, false, false);
             }
-
         }
 
         protected void ChangeExternalSelection(int id, bool skipBehaviour)
@@ -103,6 +102,19 @@ namespace DrBlackRat.VRC.ModernUIs
                 }
             }
         }
+
+        public void _ButtonSelected(int buttonId)
+        {
+            if (doubleClickToDefault && buttonId == selectedState)
+            {
+                if (buttonId == doubleClickDefaultState) return;
+                _UpdateSelection(doubleClickDefaultState, false, false, false);
+            }
+            else
+            {
+                _UpdateSelection(buttonId, false, false, false);
+            }
+        }
         
         public void _CustomUpdate()
         {
@@ -111,43 +123,26 @@ namespace DrBlackRat.VRC.ModernUIs
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
         
-        public virtual void _UpdateSelection(int newButtonId, bool fromStorage, bool skipCheck)
+        public virtual bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
-            if (doubleClickToDefault && !skipCheck)
-            {
-                if (newButtonId == selectedState)
-                {
-                    if (newButtonId == doubleClickDefaultState) return;
-                    prevSelectedState = selectedState;
-                    selectedState = doubleClickDefaultState;
-                }
-                else
-                {
-                    prevSelectedState = selectedState;
-                    selectedState = newButtonId;
-                }
-
-            }
-            else
-            {
-                if (newButtonId == selectedState && !skipCheck) return;
-                prevSelectedState = selectedState;
-                selectedState = newButtonId;
-            }
+            if (newState == selectedState && !skipSameCheck) return false;
+            prevSelectedState = selectedState;
+            selectedState = newState;
 
             ChangeExternalSelection(selectedState, false);
             
-            if (usePersistence && !fromStorage) PlayerData.SetInt(dataKey, selectedState);
+            if (usePersistence && !skipPersistence) PlayerData.SetInt(dataKey, selectedState);
             
             // Button Transition
-            selectorUIButtons[prevSelectedState]._UnSelect();
-            selectorUIButtons[selectedState]._Select();
+            selectorUIButtons[prevSelectedState]._UpdateSelected(false);
+            selectorUIButtons[selectedState]._UpdateSelected(true);
             
             // UI Animation
             animateUI = true;
             movementElapsedTime = 0f;
             oldSelectorPos = selectorTransform.position;
             _CustomUpdate();
+            return true;
         }
         
         

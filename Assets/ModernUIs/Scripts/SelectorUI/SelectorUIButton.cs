@@ -29,7 +29,8 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private GameObject textObj;
         [SerializeField] private Vector2 textNormalPos;
         [SerializeField] private Vector2 textSelectedPos;
-        
+
+        private Button button;
         private RectTransform buttonTransform;
         private Image buttonImage;
         private Image icon;
@@ -69,6 +70,7 @@ namespace DrBlackRat.VRC.ModernUIs
             // Inital Setup
             if (buttonObj != null)
             {
+                button = buttonObj.GetComponent<Button>();
                 buttonTransform = buttonObj.GetComponent<RectTransform>();
                 buttonImage = buttonObj.GetComponent<Image>();
             }
@@ -100,7 +102,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _ButtonPressed()
         {
-            selectorUI._UpdateSelection(buttonId, false, false);
+            selectorUI._ButtonSelected(buttonId);
         }
         
         public Vector3 Position()
@@ -108,21 +110,18 @@ namespace DrBlackRat.VRC.ModernUIs
             return buttonTransform.position;
         }
 
-        public void _Select()
+        public void _UpdateSelected(bool selected)
         {
-            UpdateUIState(true);
+            UpdateUIState(selected);
             
             animate = true;
             elapsedTime = 0f;
             _CustomUpdate();
         }
-        public void _UnSelect()
+
+        public void _UpdateInteractable(bool interactable)
         {
-            UpdateUIState(false);
-            
-            animate = true;
-            elapsedTime = 0f;
-            _CustomUpdate();
+            button.interactable = interactable;
         }
         #endregion
         #region UI Animation
