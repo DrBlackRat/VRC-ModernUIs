@@ -28,7 +28,6 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 _UpdateSelection(value, true, false, false);
             }
-            
         }
 
         public override void OnDeserialization()
@@ -50,7 +49,6 @@ namespace DrBlackRat.VRC.ModernUIs
                     MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
                     return false;
                 }
-                
             }
             return true;
         }

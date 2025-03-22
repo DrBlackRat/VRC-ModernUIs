@@ -33,6 +33,23 @@ namespace DrBlackRat.VRC.ModernUIs
             Array.Copy(array, index + 1, newArray, index, newArray.Length - index);
             return newArray;
         }
+        
+        public static T[] Combine<T>(params T[][] arrays)
+        {
+            int length = 0;
+            foreach (var array in arrays)
+            {
+                length += array.Length;
+            }
+            T[] newArray = new T[length];
+            int index = 0;
+            foreach (var array in arrays)
+            {
+                Array.Copy(array, 0, newArray, index, array.Length);
+                index += array.Length;
+            }
+            return newArray;
+        }
     }
 }
 

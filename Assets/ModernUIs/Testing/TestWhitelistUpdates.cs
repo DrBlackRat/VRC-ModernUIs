@@ -7,13 +7,17 @@ using DrBlackRat.VRC.ModernUIs;
 
 public class TestWhitelistUpdates : UdonSharpBehaviour
 {
-    [TextArea]
-    public string names;
+    public string name;
 
     public WhitelistManager manager;
 
-    public void _ButtonPressed()
+    public void _AddUser()
     {
-        manager._UpdateWhitelist(names);
+        manager._AddUser(name);
+    }
+    
+    public void _RemoveUser()
+    {
+        manager._RemoveUser(name);
     }
 }

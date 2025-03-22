@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.StringLoading;
 using VRC.SDKBase;
@@ -33,7 +34,7 @@ namespace DrBlackRat.VRC.ModernUIs
         }
         private void ApplyString(string newString)
         {
-            whitelistManager._UpdateWhitelist(newString);
+            whitelistManager._AddUsers(newString.Split(new string[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries));
         }
         private void AutoReload()
         {
@@ -43,12 +44,14 @@ namespace DrBlackRat.VRC.ModernUIs
         
         public override void OnStringLoadSuccess(IVRCStringDownload result)
         {
+            MUIDebug.Log($"Whitelist from {url} loaded successfully!");
             loading = false;
             ApplyString(result.Result);
             AutoReload();
         }
         public override void OnStringLoadError(IVRCStringDownload result)
         {
+            MUIDebug.LogError($"Couldn't load whitelist from {url} because {result.Error}!");
             loading = false;
             AutoReload();
         }
