@@ -122,8 +122,8 @@ namespace DrBlackRat.VRC.ModernUIs
             AnimateUI(oldSelectorPos, selectorUIButtons[selectedState].Position());
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
-        
-        public virtual bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+
+        protected virtual bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (newState == selectedState && !skipSameCheck) return false;
             prevSelectedState = selectedState;

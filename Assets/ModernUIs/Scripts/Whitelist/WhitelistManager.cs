@@ -7,15 +7,20 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
-    [DefaultExecutionOrder(-10)]
+    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistManager : UdonSharpBehaviour
     {
         [Header("Whitelist:")] 
         [Tooltip("Display Name of each User you would want to be on the whitelist.")]
-        [SerializeField] private string[] whitelistedUsers;
+        [SerializeField] protected string[] whitelistedUsers;
         
-        private UdonBehaviour[] connectedBehaviours;
+        protected UdonBehaviour[] connectedBehaviours;
+
+        private void Start()
+        {
+            ChangeWhitelist(whitelistedUsers, true);
+        }
 
         #region UdonBehaviour connection & external API to get info
         /// <summary>
@@ -57,11 +62,20 @@ namespace DrBlackRat.VRC.ModernUIs
 
         #region External API to change the whitelist
         /// <summary>
-        /// Adds a specific user to the white list.
+        /// Adds a specific user to the white list. Skips duplicate username.
         /// </summary>
         public void _AddUser(string username)
         {
-            _ReplaceWhitelist(whitelistedUsers.Add(username));
+            foreach (var whitelistedUser in whitelistedUsers)
+            {
+                if (whitelistedUser == username)
+                {
+                    MUIDebug.LogWarning($"Whitelist Manager: User: {username} is already on the whitelist!");
+                    return;
+                }
+            }
+            MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+            ChangeWhitelist(whitelistedUsers.Add(username), false);
         }
 
         /// <summary>
@@ -69,15 +83,40 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _RemoveUser(string username)
         {
-            _ReplaceWhitelist(whitelistedUsers.Remove(username));
+            MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
+            ChangeWhitelist(whitelistedUsers.Remove(username), false);
         }
 
         /// <summary>
-        /// Adds an array of user to the white list.
+        /// Adds an array of user to the white list. Skips duplicate usernames.
         /// </summary>
-        public void _AddUsers(string[] additionalUsernames)
+        public void _AddUsers(string[] usernames)
         {
-            _ReplaceWhitelist(ArrayExtensions.Combine(whitelistedUsers, additionalUsernames));
+            var tempWhitelist = whitelistedUsers;
+            
+            if (tempWhitelist.Length == 0)
+            {
+                ChangeWhitelist(usernames,  false);
+                return;
+            }
+            // Checks for duplicate usernames and doesn't add them again.
+            foreach (var username in usernames)
+            {
+                if (whitelistedUsers.Length != 0) {}
+                foreach (var whitelistedUser in tempWhitelist)
+                {
+                    if (whitelistedUser == username)
+                    {
+                        MUIDebug.LogWarning($"Whitelist Manager: User: {username} is already on the whitelist!");
+                    }
+                    else
+                    {
+                        MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                        tempWhitelist = tempWhitelist.Add(username);
+                    }
+                }
+            }
+            ChangeWhitelist(tempWhitelist, false);
         }
         
         /// <summary>
@@ -85,15 +124,20 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _ReplaceWhitelist(string[] usernames)
         {
+            ChangeWhitelist(usernames, false);
+        }
+
+        protected virtual void ChangeWhitelist(string[] usernames, bool fromNet)
+        {
             whitelistedUsers = usernames;
-            MUIDebug.Log($"Whitelist Updated");
+            MUIDebug.Log($"Whitelist Manager: Whitelist Updated");
             
             if (connectedBehaviours == null) return;
             foreach (var behaviour in connectedBehaviours)
             {
                 if (behaviour == null) continue;
                 behaviour.SendCustomEvent("_WhitelistUpdated");
-            }
+            } 
         }
         #endregion
     }

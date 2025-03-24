@@ -27,22 +27,22 @@ PrefabInstance:
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
@@ -53,6 +53,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.004999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.004999999
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
@@ -67,7 +77,7 @@ PrefabInstance:
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.434
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
@@ -92,12 +102,12 @@ PrefabInstance:
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 10.197
+      value: 10.180001
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.829
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 719025849088266650, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
@@ -135,12 +145,14 @@ PrefabInstance:
     - target: {fileID: 3062113401022117219, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_text
-      value: Synced
+      value: 'Synced Toggle
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 4446071173962729506, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: m_Name
-      value: SimpleToggleNetworked
+      value: SimpleToggleSynced
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 997586210181151503, guid: bb89f5d0dec70ed4793187ddb3a2d5bf, type: 3}
@@ -244,6 +256,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   movementDuration: 0.5
   whitelistManager: {fileID: 0}
+  whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
+  notWhitelistedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5882353}
 --- !u!114 &4287290769683310850
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ using VRC.SDK3.Persistence;
 namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class NetworkedSelectorUI : WhitelistSelectorUI
+    public class SyncedSelectorUI : WhitelistSelectorUI
     {
         [UdonSynced] protected bool persistenceLoaded;
         [UdonSynced] protected int netSelectedState;
@@ -52,8 +52,8 @@ namespace DrBlackRat.VRC.ModernUIs
             }
             return true;
         }
-        
-        public override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+
+        protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (!base._UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
 

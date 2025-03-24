@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using UnityEngine;
 
 namespace DrBlackRat.VRC.ModernUIs
@@ -48,7 +49,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 Array.Copy(array, 0, newArray, index, array.Length);
                 index += array.Length;
             }
-            return newArray;
+            return newArray; 
         }
     }
 }
