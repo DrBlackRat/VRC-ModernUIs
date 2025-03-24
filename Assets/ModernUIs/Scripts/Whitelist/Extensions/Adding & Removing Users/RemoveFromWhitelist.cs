@@ -15,7 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             if (requireWhitelisted && !hasAccess) return;
             whitelistManager._RemoveUser(inputField.text);
-            inputField.text = String.Empty;
+            inputField.SetTextWithoutNotify(String.Empty);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 return;
             }
             whitelistManager._AddUser(inputField.text);
-            inputField.text = String.Empty;
+            inputField.SetTextWithoutNotify(String.Empty);
         }
     }
 }
