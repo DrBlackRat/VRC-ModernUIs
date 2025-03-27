@@ -17,7 +17,7 @@ namespace DrBlackRat.VRC.ModernUIs
         
         protected UdonBehaviour[] connectedBehaviours;
 
-        private void Start()
+        protected virtual void Start()
         {
             ChangeWhitelist(whitelistedUsers, true);
         }
@@ -90,9 +90,10 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Adds an array of user to the white list. Skips duplicate usernames.
         /// </summary>
-        public void _AddUsers(string[] usernames)
+        public void _AddUsers(string[] newUsernames)
         {
             var tempWhitelist = whitelistedUsers;
+            var usernames = newUsernames.Distinct();
             
             if (tempWhitelist.Length == 0)
             {

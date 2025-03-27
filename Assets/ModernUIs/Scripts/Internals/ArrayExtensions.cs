@@ -51,6 +51,37 @@ namespace DrBlackRat.VRC.ModernUIs
             }
             return newArray; 
         }
+        
+        public static T[] Distinct<T>(this T[] array)
+        {
+            if (array == null || array.Length == 0)
+                return array;
+
+            T[] tempArray = new T[array.Length];
+            int newSize = 0;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                bool isDuplicate = false;
+                for (int j = 0; j < newSize; j++)
+                {
+                    if (tempArray[j].Equals(array[i]))
+                    {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                if (!isDuplicate)
+                {
+                    tempArray[newSize] = array[i];
+                    newSize++;
+                }
+            }
+
+            T[] uniqueArray = new T[newSize];
+            Array.Copy(tempArray, uniqueArray, newSize);
+            return uniqueArray;
+        }
     }
 }
 
