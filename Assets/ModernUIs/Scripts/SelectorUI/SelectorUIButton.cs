@@ -13,59 +13,59 @@ namespace DrBlackRat.VRC.ModernUIs
     public class SelectorUIButton : UdonSharpBehaviour
     {
         [Header("Button:")]
-        [SerializeField] private GameObject buttonObj;
-        [SerializeField] private Vector2 buttonNormalScale;
-        [SerializeField] private Vector2 buttonSelectedScale;
+        [SerializeField] protected GameObject buttonObj;
+        [SerializeField] protected Vector2 buttonNormalScale;
+        [SerializeField] protected Vector2 buttonSelectedScale;
         [Space(10)]
-        [SerializeField] private float buttonNormalPixelPerUnit;
-        [SerializeField] private float buttonSelectedPixelPerUnit;
+        [SerializeField] protected float buttonNormalPixelPerUnit;
+        [SerializeField] protected float buttonSelectedPixelPerUnit;
 
         [Header("Icon")]
-        [SerializeField] private GameObject iconObj;
-        [SerializeField] private Vector2 iconNormalPos;
-        [SerializeField] private Vector2 iconSelectedPos;
+        [SerializeField] protected GameObject iconObj;
+        [SerializeField] protected Vector2 iconNormalPos;
+        [SerializeField] protected Vector2 iconSelectedPos;
         
         [Header("Text")]
-        [SerializeField] private GameObject textObj;
-        [SerializeField] private Vector2 textNormalPos;
-        [SerializeField] private Vector2 textSelectedPos;
+        [SerializeField] protected GameObject textObj;
+        [SerializeField] protected Vector2 textNormalPos;
+        [SerializeField] protected Vector2 textSelectedPos;
 
-        private Button button;
-        private RectTransform buttonTransform;
-        private Image buttonImage;
-        private Image icon;
-        private RectTransform iconTransform;
-        private TextMeshProUGUI text;
-        private RectTransform textTransform;
+        protected Button button;
+        protected RectTransform buttonTransform;
+        protected Image buttonImage;
+        protected Image icon;
+        protected RectTransform iconTransform;
+        protected TextMeshProUGUI text;
+        protected RectTransform textTransform;
         
-        private bool animate;
-        private float elapsedTime;
+        protected bool animate;
+        protected float elapsedTime;
 
-        private Vector2 prevButtonScale;
-        private float prevButtonPixelPerUnit;
-        private Vector2 prevIconPos;
-        private Color prevIconColor;
-        private Vector2 prevTextPos;
-        private Color prevTextColor;
+        protected Vector2 prevButtonScale;
+        protected float prevButtonPixelPerUnit;
+        protected Vector2 prevIconPos;
+        protected Color prevIconColor;
+        protected Vector2 prevTextPos;
+        protected Color prevTextColor;
         
-        private Vector2 newButtonScale;
-        private float newButtonPixelPerUnit;
-        private Vector2 newIconPos;
-        private Color newIconColor;
-        private Vector2 newTextPos;
-        private Color newTextColor;
+        protected Vector2 newButtonScale;
+        protected float newButtonPixelPerUnit;
+        protected Vector2 newIconPos;
+        protected Color newIconColor;
+        protected Vector2 newTextPos;
+        protected Color newTextColor;
         
         // Provided by main script
-        private Color normalColor;
-        private Color selectedColor;
-        private AnimationCurve smoothingCurve;
-        private float movementDuration;
+        protected Color normalColor;
+        protected Color selectedColor;
+        protected AnimationCurve smoothingCurve;
+        protected float movementDuration;
         
-        private SelectorUI selectorUI;
-        private int buttonId;
+        protected SelectorUI selectorUI;
+        protected int buttonId;
 
         #region SelectorUI Connection
-        public void Setup(Color newNormalColor, Color newSelectedColor, AnimationCurve newSmoothingCurve, float newMovementDuration, SelectorUI newSelectorUI, int newButtonId)
+        public virtual void _Setup(Color newNormalColor, Color newSelectedColor, AnimationCurve newSmoothingCurve, float newMovementDuration, SelectorUI newSelectorUI, int newButtonId)
         {
             // Inital Setup
             if (buttonObj != null)
@@ -125,7 +125,7 @@ namespace DrBlackRat.VRC.ModernUIs
         }
         #endregion
         #region UI Animation
-        private void UpdateUIState(bool selected)
+        protected void UpdateUIState(bool selected)
         {
             if (buttonTransform) prevButtonScale = buttonTransform.sizeDelta;
             if (buttonImage) prevButtonPixelPerUnit = buttonImage.pixelsPerUnitMultiplier;
@@ -161,7 +161,7 @@ namespace DrBlackRat.VRC.ModernUIs
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
         
-        private void AnimateUI()
+        protected void AnimateUI()
         {
             elapsedTime += Time.deltaTime;
             var percentageComplete = elapsedTime / movementDuration;
@@ -172,7 +172,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 animate = false;
             }
         }
-        private void UpdateUI(float transition)
+        protected void UpdateUI(float transition)
         {
             if (icon) icon.color = Color.LerpUnclamped(prevIconColor, newIconColor, transition);
             if (text) text.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);

@@ -64,7 +64,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
             for (int i = 0; i < selectorUIButtons.Length; i++)
             {
-                selectorUIButtons[i].Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
+                selectorUIButtons[i]._Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
             }
             
             _UpdateSelection(selectedState, true, true, false);
@@ -81,14 +81,14 @@ namespace DrBlackRat.VRC.ModernUIs
 
         protected void ChangeExternalSelection(int id, bool skipBehaviour)
         {
-            if (itemObjs != null && itemObjs.Length > 0)
+            if (itemObjs != null && itemObjs.Length != 0)
             {
                 foreach (var item in itemObjs)
                 {
                     if (item == null) continue;
                     item.SetActive(false);
                 }
-                if (itemObjs[id] != null) itemObjs[id].SetActive(true);
+                if (itemObjs.Length - 1 >= id && itemObjs[id] != null) itemObjs[id].SetActive(true);
             }
 
             // skipBehaviour is currently only used by the Mirror UI to prevent the seperator from moving
