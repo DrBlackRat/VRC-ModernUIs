@@ -179,6 +179,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4727624778474034510}
+  - component: {fileID: 4473382911553098961}
   m_Layer: 17
   m_Name: Example Slider
   m_TagString: Untagged
@@ -207,6 +208,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -17.4}
   m_SizeDelta: {x: -10, y: 10}
   m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &4473382911553098961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050644940877558603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: 16
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &2338364711903872204
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,8 +509,8 @@ MonoBehaviour:
   sliderBehaviour: {fileID: 0}
   updateEventName: _SliderUpdated
   variableName: sliderValue
-  usePersistence: 1
-  dataKey: UiExampleSlider
+  usePersistence: 0
+  dataKey: CHANGE THIS
   slider: {fileID: 3751749266242236627}
 --- !u!114 &8012476625405821664
 MonoBehaviour:

@@ -8,6 +8,7 @@ using VRC.Udon;
 namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(-9000)]
     public class MobileUIHider : UdonSharpBehaviour
     {
         [Header("Settings:")]
@@ -24,7 +25,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Size of Element Transforms if a user is on Android or iOS. Same order as Size Transforms is used.")]
         [SerializeField] private Vector2[] hiddenSize;
 
-
+        
         private void Start()
         {
 #if UNITY_ANDROID || UNITY_IPHONE
@@ -32,6 +33,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 if (obj == null) continue;
                 obj.SetActive(false);
+                Debug.LogError("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             }
             
             for (int i = 0; i < moveTransforms.Length; i++)

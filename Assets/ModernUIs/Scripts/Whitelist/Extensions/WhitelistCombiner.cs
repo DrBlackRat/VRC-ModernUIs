@@ -35,5 +35,41 @@ namespace DrBlackRat.VRC.ModernUIs
             users = users.Distinct();
             ChangeWhitelist(users, false);
         }
+
+        /// <summary>
+        /// DISABLED ON COMBINER
+        /// Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.
+        /// </summary>
+        public override void _AddUser(string username)
+        {
+            MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
+        }
+
+        /// <summary>
+        /// DISABLED ON COMBINER
+        /// Users can't directly be removed from a whitelist combiner. Remove them from the original whitelist instead.
+        /// </summary>
+        public override void _RemoveUser(string username)
+        {
+            MUIDebug.LogError("Whitelist Combiner: Users can't directly be removed from a whitelist combiner. Remove them from the original whitelist instead.");
+        }
+
+        /// <summary>
+        /// DISABLED ON COMBINER
+        /// Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.
+        /// </summary>
+        public override void _AddUsers(string[] newUsernames)
+        {
+            MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
+        }
+
+        /// <summary>
+        /// DISABLED ON COMBINER
+        /// Whitelist can't directly be replaced on a whitelist combiner.
+        /// </summary>
+        public override void _ReplaceWhitelist(string[] newUsernames)
+        {
+            MUIDebug.LogError("Whitelist Combiner: Whitelist can't directly be replaced on a whitelist combiner.");
+        }
     }
 }

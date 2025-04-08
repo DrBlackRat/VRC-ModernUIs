@@ -64,7 +64,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Adds a specific user to the white list. Skips duplicate username.
         /// </summary>
-        public void _AddUser(string username)
+        public virtual void _AddUser(string username)
         {
             foreach (var whitelistedUser in whitelistedUsers)
             {
@@ -81,7 +81,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Removes a specific user from the white list.
         /// </summary>
-        public void _RemoveUser(string username)
+        public virtual void _RemoveUser(string username)
         {
             MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
             ChangeWhitelist(whitelistedUsers.Remove(username), false);
@@ -90,7 +90,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Adds an array of user to the white list. Skips duplicate usernames.
         /// </summary>
-        public void _AddUsers(string[] newUsernames)
+        public virtual void _AddUsers(string[] newUsernames)
         {
             var tempWhitelist = whitelistedUsers;
             var usernames = newUsernames.Distinct();
@@ -123,7 +123,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Fully replaces the current whitelist with a new one.
         /// </summary>
-        public void _ReplaceWhitelist(string[] usernames)
+        public virtual void _ReplaceWhitelist(string[] usernames)
         {
             ChangeWhitelist(usernames, false);
         }

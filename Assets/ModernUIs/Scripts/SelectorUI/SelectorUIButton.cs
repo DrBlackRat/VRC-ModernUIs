@@ -64,6 +64,8 @@ namespace DrBlackRat.VRC.ModernUIs
         protected SelectorUI selectorUI;
         protected int buttonId;
 
+        protected bool locked;
+
         #region SelectorUI Connection
         public virtual void _Setup(Color newNormalColor, Color newSelectedColor, AnimationCurve newSmoothingCurve, float newMovementDuration, SelectorUI newSelectorUI, int newButtonId)
         {
@@ -95,13 +97,15 @@ namespace DrBlackRat.VRC.ModernUIs
             selectorUI = newSelectorUI;
             buttonId = newButtonId;
             
-            // Reset 
+            // Reset
+            button.interactable = !locked;
             UpdateUIState(false);
             UpdateUI(1f);
         }
 
-        public void _ButtonPressed()
+        public virtual void _ButtonPressed()
         {
+            if (locked) return;
             selectorUI._ButtonSelected(buttonId);
         }
         
@@ -119,9 +123,10 @@ namespace DrBlackRat.VRC.ModernUIs
             _CustomUpdate();
         }
 
-        public void _UpdateInteractable(bool interactable)
+        public virtual void _UpdateLocked(bool newLocked)
         {
-            button.interactable = interactable;
+            locked = newLocked;
+            button.interactable = !locked;
         }
         #endregion
         #region UI Animation

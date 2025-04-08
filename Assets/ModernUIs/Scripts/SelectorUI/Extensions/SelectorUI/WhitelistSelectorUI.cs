@@ -53,7 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
             foreach (var selectorUIButton in selectorUIButtons)
             {
-                selectorUIButton._UpdateInteractable(access);
+                selectorUIButton._UpdateLocked(!access);
                 selectorImage.color = access ? whitelistedColor : notWhitelistedColor;
             }
             return access;

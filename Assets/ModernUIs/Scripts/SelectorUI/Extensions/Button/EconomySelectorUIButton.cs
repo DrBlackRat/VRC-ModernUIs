@@ -18,14 +18,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected bool owned;
         [Tooltip("Product a user needs to own to be able to select this button.")]
         [SerializeField] protected UdonProduct product;
-
-        public override void _Setup(Color newNormalColor, Color newSelectedColor, AnimationCurve newSmoothingCurve,
-            float newMovementDuration, SelectorUI newSelectorUI, int newButtonId)
-        {
-            base._Setup(newNormalColor, newSelectedColor, newSmoothingCurve, newMovementDuration, newSelectorUI, newButtonId);
-            _UpdateInteractable(owned);
-        }
-
+        
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
             if (!player.isLocal) return;
@@ -34,7 +27,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (result.ID != product.ID) return;
 
             owned = true;
-            _UpdateInteractable(owned);
+            _UpdateLocked(locked);
         }
         
         public override void OnPurchaseExpired(IProduct result, VRCPlayerApi player)
@@ -45,7 +38,19 @@ namespace DrBlackRat.VRC.ModernUIs
             if (result.ID != product.ID) return;
 
             owned = false;
-            _UpdateInteractable(owned);
+            _UpdateLocked(locked);
+        }
+
+        public override void _ButtonPressed()
+        {
+            if (!owned) return;
+            base._ButtonPressed();
+        }
+
+        public override void _UpdateLocked(bool newLocked)
+        {
+            locked = newLocked;
+            button.interactable = !locked && owned;
         }
     }
 }
