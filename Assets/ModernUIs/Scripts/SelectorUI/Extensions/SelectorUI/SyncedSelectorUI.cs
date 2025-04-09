@@ -50,6 +50,7 @@ namespace DrBlackRat.VRC.ModernUIs
                     return false;
                 }
             }
+            MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner.");
             return true;
         }
 

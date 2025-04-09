@@ -32,11 +32,13 @@ namespace DrBlackRat.VRC.ModernUIs
                 whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
             }
             hasAccess = CheckAccess();
+            _UpdateInteractable();
         }
 
-        public void _WhitelistUpdated()
+        public virtual void _WhitelistUpdated()
         {
             hasAccess = CheckAccess();
+            _UpdateInteractable();
         }
 
         protected bool CheckAccess()
@@ -50,15 +52,24 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 access = whitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
             }
-
-            foreach (var selectorUIButton in selectorUIButtons)
-            {
-                selectorUIButton._UpdateLocked(!access);
-                selectorImage.color = access ? whitelistedColor : notWhitelistedColor;
-            }
             return access;
         }
 
+        protected virtual void _UpdateInteractable()
+        {
+            foreach (var selectorUIButton in selectorUIButtons)
+            {
+                selectorUIButton._UpdateLocked(!hasAccess);
+            }
+            selectorImage.color = hasAccess ? whitelistedColor : notWhitelistedColor;
+        }
+
+        public override void OnPlayerRestored(VRCPlayerApi player)
+        {
+            if (!hasAccess) return;
+            base.OnPlayerRestored(player);
+        }
+        
         protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (!hasAccess && !skipSameCheck && !fromNet)

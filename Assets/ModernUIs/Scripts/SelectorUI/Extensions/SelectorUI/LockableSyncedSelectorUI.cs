@@ -1,0 +1,137 @@
+﻿
+using UdonSharp;
+using UnityEngine;
+using VRC.SDKBase;
+using VRC.Udon;
+using UnityEngine.UI;
+using TMPro;
+
+
+namespace DrBlackRat.VRC.ModernUIs
+{
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    public class LockableSyncedSelectorUI : SyncedSelectorUI
+    {
+        [Header("Lock Button:")] 
+        [Tooltip("Default locked state of the Selector UI.")]
+        [SerializeField] protected bool locked;
+        [Tooltip("If enabled, the Selector UI will always appear as if it's unlocked for whitelisted users, no matter what.")]
+        [SerializeField] protected bool whitelistOverride;
+        [Space(10)]
+        [Tooltip("Button that switches the locked state.")]
+        [SerializeField] protected Button lockButton;
+        [Tooltip("Text Mesh Pro UI of which the text should be changed between \"Locked\", \"Unlocked\" and \"Not Whitelisted\".")]
+        [SerializeField] protected TextMeshProUGUI lockTextState;
+        [Tooltip("Text Mesh Pro UI of which the text should be changed to display the current network owner.")]
+        [SerializeField] protected TextMeshProUGUI lockTextOwner;
+        [Tooltip("Icon that is enabled if the Selector UI is locked.")]
+        [SerializeField] protected GameObject lockIcon;
+        [Tooltip("Icon that is enabled if the Selector UI is unlocked.")]
+        [SerializeField] protected GameObject unlockIcon;
+        
+        [UdonSynced] protected bool netLocked;
+        protected bool canChangeState;
+
+        protected override void Start()
+        {
+            base.Start();
+            UpdateLock(locked, true);
+        }
+        
+        public void _LockPressed()
+        {
+            if (!canChangeState) return;
+            UpdateLock(!locked, false);
+        }
+
+        public override void _WhitelistUpdated()
+        {
+            base._WhitelistUpdated();
+            UpdateLock(locked, false);
+        }
+        
+        protected void UpdateLock(bool newlocked, bool fromNet)
+        {
+            var usingWhitelist = whitelistManager != null;
+            
+            locked = newlocked;
+            // If a player is whitelisted (or no whitelist is given) and it's unlocked they can change the Selector UI
+            // If a player is whitelisted (or no whitelist is given) and whitelistOverride is enabled they can change the Selector UI
+            canChangeState = hasAccess && (!locked || (whitelistOverride && usingWhitelist) || Networking.LocalPlayer.IsOwner(gameObject));
+
+            //Update Button
+            lockIcon.SetActive(locked);
+            unlockIcon.SetActive(!locked);
+            lockButton.interactable = canChangeState;
+            lockTextOwner.text = $"By: {Networking.GetOwner(gameObject).displayName}";
+            // Lock Button Text (This is stupidly big for what it is lol)
+            string lockText;
+            if (locked)
+            {
+                lockText = (hasAccess && whitelistOverride && usingWhitelist)
+                    ? "Whitelisted"
+                    : "Locked";
+            }
+            else
+            {
+                lockText = (!hasAccess && usingWhitelist)
+                    ? "Not Whitelisted"
+                    : "Unlocked";
+            }
+            lockTextState.text = lockText;
+            
+            _UpdateInteractable();
+            Debug.LogError($"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n Locked: {locked}\n Has Access: {hasAccess}\n Can Change: {canChangeState}");
+            
+            if (!fromNet)
+            {
+                if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
+                netLocked = locked;
+                RequestSerialization();
+            }
+        }
+        
+        protected override void _UpdateInteractable()
+        {
+            foreach (var selectorUIButton in selectorUIButtons)
+            {
+                selectorUIButton._UpdateLocked(!canChangeState);
+            }
+            selectorImage.color = canChangeState ? whitelistedColor : notWhitelistedColor;
+        }
+
+        public override void OnDeserialization()
+        {
+            UpdateLock(netLocked, true);
+            base.OnDeserialization();
+        }
+        
+        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
+        {
+            if (!canChangeState)
+            {
+                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
+                return false;
+            }
+
+            return base.OnOwnershipRequest(requester, newOwner);
+        }
+
+        public override void OnPlayerRestored(VRCPlayerApi player)
+        {
+            if (!canChangeState) return;
+            base.OnPlayerRestored(player);
+        }
+        
+        protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        {
+            if (!skipSameCheck && !fromNet && !canChangeState)
+            {
+                MUIDebug.LogError("You are not allowed to change this Selector UI!");
+                return false;
+            }
+            if (!base._UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
+            return true;
+        }
+    }
+}
