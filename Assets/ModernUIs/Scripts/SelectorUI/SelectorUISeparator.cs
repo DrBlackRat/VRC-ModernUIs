@@ -16,8 +16,8 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
-        private bool animateUI;
-        private float movementElapsedTime;
+        private bool animate;
+        private float animationElapsedTime;
         
         private Vector2 prevSeparatorPos;
         private Vector2 nextSeparatorPos;
@@ -29,30 +29,37 @@ namespace DrBlackRat.VRC.ModernUIs
             prevSeparatorPos = recTransform.anchoredPosition;
             nextSeparatorPos = positions[selectionId];
             
-            animateUI = true;
-            movementElapsedTime = 0f;
+            // UI Animation
+            animate = false;
+            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+        }
+        // Is called one frame delayed to allow the update loop to stop.
+        public void _StartAnimation()
+        {
+            animate = true;
+            animationElapsedTime = 0f;
             _CustomUpdate();
         }
         
         public void _CustomUpdate()
         {
-            if (!animateUI) return;
+            if (!animate) return;
             AnimateUI(prevSeparatorPos, nextSeparatorPos);
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
         
         private void AnimateUI(Vector2 startPos, Vector2 endPos)
         {
-            movementElapsedTime += Time.deltaTime;
-            var percentageComplete = movementElapsedTime / movementDuration;
+            animationElapsedTime += Time.deltaTime;
+            var percentageComplete = animationElapsedTime / movementDuration;
             var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
             // Set Selector Position
             recTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
             
             if (percentageComplete >= 1f)
             {
-                movementElapsedTime = 0f;
-                animateUI = false;
+                animationElapsedTime = 0f;
+                animate = false;
             }
         }
     }

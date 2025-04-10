@@ -6,7 +6,6 @@ using VRC.Udon;
 using UnityEngine.UI;
 using TMPro;
 
-
 namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
@@ -45,12 +44,57 @@ namespace DrBlackRat.VRC.ModernUIs
         public override void _WhitelistUpdated()
         {
             base._WhitelistUpdated();
-            UpdateLock(locked, false);
+            UpdateLock(locked, true);
         }
         
+        protected override void _UpdateInteractable()
+        {
+            foreach (var selectorUIButton in selectorUIButtons)
+            {
+                selectorUIButton._UpdateLocked(!canChangeState);
+            }
+            selectorImage.color = canChangeState ? whitelistedColor : notWhitelistedColor;
+        }
+
+        #region Networking / Ownership / Persistence
+        public override void OnDeserialization()
+        {
+            UpdateLock(netLocked, true);
+            base.OnDeserialization();
+        }
+        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
+        {
+            if (!canChangeState && !Networking.LocalPlayer.IsOwner(gameObject) )
+            {
+                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
+                return false;
+            }
+
+            return base.OnOwnershipRequest(requester, newOwner);
+        }        
+        public override void OnOwnershipTransferred(VRCPlayerApi player)
+        {
+            UpdateLock(locked, true);
+        }
+        public override void OnPlayerRestored(VRCPlayerApi player)
+        {
+            if (!canChangeState) return;
+            base.OnPlayerRestored(player);
+        }
+        #endregion
+
         protected void UpdateLock(bool newlocked, bool fromNet)
         {
             locked = newlocked;
+            netLocked = locked;
+            
+            if (!fromNet)
+            {
+                if (!Networking.LocalPlayer.IsOwner(gameObject))
+                    Networking.SetOwner(Networking.LocalPlayer, gameObject);
+                RequestSerialization();
+            }
+            
             // If a player is whitelisted (or no whitelist is given) and it's unlocked they can change the Selector UI
             // If a player is whitelisted (or no whitelist is given) and whitelistOverride is enabled they can change the Selector UI
             canChangeState = hasAccess && (!locked || Networking.LocalPlayer.IsOwner(gameObject));
@@ -77,62 +121,18 @@ namespace DrBlackRat.VRC.ModernUIs
             lockTextState.text = lockText;
             
             _UpdateInteractable();
-            Debug.LogError($"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \n Locked: {locked}\n Has Access: {hasAccess}\n Can Change: {canChangeState}");
-            
-            if (!fromNet)
-            {
-                if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
-                netLocked = locked;
-                RequestSerialization();
-            }
         }
         
-        protected override void _UpdateInteractable()
-        {
-            foreach (var selectorUIButton in selectorUIButtons)
-            {
-                selectorUIButton._UpdateLocked(!canChangeState);
-            }
-            selectorImage.color = canChangeState ? whitelistedColor : notWhitelistedColor;
-        }
-
-        public override void OnDeserialization()
-        {
-            UpdateLock(netLocked, true);
-            base.OnDeserialization();
-        }
-        
-        public override void OnPlayerLeft(VRCPlayerApi player)
-        {
-            if (player.isLocal) return;
-            UpdateLock(locked, true);
-        }
-        
-        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
-        {
-            if (!canChangeState)
-            {
-                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
-                return false;
-            }
-
-            return base.OnOwnershipRequest(requester, newOwner);
-        }
-
-        public override void OnPlayerRestored(VRCPlayerApi player)
-        {
-            if (!canChangeState) return;
-            base.OnPlayerRestored(player);
-        }
-        
-        protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (!skipSameCheck && !fromNet && !canChangeState)
             {
                 MUIDebug.LogError("You are not allowed to change this Selector UI!");
                 return false;
             }
-            if (!base._UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
+
+            if (!base.UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
+            if (!fromNet) UpdateLock(locked, false);
             return true;
         }
     }

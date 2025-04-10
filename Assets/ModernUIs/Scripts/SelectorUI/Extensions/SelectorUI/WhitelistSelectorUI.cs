@@ -70,14 +70,14 @@ namespace DrBlackRat.VRC.ModernUIs
             base.OnPlayerRestored(player);
         }
         
-        protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (!hasAccess && !skipSameCheck && !fromNet)
             {
                 MUIDebug.LogError("You are not whitelisted!");
                 return false;
             }
-            return base._UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet);
+            return base.UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet);
         }
     }
 }

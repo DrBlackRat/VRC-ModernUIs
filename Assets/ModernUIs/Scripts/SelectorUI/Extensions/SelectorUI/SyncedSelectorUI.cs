@@ -26,13 +26,13 @@ namespace DrBlackRat.VRC.ModernUIs
             
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
-                _UpdateSelection(value, true, false, false);
+                UpdateSelection(value, true, false, false);
             }
         }
 
         public override void OnDeserialization()
         {
-            _UpdateSelection(netSelectedState, true, false, true);
+            UpdateSelection(netSelectedState, true, false, true);
         }
 
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
@@ -54,9 +54,9 @@ namespace DrBlackRat.VRC.ModernUIs
             return true;
         }
 
-        protected override bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
-            if (!base._UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
+            if (!base.UpdateSelection(newState, skipPersistence, skipSameCheck, fromNet)) return false;
 
             if (!fromNet)
             {

@@ -39,7 +39,7 @@ namespace DrBlackRat.VRC.ModernUIs
         protected RectTransform textTransform;
         
         protected bool animate;
-        protected float elapsedTime;
+        protected float animationElapsedTime;
 
         protected Vector2 prevButtonScale;
         protected float prevButtonPixelPerUnit;
@@ -118,8 +118,15 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             UpdateUIState(selected);
             
+            // UI Animation
+            animate = false;
+            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+        }
+        // Is called one frame delayed to allow the update loop to stop.
+        public void _StartAnimation()
+        {
             animate = true;
-            elapsedTime = 0f;
+            animationElapsedTime = 0f;
             _CustomUpdate();
         }
 
@@ -168,12 +175,12 @@ namespace DrBlackRat.VRC.ModernUIs
         
         protected void AnimateUI()
         {
-            elapsedTime += Time.deltaTime;
-            var percentageComplete = elapsedTime / movementDuration;
+            animationElapsedTime += Time.deltaTime;
+            var percentageComplete = animationElapsedTime / movementDuration;
             UpdateUI(smoothingCurve.Evaluate(percentageComplete));
             if (percentageComplete >= 1f)
             {
-                elapsedTime = 0f;
+                animationElapsedTime = 0f;
                 animate = false;
             }
         }

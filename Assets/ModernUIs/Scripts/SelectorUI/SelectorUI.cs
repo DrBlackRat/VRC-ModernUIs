@@ -52,8 +52,8 @@ namespace DrBlackRat.VRC.ModernUIs
 
         protected RectTransform selectorTransform;
         
-        protected bool animateUI;
-        protected float movementElapsedTime;
+        protected bool animate; 
+        protected float animationElapsedTime;
         protected Vector3 oldSelectorPos;
 
         protected int prevSelectedState;
@@ -67,7 +67,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 selectorUIButtons[i]._Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
             }
             
-            _UpdateSelection(selectedState, true, true, false);
+            UpdateSelection(selectedState, true, true, true);
         }
         
         public override void OnPlayerRestored(VRCPlayerApi player)
@@ -75,7 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!player.isLocal || !usePersistence) return;
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
-                _UpdateSelection(value, true, false, false);
+                UpdateSelection(value, true, false, false);
             }
         }
 
@@ -108,22 +108,22 @@ namespace DrBlackRat.VRC.ModernUIs
             if (doubleClickToDefault && buttonId == selectedState)
             {
                 if (buttonId == doubleClickDefaultState) return;
-                _UpdateSelection(doubleClickDefaultState, false, false, false);
+                UpdateSelection(doubleClickDefaultState, false, false, false);
             }
             else
             {
-                _UpdateSelection(buttonId, false, false, false);
+                UpdateSelection(buttonId, false, false, false);
             }
         }
         
         public void _CustomUpdate()
         {
-            if (!animateUI) return;
+            if (!animate) return;
             AnimateUI(oldSelectorPos, selectorUIButtons[selectedState].Position());
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
 
-        protected virtual bool _UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected virtual bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (newState == selectedState && !skipSameCheck) return false;
             prevSelectedState = selectedState;
@@ -138,26 +138,32 @@ namespace DrBlackRat.VRC.ModernUIs
             selectorUIButtons[selectedState]._UpdateSelected(true);
             
             // UI Animation
-            animateUI = true;
-            movementElapsedTime = 0f;
+            animate = false;
+            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            return true;
+        }
+        // Is called one frame delayed to allow the update loop to stop.
+        public void _StartAnimation()
+        {
+            animate = true;
+            animationElapsedTime = 0f;
             oldSelectorPos = selectorTransform.position;
             _CustomUpdate();
-            return true;
         }
         
         
         protected void AnimateUI(Vector3 startPos, Vector3 endPos)
         {
-            movementElapsedTime += Time.deltaTime;
-            var percentageComplete = movementElapsedTime / movementDuration;
+            animationElapsedTime += Time.deltaTime;
+            var percentageComplete = animationElapsedTime / movementDuration;
             var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
             // Set Selector Position
             selectorTransform.position = Vector3.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
             
             if (percentageComplete >= 1f)
             {
-                movementElapsedTime = 0f;
-                animateUI = false;
+                animationElapsedTime = 0f;
+                animate = false;
             }
         }
     }
