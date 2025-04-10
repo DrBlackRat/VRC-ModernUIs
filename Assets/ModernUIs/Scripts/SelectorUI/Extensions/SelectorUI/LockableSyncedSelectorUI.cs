@@ -15,8 +15,6 @@ namespace DrBlackRat.VRC.ModernUIs
         [Header("Lock Button:")] 
         [Tooltip("Default locked state of the Selector UI.")]
         [SerializeField] protected bool locked;
-        [Tooltip("If enabled, the Selector UI will always appear as if it's unlocked for whitelisted users, no matter what.")]
-        [SerializeField] protected bool whitelistOverride;
         [Space(10)]
         [Tooltip("Button that switches the locked state.")]
         [SerializeField] protected Button lockButton;
@@ -52,29 +50,27 @@ namespace DrBlackRat.VRC.ModernUIs
         
         protected void UpdateLock(bool newlocked, bool fromNet)
         {
-            var usingWhitelist = whitelistManager != null;
-            
             locked = newlocked;
             // If a player is whitelisted (or no whitelist is given) and it's unlocked they can change the Selector UI
             // If a player is whitelisted (or no whitelist is given) and whitelistOverride is enabled they can change the Selector UI
-            canChangeState = hasAccess && (!locked || (whitelistOverride && usingWhitelist) || Networking.LocalPlayer.IsOwner(gameObject));
+            canChangeState = hasAccess && (!locked || Networking.LocalPlayer.IsOwner(gameObject));
 
             //Update Button
             lockIcon.SetActive(locked);
             unlockIcon.SetActive(!locked);
             lockButton.interactable = canChangeState;
-            lockTextOwner.text = $"By: {Networking.GetOwner(gameObject).displayName}";
+            lockTextOwner.text = $"Owner: {Networking.GetOwner(gameObject).displayName}";
             // Lock Button Text (This is stupidly big for what it is lol)
             string lockText;
             if (locked)
             {
-                lockText = (hasAccess && whitelistOverride && usingWhitelist)
-                    ? "Whitelisted"
-                    : "Locked";
+                lockText = (!hasAccess && Networking.LocalPlayer.IsOwner(gameObject))
+                    ? "Not Whitelisted"
+                    : "Locked";         
             }
             else
             {
-                lockText = (!hasAccess && usingWhitelist)
+                lockText = (!hasAccess)
                     ? "Not Whitelisted"
                     : "Unlocked";
             }
@@ -104,6 +100,12 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             UpdateLock(netLocked, true);
             base.OnDeserialization();
+        }
+        
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            if (player.isLocal) return;
+            UpdateLock(locked, true);
         }
         
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
