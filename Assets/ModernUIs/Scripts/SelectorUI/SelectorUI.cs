@@ -39,7 +39,7 @@ namespace DrBlackRat.VRC.ModernUIs
         
         [Header("Internals:")]
         [SerializeField] protected SelectorUIButton[] selectorUIButtons;
-        [SerializeField] protected GameObject selector;
+        [SerializeField] protected Selector selector;
         
         // UI Stuff
         [Header("Text Colors:")]
@@ -50,22 +50,15 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected AnimationCurve animationCurve;
         [SerializeField] protected float movementDuration;
 
-        protected RectTransform selectorTransform;
-        
-        protected bool animate; 
-        protected float animationElapsedTime;
-        protected Vector3 oldSelectorPos;
-
         protected int prevSelectedState;
         
         protected virtual void Start()
         {
-            selectorTransform = selector.GetComponent<RectTransform>();
-
             for (int i = 0; i < selectorUIButtons.Length; i++)
             {
                 selectorUIButtons[i]._Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
             }
+            selector.Setup(this, animationCurve, movementDuration);
             
             UpdateSelection(selectedState, true, true, true);
         }
@@ -116,12 +109,6 @@ namespace DrBlackRat.VRC.ModernUIs
             }
         }
         
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI(oldSelectorPos, selectorUIButtons[selectedState].Position());
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
 
         protected virtual bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
@@ -137,34 +124,10 @@ namespace DrBlackRat.VRC.ModernUIs
             selectorUIButtons[prevSelectedState]._UpdateSelected(false);
             selectorUIButtons[selectedState]._UpdateSelected(true);
             
-            // UI Animation
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            // UI Selector Animation
+            selector._MoveTo(selectorUIButtons[selectedState]);
             return true;
         }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
-        {
-            animate = true;
-            animationElapsedTime = 0f;
-            oldSelectorPos = selectorTransform.position;
-            _CustomUpdate();
-        }
-        
-        
-        protected void AnimateUI(Vector3 startPos, Vector3 endPos)
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
-            // Set Selector Position
-            selectorTransform.position = Vector3.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
-            {
-                animationElapsedTime = 0f;
-                animate = false;
-            }
-        }
+
     }
 }

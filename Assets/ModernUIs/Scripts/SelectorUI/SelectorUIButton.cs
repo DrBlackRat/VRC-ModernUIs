@@ -37,6 +37,8 @@ namespace DrBlackRat.VRC.ModernUIs
         protected RectTransform iconTransform;
         protected TextMeshProUGUI text;
         protected RectTransform textTransform;
+
+        protected RectTransform parentTransform;
         
         protected bool animate;
         protected float animationElapsedTime;
@@ -86,6 +88,8 @@ namespace DrBlackRat.VRC.ModernUIs
                 text = textObj.GetComponent<TextMeshProUGUI>();
                 textTransform = textObj.GetComponent<RectTransform>();
             }
+
+            parentTransform = GetComponent<RectTransform>();
             
             // Animation
             normalColor = newNormalColor;
@@ -109,9 +113,29 @@ namespace DrBlackRat.VRC.ModernUIs
             selectorUI._ButtonSelected(buttonId);
         }
         
-        public Vector3 Position()
+        // API
+        /// <summary>
+        /// Returns the local center position of the Selector Button. Used for selector UI.
+        /// </summary>
+        public Vector3 LocalPos()
         {
-            return buttonTransform.position;
+            return parentTransform.localPosition;
+        }
+
+        /// <summary>
+        /// Returns the selected size of the Selector Button. Used for selector UI.
+        /// </summary>
+        public Vector2 SelectedSize()
+        {
+            return parentTransform.sizeDelta;
+        }
+        
+        /// <summary>
+        /// Returns the selected "Pixel Per Unit Multiplier" of the Selector Button. Used for selector UI.
+        /// </summary>
+        public float SelectedCornerRadius()
+        {
+            return buttonSelectedPixelPerUnit;
         }
 
         public void _UpdateSelected(bool selected)

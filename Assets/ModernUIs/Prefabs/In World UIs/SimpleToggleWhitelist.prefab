@@ -203,6 +203,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6512803646819398430, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
+    - target: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
     - target: {fileID: 181147871030889172, guid: bb89f5d0dec70ed4793187ddb3a2d5bf,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -270,12 +276,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fc66a26eb8c7c043b6c781f9571a8ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &6159374805792535232 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8656192070943179321, guid: fd671aceddd13564184bf18ec0b0c675,
+--- !u!114 &5596030435018522432 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
     type: 3}
   m_PrefabInstance: {fileID: 3268071899831087353}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea02d12838992ba4984bbd11403f4460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6383848919559605427 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8488575937032666186, guid: fd671aceddd13564184bf18ec0b0c675,
@@ -316,7 +328,7 @@ MonoBehaviour:
   selectorUIButtons:
   - {fileID: 7227413061868167230}
   - {fileID: 1753059045736720527}
-  selector: {fileID: 6159374805792535232}
+  selector: {fileID: 5596030435018522432}
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
   animationCurve:

@@ -26,7 +26,6 @@ namespace DrBlackRat.VRC.ModernUIs
         protected override void Start()
         {
             base.Start();
-            selectorImage = selectorTransform.GetComponent<Image>();
             if (whitelistManager != null)
             {
                 whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
@@ -61,7 +60,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 selectorUIButton._UpdateLocked(!hasAccess);
             }
-            selectorImage.color = hasAccess ? whitelistedColor : notWhitelistedColor;
+            selector._SetColor(hasAccess ? whitelistedColor : notWhitelistedColor);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
