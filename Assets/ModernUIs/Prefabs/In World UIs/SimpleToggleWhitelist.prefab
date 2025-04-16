@@ -114,11 +114,83 @@ PrefabInstance:
       propertyPath: m_text
       value: Whitelist
       objectReference: {fileID: 0}
+    - target: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4439893429101827132, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: m_Name
       value: SimpleToggleWhitelist
       objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994132853145724987, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266515496357171399, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5266515496357171399, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
     - target: {fileID: 5656688987615824728, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -186,6 +258,18 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2425521116417015721}
   m_SourcePrefab: {fileID: 100100000, guid: fd671aceddd13564184bf18ec0b0c675, type: 3}
+--- !u!114 &1753059045736720527 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
+    type: 3}
+  m_PrefabInstance: {fileID: 3268071899831087353}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc66a26eb8c7c043b6c781f9571a8ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6159374805792535232 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8656192070943179321, guid: fd671aceddd13564184bf18ec0b0c675,
@@ -230,8 +314,8 @@ MonoBehaviour:
   usePersistence: 0
   dataKey: CHANGE THIS
   selectorUIButtons:
-  - {fileID: 8590799335973176295}
-  - {fileID: 7195097139400850337}
+  - {fileID: 7227413061868167230}
+  - {fileID: 1753059045736720527}
   selector: {fileID: 6159374805792535232}
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
@@ -307,21 +391,9 @@ MonoBehaviour:
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
   publicVariablesUnityEngineObjects: []
   publicVariablesSerializationDataFormat: 0
---- !u!114 &7195097139400850337 stripped
+--- !u!114 &7227413061868167230 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5656688987615824728, guid: fd671aceddd13564184bf18ec0b0c675,
-    type: 3}
-  m_PrefabInstance: {fileID: 3268071899831087353}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc66a26eb8c7c043b6c781f9571a8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8590799335973176295 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6512803646819398430, guid: fd671aceddd13564184bf18ec0b0c675,
+  m_CorrespondingSourceObject: {fileID: 5266515496357171399, guid: fd671aceddd13564184bf18ec0b0c675,
     type: 3}
   m_PrefabInstance: {fileID: 3268071899831087353}
   m_PrefabAsset: {fileID: 0}

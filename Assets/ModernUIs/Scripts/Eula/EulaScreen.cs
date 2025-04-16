@@ -1,4 +1,5 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VRC.SDKBase;
@@ -11,7 +12,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EulaScreen : UdonSharpBehaviour
     {
-        [FormerlySerializedAs("wallCollider")]
         [Header("Settings:")] 
         [Tooltip("Object to disable if Eula has been accepted. Use full for things like a collider box.")]
         [SerializeField] private GameObject disableObject;
@@ -34,14 +34,20 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Current version of the Eula, if the accepted one is lower than the current a user will have to accept it again.")]
         [SerializeField] private int ruleVer;
         
-        [Header("UI Animation:")]
+        [Header("Animation:")]
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
-        private bool animateUI;
+        private bool animate;
         private float movementElapsedTime;
         private Vector3 oldUiPos;
         private Vector3 oldUiScale;
+
+        private void Start()
+        {
+            // Disable Changed Info if left on in editor by accident
+            if (versionChangeInfo != null) versionChangeInfo.SetActive(false);
+        }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
@@ -69,14 +75,14 @@ namespace DrBlackRat.VRC.ModernUIs
 
             oldUiPos = eulaObject.transform.position;
             oldUiScale = eulaObject.transform.localScale;
-            animateUI = true;
+            animate = true;
             movementElapsedTime = 0f; 
             _CustomUpdate();
         }
         
         public void _CustomUpdate()
         {
-            if (!animateUI) return;
+            if (!animate) return;
             AnimateUI();
             SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
         }
@@ -95,7 +101,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 eulaObject.SetActive(false);
                 movementElapsedTime = 0f;
-                animateUI = false;
+                animate = false;
             }
         }
     }
