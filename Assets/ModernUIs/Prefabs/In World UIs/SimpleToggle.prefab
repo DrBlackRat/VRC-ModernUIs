@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 5400066617427153485}
   - component: {fileID: 1307447845584874842}
   - component: {fileID: 2579854908658704592}
+  - component: {fileID: 8016291456823805368}
   m_Layer: 17
   m_Name: SimpleToggle
   m_TagString: Untagged
@@ -214,6 +215,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllowFocusView: 1
+--- !u!114 &8016291456823805368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4439893429101827132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a8b7b1289155748bcaefcd3933dabb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5244093069899408900
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,7 +861,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 0
+  _syncMethod: 1
   serializedProgramAsset: {fileID: 11400000, guid: dd23706675fd3e14d946351bdc0fca2c,
     type: 2}
   programSource: {fileID: 11400000, guid: e26b631bf665718478661181e4174697, type: 2}
@@ -863,26 +876,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3669764488060842746}
     m_Modifications:
-    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
-        type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 35
-      objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1048,6 +1041,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Off
+      objectReference: {fileID: 0}
+    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6608199599004276992, guid: 0c6906363e6d4104fa9122a0e06122ff,
+        type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

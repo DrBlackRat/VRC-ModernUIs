@@ -9480,11 +9480,6 @@ MonoBehaviour:
     ID: 127
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
-  - gameObject: {fileID: 8553683585779298731}
-    ID: 128
-    SerializedTypeNames:
-    - VRC.Udon.UdonBehaviour
-    - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 3376288841868315522}
     ID: 129
     SerializedTypeNames:
@@ -10096,6 +10091,10 @@ MonoBehaviour:
     - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 1299552266}
     ID: 389
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 8553683585779298731}
+    ID: 128
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
@@ -13883,12 +13882,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tab Menu
       objectReference: {fileID: 0}
-    - target: {fileID: 4962043339608835798, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 4962043339608835798, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
     - target: {fileID: 5084660221980205546, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -14630,6 +14623,7 @@ GameObject:
   - component: {fileID: 5131141578140596418}
   - component: {fileID: 6043795707410135514}
   - component: {fileID: 6043795707410135513}
+  - component: {fileID: 6043795707410135515}
   m_Layer: 17
   m_Name: UI
   m_TagString: Untagged
@@ -14950,11 +14944,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
-    - target: {fileID: 4038745995248189110, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: _syncMethod
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -15025,18 +15014,6 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 5266515496357171399, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-    - target: {fileID: 5656688987615824728, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 5656688987615824728, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-    - target: {fileID: 6512803646819398430, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 6512803646819398430, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
     - target: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
@@ -16749,11 +16726,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 415314889584849652, guid: 08da920dff8f7794f92b7666d4effe73,
-        type: 3}
-      propertyPath: _syncMethod
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 497108117854689719, guid: 08da920dff8f7794f92b7666d4effe73,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -17383,6 +17355,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6043795707410135515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247936995530073999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a8b7b1289155748bcaefcd3933dabb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  removeLayoutComponents: 1
 --- !u!224 &6106883134090519589 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5031198619604549308, guid: 7cdaad2b2821d4c46b08215c928ac14d,
