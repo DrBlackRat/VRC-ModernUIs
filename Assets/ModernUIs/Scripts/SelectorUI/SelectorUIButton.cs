@@ -102,7 +102,7 @@ namespace DrBlackRat.VRC.ModernUIs
             buttonId = newButtonId;
             
             // Reset
-            button.interactable = !locked;
+            if (button) button.interactable = !locked;
             UpdateUIState(false);
             UpdateUI(1f);
         }
@@ -157,7 +157,7 @@ namespace DrBlackRat.VRC.ModernUIs
         public virtual void _UpdateLocked(bool newLocked)
         {
             locked = newLocked;
-            button.interactable = !locked;
+            if (button) button.interactable = !locked;
         }
         #endregion
         #region UI Animation

@@ -44,12 +44,12 @@ namespace DrBlackRat.VRC.ModernUIs
             
             newPos = selectorTransform.localPosition;
             newSize = selectorTransform.sizeDelta;
-            newCorner = selectorImage.pixelsPerUnitMultiplier;
+            if(selectorImage != null) newCorner = selectorImage.pixelsPerUnitMultiplier;
         }
 
         public void _SetColor(Color color)
         {
-            selectorImage.color = color;
+            if(selectorImage != null) selectorImage.color = color;
         }
         
         public void _MoveTo(SelectorUIButton button)
@@ -92,7 +92,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
             selectorTransform.localPosition = Vector3.LerpUnclamped(prevPos, newPos, smoothPercentageComplete);
             selectorTransform.sizeDelta = Vector2.LerpUnclamped(prevSize, newSize, smoothPercentageComplete);
-            selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
+            if(selectorImage != null) selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
             
             if (percentageComplete >= 1f)
             {
