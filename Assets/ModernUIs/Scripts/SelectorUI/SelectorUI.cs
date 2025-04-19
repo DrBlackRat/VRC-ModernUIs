@@ -16,9 +16,9 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected int selectedState;
         [Space(10)] 
         [Tooltip("When enabled, clicking on an activated button again will make the selection go back to the default state.")]
-        [SerializeField] protected bool doubleClickToDefault;
+        [SerializeField] protected bool secondClickToDefault;
         [Tooltip("Default State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
-        [SerializeField] protected int doubleClickDefaultState;
+        [SerializeField] protected int secondClickDefaultState;
         
         [Header("Toggles:")]
         [Tooltip("Objects that should be turned on / off. The same order as buttons will be used.")]
@@ -98,10 +98,10 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _ButtonSelected(int buttonId)
         {
-            if (doubleClickToDefault && buttonId == selectedState)
+            if (secondClickToDefault && buttonId == selectedState)
             {
-                if (buttonId == doubleClickDefaultState) return;
-                UpdateSelection(doubleClickDefaultState, false, false, false);
+                if (buttonId == secondClickDefaultState) return;
+                UpdateSelection(secondClickDefaultState, false, false, false);
             }
             else
             {
