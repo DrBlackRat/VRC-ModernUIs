@@ -40,6 +40,12 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _SwitchTab()
         {
+            animate = false;
+            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+        }
+        // Is called one frame delayed to allow the update loop to stop.
+        public void _StartAnimation()
+        {
             prevTabID = currentTabID;
             currentTabID = tabId;
             
@@ -49,13 +55,6 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
-            // UI Animation
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
-        }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
-        {
             animate = true;
             animationElapsedTime = 0f;
             oldTabPos = tabs[prevTabID]._GetPos();

@@ -41,10 +41,6 @@ namespace DrBlackRat.VRC.ModernUIs
 
             selectorTransform = GetComponent<RectTransform>();
             selectorImage = GetComponent<Image>();
-            
-            newPos = selectorTransform.localPosition;
-            newSize = selectorTransform.sizeDelta;
-            newCorner = selectorImage.pixelsPerUnitMultiplier;
         }
 
         public void _SetColor(Color color)
@@ -65,13 +61,13 @@ namespace DrBlackRat.VRC.ModernUIs
             animate = true;
             animationElapsedTime = 0f;
             
-            prevPos = newPos;
+            prevPos = selectorTransform.localPosition;;
             newPos = selectorUIButton.LocalPos();
 
-            prevSize = newSize;
+            prevSize = selectorTransform.sizeDelta;
             newSize = selectorUIButton.SelectedSize();
 
-            prevCorner = newCorner;
+            prevCorner = selectorImage.pixelsPerUnitMultiplier;
             newCorner = selectorUIButton.SelectedCornerRadius();
             
             _CustomUpdate();

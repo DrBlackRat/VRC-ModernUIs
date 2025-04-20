@@ -26,16 +26,14 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _SelectionChanged()
         {
-            prevSeparatorPos = recTransform.anchoredPosition;
-            nextSeparatorPos = positions[selectionId];
-            
-            // UI Animation
             animate = false;
             SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
         }
         // Is called one frame delayed to allow the update loop to stop.
         public void _StartAnimation()
         {
+            prevSeparatorPos = recTransform.anchoredPosition;
+            nextSeparatorPos = positions[selectionId];
             animate = true;
             animationElapsedTime = 0f;
             _CustomUpdate();
