@@ -30,6 +30,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
             }
+            if (!selector.overrideDefaults) selector._SetDefaultColors(whitelistedColor, notWhitelistedColor);
             hasAccess = CheckAccess();
             _UpdateInteractable();
         }
@@ -60,7 +61,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 selectorUIButton._UpdateLocked(!hasAccess);
             }
-            selector._SetColor(hasAccess ? whitelistedColor : notWhitelistedColor);
+            selector._SetEnabled(hasAccess);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)

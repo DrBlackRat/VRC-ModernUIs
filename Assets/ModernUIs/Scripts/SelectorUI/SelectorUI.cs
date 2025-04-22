@@ -37,16 +37,30 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
         [SerializeField] protected string dataKey = "CHANGE THIS";
         
-        [Header("Internals:")]
+        [Header("Internal Connections:")]
         [SerializeField] protected SelectorUIButton[] selectorUIButtons;
         [SerializeField] protected Selector selector;
         
-        // UI Stuff
-        [Header("Text Colors:")]
+        [Header("Default Button Settings:")]
+        [SerializeField] protected Vector2 buttonNormalScale;
+        [SerializeField] protected Vector2 buttonSelectedScale;
+        [Space(10)]
+        [SerializeField] protected float buttonNormalPixelPerUnit;
+        [SerializeField] protected float buttonSelectedPixelPerUnit;
+        
+        [Header("Default Colors:")]
         [SerializeField] protected Color normalColor;
         [SerializeField] protected Color selectedColor;
         
-        [Header("UI Animation:")]
+        [Header("Default Icon Settings:")]
+        [SerializeField] protected Vector2 iconNormalPos;
+        [SerializeField] protected Vector2 iconSelectedPos;
+        
+        [Header("Default Text Settings:")]
+        [SerializeField] protected Vector2 textNormalPos;
+        [SerializeField] protected Vector2 textSelectedPos;
+        
+        [Header("Default UI Animation:")]
         [SerializeField] protected AnimationCurve animationCurve;
         [SerializeField] protected float movementDuration;
 
@@ -56,9 +70,25 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             for (int i = 0; i < selectorUIButtons.Length; i++)
             {
-                selectorUIButtons[i]._Setup(normalColor, selectedColor, animationCurve, movementDuration, this, i);
-            }
-            selector.Setup(this, animationCurve, movementDuration);
+                if (!selectorUIButtons[i].overrideDefaults) selectorUIButtons[i]._SetDefaults(
+                    buttonNormalScale, 
+                    buttonSelectedScale, 
+                    buttonNormalPixelPerUnit, 
+                    buttonSelectedPixelPerUnit, 
+                    normalColor, 
+                    selectedColor, 
+                    iconNormalPos, 
+                    iconSelectedPos, 
+                    textNormalPos, 
+                    textSelectedPos, 
+                    animationCurve, 
+                    movementDuration);
+                selectorUIButtons[i]._Setup(this, i);
+            }            
+            
+            if (!selector.overrideDefaults) selector._SetDefaults(animationCurve, movementDuration);
+            selector._Setup(this);
+
             
             UpdateSelection(selectedState, true, true, true);
         }

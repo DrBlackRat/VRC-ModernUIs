@@ -12,23 +12,37 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SelectorUIButton : UdonSharpBehaviour
     {
-        [Header("Button:")]
+        [Header("References:")]
         [SerializeField] protected GameObject buttonObj;
+        [SerializeField] protected GameObject iconObj;
+        [SerializeField] protected GameObject textObj;
+        
+        [Header("Overrides:")]
+        [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults would be used.")]
+        public bool overrideDefaults;
+        
+        [Header("Button Override:")]
         [SerializeField] protected Vector2 buttonNormalScale;
         [SerializeField] protected Vector2 buttonSelectedScale;
         [Space(10)]
         [SerializeField] protected float buttonNormalPixelPerUnit;
         [SerializeField] protected float buttonSelectedPixelPerUnit;
-
-        [Header("Icon")]
-        [SerializeField] protected GameObject iconObj;
+        
+        [Header("Color Override:")]
+        [SerializeField] protected Color normalColor;
+        [SerializeField] protected Color selectedColor;
+        
+        [Header("Icon Override:")]
         [SerializeField] protected Vector2 iconNormalPos;
         [SerializeField] protected Vector2 iconSelectedPos;
         
-        [Header("Text")]
-        [SerializeField] protected GameObject textObj;
+        [Header("Text Override:")]
         [SerializeField] protected Vector2 textNormalPos;
         [SerializeField] protected Vector2 textSelectedPos;
+        
+        [Header("Animation Override:")]
+        [SerializeField] protected AnimationCurve smoothingCurve;
+        [SerializeField] protected float movementDuration;
 
         protected Button button;
         protected RectTransform buttonTransform;
@@ -58,18 +72,13 @@ namespace DrBlackRat.VRC.ModernUIs
         protected Color newTextColor;
         
         // Provided by main script
-        protected Color normalColor;
-        protected Color selectedColor;
-        protected AnimationCurve smoothingCurve;
-        protected float movementDuration;
-        
         protected SelectorUI selectorUI;
         protected int buttonId;
 
         protected bool locked;
 
         #region SelectorUI Connection
-        public virtual void _Setup(Color newNormalColor, Color newSelectedColor, AnimationCurve newSmoothingCurve, float newMovementDuration, SelectorUI newSelectorUI, int newButtonId)
+        public virtual void _Setup(SelectorUI newSelectorUI, int newButtonId)
         {
             // Inital Setup
             if (buttonObj != null)
@@ -91,12 +100,6 @@ namespace DrBlackRat.VRC.ModernUIs
 
             parentTransform = GetComponent<RectTransform>();
             
-            // Animation
-            normalColor = newNormalColor;
-            selectedColor = newSelectedColor;
-            smoothingCurve = newSmoothingCurve;
-            movementDuration = newMovementDuration;
-            
             // Tab UI
             selectorUI = newSelectorUI;
             buttonId = newButtonId;
@@ -105,6 +108,40 @@ namespace DrBlackRat.VRC.ModernUIs
             button.interactable = !locked;
             UpdateUIState(false);
             UpdateUI(1f);
+        }
+
+        public virtual void _SetDefaults(
+            Vector2 newButtonNormalScale,
+            Vector2 newButtonSelectedScale,
+            float newButtonNormalPixelPerUnit,
+            float newButtonSelectedPixelPerUnit,
+            Color newNormalColor,
+            Color newSelectedColor,
+            Vector2 newIconNormalPos,
+            Vector2 newIconSelectedPos,
+            Vector2 newTextNormalPos,
+            Vector2 newTextSelectedPos,
+            AnimationCurve newSmoothingCurve,
+            float newMovementDuration)
+        {
+            if (overrideDefaults) return;
+            buttonNormalScale = newButtonNormalScale;
+            buttonSelectedScale = newButtonSelectedScale;
+
+            buttonNormalPixelPerUnit = newButtonNormalPixelPerUnit;
+            buttonSelectedPixelPerUnit = newButtonSelectedPixelPerUnit;
+
+            normalColor = newNormalColor;
+            selectedColor = newSelectedColor;
+            
+            iconNormalPos = newIconNormalPos;
+            iconSelectedPos = newIconSelectedPos;
+
+            textNormalPos = newTextNormalPos;
+            textSelectedPos = newTextSelectedPos;
+
+            smoothingCurve = newSmoothingCurve;
+            movementDuration = newMovementDuration;
         }
 
         public virtual void _ButtonPressed()

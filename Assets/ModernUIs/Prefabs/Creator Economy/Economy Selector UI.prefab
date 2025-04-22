@@ -158,8 +158,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 7786150998757036611}
   selectedState: 0
-  doubleClickToDefault: 0
-  doubleClickDefaultState: 0
+  secondClickToDefault: 0
+  secondClickDefaultState: 0
   itemObjs: []
   externalBehaviours: []
   idValueName: selectionId
@@ -174,8 +174,16 @@ MonoBehaviour:
   - {fileID: 7847845734607783768}
   - {fileID: 190189362334946753}
   selector: {fileID: 1414476892537151929}
+  buttonNormalScale: {x: -4, y: -4}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 60
+  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -560,6 +568,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2291558832814445771}
+  overrideDefaults: 0
+  smoothingCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementDuration: 0
+  enabledColor: {r: 0, g: 0, b: 0, a: 0}
+  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &2291558832814445771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,6 +942,11 @@ PrefabInstance:
       propertyPath: m_text
       value: Locked 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1237689232266450389, guid: bc08df8a5eb99dd40a32f28c87c74d58,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 8.95
+      objectReference: {fileID: 0}
     - target: {fileID: 3290783573871902114, guid: bc08df8a5eb99dd40a32f28c87c74d58,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -1211,6 +1234,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Locked 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1237689232266450389, guid: bc08df8a5eb99dd40a32f28c87c74d58,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 8.95
       objectReference: {fileID: 0}
     - target: {fileID: 3290783573871902114, guid: bc08df8a5eb99dd40a32f28c87c74d58,
         type: 3}

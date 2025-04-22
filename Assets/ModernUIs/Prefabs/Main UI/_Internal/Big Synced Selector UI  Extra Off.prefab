@@ -299,8 +299,16 @@ MonoBehaviour:
   - {fileID: 2956526691581133853}
   - {fileID: 3816596193894470277}
   selector: {fileID: 3581645354239287454}
+  buttonNormalScale: {x: -4, y: -4}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 60
+  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -558,6 +566,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5954784548893463332}
+  overrideDefaults: 0
+  smoothingCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementDuration: 0
+  enabledColor: {r: 0, g: 0, b: 0, a: 0}
+  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &5954784548893463332
 MonoBehaviour:
   m_ObjectHideFlags: 0

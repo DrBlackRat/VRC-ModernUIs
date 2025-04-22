@@ -53,7 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 selectorUIButton._UpdateLocked(!canChangeState);
             }
-            selector._SetColor(canChangeState ? whitelistedColor : notWhitelistedColor);
+            selector._SetEnabled(canChangeState);
         }
 
         #region Networking / Ownership / Persistence

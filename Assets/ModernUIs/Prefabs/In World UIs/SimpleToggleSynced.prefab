@@ -137,7 +137,7 @@ PrefabInstance:
     - target: {fileID: 2634268787049201021, guid: 6da3bf48f90f8ed43b5f684a5c2a41ac,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 10.197
+      value: 10.18
       objectReference: {fileID: 0}
     - target: {fileID: 2634268787049201021, guid: 6da3bf48f90f8ed43b5f684a5c2a41ac,
         type: 3}
@@ -300,8 +300,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6889684302270198416}
   selectedState: 0
-  doubleClickToDefault: 0
-  doubleClickDefaultState: 0
+  secondClickToDefault: 0
+  secondClickDefaultState: 0
   itemObjs: []
   externalBehaviours: []
   idValueName: selectionId
@@ -312,8 +312,16 @@ MonoBehaviour:
   - {fileID: 7875719733778587625}
   - {fileID: 1248866349614077784}
   selector: {fileID: 4947723941441306775}
+  buttonNormalScale: {x: -2, y: -2}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 40
+  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:

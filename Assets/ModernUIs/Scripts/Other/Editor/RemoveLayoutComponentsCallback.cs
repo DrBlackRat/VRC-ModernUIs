@@ -18,38 +18,33 @@ namespace DrBlackRat.VRC.ModernUIs
                 if (!remover.removeLayoutComponents) continue;
                 
                 var fitterComponents = remover.GetComponentsInChildren<ContentSizeFitter>();
-                foreach (var contentSizeFitter in fitterComponents)
+                for (int i = fitterComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(contentSizeFitter);
-                    //contentSizeFitter.enabled = false;
+                    Object.DestroyImmediate(fitterComponents[i]);
                 }
                 
                 var verticalComponents = remover.GetComponentsInChildren<VerticalLayoutGroup>();
-                foreach (var verticalLayout in verticalComponents)
+                for (int i = verticalComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(verticalLayout);
-                    //verticalLayout.enabled = false;
+                    Object.DestroyImmediate(verticalComponents[i]);
                 }
                 
                 var horizontalComponents = remover.GetComponentsInChildren<HorizontalLayoutGroup>();
-                foreach (var horizontalLayout in horizontalComponents)
+                for (int i = horizontalComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(horizontalLayout);
-                    //horizontalLayout.enabled = false;
+                    Object.DestroyImmediate(horizontalComponents[i]);
                 }
                 
                 var gridComponents = remover.GetComponentsInChildren<GridLayoutGroup>();
-                foreach (var gridLayout in gridComponents)
+                for (int i = gridComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(gridLayout);
-                    //gridLayout.enabled = false;
+                    Object.DestroyImmediate(gridComponents[i]);
                 }
                 
                 var layoutElementComponents = remover.GetComponentsInChildren<LayoutElement>();
-                foreach (var layoutElement in layoutElementComponents)
+                for (int i = layoutElementComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(layoutElement);
-                    //layoutElement.enabled = false;
+                    Object.DestroyImmediate(layoutElementComponents[i]);
                 }
             }
         }

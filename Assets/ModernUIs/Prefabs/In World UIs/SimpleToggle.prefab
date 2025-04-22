@@ -227,6 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a8b7b1289155748bcaefcd3933dabb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  removeLayoutComponents: 1
 --- !u!1 &5244093069899408900
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,8 +640,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4270540110030001448}
   selectedState: 0
-  doubleClickToDefault: 0
-  doubleClickDefaultState: 0
+  secondClickToDefault: 0
+  secondClickDefaultState: 0
   itemObjs: []
   externalBehaviours: []
   idValueName: selectionId
@@ -651,8 +652,16 @@ MonoBehaviour:
   - {fileID: 5266515496357171399}
   - {fileID: 3823164631907702902}
   selector: {fileID: 6986101289647312825}
+  buttonNormalScale: {x: -2, y: -2}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 40
+  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -842,6 +851,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4038745995248189110}
+  overrideDefaults: 0
+  smoothingCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementDuration: 0
+  enabledColor: {r: 0, g: 0, b: 0, a: 0}
+  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4038745995248189110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,12 +998,12 @@ PrefabInstance:
     - target: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: buttonNormalScale.x
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: buttonNormalScale.y
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -999,7 +1018,7 @@ PrefabInstance:
     - target: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: buttonNormalPixelPerUnit
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -1141,17 +1160,17 @@ PrefabInstance:
     - target: {fileID: 7082709604238250124, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: buttonNormalScale.x
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7082709604238250124, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: buttonNormalScale.y
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7082709604238250124, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: buttonNormalPixelPerUnit
-      value: 40
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7082709604238250124, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}

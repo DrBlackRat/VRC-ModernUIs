@@ -187,8 +187,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 7214510220193600906}
   selectedState: 1
-  doubleClickToDefault: 0
-  doubleClickDefaultState: 0
+  secondClickToDefault: 0
+  secondClickDefaultState: 0
   itemObjs:
   - {fileID: 0}
   - {fileID: 0}
@@ -201,8 +201,16 @@ MonoBehaviour:
   - {fileID: 9098897556911491554}
   - {fileID: 5990977783880500514}
   selector: {fileID: 5517270773989077191}
+  buttonNormalScale: {x: -4, y: -4}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 60
+  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -450,6 +458,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 94381290742556049}
+  overrideDefaults: 0
+  smoothingCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  movementDuration: 0
+  enabledColor: {r: 0, g: 0, b: 0, a: 0}
+  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &94381290742556049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -770,26 +788,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1324636217814232040}
     m_Modifications:
-    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
-        type: 3}
-      propertyPath: m_PixelsPerUnitMultiplier
-      value: 35
-      objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -925,6 +923,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: On
+      objectReference: {fileID: 0}
+    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 250669175796694228, guid: 0b8042595e7a85a4fad1db11a382de2b,
+        type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

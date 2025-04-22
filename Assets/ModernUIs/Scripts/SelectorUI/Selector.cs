@@ -9,14 +9,24 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Selector : UdonSharpBehaviour
     {
+        [Header("Overrides:")]
+        [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults would be used.")]
+        public bool overrideDefaults;
+        
+        [Header("Animation Override:")]
+        [SerializeField] protected AnimationCurve smoothingCurve;
+        [SerializeField] protected float movementDuration;
+
+        [Header("Color Override:")] 
+        [SerializeField] protected Color enabledColor;
+        [SerializeField] protected Color disabledColor;
+        
         // Grabbed at Start
         private RectTransform selectorTransform;
         private Image selectorImage;
         
         // Provided by Main Script
         private SelectorUI selectorUI;
-        private AnimationCurve smoothingCurve;
-        private float movementDuration;
         
         // Animation
         private bool animate;
@@ -33,19 +43,31 @@ namespace DrBlackRat.VRC.ModernUIs
         private float prevCorner;
         private float newCorner;
 
-        public void Setup(SelectorUI newSelectorUI, AnimationCurve newSmoothingCurve, float newMovementDuration)
+        public void _Setup(SelectorUI newSelectorUI)
         {
             selectorUI = newSelectorUI;
-            smoothingCurve = newSmoothingCurve;
-            movementDuration = newMovementDuration;
 
             selectorTransform = GetComponent<RectTransform>();
             selectorImage = GetComponent<Image>();
         }
 
-        public void _SetColor(Color color)
+        public void _SetDefaults(AnimationCurve newSmoothingCurve, float newMovementDuration)
         {
-            selectorImage.color = color;
+            if(overrideDefaults) return;
+            smoothingCurve = newSmoothingCurve;
+            movementDuration = newMovementDuration;
+        }
+
+        public void _SetDefaultColors(Color newEnabledColor, Color newDisabledColor)
+        {
+            if(overrideDefaults) return;
+            enabledColor = newEnabledColor;
+            disabledColor = newDisabledColor;
+        }
+
+        public void _SetEnabled(bool selectorEnabled)
+        {
+            selectorImage.color = selectorEnabled ? enabledColor : disabledColor;
         }
         
         public void _MoveTo(SelectorUIButton button)
