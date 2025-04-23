@@ -9,15 +9,12 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Selector : UdonSharpBehaviour
     {
-        [Header("Overrides:")]
-        [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults would be used.")]
+        [Tooltip("If enabled the Color and Animation Settings can be overriden, otherwise the defaults provided by the Selector UI will be used.")]
         public bool overrideDefaults;
         
-        [Header("Animation Override:")]
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
-
-        [Header("Color Override:")] 
+        
         [SerializeField] protected Color enabledColor;
         [SerializeField] protected Color disabledColor;
         

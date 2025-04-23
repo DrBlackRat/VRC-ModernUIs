@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:editor="UnityEditor.UIElements" xmlns:vrc="VRC.SDKBase.Editor.Elements" xmlns:engine="UnityEngine.UIElements" xmlns="UnityEditor.Overlays" elementFormDefault="qualified" targetNamespace="VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="UnityEngine.UIElements.xsd" namespace="UnityEngine.UIElements" />
+  <xs:complexType name="VideoPlayerElementType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="url-attr" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="VideoPlayerElement" substitutionGroup="engine:VisualElement" xmlns:q1="VRC.Udon.Editor.ProgramSources.UdonGraphProgram.UI.GraphView" type="q1:VideoPlayerElementType" />
+</xs:schema>

@@ -12,37 +12,32 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SelectorUIButton : UdonSharpBehaviour
     {
-        [Header("References:")]
         [SerializeField] protected GameObject buttonObj;
         [SerializeField] protected GameObject iconObj;
         [SerializeField] protected GameObject textObj;
         
-        [Header("Overrides:")]
-        [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults would be used.")]
+        [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults provided by the Selector UI will be used.")]
         public bool overrideDefaults;
         
-        [Header("Button Override:")]
-        [SerializeField] protected Vector2 buttonNormalScale;
-        [SerializeField] protected Vector2 buttonSelectedScale;
-        [Space(10)]
-        [SerializeField] protected float buttonNormalPixelPerUnit;
-        [SerializeField] protected float buttonSelectedPixelPerUnit;
-        
-        [Header("Color Override:")]
         [SerializeField] protected Color normalColor;
         [SerializeField] protected Color selectedColor;
         
-        [Header("Icon Override:")]
+        [SerializeField] protected AnimationCurve smoothingCurve;
+        [SerializeField] protected float movementDuration;
+        
+        [SerializeField] protected Vector2 buttonNormalScale;
+        [SerializeField] protected Vector2 buttonSelectedScale;
+
+        [SerializeField] protected float buttonNormalPixelPerUnit;
+        [SerializeField] protected float buttonSelectedPixelPerUnit;
+        
         [SerializeField] protected Vector2 iconNormalPos;
         [SerializeField] protected Vector2 iconSelectedPos;
         
-        [Header("Text Override:")]
         [SerializeField] protected Vector2 textNormalPos;
         [SerializeField] protected Vector2 textSelectedPos;
         
-        [Header("Animation Override:")]
-        [SerializeField] protected AnimationCurve smoothingCurve;
-        [SerializeField] protected float movementDuration;
+
 
         protected Button button;
         protected RectTransform buttonTransform;

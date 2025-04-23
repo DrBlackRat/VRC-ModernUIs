@@ -13,7 +13,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EconomySelectorUIButton : SelectorUIButton
     {
-        [Header("Creator Economy:")] 
         [Tooltip("If enabled, a user will be treated as if they own the product, useful for testing.")]
         [SerializeField] protected bool owned;
         [Tooltip("Product a user needs to own to be able to select this button.")]

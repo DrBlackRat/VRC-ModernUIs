@@ -187,20 +187,18 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 7214510220193600906}
   selectedState: 1
-  secondClickToDefault: 0
-  secondClickDefaultState: 0
+  secondClick: 0
+  secondClickState: 0
+  usePersistence: 0
+  dataKey: CHANGE THIS
   itemObjs:
   - {fileID: 0}
   - {fileID: 0}
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  usePersistence: 0
-  dataKey: CHANGE THIS
-  selectorUIButtons:
-  - {fileID: 9098897556911491554}
-  - {fileID: 5990977783880500514}
-  selector: {fileID: 5517270773989077191}
+  selectorUIButtons: []
+  selector: {fileID: 0}
   buttonNormalScale: {x: -4, y: -4}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 60
@@ -768,18 +766,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2021854296605153646}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9098897556911491554 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7082709604238250124, guid: be00b570ce73c8e44af2d09ea50ce1e6,
-    type: 3}
-  m_PrefabInstance: {fileID: 2021854296605153646}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc66a26eb8c7c043b6c781f9571a8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6454965157382645081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -949,18 +935,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5798a6c062e04541be5b6db3133fda1, type: 3}
---- !u!114 &5990977783880500514 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 770289335657603195, guid: c5798a6c062e04541be5b6db3133fda1,
-    type: 3}
-  m_PrefabInstance: {fileID: 6454965157382645081}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fc66a26eb8c7c043b6c781f9571a8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &6880629571727277534 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,

@@ -16,9 +16,15 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected int selectedState;
         [Space(10)] 
         [Tooltip("When enabled, clicking on an activated button again will make the selection go back to the default state.")]
-        [SerializeField] protected bool secondClickToDefault;
-        [Tooltip("Default State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
-        [SerializeField] protected int secondClickDefaultState;
+        [SerializeField] protected bool secondClick;
+        [Tooltip("State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
+        [SerializeField] protected int secondClickState;
+        
+        [Header("Persistence:")]
+        [Tooltip("Turn on if this SelectorUI should be saved using Persistence.")]
+        [SerializeField] protected bool usePersistence;
+        [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
+        [SerializeField] protected string dataKey = "CHANGE THIS";
         
         [Header("Toggles:")]
         [Tooltip("Objects that should be turned on / off. The same order as buttons will be used.")]
@@ -30,16 +36,13 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected string idValueName = "selectionId";
         [Tooltip("Name of Event that will be fired if the selection changes.")]
         [SerializeField] protected string changeEventName = "_SelectionChanged";
-
-        [Header("Persistence:")]
-        [Tooltip("Turn on if this SelectorUI should be saved using Persistence.")]
-        [SerializeField] protected bool usePersistence;
-        [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
-        [SerializeField] protected string dataKey = "CHANGE THIS";
+        
         
         [Header("Internal Connections:")]
-        [SerializeField] protected SelectorUIButton[] selectorUIButtons;
-        [SerializeField] protected Selector selector;
+        [Tooltip("Selector UI Buttons which are used for this Selector UI. Grabbed automatically if left empty.")]
+        public SelectorUIButton[] selectorUIButtons;
+        [Tooltip("Selector which is used for this Selector UI. Grabbed automatically if left empty.")]
+        public Selector selector;
         
         [Header("Default Button Settings:")]
         [SerializeField] protected Vector2 buttonNormalScale;
@@ -60,8 +63,9 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected Vector2 textNormalPos;
         [SerializeField] protected Vector2 textSelectedPos;
         
+        [FormerlySerializedAs("animationCurve")]
         [Header("Default UI Animation:")]
-        [SerializeField] protected AnimationCurve animationCurve;
+        [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
 
         protected int prevSelectedState;
@@ -81,12 +85,12 @@ namespace DrBlackRat.VRC.ModernUIs
                     iconSelectedPos, 
                     textNormalPos, 
                     textSelectedPos, 
-                    animationCurve, 
+                    smoothingCurve, 
                     movementDuration);
                 selectorUIButtons[i]._Setup(this, i);
             }            
             
-            if (!selector.overrideDefaults) selector._SetDefaults(animationCurve, movementDuration);
+            if (!selector.overrideDefaults) selector._SetDefaults(smoothingCurve, movementDuration);
             selector._Setup(this);
 
             
@@ -128,10 +132,10 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _ButtonSelected(int buttonId)
         {
-            if (secondClickToDefault && buttonId == selectedState)
+            if (secondClick && buttonId == selectedState)
             {
-                if (buttonId == secondClickDefaultState) return;
-                UpdateSelection(secondClickDefaultState, false, false, false);
+                if (buttonId == secondClickState) return;
+                UpdateSelection(secondClickState, false, false, false);
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -8,12 +9,11 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SelectorUISeparator : UdonSharpBehaviour
     {
-        [Header("Settings:")]
         [SerializeField] private RectTransform recTransform;
         [SerializeField] private Vector2[] positions;
         
-        [Header("UI Animation:")]
-        [SerializeField] private AnimationCurve animationCurve;
+        [FormerlySerializedAs("animationCurve")]
+        [SerializeField] private AnimationCurve smoothingCurve;
         [SerializeField] private float movementDuration;
         
         private bool animate;
@@ -50,7 +50,7 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             animationElapsedTime += Time.deltaTime;
             var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
+            var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
             // Set Selector Position
             recTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
             
