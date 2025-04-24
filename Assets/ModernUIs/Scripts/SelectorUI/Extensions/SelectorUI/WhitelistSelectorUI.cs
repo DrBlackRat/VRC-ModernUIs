@@ -12,7 +12,7 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistSelectorUI : SelectorUI
     {
-        [Header("Whitelist:")] 
+
         [SerializeField] [Tooltip("Whitelist Manager that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
         protected WhitelistManager whitelistManager;
         [Tooltip("Color for the selector if a user is whitelisted.")]
@@ -21,7 +21,6 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected Color notWhitelistedColor;
 
         protected bool hasAccess;
-        protected Image selectorImage;
 
         protected override void Start()
         {

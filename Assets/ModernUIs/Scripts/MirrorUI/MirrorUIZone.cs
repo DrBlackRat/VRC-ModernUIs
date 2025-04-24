@@ -11,7 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [RequireComponent(typeof(BoxCollider))]
     public class MirrorUIZone : UdonSharpBehaviour
     {
-        [Header("Settings:")]
         [Tooltip("Mirror UI the Trigger Events should be sent to. You can have multiple of these attached to a Mirror UI.")]
         [SerializeField] private MirrorUI mirrorBehaviour;
         

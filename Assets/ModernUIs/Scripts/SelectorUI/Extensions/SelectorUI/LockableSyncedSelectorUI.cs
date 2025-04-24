@@ -11,10 +11,9 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class LockableSyncedSelectorUI : SyncedSelectorUI
     {
-        [Header("Lock Button:")] 
         [Tooltip("Default locked state of the Selector UI.")]
         [SerializeField] protected bool locked;
-        [Space(10)]
+
         [Tooltip("Button that switches the locked state.")]
         [SerializeField] protected Button lockButton;
         [Tooltip("Text Mesh Pro UI of which the text should be changed between \"Locked\", \"Unlocked\" and \"Not Whitelisted\".")]

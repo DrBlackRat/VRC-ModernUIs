@@ -3,16 +3,17 @@
     <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Modern UI | Economy Selector UI Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Settings" class="section" style="flex-grow: 1;">
-        <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 18px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-right: 0; margin-bottom: 5px;" />
-        <ui:Label tabindex="-1" text="References" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-        <uie:PropertyField binding-path="buttonObj" name="buttonObj" label="Button Object" />
-        <uie:PropertyField binding-path="iconObj" name="iconObj" label="Icon Object" />
-        <uie:PropertyField binding-path="textObj" name="textObj" label="Text Object" />
-        <ui:Label tabindex="-1" text="Creator Economy" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-        <uie:PropertyField binding-path="owned" name="owned" label="Owned" />
-        <uie:PropertyField binding-path="product" name="product" label="Udon Product" />
-    </ui:VisualElement>
+    <ui:Foldout text="Settings" view-data-key="SelectorUIButtomSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="References" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="buttonObj" name="buttonObj" label="Button Object" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="iconObj" name="iconObj" label="Icon Object" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="textObj" name="textObj" label="Text Object" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Creator Economy" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="owned" name="owned" label="Owned" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="product" name="product" label="Udon Product" style="-unity-font-style: normal; font-size: 12px;" />
+        </ui:VisualElement>
+    </ui:Foldout>
     <ui:VisualElement name="OverrideOptions" class="section" style="flex-grow: 1;">
         <ui:Toggle label="Override Defaults" binding-path="overrideDefaults" name="overrideDefaults" style="font-size: 18px; -unity-font-style: bold; flex-direction: row-reverse; flex-grow: 0; -unity-text-align: upper-left; align-self: flex-start; align-items: stretch; justify-content: flex-start; margin-bottom: 5px; margin-right: 0; margin-top: 1px; margin-left: 3px; min-width: 180px;" />
         <ui:Foldout text="Overrides" view-data-key="SelectorUIButtonOverridesFoldout" value="false" class="section insideSection" style="margin-top: 6px; margin-right: 6px; margin-bottom: 6px; margin-left: 6px; padding-top: 6px; padding-right: 6px; padding-bottom: 6px; padding-left: 20px; font-size: 12px;">

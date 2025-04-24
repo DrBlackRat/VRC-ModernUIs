@@ -15,8 +15,8 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
         
-        [SerializeField] protected Color enabledColor;
-        [SerializeField] protected Color disabledColor;
+        protected Color enabledColor;
+        protected Color disabledColor;
         
         // Grabbed at Start
         private RectTransform selectorTransform;
