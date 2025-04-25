@@ -57,7 +57,6 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _SetDefaultColors(Color newEnabledColor, Color newDisabledColor)
         {
-            if(overrideDefaults) return;
             enabledColor = newEnabledColor;
             disabledColor = newDisabledColor;
         }
