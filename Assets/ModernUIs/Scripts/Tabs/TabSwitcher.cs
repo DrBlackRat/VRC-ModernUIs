@@ -11,13 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class TabSwitcher : UdonSharpBehaviour
     {
-        [Header("Settings:")]
-        [Tooltip("Transform that gets moved to show a Tab.")]
-        [SerializeField] private RectTransform tabsTransform;
-        [Tooltip("The Tabs that should be switched to.")]
-        [SerializeField] private Tab[] tabs;
-        
-        [Header("UI Animation:")]
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
@@ -26,11 +19,15 @@ namespace DrBlackRat.VRC.ModernUIs
         private Vector2 oldTabPos;
         private int prevTabID = 0;
         private int currentTabID = 0;
+        
+        private RectTransform tabsTransform;
 
-        [HideInInspector]public int tabId;
+        [HideInInspector] public int tabId;
+        [HideInInspector] public Tab[] tabs;
 
         private void Start()
         {
+            tabsTransform = GetComponent<RectTransform>();
             // Hide Tabs on Start
             foreach (var tab in tabs)
             {

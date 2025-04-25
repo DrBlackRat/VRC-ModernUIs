@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -10,16 +11,21 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Tab : UdonSharpBehaviour
     {
-        [Header("Settings")]
-        [Tooltip("Position the Tab should move to when selected.")]
-        [SerializeField] private Vector2 tabsPos;
-        [Tooltip("Canvas Group of which the Alpha will be set to when the Tab is hidden, this prevents it from rendering.")]
-        [SerializeField] private CanvasGroup canvasGroup;
+        private RectTransform rectTransform;
+        private Vector2 tabPos;
+        private CanvasGroup canvasGroup;
+
+        private void Start()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+            rectTransform = GetComponent<RectTransform>();
+            tabPos = new Vector2(-rectTransform.anchoredPosition.x, -rectTransform.anchoredPosition.y);
+        }
 
         // Tab Moving Stuff
         public Vector2 _GetPos()
         {
-            return tabsPos;
+            return tabPos;
         }
         public void _Hide()
         {

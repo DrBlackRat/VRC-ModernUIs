@@ -12,27 +12,23 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SliderUI : UdonSharpBehaviour
     {
-        [Header("Settings:")]
         [Tooltip("This is the default value the slider will have.")]
         [SerializeField] private float value = 0f;
-        [Space(10)]
+
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
         [SerializeField] private PostProcessVolume postProcessVolume;
-        [Space(10)]
         [Tooltip("Udon Behaviour that should be updated.")]
         [SerializeField] private UdonBehaviour sliderBehaviour;
         [Tooltip("Event that will be called on the Slider Behaviour if the value changes.")]
         [SerializeField] private string updateEventName = "_SliderUpdated";
         [Tooltip("Variable that will be updated on the Slider Behaviour if the value changes.")]
         [SerializeField] private string variableName = "sliderValue";
-
-        [Header("Persistence:")]
+        
         [Tooltip("Turn on if this Slider should be saved using Persistence.")]
         [SerializeField] private bool usePersistence = true;
         [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
         [SerializeField] private string dataKey = "CHANGE THIS";
-
-        [Header("Internals:")] 
+        
         [SerializeField] private Slider slider;
 
 

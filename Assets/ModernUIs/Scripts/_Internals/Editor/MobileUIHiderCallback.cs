@@ -17,6 +17,12 @@ namespace DrBlackRat.VRC.ModernUIs
                     if (obj == null) continue;
                     obj.SetActive(false);
                 }
+
+                foreach (var obj in mobileUIHider.objectsToEnable)
+                {
+                    if (obj == null) continue;
+                    obj.SetActive(true);
+                }
                 
                 for (int i = 0; i < mobileUIHider.moveTransforms.Length; i++)
                 {

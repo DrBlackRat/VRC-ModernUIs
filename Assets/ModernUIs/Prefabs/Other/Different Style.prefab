@@ -72,8 +72,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 3472518106093421194}
-  tabsPos: {x: 0, y: -17.5}
-  canvasGroup: {fileID: 5026805164665121546}
 --- !u!114 &3472518106093421194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,8 +832,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
-  enabledColor: {r: 0, g: 0, b: 0, a: 0}
-  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &500769071451676052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1441,21 +1437,15 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1918245016365768280}
   selectedState: 0
-  secondClickToDefault: 0
-  secondClickDefaultState: 0
+  secondClick: 0
+  secondClickState: 0
+  usePersistence: 0
+  dataKey: CHANGE THIS
   itemObjs: []
   externalBehaviours:
   - {fileID: 610791990781489129}
   idValueName: tabId
   changeEventName: _SwitchTab
-  usePersistence: 0
-  dataKey: CHANGE THIS
-  selectorUIButtons:
-  - {fileID: 7534685661276583157}
-  - {fileID: 7989021305689426047}
-  - {fileID: 1003166134522692241}
-  - {fileID: 2014872352673345490}
-  selector: {fileID: 5726360876491752460}
   buttonNormalScale: {x: -1, y: -1}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 20
@@ -1466,7 +1456,7 @@ MonoBehaviour:
   iconSelectedPos: {x: 0, y: 0}
   textNormalPos: {x: 0, y: 0}
   textSelectedPos: {x: 0, y: 0}
-  animationCurve:
+  smoothingCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1509,6 +1499,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.75
+  selectorUIButtons: []
+  selector: {fileID: 0}
 --- !u!114 &1918245016365768280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1881,8 +1873,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 8737652814864266252}
-  tabsPos: {x: 800, y: -17.5}
-  canvasGroup: {fileID: 2033732221602205150}
 --- !u!114 &8737652814864266252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2094,6 +2084,42 @@ MonoBehaviour:
           m_StringArgument: _ButtonPressed
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &6513662906362101876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4016186598246864464}
+  m_Layer: 17
+  m_Name: TabsHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4016186598246864464
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6513662906362101876}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00038147}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1162521658399248928}
+  m_Father: {fileID: 3953255893197361073}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -17.5}
+  m_SizeDelta: {x: -20, y: -55}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6563347731922827896
 GameObject:
   m_ObjectHideFlags: 0
@@ -2412,7 +2438,7 @@ GameObject:
   - component: {fileID: 610791990781489129}
   - component: {fileID: 5106544027487780187}
   m_Layer: 17
-  m_Name: Tabs
+  m_Name: TabsSwitcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2425,7 +2451,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7832376768709101269}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2434,11 +2460,11 @@ RectTransform:
   - {fileID: 3379215323363880901}
   - {fileID: 3815192721311196868}
   - {fileID: 5822228088271663238}
-  m_Father: {fileID: 3953255893197361073}
+  m_Father: {fileID: 4016186598246864464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -17.5}
+  m_AnchoredPosition: {x: 0, y: -0}
   m_SizeDelta: {x: 380, y: 251}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &131633323905729038
@@ -2463,12 +2489,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 610791990781489129}
-  tabsTransform: {fileID: 1162521658399248928}
-  tabs:
-  - {fileID: 8957805573887700116}
-  - {fileID: 2291656700536244891}
-  - {fileID: 1913429208347137769}
-  - {fileID: 5650757201506165559}
   animationCurve:
     serializedVersion: 2
     m_Curve:
@@ -2513,6 +2533,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   movementDuration: 1
   tabId: 0
+  tabs:
+  - {fileID: 8957805573887700116}
+  - {fileID: 2291656700536244891}
+  - {fileID: 1913429208347137769}
+  - {fileID: 5650757201506165559}
 --- !u!114 &610791990781489129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2623,8 +2648,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4254022601051613272}
-  tabsPos: {x: 400, y: -17.5}
-  canvasGroup: {fileID: 2403157641180406278}
 --- !u!114 &4254022601051613272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3043,8 +3066,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 8276238970314255717}
-  tabsPos: {x: 1200, y: -17.5}
-  canvasGroup: {fileID: 8000434760286428938}
 --- !u!114 &8276238970314255717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3365,7 +3386,7 @@ RectTransform:
   - {fileID: 1019093079084258108}
   - {fileID: 6723013988623096185}
   - {fileID: 5841971860757932555}
-  - {fileID: 1162521658399248928}
+  - {fileID: 4016186598246864464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
