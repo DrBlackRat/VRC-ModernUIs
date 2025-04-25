@@ -10,13 +10,11 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class UIDistanceHider : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
         [Tooltip("Canvas Group that will be hidden when Player is outside of the trigger.")]
         [SerializeField] private CanvasGroup[] hidingCanvases;
         [Tooltip("Canvas Group that will be shown when Player is outside of the trigger. Use full for things like a distance hidden info message.")]
         [SerializeField] private CanvasGroup infoCanvas;
-
-        [Header("Animation:")]
+        
         [SerializeField] private AnimationCurve smoothingCurve;
         [SerializeField] private float movementDuration;
         
