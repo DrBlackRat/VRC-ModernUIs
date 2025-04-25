@@ -29,7 +29,7 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
             }
-            if (!selector.overrideDefaults) selector._SetDefaultColors(whitelistedColor, notWhitelistedColor);
+            selector._SetDefaultColors(whitelistedColor, notWhitelistedColor);
             hasAccess = CheckAccess();
             _UpdateInteractable();
         }
