@@ -12,11 +12,9 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistTeleport : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
         [SerializeField] private Transform teleportTransform;
         [SerializeField] private WhitelistManager whitelistManager;
-
-        [Header("Button:")] 
+        
         [Tooltip("Button that will have it's intractability enabled / disabled depending on if you are on the whitelist or not.")]
         [SerializeField] private Button teleportButton;
         [Tooltip("Text Mesh Pro UGUI component that will have it's text changed depending on if you are on the whitelist or not.")]

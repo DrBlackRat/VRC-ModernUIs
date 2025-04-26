@@ -12,21 +12,19 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EulaScreen : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
         [Tooltip("Object to disable if Eula has been accepted. Use full for things like a collider box.")]
         [SerializeField] private GameObject disableObject;
-        [Space(10)]
+
         [Tooltip("Object to disable, move and scale when the Eula has been accepted.")]
         [SerializeField] private GameObject eulaObject;
         [Tooltip("Transform the Eula will animate it's scale and position to.")]
         [SerializeField] private Transform hiddenTransform;
         [Tooltip("Canvas Group of which the alpha will be animated to make it slowly fade out.")]
         [SerializeField] private CanvasGroup canvasGroup;
-        [Space(10)] 
+        
         [Tooltip("Game Object that gets enabled if the Eula has changed since it was last accepted.")]
         [SerializeField] private GameObject versionChangeInfo;
         
-        [Header("Persistence:")]
         [Tooltip("Turn on if this Eula should be saved using Persistence.")]
         [SerializeField] private bool usePersistence = true;
         [Tooltip("Data Key that will be used to save / load this Eula, everything using Persistence should have a different Data Key.")]
@@ -34,7 +32,6 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Current version of the Eula, if the accepted one is lower than the current a user will have to accept it again.")]
         [SerializeField] private int ruleVer;
         
-        [Header("Animation:")]
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
