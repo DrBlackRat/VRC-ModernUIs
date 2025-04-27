@@ -23,7 +23,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
         [SerializeField] protected string dataKey = "CHANGE THIS";
         
-        [Tooltip("Objects that should be turned on / off. The same order as buttons will be used.")]
+        [Tooltip("Objects that should be turned on / off. The same order as buttons in the children of the Selector UI will be used (top to bottom).")]
         [SerializeField] protected GameObject[] itemObjs;
         [Tooltip("Udon Behaviours that the connection data will be send to.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;

@@ -5,12 +5,12 @@ using VRC.Economy;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUI
+namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class OpenListing : UdonSharpBehaviour
     {
-        [SerializeField] private string listingId = "";
+        [SerializeField] private string listingId = "CHANGE THIS";
         
         public void _OpenListing()
         {

@@ -9,8 +9,7 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class OpenGroupStore : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
-        [SerializeField] private string groupId;
+        [SerializeField] private string groupId = "CHANGE THIS";
         
         public void _OpenStore()
         {
