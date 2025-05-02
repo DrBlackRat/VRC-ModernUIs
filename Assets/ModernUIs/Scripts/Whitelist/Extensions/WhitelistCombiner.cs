@@ -8,7 +8,7 @@ using VRC.Udon;
 namespace DrBlackRat.VRC.ModernUIs
 {
     [DefaultExecutionOrder(900)]
-    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistCombiner : WhitelistManager
     {
         [Tooltip("Whitelists that you want to combine into one. Useful for combining a local and synced whitelist.")]
