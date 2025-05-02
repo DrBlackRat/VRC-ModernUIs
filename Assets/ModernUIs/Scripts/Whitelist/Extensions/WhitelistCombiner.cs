@@ -11,7 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class WhitelistCombiner : WhitelistManager
     {
-        [Header("Whitelist Combiner:")]
         [Tooltip("Whitelists that you want to combine into one. Useful for combining a local and synced whitelist.")]
         [SerializeField] protected WhitelistManager[] whitelistManagers;
         

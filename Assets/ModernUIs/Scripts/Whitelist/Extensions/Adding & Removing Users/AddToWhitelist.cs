@@ -11,13 +11,16 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class AddToWhitelist : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
+        [Tooltip("Whitelist Manager that will be adjusted")]
         [SerializeField] protected WhitelistManager whitelistManager;
+        [Tooltip("Input Field of which to get the username from.")]
         [SerializeField] protected TMP_InputField inputField;
-        [Header("Whitelisted:")] 
-        [Tooltip("Requires user to be whitelisted to be able to add a username. This will be enabled automatically when using the Synced Whitelist Manager.")]
+        
+        [Tooltip("Requires user to be whitelisted to be able to add / remove a username. This will be enabled automatically when using the Synced Whitelist Manager.")]
         [SerializeField] protected bool requireWhitelisted;
-        [Space(10)]
+        [Tooltip("Whitelist a user needs to be on to add / remove a username. If left empty it will be the same as the whitelistManager")]
+        [SerializeField] protected WhitelistManager inputWhitelistManager;
+
         [Tooltip("Text Mesh Pro UGUI component that will have it's text changed depending on if you are on the whitelist or not.")]
         [SerializeField] protected TextMeshProUGUI placeholderText;
         [Tooltip("Text that is displayed if you are on the whitelist.")]
@@ -33,13 +36,14 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 requireWhitelisted = true;
             }
-            whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+            if (inputWhitelistManager == null) inputWhitelistManager = whitelistManager;
+            inputWhitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
         }
 
         public void _WhitelistUpdated()
         {
             if (!requireWhitelisted) return;
-            hasAccess = whitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+            hasAccess = inputWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
 
             inputField.interactable = hasAccess;
             placeholderText.text = hasAccess ? whitelistedText : notWhitelistedText;

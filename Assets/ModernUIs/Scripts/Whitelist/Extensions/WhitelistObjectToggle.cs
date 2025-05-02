@@ -9,11 +9,9 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistObjectToggle : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
         [SerializeField] private WhitelistManager whitelistManager;
-
-        [Space(10)] 
+        
         [Tooltip("Objects that should only be enabled for whitelisted users.")]
         [SerializeField] private GameObject[] whitelistedObjs;
         [Tooltip("Objects that should be enabled for everyone, but disabled for whitlisted users.")]

@@ -11,13 +11,12 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistStringLoader : UdonSharpBehaviour
     {
-        [Header("Settings:")]
         [SerializeField] private VRCUrl url;
         [SerializeField] private WhitelistManager whitelistManager;
-
-        [Header("Auto Reload:")]
+        
         [SerializeField] private bool autoReload = false;
         [Range(1, 60)]
+        [Tooltip("Time after which the whitelist will be downloaded again in minutes.")]
         [SerializeField] private int autoReloadTime = 10;
         
         private bool loading = false;

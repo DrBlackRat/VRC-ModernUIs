@@ -11,11 +11,11 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistNameDisplay : UdonSharpBehaviour
     {
-        [Header("Settings:")] 
-        [Tooltip("Text Mesh Pro UGUI component that should get the names added to it.")]
-        [SerializeField] private TextMeshProUGUI textMesh;
         [Tooltip("Whitelist Manager to grab the names from.")]
         [SerializeField] private WhitelistManager whitelistManager;
+        
+        [Tooltip("Text Mesh Pro UGUI component that should get the names added to it.")]
+        [SerializeField] private TextMeshProUGUI textMesh;
 
         private void Start()
         {

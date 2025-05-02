@@ -11,7 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistManager : UdonSharpBehaviour
     {
-        [Header("Whitelist:")] 
         [Tooltip("Display Name of each User you would want to be on the whitelist.")]
         [SerializeField] protected string[] whitelistedUsers;
         
