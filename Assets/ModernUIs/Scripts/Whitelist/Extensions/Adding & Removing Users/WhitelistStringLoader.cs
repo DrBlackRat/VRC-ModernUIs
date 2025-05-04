@@ -14,6 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private VRCUrl url;
         [SerializeField] private WhitelistManager whitelistManager;
         
+        [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
         [SerializeField] private bool autoReload = false;
         [Range(1, 60)]
         [Tooltip("Time after which the whitelist will be downloaded again in minutes.")]
