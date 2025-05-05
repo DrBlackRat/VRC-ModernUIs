@@ -4,6 +4,7 @@ using UnityEngine;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -14,7 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Display Name of each User you would want to be on the whitelist.")]
         [SerializeField] protected string[] whitelistedUsers;
         
-        protected UdonBehaviour[] connectedBehaviours;
+        protected IUdonEventReceiver[] connectedBehaviours;
 
         protected virtual void Start()
         {
@@ -25,7 +26,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <summary>
         /// Sets up a connection with the Whitelist Manager. Used to receive the "_WhitelistUpdated" event if the whitelist changes.
         /// </summary>
-        public void _SetUpConnection(UdonBehaviour behaviour)
+        public void _SetUpConnection(IUdonEventReceiver behaviour)
         {
             connectedBehaviours = connectedBehaviours.Add(behaviour);
         }

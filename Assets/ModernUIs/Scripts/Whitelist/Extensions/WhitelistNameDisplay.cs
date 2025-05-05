@@ -2,9 +2,11 @@
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UIElements;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -19,7 +21,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void Start()
         {
-            whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
         }
 
         public void _WhitelistUpdated()

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -37,7 +38,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 requireWhitelisted = true;
             }
             if (inputWhitelistManager == null) inputWhitelistManager = whitelistManager;
-            inputWhitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+            inputWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
         }
 
         public void _WhitelistUpdated()

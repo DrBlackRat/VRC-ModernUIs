@@ -4,6 +4,7 @@ using UnityEngine;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -19,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs
             base.Start();
             foreach (var whitelistManager in whitelistManagers)
             {
-                whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+                whitelistManager._SetUpConnection((IUdonEventReceiver)this);
             }
         }
 
