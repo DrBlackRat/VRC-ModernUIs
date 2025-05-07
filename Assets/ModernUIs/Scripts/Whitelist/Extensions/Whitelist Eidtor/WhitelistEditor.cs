@@ -57,8 +57,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
-            allUsers.Add(player.displayName);
-            AddNotWhitelistUser(player.displayName);
+            var name = player.displayName;
+            allUsers.Add(name);
+            AddNotWhitelistUser(name);
         }
 
         public override void OnPlayerLeft(VRCPlayerApi player)
@@ -83,7 +84,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             foreach (var username in whitelist)
             {
                 if (whitelistedUsers.ContainsKey(username)) continue;
-                if (hasAdminWhitelist && !showAdmins && adminWhitelistManager._IsPlayerWhitelisted(username)) continue;
                 AddWhitelistUser(username);
             }
             
@@ -155,6 +155,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private void AddNotWhitelistUser(string username)
         {
             if (notWhitelistedUsers.ContainsKey(username) || whitelistedUsers.ContainsKey(username) || !allUsers.Contains(username)) return;
+            if (hasAdminWhitelist && !showAdmins && adminWhitelistManager._IsPlayerWhitelisted(username)) return;
             
             var newUserObj = Instantiate(notWhitelistedPrefab, notWhitelistedTransform.position, notWhitelistedTransform.rotation, notWhitelistedTransform);
             newUserObj.transform.localScale = Vector3.one;
