@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(MobileUIHider))]
-    public class MobileUIHiderEditor : Editor
+    public class MobileUIHiderEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

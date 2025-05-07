@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(UIDistanceHider))]
-    public class UIDistanceHiderEditor : Editor
+    public class UIDistanceHiderEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

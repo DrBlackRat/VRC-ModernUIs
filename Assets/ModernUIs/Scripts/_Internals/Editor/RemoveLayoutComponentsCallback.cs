@@ -2,7 +2,7 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     public static class RemoveLayoutComponentsCallback
     

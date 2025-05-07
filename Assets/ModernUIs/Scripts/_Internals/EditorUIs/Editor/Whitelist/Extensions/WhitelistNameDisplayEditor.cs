@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DrBlackRat.VRC.ModernUIs.Whitelist;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(WhitelistNameDisplay))]
-    public class WhitelistNameDisplayEditor : Editor
+    public class WhitelistNameDisplayEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

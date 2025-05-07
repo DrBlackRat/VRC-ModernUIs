@@ -82,6 +82,12 @@ namespace DrBlackRat.VRC.ModernUIs
             Array.Copy(tempArray, uniqueArray, newSize);
             return uniqueArray;
         }
+
+        public static bool Contains<T>(this T[] array, T value)
+        {
+            if (Array.IndexOf(array, value) != -1) return true;
+            return false;
+        }
     }
 }
 

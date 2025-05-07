@@ -6,7 +6,7 @@ using TMPro;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [DefaultExecutionOrder(-10)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]

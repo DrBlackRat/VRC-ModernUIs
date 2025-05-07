@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DrBlackRat.VRC.ModernUIs.Utils.MirrorUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(MirrorUIZone))]
-    public class MirrorUIZoneEditor : Editor
+    public class MirrorUIZoneEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

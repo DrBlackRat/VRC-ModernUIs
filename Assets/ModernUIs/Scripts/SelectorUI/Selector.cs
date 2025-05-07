@@ -4,7 +4,8 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs
+
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Selector : UdonSharpBehaviour

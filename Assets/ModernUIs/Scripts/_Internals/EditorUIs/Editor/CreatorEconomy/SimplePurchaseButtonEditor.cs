@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(SimplePurchaseButton))]
-    public class SimplePurchaseButtonEditor : Editor
+    public class SimplePurchaseButtonEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

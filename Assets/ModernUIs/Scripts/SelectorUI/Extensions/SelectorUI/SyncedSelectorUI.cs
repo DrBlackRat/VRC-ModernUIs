@@ -6,7 +6,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Persistence;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSelectorUI : WhitelistSelectorUI

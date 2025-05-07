@@ -1,14 +1,15 @@
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     public static class SelectorUICallback
     {
         [PostProcessScene(-49)]
         public static void OnPostProcessScene()
         {
-            SelectorUI[] selectorUis = Object.FindObjectsOfType<SelectorUI>();
+            SelectorUI.SelectorUI[] selectorUis = Object.FindObjectsOfType<SelectorUI.SelectorUI>();
 
             foreach (var selectorUi in selectorUis)
             {

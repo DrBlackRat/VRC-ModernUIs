@@ -5,11 +5,12 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using DrBlackRat.VRC.ModernUIs.Utils.MirrorUI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
-    [CustomEditor(typeof(MirrorUI))]
-    public class MirrorUIEditor : Editor
+    [CustomEditor(typeof(MirrorUI.MirrorUI))]
+    public class MirrorUIEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

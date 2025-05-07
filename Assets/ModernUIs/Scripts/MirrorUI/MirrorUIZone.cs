@@ -4,7 +4,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.MirrorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(100)]

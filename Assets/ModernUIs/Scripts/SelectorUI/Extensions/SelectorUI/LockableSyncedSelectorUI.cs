@@ -6,7 +6,7 @@ using VRC.Udon;
 using UnityEngine.UI;
 using TMPro;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class LockableSyncedSelectorUI : SyncedSelectorUI

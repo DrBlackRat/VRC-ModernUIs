@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(TabSwitcher))]
-    public class TabSwitcherEditor : Editor
+    public class TabSwitcherEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(WhitelistTeleport))]
-    public class WhitelistTeleportEditor : Editor
+    public class WhitelistTeleportEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

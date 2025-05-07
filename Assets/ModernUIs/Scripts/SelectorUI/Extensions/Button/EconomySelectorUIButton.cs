@@ -7,7 +7,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Economy;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [DefaultExecutionOrder(-10)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]

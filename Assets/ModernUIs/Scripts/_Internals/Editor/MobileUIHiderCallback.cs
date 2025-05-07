@@ -1,7 +1,7 @@
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     public static class MobileUIHiderCallback
     {

@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SelectorUISeparator : UdonSharpBehaviour

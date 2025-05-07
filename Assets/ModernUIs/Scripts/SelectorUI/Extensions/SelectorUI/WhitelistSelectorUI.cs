@@ -1,4 +1,5 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,7 +8,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Persistence;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistSelectorUI : SelectorUI

@@ -6,7 +6,7 @@ using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
 
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistStringLoader : UdonSharpBehaviour

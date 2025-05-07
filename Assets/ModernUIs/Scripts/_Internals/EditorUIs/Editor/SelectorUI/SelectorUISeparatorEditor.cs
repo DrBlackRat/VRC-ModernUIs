@@ -5,12 +5,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(SelectorUISeparator))]
 
-    public class SelectorUISeparatorEditor : Editor
+    public class SelectorUISeparatorEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

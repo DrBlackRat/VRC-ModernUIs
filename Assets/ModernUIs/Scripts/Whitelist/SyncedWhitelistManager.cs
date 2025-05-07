@@ -6,7 +6,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]

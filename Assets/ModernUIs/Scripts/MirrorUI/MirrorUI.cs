@@ -5,11 +5,12 @@ using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Persistence;
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.MirrorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class MirrorUI : SelectorUI
+    public class MirrorUI : SelectorUI.SelectorUI
     {
         private int zoneCounter;
         

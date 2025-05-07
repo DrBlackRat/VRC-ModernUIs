@@ -5,22 +5,24 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
-    [CustomEditor(typeof(SelectorUI))]
-    public class SelectorUIEditor : Editor
-    {
-        public VisualTreeAsset visualTree;
+    [CustomEditor(typeof(SelectorUI.SelectorUI))]
+    public class SelectorUIEditor : UnityEditor.Editor
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            VisualElement root = new VisualElement();
-            
-            // UXML
-            visualTree.CloneTree(root);
-            
-            return root;
-        }
+    {
+    public VisualTreeAsset visualTree;
+
+    public override VisualElement CreateInspectorGUI()
+    {
+        VisualElement root = new VisualElement();
+
+        // UXML
+        visualTree.CloneTree(root);
+
+        return root;
+    }
     }
 }

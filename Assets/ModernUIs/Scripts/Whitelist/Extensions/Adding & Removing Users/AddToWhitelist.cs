@@ -7,7 +7,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class AddToWhitelist : UdonSharpBehaviour
@@ -33,10 +33,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         protected void Start()
         {
-            if (whitelistManager.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>())
-            {
-                requireWhitelisted = true;
-            }
+            if (whitelistManager.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
             if (inputWhitelistManager == null) inputWhitelistManager = whitelistManager;
             inputWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
         }

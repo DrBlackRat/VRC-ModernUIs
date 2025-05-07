@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class RemoveFromWhitelist : AddToWhitelist

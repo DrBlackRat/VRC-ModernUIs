@@ -6,10 +6,10 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
 {
     [CustomEditor(typeof(OpenGroup))]
-    public class OpenGroupEditor : Editor
+    public class OpenGroupEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

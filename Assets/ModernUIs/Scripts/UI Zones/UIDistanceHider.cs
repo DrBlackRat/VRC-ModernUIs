@@ -5,7 +5,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using UnityEngine.UI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Utils
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class UIDistanceHider : UdonSharpBehaviour
