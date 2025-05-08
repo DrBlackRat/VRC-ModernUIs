@@ -57,9 +57,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
-            var name = player.displayName;
-            allUsers.Add(name);
-            AddNotWhitelistUser(name);
+            var username = player.displayName;
+            allUsers.Add(username);
+            AddNotWhitelistUser(username);
         }
 
         public override void OnPlayerLeft(VRCPlayerApi player)
