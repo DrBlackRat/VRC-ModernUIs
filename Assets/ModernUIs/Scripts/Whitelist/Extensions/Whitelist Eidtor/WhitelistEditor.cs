@@ -8,6 +8,7 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistEditor : UdonSharpBehaviour
     {
         [SerializeField] private GameObject whitelistedPrefab;
@@ -70,14 +71,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public void _WhitelistUpdated()
         {
+            if (requireWhitelisted) UpdateAccess(adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer));
+            
             // blocks it being called by updating the whitelist manager
             if (blockWhitelistUpdate)
             {
                 blockWhitelistUpdate = false;
                 return;
             }
-            
-            if (requireWhitelisted) UpdateAccess(adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer));
             
             // Add if not on whitelistedUsers
             var whitelist = whitelistManager._GetNames();

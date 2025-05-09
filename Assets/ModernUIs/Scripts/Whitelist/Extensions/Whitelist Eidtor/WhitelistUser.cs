@@ -6,6 +6,7 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistUser : UdonSharpBehaviour
     {
         [SerializeField] private TextMeshProUGUI usernameTMP;
@@ -18,7 +19,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private string displayName;
         public string DisplayName
         {
-            get => displayName;
             set
             {
                 displayName = value;
@@ -29,7 +29,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private bool hasAccess;
         public bool HasAccess
         {
-            get => hasAccess;
             set
             {
                 hasAccess = value;
