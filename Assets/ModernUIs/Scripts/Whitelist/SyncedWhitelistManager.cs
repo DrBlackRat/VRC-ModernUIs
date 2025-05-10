@@ -71,7 +71,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         
-        protected override void WhitelistUpdated(bool fromNet)
+        protected override void WhitelistUpdated(bool fromNet, IUdonEventReceiver senderBehaviour = null)
         {
             var localPlayer = Networking.LocalPlayer;
             hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || adminWhitelistManager._IsPlayerWhitelisted(localPlayer);
@@ -86,58 +86,58 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 if (!localPlayer.IsOwner(gameObject)) Networking.SetOwner(localPlayer, gameObject);
                 RequestSerialization();
             }
-            base.WhitelistUpdated(fromNet);
+            base.WhitelistUpdated(fromNet, senderBehaviour);
         }
 
         #region Access Check Overrides
-        public override void _AddUser(string username)
+        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour)
         {
             if (!hasAccess)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-            base._AddUser(username);
+            base._AddUser(username, senderBehaviour);
         }
 
-        public override void _RemoveUser(string username)
+        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
             if (!hasAccess)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-            base._RemoveUser(username);
+            base._RemoveUser(username, senderBehaviour);
         }
 
-        public override void _AddUsers(DataList newUsernames)
+        public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!hasAccess)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-            base._AddUsers(newUsernames);
+            base._AddUsers(newUsernames, senderBehaviour);
         }
         
-        public override void _AddUsers(string[] newUsernames)
+        public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!hasAccess)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-            base._AddUsers(newUsernames);
+            base._AddUsers(newUsernames, senderBehaviour);
         }
 
-        public override void _ReplaceWhitelist(DataList newUsernames)
+        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!hasAccess)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-            base._ReplaceWhitelist(newUsernames);
+            base._ReplaceWhitelist(newUsernames, senderBehaviour);
         }
         #endregion
     }

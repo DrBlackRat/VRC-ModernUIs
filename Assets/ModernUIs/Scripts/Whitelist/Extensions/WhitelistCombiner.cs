@@ -34,7 +34,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 whitelist.AddRange(whitelistManager._GetUsersAsList());
             }
-            WhitelistUpdated(false);
+            WhitelistUpdated( false);
         }
 
         #region Overrides 
@@ -42,7 +42,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// DISABLED ON COMBINER
         /// Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.
         /// </summary>
-        public override void _AddUser(string username)
+        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour)
         {
             MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
         }
@@ -51,7 +51,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// DISABLED ON COMBINER
         /// Users can't directly be removed from a whitelist combiner. Remove them from the original whitelist instead.
         /// </summary>
-        public override void _RemoveUser(string username)
+        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
             MUIDebug.LogError("Whitelist Combiner: Users can't directly be removed from a whitelist combiner. Remove them from the original whitelist instead.");
         }
@@ -60,7 +60,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// DISABLED ON COMBINER
         /// Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.
         /// </summary>
-        public override void _AddUsers(DataList newUsernames)
+        public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
         }
@@ -69,7 +69,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// DISABLED ON COMBINER
         /// Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.
         /// </summary>
-        public override void _AddUsers(string[] newUsernames)
+        public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
         }
@@ -78,7 +78,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// DISABLED ON COMBINER
         /// Whitelist can't directly be replaced on a whitelist combiner.
         /// </summary>
-        public override void _ReplaceWhitelist(DataList newUsernames)
+        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             MUIDebug.LogError("Whitelist Combiner: Whitelist can't directly be replaced on a whitelist combiner.");
         }

@@ -22,7 +22,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             set
             {
                 displayName = value;
-                usernameTMP.text = value;
+                if (usernameTMP != null) usernameTMP.text = value;
             } 
         }
         
@@ -32,7 +32,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             set
             {
                 hasAccess = value;
-                buttonObj.SetActive(value);
+                if (buttonObj != null) buttonObj.SetActive(value);
             }
         }
         

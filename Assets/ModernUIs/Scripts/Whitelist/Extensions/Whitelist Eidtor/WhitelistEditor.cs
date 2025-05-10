@@ -28,7 +28,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private DataList allUsers = new DataList();
 
         private bool hasAccess;
-        private bool blockWhitelistUpdate;
         private bool hasAdminWhitelist;
         
         private void Start()
@@ -72,13 +71,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _WhitelistUpdated()
         {
             if (requireWhitelisted) UpdateAccess(adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer));
-            
-            // blocks it being called by updating the whitelist manager
-            if (blockWhitelistUpdate)
-            {
-                blockWhitelistUpdate = false;
-                return;
-            }
             
             // Add if not on whitelistedUsers
             var whitelist = whitelistManager._GetUsersAsList();
@@ -181,18 +173,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasAccess) return;
             AddWhitelistUser(username);
-            
-            blockWhitelistUpdate = true;
-            whitelistManager._AddUser(username);
+            whitelistManager._AddUser(username, (IUdonEventReceiver)this);
         }
 
         public void _Remove(string username)
         {
             if (!hasAccess) return;
             RemoveWhitelistUser(username);
-            
-            blockWhitelistUpdate = true;
-            whitelistManager._RemoveUser(username);
+            whitelistManager._RemoveUser(username, (IUdonEventReceiver)this);
         }
     }
 }
