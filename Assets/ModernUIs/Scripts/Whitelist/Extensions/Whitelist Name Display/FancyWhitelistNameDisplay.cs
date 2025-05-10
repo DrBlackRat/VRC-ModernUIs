@@ -10,6 +10,7 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FancyWhitelistNameDisplay : UdonSharpBehaviour
     {
         [SerializeField] private GameObject usernamePrefab;
