@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,14 +15,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistManager : UdonSharpBehaviour
     {
-        [Tooltip("Display Name of each User you would want to be on the whitelist.")]
-        [SerializeField] protected string[] whitelistedUsers;
-        
-        protected IUdonEventReceiver[] connectedBehaviours;
+        [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
+        [SerializeField] protected string[] startWhitelist;
+
+        protected DataList whitelist = new DataList();
+        protected DataList connectedBehaviours = new DataList();
 
         protected virtual void Start()
         {
-            ChangeWhitelist(whitelistedUsers, true);
+            foreach (var username in startWhitelist)
+            {
+                if (whitelist.Contains(username)) continue;
+                whitelist.Add(username);
+            }
+            WhitelistUpdated(true);
         }
 
         #region UdonBehaviour connection & external API to get info
@@ -28,7 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public void _SetUpConnection(IUdonEventReceiver behaviour)
         {
-            connectedBehaviours = connectedBehaviours.Add(behaviour);
+            connectedBehaviours.Add((UnityEngine.Object)behaviour);
         }
         
         /// <summary>
@@ -36,20 +45,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
-            foreach (var name in whitelistedUsers)
-            {
-                if (name == playerApi.displayName) return true;
-            }
-            return false;
+            return whitelist.Contains(playerApi.displayName);;
         }
         
-        public bool _IsPlayerWhitelisted(string displayname)
+        public bool _IsPlayerWhitelisted(string username)
         {
-            foreach (var name in whitelistedUsers)
-            {
-                if (name == displayname) return true;
-            }
-            return false;
+            return whitelist.Contains(username);
         }
         
         /// <summary>
@@ -57,15 +58,39 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public string _GetNamesFormatted()
         {
-            return string.Join("\n", whitelistedUsers);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < whitelist.Count; i++)
+            {
+                sb.Append(whitelist[i]);
+                if (i != whitelist.Count - 1)
+                {
+                    sb.Append("\n");
+                }
+            }
+            return sb.ToString();
         }
 
         /// <summary>
-        /// Returns the array of whitelisted usernames.
+        /// Returns the whitelist as an array. This is slow! it's recommended to do "_GetUsersAsList() instead"
         /// </summary>
-        public string[] _GetNames()
+        public string[] _GetUsersAsArray()
         {
-            return whitelistedUsers;
+            string[] usernames = new string[whitelist.Count];
+
+            for (int i = 0; i < whitelist.Count; i++)
+            {
+                usernames[i] = whitelist[i].String;
+            }
+            
+            return usernames;
+        }
+
+        /// <summary>
+        /// Returns a copy of the whitelist DataList. Don't use this for editing!
+        /// </summary>
+        public DataList _GetUsersAsList()
+        {
+            return whitelist.DeepClone();
         }
         #endregion
 
@@ -75,16 +100,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public virtual void _AddUser(string username)
         {
-            foreach (var whitelistedUser in whitelistedUsers)
+            if (whitelist.Contains(username))
             {
-                if (whitelistedUser == username)
-                {
-                    MUIDebug.LogWarning($"Whitelist Manager: User: {username} is already on the whitelist!");
-                    return;
-                }
+                MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
+                return;
             }
+            whitelist.Add(username);
             MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
-            ChangeWhitelist(whitelistedUsers.Add(username), false);
+            WhitelistUpdated(false);
         }
 
         /// <summary>
@@ -92,62 +115,81 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public virtual void _RemoveUser(string username)
         {
+            if (!whitelist.Contains(username))
+            {
+                MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
+                return;
+            }
+
+            whitelist.Remove(username);
             MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
-            ChangeWhitelist(whitelistedUsers.Remove(username), false);
+            WhitelistUpdated(false);
         }
 
         /// <summary>
-        /// Adds an array of user to the white list. Skips duplicate usernames.
+        /// Adds a DataList of usernames to the whitelist. Skips duplicate usernames.
+        /// </summary>
+        public virtual void _AddUsers(DataList newUsernames)
+        {
+            if (newUsernames == null || newUsernames.Count == 0) return;
+
+            for (int i = 0; i < newUsernames.Count; i++)
+            {
+                var token = newUsernames[i];
+                if (token.IsNull) continue;
+                
+                var username = token.String;
+
+                if (whitelist.Contains(username))
+                {
+                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
+                    continue;
+                }
+                whitelist.Add(username);
+                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+            }
+            WhitelistUpdated(false);
+        }
+
+        /// <summary>
+        /// Adds an Array of usernames to the whitelist. Skips duplicate usernames.
         /// </summary>
         public virtual void _AddUsers(string[] newUsernames)
         {
-            var tempWhitelist = whitelistedUsers;
-            var usernames = newUsernames.Distinct();
-            
-            if (tempWhitelist.Length == 0)
+            if (newUsernames == null || newUsernames.Length == 0) return;
+
+            foreach (var username in newUsernames)
             {
-                ChangeWhitelist(usernames,  false);
-                return;
-            }
-            // Checks for duplicate usernames and doesn't add them again.
-            foreach (var username in usernames)
-            {
-                if (whitelistedUsers.Length != 0) {}
-                foreach (var whitelistedUser in tempWhitelist)
+                if (whitelist.Contains(username))
                 {
-                    if (whitelistedUser == username)
-                    {
-                        MUIDebug.LogWarning($"Whitelist Manager: User: {username} is already on the whitelist!");
-                    }
-                    else
-                    {
-                        MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
-                        tempWhitelist = tempWhitelist.Add(username);
-                    }
+                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
+                    continue;
                 }
+                whitelist.Add(username);
+                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
             }
-            ChangeWhitelist(tempWhitelist, false);
+            WhitelistUpdated(false);
         }
         
         /// <summary>
-        /// Fully replaces the current whitelist with a new one.
+        /// Fully replaces the current whitelist with a new one. This is usually not recommended, try _AddUsers or _RemoveUser first.
         /// </summary>
-        public virtual void _ReplaceWhitelist(string[] usernames)
+        public virtual void _ReplaceWhitelist(DataList newUsernames)
         {
-            ChangeWhitelist(usernames, false);
+            whitelist = newUsernames;
+            WhitelistUpdated(false);
         }
 
-        protected virtual void ChangeWhitelist(string[] usernames, bool fromNet)
+        protected virtual void WhitelistUpdated(bool fromNet)
         {
-            whitelistedUsers = usernames;
             MUIDebug.Log($"Whitelist Manager: Whitelist Updated");
             
             if (connectedBehaviours == null) return;
-            foreach (var behaviour in connectedBehaviours)
+            for (int i = 0; i < connectedBehaviours.Count; i++)
             {
-                if (behaviour == null) continue;
-                behaviour.SendCustomEvent("_WhitelistUpdated");
-            } 
+                if (connectedBehaviours[i].IsNull) continue;
+                ((IUdonEventReceiver)connectedBehaviours[i].Reference).SendCustomEvent("_WhitelistUpdated");
+            }
         }
         #endregion
     }

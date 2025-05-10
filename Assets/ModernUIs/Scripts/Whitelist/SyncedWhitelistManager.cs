@@ -1,4 +1,5 @@
 ﻿using System;
+using BestHTTP.JSON;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Data;
@@ -17,8 +18,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Allow none Admins, but users who are on the whitelist it self to change it. Will be set to true if no Admin Whitelist is provided.")]
         [SerializeField] protected bool noneAdminAccess;
         
-        [UdonSynced] protected string[] netWhitelistedUsers;
-        protected bool hasAdminAccess;
+        [UdonSynced] protected string serializedWhitelist;
+        protected bool hasAccess;
 
         protected override void Start()
         {
@@ -36,12 +37,24 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         // Only for Admin Whitelist
         public void _WhitelistUpdated()
         {
-            hasAdminAccess = adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(Networking.LocalPlayer)) || adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
         }
 
         public override void OnDeserialization()
         {
-            ChangeWhitelist(netWhitelistedUsers, true);
+            if (VRCJson.TryDeserializeFromJson(serializedWhitelist, out DataToken result))
+            {
+                whitelist = result.DataList;
+                WhitelistUpdated(true);
+            }
+        }
+
+        public override void OnPreSerialization()
+        {
+            if (VRCJson.TrySerializeToJson(whitelist, JsonExportType.Minify, out DataToken result))
+            {
+                serializedWhitelist = result.String;
+            }
         }
 
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
@@ -58,24 +71,75 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         
-        protected override void ChangeWhitelist(string[] usernames, bool fromNet)
+        protected override void WhitelistUpdated(bool fromNet)
         {
             var localPlayer = Networking.LocalPlayer;
-            var hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || hasAdminAccess;
+            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || adminWhitelistManager._IsPlayerWhitelisted(localPlayer);
             if (!hasAccess && !fromNet)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
-
-            netWhitelistedUsers = usernames;
+            
             if (!fromNet)
             {
                 if (!localPlayer.IsOwner(gameObject)) Networking.SetOwner(localPlayer, gameObject);
                 RequestSerialization();
             }
-            base.ChangeWhitelist(usernames, fromNet);
+            base.WhitelistUpdated(fromNet);
         }
+
+        #region Access Check Overrides
+        public override void _AddUser(string username)
+        {
+            if (!hasAccess)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                return;
+            }
+            base._AddUser(username);
+        }
+
+        public override void _RemoveUser(string username)
+        {
+            if (!hasAccess)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                return;
+            }
+            base._RemoveUser(username);
+        }
+
+        public override void _AddUsers(DataList newUsernames)
+        {
+            if (!hasAccess)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                return;
+            }
+            base._AddUsers(newUsernames);
+        }
+        
+        public override void _AddUsers(string[] newUsernames)
+        {
+            if (!hasAccess)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                return;
+            }
+            base._AddUsers(newUsernames);
+        }
+
+        public override void _ReplaceWhitelist(DataList newUsernames)
+        {
+            if (!hasAccess)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                return;
+            }
+            base._ReplaceWhitelist(newUsernames);
+        }
+        #endregion
     }
 }
     

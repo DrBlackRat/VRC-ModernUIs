@@ -81,27 +81,27 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             // Add if not on whitelistedUsers
-            var whitelist = whitelistManager._GetNames();
-            foreach (var username in whitelist)
+            var whitelist = whitelistManager._GetUsersAsList();
+            for (var i = 0; i < whitelist.Count; i++)
             {
-                if (whitelistedUsers.ContainsKey(username)) continue;
-                AddWhitelistUser(username);
+                if (whitelistedUsers.ContainsKey(whitelist[i].String)) continue;
+                AddWhitelistUser(whitelist[i].String);
             }
             
             // Remove if on whitelistedUsers but not on whitelist
             var keys = whitelistedUsers.GetKeys();
             for (var i = 0; i < keys.Count; i++)
             {
-                if (whitelist.Contains((string)keys[i])) continue;
-                RemoveWhitelistUser((string)keys[i]);
+                if (whitelist.Contains(keys[i])) continue;
+                RemoveWhitelistUser(keys[i].String);
             }
 
             if (hasAdminWhitelist && !showAdmins)
             {
-                var admins = adminWhitelistManager._GetNames();
-                foreach (var admin in admins)
+                var admins = adminWhitelistManager._GetUsersAsList();
+                for (var i = 0; i < admins.Count; i++)
                 {
-                    RemoveNotWhitelistUser(admin);
+                    RemoveNotWhitelistUser(admins[i].String); 
                 }
             }
         }
