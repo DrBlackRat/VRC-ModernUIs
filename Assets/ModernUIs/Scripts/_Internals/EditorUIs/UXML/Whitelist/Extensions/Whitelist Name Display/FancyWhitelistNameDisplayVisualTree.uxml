@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Modern UI | Fancy Whitlist Name Display" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="A &quot;fancy&quot; way to display users on a whitelist. Adds a new object for each user." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+    </ui:VisualElement>
+    <ui:Foldout text="Settings" view-data-key="FancyWhitelistNameDisplaysSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Connection" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelistManager" name="whitelistManager" label="Whitelist Manager" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="UI" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="usernamePrefab" name="usernamePrefab" label="Username Prefab" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="usernameTransform" name="usernameTransform" label="Username Transform" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>

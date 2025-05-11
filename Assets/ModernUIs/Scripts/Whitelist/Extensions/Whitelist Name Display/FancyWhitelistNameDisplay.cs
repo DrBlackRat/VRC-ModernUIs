@@ -13,7 +13,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class FancyWhitelistNameDisplay : UdonSharpBehaviour
     {
+        [Tooltip("Prefab that will be instantiated for each user on the whitelist.")]
         [SerializeField] private GameObject usernamePrefab;
+        [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] private Transform usernameTransform;
 
         [SerializeField] private WhitelistManager whitelistManager;
