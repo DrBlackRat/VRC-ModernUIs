@@ -8,7 +8,7 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(900)]
+    [DefaultExecutionOrder(800)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistCombiner : WhitelistManager
     {
@@ -32,7 +32,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             whitelist.Clear();
             foreach (var whitelistManager in whitelistManagers)
             {
-                whitelist.AddRange(whitelistManager._GetUsersAsList());
+                var users = whitelistManager._GetUsersAsList();
+                if (users == null) continue;
+                whitelist.AddRange(users);
             }
             WhitelistUpdated( false);
         }

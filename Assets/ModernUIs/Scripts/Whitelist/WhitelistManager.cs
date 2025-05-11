@@ -46,11 +46,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// </summary>
         public bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
+            if (playerApi == null) return false;
             return whitelist.Contains(playerApi.displayName);;
         }
         
         public bool _IsPlayerWhitelisted(string username)
         {
+            if (username == null) return false;
             return whitelist.Contains(username);
         }
         

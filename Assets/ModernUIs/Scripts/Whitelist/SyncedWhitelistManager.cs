@@ -9,7 +9,7 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(1000)]
+    [DefaultExecutionOrder(900)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedWhitelistManager : WhitelistManager
     {
@@ -74,7 +74,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected override void WhitelistUpdated(bool fromNet, IUdonEventReceiver senderBehaviour = null)
         {
             var localPlayer = Networking.LocalPlayer;
-            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || adminWhitelistManager._IsPlayerWhitelisted(localPlayer);
+            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || adminWhitelistManager!= null && adminWhitelistManager._IsPlayerWhitelisted(localPlayer);
             if (!hasAccess && !fromNet)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
