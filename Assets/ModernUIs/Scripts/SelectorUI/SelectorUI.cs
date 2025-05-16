@@ -85,8 +85,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
             if (!player.isLocal || !usePersistence) return;
+            
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
+                if (selectorUIButtons[value].GetUdonTypeID() == GetUdonTypeID<EconomySelectorUIButton>())
+                {
+                    if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned) return;
+                }
                 UpdateSelection(value, true, false, false);
             }
         }

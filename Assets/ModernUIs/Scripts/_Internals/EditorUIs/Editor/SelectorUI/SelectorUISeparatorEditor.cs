@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using DrBlackRat.VRC.ModernUIs.SelectorUI;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(SelectorUISeparator))]
 

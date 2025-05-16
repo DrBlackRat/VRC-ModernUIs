@@ -14,10 +14,12 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     public class EconomySelectorUIButton : SelectorUIButton
     {
         [Tooltip("If enabled, a user will be treated as if they own the product, useful for testing.")]
-        [SerializeField] protected bool owned;
+        [SerializeField] public bool owned;
         [Tooltip("Product a user needs to own to be able to select this button.")]
         [SerializeField] protected UdonProduct product;
-        
+
+        public bool Owned => owned;
+
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
             if (!player.isLocal) return;

@@ -83,7 +83,7 @@ PrefabInstance:
     - target: {fileID: 1900282449212803492, guid: 3173e5759dbc24247a2ad7de170424cc,
         type: 3}
       propertyPath: m_Name
-      value: Economy Selector UI Lockable Variant
+      value: Economy Selector UI Lockable
       objectReference: {fileID: 0}
     - target: {fileID: 2067501279413874688, guid: 3173e5759dbc24247a2ad7de170424cc,
         type: 3}
@@ -478,22 +478,14 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1356453854093079217}
   selectedState: 0
-  secondClickToDefault: 0
-  secondClickDefaultState: 0
+  secondClick: 0
+  secondClickState: 0
+  usePersistence: 0
+  dataKey: CHANGE THIS
   itemObjs: []
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  usePersistence: 0
-  dataKey: CHANGE THIS
-  selectorUIButtons:
-  - {fileID: 2814371765505056712}
-  - {fileID: 3227641044138280680}
-  - {fileID: 5242787961830276078}
-  - {fileID: 1927032063469882164}
-  - {fileID: 7702890510911061100}
-  - {fileID: 336850993733988085}
-  selector: {fileID: 1562246848820075149}
   buttonNormalScale: {x: -4, y: -4}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 60
@@ -504,7 +496,7 @@ MonoBehaviour:
   iconSelectedPos: {x: 0, y: 0}
   textNormalPos: {x: 0, y: 0}
   textSelectedPos: {x: 0, y: 0}
-  animationCurve:
+  smoothingCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -547,6 +539,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  selectorUIButtons:
+  - {fileID: 2814371765505056712}
+  - {fileID: 3227641044138280680}
+  - {fileID: 5242787961830276078}
+  - {fileID: 1927032063469882164}
+  - {fileID: 7702890510911061100}
+  - {fileID: 336850993733988085}
+  selector: {fileID: 1562246848820075149}
   whitelistManager: {fileID: 0}
   whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
   notWhitelistedColor: {r: 1, g: 1, b: 1, a: 0.2}

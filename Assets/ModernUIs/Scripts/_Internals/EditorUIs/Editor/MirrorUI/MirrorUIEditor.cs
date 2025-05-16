@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
-using DrBlackRat.VRC.ModernUIs.Utils.MirrorUI;
+using DrBlackRat.VRC.ModernUIs.MirrorUI;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(MirrorUI.MirrorUI))]
     public class MirrorUIEditor : UnityEditor.Editor

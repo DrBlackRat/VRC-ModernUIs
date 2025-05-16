@@ -12,6 +12,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     {
         [Tooltip("If enabled the Color and Animation Settings can be overriden, otherwise the defaults provided by the Selector UI will be used.")]
         public bool overrideDefaults;
+
+        [Tooltip("If the size of the Selector should be fixed, otherwise the size of the button it's transitioning to will be used.")]
+        [SerializeField] protected bool fixedSize;
+        [Tooltip("If the rounding of the Selector should be fixed, otherwise the rounding of the button it's transitioning to will be used.")]
+        [SerializeField] protected bool fixedRounding;
         
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
@@ -106,8 +111,8 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
 
             selectorTransform.localPosition = Vector3.LerpUnclamped(prevPos, newPos, smoothPercentageComplete);
-            selectorTransform.sizeDelta = Vector2.LerpUnclamped(prevSize, newSize, smoothPercentageComplete);
-            selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
+            if (!fixedSize) selectorTransform.sizeDelta = Vector2.LerpUnclamped(prevSize, newSize, smoothPercentageComplete);
+            if (!fixedRounding) selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
             
             if (percentageComplete >= 1f)
             {

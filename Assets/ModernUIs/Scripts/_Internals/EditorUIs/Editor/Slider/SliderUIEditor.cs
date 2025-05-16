@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils
+namespace DrBlackRat.VRC.ModernUIs
 {
     [CustomEditor(typeof(SliderUI))]
     public class SliderUIEditor : UnityEditor.Editor

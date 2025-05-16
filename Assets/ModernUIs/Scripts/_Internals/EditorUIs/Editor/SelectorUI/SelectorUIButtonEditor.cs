@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(SelectorUIButton))]
     public class SelectorUIButtonEditor : UnityEditor.Editor

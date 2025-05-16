@@ -2,7 +2,7 @@ using DrBlackRat.VRC.ModernUIs.SelectorUI;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     public static class SelectorUICallback
     {

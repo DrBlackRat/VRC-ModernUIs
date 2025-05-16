@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils
+namespace DrBlackRat.VRC.ModernUIs
 {
     public class RemoveLayoutComponents : MonoBehaviour
     {

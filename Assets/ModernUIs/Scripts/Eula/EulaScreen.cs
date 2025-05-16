@@ -7,7 +7,7 @@ using VRC.Udon;
 using VRC.SDK3.Persistence;
 
 
-namespace DrBlackRat.VRC.ModernUIs.Utils
+namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EulaScreen : UdonSharpBehaviour

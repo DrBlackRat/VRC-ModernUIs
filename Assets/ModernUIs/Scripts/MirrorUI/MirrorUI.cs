@@ -7,7 +7,7 @@ using VRC.Udon;
 using VRC.SDK3.Persistence;
 using DrBlackRat.VRC.ModernUIs.SelectorUI;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.MirrorUI
+namespace DrBlackRat.VRC.ModernUIs.MirrorUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class MirrorUI : SelectorUI.SelectorUI

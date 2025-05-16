@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(UIZone))]
     public class UIZoneEditor : UnityEditor.Editor

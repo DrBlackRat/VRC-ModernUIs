@@ -21,11 +21,18 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             
             if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
             
-            persistenceLoaded = true;
-            RequestSerialization();
+
             
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
+                if (selectorUIButtons[value].GetUdonTypeID() == GetUdonTypeID<EconomySelectorUIButton>())
+                {
+                    if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned) return;
+                }
+                
+                persistenceLoaded = true;
+                RequestSerialization();
+                
                 UpdateSelection(value, true, false, false);
             }
         }

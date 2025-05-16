@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils
+namespace DrBlackRat.VRC.ModernUIs
 {
     public class MobileUIHider : MonoBehaviour
     {

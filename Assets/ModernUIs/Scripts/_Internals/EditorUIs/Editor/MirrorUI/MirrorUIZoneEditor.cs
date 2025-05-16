@@ -1,13 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using DrBlackRat.VRC.ModernUIs.Utils.MirrorUI;
+using DrBlackRat.VRC.ModernUIs.MirrorUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs.Utils.Editor
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     [CustomEditor(typeof(MirrorUIZone))]
     public class MirrorUIZoneEditor : UnityEditor.Editor

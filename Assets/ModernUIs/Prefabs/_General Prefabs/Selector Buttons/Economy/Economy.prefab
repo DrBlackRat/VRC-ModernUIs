@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12, y: 0}
-  m_SizeDelta: {x: -26, y: -2}
+  m_AnchoredPosition: {x: 17.5, y: 0}
+  m_SizeDelta: {x: -37, y: -2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1546241174859162648
 CanvasRenderer:
@@ -166,10 +166,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1654985180429447492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15, y: 0}
-  m_SizeDelta: {x: -69, y: -2}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 25, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &5508992869343112698
 CanvasRenderer:
@@ -273,16 +273,8 @@ MonoBehaviour:
   iconObj: {fileID: 2885260772777640095}
   textObj: {fileID: 1893993531749394545}
   overrideDefaults: 1
-  buttonNormalScale: {x: -4, y: -4}
-  buttonSelectedScale: {x: 0, y: 0}
-  buttonNormalPixelPerUnit: 60
-  buttonSelectedPixelPerUnit: 35
   normalColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
   selectedColor: {r: 0, g: 0, b: 0, a: 1}
-  iconNormalPos: {x: 15, y: 0}
-  iconSelectedPos: {x: 8, y: 0}
-  textNormalPos: {x: 12, y: 0}
-  textSelectedPos: {x: 9, y: 0}
   smoothingCurve:
     serializedVersion: 2
     m_Curve:
@@ -326,6 +318,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  buttonNormalScale: {x: -4, y: -4}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 60
+  buttonSelectedPixelPerUnit: 35
+  iconNormalPos: {x: 15, y: 0}
+  iconSelectedPos: {x: 8, y: 0}
+  textNormalPos: {x: 12, y: 0}
+  textSelectedPos: {x: 9, y: 0}
   owned: 0
   product: {fileID: 0}
 --- !u!114 &4200275803758963496
