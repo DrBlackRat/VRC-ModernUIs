@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 684500486076506942}
   - component: {fileID: 8126729622114039545}
   - component: {fileID: 4676116046370900021}
+  - component: {fileID: 8382514898887814492}
   m_Layer: 17
   m_Name: Request Button
   m_TagString: Untagged
@@ -267,6 +268,18 @@ MonoBehaviour:
           m_StringArgument: _RequestAccess
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!225 &8382514898887814492
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7325157356411290861}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &8104924284665218041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -487,6 +500,27 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
+    - target: {fileID: 5383628531946157070, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5383628531946157070, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+    - target: {fileID: 5383628531946157070, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: hidingCanvases.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383628531946157070, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: hidingCanvases.Array.data[0]
+      value: 
+      objectReference: {fileID: 8382514898887814492}
+    - target: {fileID: 5383628531946157070, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: hidingCanvases.Array.data[1]
+      value: 
+      objectReference: {fileID: 1244747067069384992}
     - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -666,6 +700,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5889592607255745873}
+    - targetCorrespondingSourceObject: {fileID: 446544523462344992, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1244747067069384992}
   m_SourcePrefab: {fileID: 100100000, guid: c584f53b5c724724eb0b59f277303599, type: 3}
 --- !u!224 &1180821463516507675 stripped
 RectTransform:
@@ -751,3 +789,21 @@ MonoBehaviour:
   serializedPublicVariablesBytesString: Ai8AAAAAATIAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAFQAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AAAAAAAYBAAAAAAAAACcBBAAAAHQAeQBwAGUAAWgAAABTAHkAcwB0AGUAbQAuAEMAbwBsAGwAZQBjAHQAaQBvAG4AcwAuAEcAZQBuAGUAcgBpAGMALgBMAGkAcwB0AGAAMQBbAFsAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4ALgBJAG4AdABlAHIAZgBhAGMAZQBzAC4ASQBVAGQAbwBuAFYAYQByAGkAYQBiAGwAZQAsACAAVgBSAEMALgBVAGQAbwBuAC4AQwBvAG0AbQBvAG4AXQBdACwAIABtAHMAYwBvAHIAbABpAGIAAQEJAAAAVgBhAHIAaQBhAGIAbABlAHMALwEAAAABaAAAAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwAuAEwAaQBzAHQAYAAxAFsAWwBWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAEkAbgB0AGUAcgBmAGEAYwBlAHMALgBJAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlACwAIABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgBdAF0ALAAgAG0AcwBjAG8AcgBsAGkAYgABAAAABgEAAAAAAAAAAi8CAAAAAUkAAABWAFIAQwAuAFUAZABvAG4ALgBDAG8AbQBtAG8AbgAuAFUAZABvAG4AVgBhAHIAaQBhAGIAbABlAGAAMQBbAFsAUwB5AHMAdABlAG0ALgBJAG4AdAAzADIALAAgAG0AcwBjAG8AcgBsAGkAYgBdAF0ALAAgAFYAUgBDAC4AVQBkAG8AbgAuAEMAbwBtAG0AbwBuAAIAAAAGAgAAAAAAAAAnAQQAAAB0AHkAcABlAAEXAAAAUwB5AHMAdABlAG0ALgBTAHQAcgBpAG4AZwAsACAAbQBzAGMAbwByAGwAaQBiACcBCgAAAFMAeQBtAGIAbwBsAE4AYQBtAGUAAR8AAABfAF8AXwBVAGQAbwBuAFMAaABhAHIAcABCAGUAaABhAHYAaQBvAHUAcgBWAGUAcgBzAGkAbwBuAF8AXwBfACcBBAAAAHQAeQBwAGUAARYAAABTAHkAcwB0AGUAbQAuAEkAbgB0ADMAMgAsACAAbQBzAGMAbwByAGwAaQBiABcBBQAAAFYAYQBsAHUAZQACAAAABwUHBQcF
   publicVariablesUnityEngineObjects: []
   publicVariablesSerializationDataFormat: 0
+--- !u!1 &8523071439450325721 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 446544523462344992, guid: c584f53b5c724724eb0b59f277303599,
+    type: 3}
+  m_PrefabInstance: {fileID: 8104924284665218041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1244747067069384992
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8523071439450325721}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -80,7 +80,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             {
                 button = buttonObj.GetComponent<Button>();
                 buttonTransform = buttonObj.GetComponent<RectTransform>();
-                buttonImage = buttonObj.GetComponent<Image>();
+                buttonImage = button.image;
             }
             if (iconObj != null)
             {
