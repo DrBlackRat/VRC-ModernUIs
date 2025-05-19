@@ -27,7 +27,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             {
                 if (selectorUIButtons[value].GetUdonTypeID() == GetUdonTypeID<EconomySelectorUIButton>())
                 {
-                    if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned) return;
+                    if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned)
+                    {
+                        PlayerData.SetInt(dataKey, selectedState);
+                        return;
+                    }
                 }
                 
                 persistenceLoaded = true;
