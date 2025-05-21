@@ -100,7 +100,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             buttonId = newButtonId;
             
             // Reset
-            button.interactable = !locked;
+            _UpdateLocked(locked);
             UpdateUIState(false);
             UpdateUI(1f);
         }
