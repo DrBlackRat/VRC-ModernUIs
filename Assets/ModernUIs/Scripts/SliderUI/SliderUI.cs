@@ -51,9 +51,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!player.isLocal || !usePersistence) return;
             if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
             {
-                value = newValue;
-                UpdateExternal(value);
-                slider.SetValueWithoutNotify(value);
+                UpdateValue(value, true, false, false);
             }
 
         }
@@ -63,20 +61,18 @@ namespace DrBlackRat.VRC.ModernUIs
             UpdateValue(slider.value, false, false, false);
         }
 
-        private void UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected bool UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
+            if (Mathf.Approximately(newValue, value)) return false;
             if (snapSlider)
             {
-                value = Mathf.Round(newValue / snapInterval) * snapInterval;
+                var rounded = Mathf.Round(newValue / snapInterval) * snapInterval;
+                value = rounded;
             }
             else
             {
                 value = newValue;
             }
-            
-            if (Mathf.Approximately(newValue, value)) return;
-            
-            Debug.LogError($"VALUE: {value}");
 
             if (usePersistence && !skipPersistence)
             {
@@ -86,6 +82,7 @@ namespace DrBlackRat.VRC.ModernUIs
             slider.SetValueWithoutNotify(value);
             UpdateExternal(value);
             UpdateSliderText(value);
+            return true;
         }
         
         private void UpdateExternal(float newValue)

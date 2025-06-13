@@ -292,8 +292,6 @@ MonoBehaviour:
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  selectorUIButtons: []
-  selector: {fileID: 0}
   buttonNormalScale: {x: -4, y: -4}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 60
@@ -304,7 +302,7 @@ MonoBehaviour:
   iconSelectedPos: {x: 0, y: 0}
   textNormalPos: {x: 0, y: 0}
   textSelectedPos: {x: 0, y: 0}
-  animationCurve:
+  smoothingCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -347,6 +345,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  selectorUIButtons: []
+  selector: {fileID: 0}
   whitelistManager: {fileID: 0}
   whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
   notWhitelistedColor: {r: 1, g: 1, b: 1, a: 0.2}
@@ -478,8 +478,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 98, y: 14.000023}
-  m_SizeDelta: {x: 35, y: 14}
+  m_AnchoredPosition: {x: 98, y: 15}
+  m_SizeDelta: {x: 35, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8566932054837496265
 CanvasRenderer:
@@ -562,6 +562,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5954784548893463332}
   overrideDefaults: 0
+  fixedSize: 0
+  fixedRounding: 0
   smoothingCurve:
     serializedVersion: 2
     m_Curve: []
@@ -569,8 +571,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
-  enabledColor: {r: 0, g: 0, b: 0, a: 0}
-  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &5954784548893463332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,7 +878,7 @@ PrefabInstance:
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -893,7 +893,7 @@ PrefabInstance:
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0007629396
+      value: 0.0019133089
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -918,12 +918,12 @@ PrefabInstance:
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -17.499836
+      value: -17.499939
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 14.000021
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -954,7 +954,7 @@ PrefabInstance:
     - target: {fileID: 3092463336811781324, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_fontSize
-      value: 10.7
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 8746875094405886597, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
