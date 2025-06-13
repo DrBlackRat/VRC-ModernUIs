@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -30,28 +31,19 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private string dataKey = "CHANGE THIS";
         
         [SerializeField] private Slider slider;
+        
+        [Tooltip("Text that the slider value should be displayed at. Formated as whole numbers from 0 - 100, so 0.5 would be 50. Can be left empty if not needed.")]
+        [SerializeField] private TextMeshProUGUI sliderText;
+
+        [Tooltip("If enabled the slider will snap to the provided Snap Interval.")]
+        [SerializeField] private bool snapSlider;
+        [Tooltip("Interval the slider would snap to, e.g.  0.2 means it will snap to 0, 0.2, 0.4 etc.")]
+        [SerializeField] private float snapInterval = 0.1f;
 
 
         private void Start()
         {
-            slider.SetValueWithoutNotify(value);
-            UpdateExternalSlider(value);
-        }
-
-        public void _ValueUpdated()
-        {
-            value = slider.value;
-            UpdateExternalSlider(value);
-            if (usePersistence) PlayerData.SetFloat(dataKey, value);
-        }
-
-        private void UpdateExternalSlider(float newValue)
-        {
-            if (postProcessVolume != null) postProcessVolume.weight = newValue;
-            
-            if (sliderBehaviour == null) return;
-            sliderBehaviour.SetProgramVariable(variableName, newValue);
-            sliderBehaviour.SendCustomEvent(updateEventName);
+            UpdateValue(value, false, true, true);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
@@ -60,10 +52,61 @@ namespace DrBlackRat.VRC.ModernUIs
             if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
             {
                 value = newValue;
-                UpdateExternalSlider(value);
+                UpdateExternal(value);
                 slider.SetValueWithoutNotify(value);
             }
 
         }
+        
+        public void _ValueUpdated()
+        {
+            UpdateValue(slider.value, false, false, false);
+        }
+
+        private void UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        {
+            if (snapSlider)
+            {
+                value = Mathf.Round(newValue / snapInterval) * snapInterval;
+            }
+            else
+            {
+                value = newValue;
+            }
+            
+            if (Mathf.Approximately(newValue, value)) return;
+            
+            Debug.LogError($"VALUE: {value}");
+
+            if (usePersistence && !skipPersistence)
+            {
+                PlayerData.SetFloat(dataKey, value);
+            }
+            
+            slider.SetValueWithoutNotify(value);
+            UpdateExternal(value);
+            UpdateSliderText(value);
+        }
+        
+        private void UpdateExternal(float newValue)
+        {
+            if (postProcessVolume != null) postProcessVolume.weight = newValue;
+            
+            if (sliderBehaviour == null) return;
+            sliderBehaviour.SetProgramVariable(variableName, newValue);
+            sliderBehaviour.SendCustomEvent(updateEventName);
+            
+        }
+
+        private void UpdateSliderText(float newValue)
+        {
+            if (sliderText != null)
+            {
+                var temp = newValue * 100;
+                sliderText.text = temp.ToString("00");
+            } 
+        }
+
+
     }
 }

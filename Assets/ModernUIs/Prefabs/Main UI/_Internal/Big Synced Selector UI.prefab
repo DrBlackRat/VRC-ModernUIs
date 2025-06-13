@@ -262,8 +262,6 @@ MonoBehaviour:
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  selectorUIButtons: []
-  selector: {fileID: 0}
   buttonNormalScale: {x: -4, y: -4}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 60
@@ -317,6 +315,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  selectorUIButtons: []
+  selector: {fileID: 0}
   whitelistManager: {fileID: 0}
   whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
   notWhitelistedColor: {r: 1, g: 1, b: 1, a: 0.2}
@@ -563,6 +563,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4293029784060652403}
   overrideDefaults: 0
+  fixedSize: 0
+  fixedRounding: 0
   smoothingCurve:
     serializedVersion: 2
     m_Curve: []
@@ -570,8 +572,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
-  enabledColor: {r: 0, g: 0, b: 0, a: 0}
-  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4293029784060652403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,7 +591,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 0
+  _syncMethod: 1
   serializedProgramAsset: {fileID: 11400000, guid: dd23706675fd3e14d946351bdc0fca2c,
     type: 2}
   programSource: {fileID: 11400000, guid: e26b631bf665718478661181e4174697, type: 2}

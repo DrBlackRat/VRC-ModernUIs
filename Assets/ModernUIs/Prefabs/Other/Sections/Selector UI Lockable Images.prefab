@@ -470,7 +470,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5744747383455320809}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -526,6 +526,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 182260648024611377, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
+    - target: {fileID: 504389844800928905, guid: 2c69850ccd1ba32409c87da681702611,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1054730094288467380, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -672,6 +677,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 182260648024611377, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
+    - target: {fileID: 504389844800928905, guid: 2c69850ccd1ba32409c87da681702611,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1054730094288467380, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -812,85 +822,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2282537232991799652}
     m_Modifications:
-    - target: {fileID: 4661130290278957164, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4661130290278957164, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 4661130290278957164, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -2.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5407618169894350588, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5407618169894350588, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 5407618169894350588, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5407618169894350588, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -7.3299875
-      objectReference: {fileID: 0}
     - target: {fileID: 6532842471211858129, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
         type: 3}
       propertyPath: m_Name
       value: LockButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805627549693443824, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_text
-      value: Not Whitelisted
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805627549693443824, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 5.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6805627549693443824, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_fontSizeBase
-      value: 5.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7622129975810502477, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1471672461605300576}
-    - target: {fileID: 7622129975810502477, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: _LockPressed
-      objectReference: {fileID: 0}
-    - target: {fileID: 7857533315175982200, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_text
-      value: 'Owner: '
-      objectReference: {fileID: 0}
-    - target: {fileID: 7857533315175982200, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_fontSize
-      value: 3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7857533315175982200, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_fontSizeBase
-      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
         type: 3}
@@ -925,27 +860,12 @@ PrefabInstance:
     - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 50
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 9201636972491357662, guid: 2c92d58e034cf05488c8f6a71bfb65d0,
         type: 3}
@@ -1074,6 +994,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1783277360723237392}
     m_Modifications:
+    - target: {fileID: 504389844800928905, guid: 2c69850ccd1ba32409c87da681702611,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1054730094288467380, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -1345,6 +1270,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 182260648024611377, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
+    - target: {fileID: 504389844800928905, guid: 2c69850ccd1ba32409c87da681702611,
+        type: 3}
+      propertyPath: _syncMethod
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1054730094288467380, guid: 2c69850ccd1ba32409c87da681702611,
         type: 3}
       propertyPath: serializationData.Prefab

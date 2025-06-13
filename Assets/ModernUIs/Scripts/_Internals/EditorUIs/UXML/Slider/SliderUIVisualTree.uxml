@@ -10,11 +10,15 @@
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="State" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="value" name="selectedState" label="Default Value" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Snapping" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="snapSlider" name="snapSlider" label="Slider Snapping" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="snapInterval" name="snapInterval" label="Snapping Interval" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Persistence" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="usePersistence" name="usePersistence" label="Enable Persistence" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="dataKey" name="dataKey" label="Data Key" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="References" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="slider" name="slider" label="Slider" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="sliderText" name="sliderText" label="Slider Text" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
     <ui:Foldout text="External Connections " view-data-key="SliderUIExternalConnections" name="ExternalConnections" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
