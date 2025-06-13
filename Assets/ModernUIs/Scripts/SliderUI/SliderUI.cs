@@ -63,7 +63,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         protected bool UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
-            if (Mathf.Approximately(newValue, value)) return false;
+            if (Mathf.Approximately(newValue, value) && !skipSameCheck) return false;
             if (snapSlider)
             {
                 var rounded = Mathf.Round(newValue / snapInterval) * snapInterval;
@@ -100,7 +100,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (sliderText != null)
             {
                 var temp = newValue * 100;
-                sliderText.text = temp.ToString("00");
+                sliderText.text = temp.ToString("0");
             } 
         }
 
