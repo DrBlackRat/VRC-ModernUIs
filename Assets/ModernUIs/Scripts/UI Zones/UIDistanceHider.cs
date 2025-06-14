@@ -12,6 +12,8 @@ namespace DrBlackRat.VRC.ModernUIs
     {
         [Tooltip("Canvas Group that will be hidden when Player is outside of the trigger.")]
         [SerializeField] private CanvasGroup[] hidingCanvases;
+        [Tooltip("GameObjects that will be disabled when Player is outside of the trigger.")]
+        [SerializeField] private GameObject[] objectsToDisable;
         [Tooltip("Canvas Group that will be shown when Player is outside of the trigger. Use full for things like a distance hidden info message.")]
         [SerializeField] private CanvasGroup infoCanvas;
         
@@ -77,6 +79,16 @@ namespace DrBlackRat.VRC.ModernUIs
         private void UpdateHiddenState(bool newHidden)
         {
             hidden = newHidden;
+            
+            //GameObjects
+            if (objectsToDisable != null && objectsToDisable.Length != 0)
+            {
+                foreach (var disableOb in objectsToDisable)
+                {
+                    if (disableOb == null) continue;
+                    disableOb.SetActive(!hidden);
+                }
+            }
             
             // UI Animation
             animate = false;
