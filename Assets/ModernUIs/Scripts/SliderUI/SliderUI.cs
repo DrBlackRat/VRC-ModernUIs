@@ -3,45 +3,52 @@ using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VRC.SDK3.Persistence;
 using VRC.SDKBase;
 using VRC.Udon;
+using DrBlackRat.VRC.ModernUIs.Helpers;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.SliderUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SliderUI : UdonSharpBehaviour
     {
         [Tooltip("This is the default value the slider will have.")]
-        [SerializeField] private float value = 0f;
+        [SerializeField] protected float value = 0f;
 
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
-        [SerializeField] private PostProcessVolume postProcessVolume;
-        [Tooltip("Udon Behaviour that should be updated.")]
-        [SerializeField] private UdonBehaviour sliderBehaviour;
+        [SerializeField] protected PostProcessVolume postProcessVolume;
+        [Tooltip("Udon Behaviours that should be updated.")]
+        [SerializeField] protected UdonBehaviour[] externalBehaviours;
         [Tooltip("Event that will be called on the Slider Behaviour if the value changes.")]
-        [SerializeField] private string updateEventName = "_SliderUpdated";
+        [SerializeField] protected string updateEventName = "_SliderUpdated";
         [Tooltip("Variable that will be updated on the Slider Behaviour if the value changes.")]
-        [SerializeField] private string variableName = "sliderValue";
+        [SerializeField] protected string variableName = "sliderValue";
         
         [Tooltip("Turn on if this Slider should be saved using Persistence.")]
-        [SerializeField] private bool usePersistence = true;
+        [SerializeField] protected bool usePersistence;
         [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
-        [SerializeField] private string dataKey = "CHANGE THIS";
+        [SerializeField] protected string dataKey = "CHANGE THIS";
         
-        [SerializeField] private Slider slider;
+        [SerializeField] protected Slider slider;
         
         [Tooltip("Text that the slider value should be displayed at. Formated as whole numbers from 0 - 100, so 0.5 would be 50. Can be left empty if not needed.")]
-        [SerializeField] private TextMeshProUGUI sliderText;
-
-        [Tooltip("If enabled the slider will snap to the provided Snap Interval.")]
-        [SerializeField] private bool snapSlider;
+        [SerializeField] protected TextMeshProUGUI sliderText;
+        [Tooltip("Changes what the slider number will be multiplied by for display.\n- 1 would keep 0.5 as 0.5\n- 100 would turn 0.5 to 50")]
+        [SerializeField] protected float sliderDisplayMultiplier = 100f;
+        [Tooltip("What the slider value will be formated as.\n- 0 means it will always at least show one digit\n- 00 means it will fill always be formated as two digits")]
+        [SerializeField] protected string sliderDisplayFormat = "0";
+        [Tooltip("Text that would be placed at the end of the slider display value, useful for things like \"%\" or \"°\".")]
+        [SerializeField] protected string sliderDisplaySuffix;
+        
         [Tooltip("Interval the slider would snap to, e.g.  0.2 means it will snap to 0, 0.2, 0.4 etc.")]
-        [SerializeField] private float snapInterval = 0.1f;
+        [Range(0.001f, 1f)]
+        [SerializeField] protected float snapInterval = 0.001f;
 
 
-        private void Start()
+        protected virtual void Start()
         {
             UpdateValue(value, false, true, true);
         }
@@ -61,46 +68,44 @@ namespace DrBlackRat.VRC.ModernUIs
             UpdateValue(slider.value, false, false, false);
         }
 
-        protected bool UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
+        protected virtual bool UpdateValue(float newValue, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
+            newValue = Mathf.Round(newValue / snapInterval) * snapInterval;
+            slider.SetValueWithoutNotify(newValue); // Is done before the same check as slider snapping requires it
+            
             if (Mathf.Approximately(newValue, value) && !skipSameCheck) return false;
-            if (snapSlider)
-            {
-                var rounded = Mathf.Round(newValue / snapInterval) * snapInterval;
-                value = rounded;
-            }
-            else
-            {
-                value = newValue;
-            }
-
+            value = newValue;
+            
             if (usePersistence && !skipPersistence)
             {
                 PlayerData.SetFloat(dataKey, value);
             }
-            
-            slider.SetValueWithoutNotify(value);
             UpdateExternal(value);
             UpdateSliderText(value);
             return true;
         }
         
-        private void UpdateExternal(float newValue)
+        protected void UpdateExternal(float newValue)
         {
             if (postProcessVolume != null) postProcessVolume.weight = newValue;
-            
-            if (sliderBehaviour == null) return;
-            sliderBehaviour.SetProgramVariable(variableName, newValue);
-            sliderBehaviour.SendCustomEvent(updateEventName);
-            
+
+            if (externalBehaviours != null && externalBehaviours.Length > 0)
+            {
+                foreach (var behaviour in externalBehaviours)
+                {
+                    if (behaviour == null) continue;
+                    behaviour.SetProgramVariable(variableName, newValue);
+                    behaviour.SendCustomEvent(updateEventName);
+                }
+            }
         }
 
-        private void UpdateSliderText(float newValue)
+        protected void UpdateSliderText(float newValue)
         {
             if (sliderText != null)
             {
-                var temp = newValue * 100;
-                sliderText.text = temp.ToString("0");
+                var temp = newValue * sliderDisplayMultiplier;
+                sliderText.text = temp.ToString(sliderDisplayFormat) + sliderDisplaySuffix;
             } 
         }
 

@@ -8,7 +8,7 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
-    [CustomEditor(typeof(SliderUI))]
+    [CustomEditor(typeof(SliderUI.SliderUI))]
     public class SliderUIEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;

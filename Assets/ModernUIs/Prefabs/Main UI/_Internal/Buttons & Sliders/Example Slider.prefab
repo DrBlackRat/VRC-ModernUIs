@@ -164,7 +164,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 1, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -444,7 +444,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.2}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -459,7 +459,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7837372368127020641}
+  m_TargetGraphic: {fileID: 6271115001712803689}
   m_FillRect: {fileID: 6636870260845176043}
   m_HandleRect: {fileID: 8648369766814643834}
   m_Direction: 0
@@ -506,15 +506,17 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 8012476625405821664}
   value: 0
   postProcessVolume: {fileID: 0}
-  sliderBehaviour: {fileID: 0}
+  externalBehaviours: []
   updateEventName: _SliderUpdated
   variableName: sliderValue
   usePersistence: 0
   dataKey: CHANGE THIS
   slider: {fileID: 3751749266242236627}
   sliderText: {fileID: 0}
-  snapSlider: 0
-  snapInterval: 0.1
+  sliderDisplayMultiplier: 100
+  sliderDisplayFormat: 0
+  sliderDisplaySuffix: 
+  snapInterval: 0.001
 --- !u!114 &8012476625405821664
 MonoBehaviour:
   m_ObjectHideFlags: 0
