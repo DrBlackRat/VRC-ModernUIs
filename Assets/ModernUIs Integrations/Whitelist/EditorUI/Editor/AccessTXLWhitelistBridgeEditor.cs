@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(Integrations.AccessTXLWhitelistBridge))]
+    [CustomEditor(typeof(Integrations.AccessTxlToWhitelistBridge))]
     public class AccessTXLWhitelistBridgeEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
