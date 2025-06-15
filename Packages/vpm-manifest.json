@@ -8,6 +8,12 @@
     },
     "com.vrchat.worlds": {
       "version": "3.8.1"
+    },
+    "com.texelsaur.access": {
+      "version": "1.2.3"
+    },
+    "com.texelsaur.video": {
+      "version": "2.5.0-beta.7"
     }
   },
   "locked": {
@@ -28,6 +34,22 @@
     "com.vrchat.base": {
       "version": "3.8.1",
       "dependencies": {}
+    },
+    "com.texelsaur.access": {
+      "version": "1.2.3",
+      "dependencies": {
+        "com.texelsaur.common": "^1.4.0"
+      }
+    },
+    "com.texelsaur.common": {
+      "version": "1.5.8",
+      "dependencies": {}
+    },
+    "com.texelsaur.video": {
+      "version": "2.5.0-beta.7",
+      "dependencies": {
+        "com.texelsaur.common": "^1.5.0"
+      }
     }
   }
 }
