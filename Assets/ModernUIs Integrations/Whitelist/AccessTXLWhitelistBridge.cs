@@ -15,46 +15,84 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class AccessTXLWhitelistBridge : WhitelistManager
     {
-        public AccessControlUserList accessTxlList;
-        public string[] txlNames;
+        public AccessControl accessControl;
 
         protected override void Start()
         {
-            //accessTxlList._Register(AccessControlUserSource.EVENT_REVALIDATE, this, nameof(_UpdateAccessList));
+            accessControl._Register(AccessControl.EVENT_VALIDATE, this, nameof(_UpdateAccessList));
             _UpdateAccessList();
         }
 
         public void _UpdateAccessList()
         {
             Debug.LogError("LIST UPDATEDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            //txlNames = accessTxlList.UserList;
-
-            // add names to list
-            foreach (var displayname in txlNames)
-            {
-                Debug.LogWarning(displayname);
-                if (displayname == null || whitelist.Contains(displayname)) continue;
-                whitelist.Add(displayname);
-            }
-            
-            // remove names from list
-            var copyList = whitelist.ShallowClone();
-            for (int i = 0; i < copyList.Count; i++)
-            {
-                if (txlNames.Contains((string)copyList[i])) continue;
-                whitelist.Remove(copyList[i]);
-            }
-            
             WhitelistUpdated(false);
         }
         
         #region Overrides 
         /// <summary>
+        /// Returns a bool for if a username is on the whitelist.
+        /// </summary>
+        public override bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
+        {
+            if (playerApi == null) return false;
+            return accessControl._HasAccess(playerApi);
+        }
+        
+        /// <summary>
+        /// Returns a bool for if a username is on the whitelist.
+        /// Quite a lot more expensive than doing it by playerAPI, if possible use it instead.
+        /// </summary>
+        public override bool _IsPlayerWhitelisted(string username)
+        {
+            if (username == null) return false;
+            
+            var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
+            VRCPlayerApi.GetPlayers(players);
+            
+            foreach (var player in players)
+            {
+                if (player.displayName != username) continue;
+                return accessControl._HasAccess(player);
+            }
+            
+            return false;
+        }
+        
+        /// <summary>
+        /// DISABLED ON AccessTXLWhitelistBridge
+        /// </summary>
+        public override string _GetNamesFormatted()
+        {
+            return "_GetNamesFormatted | NOT ENABLED ON AccessTXLWhitelistBridge";
+        }
+        
+        /// <summary>
+        /// DISABLED ON AccessTXLWhitelistBridge
+        /// </summary>
+        public override string[] _GetUsersAsArray()
+        {
+            string[] names = new[] { "_GetUsersAsArray | NOT ENABLED ON AccessTXLWhitelistBridge" };
+            return names;
+        }
+        
+        /// <summary>
+        /// DISABLED ON AccessTXLWhitelistBridge
+        /// </summary>
+        public override DataList _GetUsersAsList()
+        {
+            DataList names = new DataList();
+            names.Add("_GetUsersAsList | NOT ENABLED ON AccessTXLWhitelistBridge");
+            return names;
+        }
+        
+        
+        /// <summary>
         /// DISABLED ON AccessTXLWhitelistBridge
         /// </summary>
         public override void _AddUser(string username, IUdonEventReceiver senderBehaviour)
         {
-            MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
+            MUIDebug.LogError("_AddUser | NOT ENABLED ON AccessTXLWhitelistBridge");
         }
 
         /// <summary>
@@ -62,7 +100,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         /// </summary>
         public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
-            MUIDebug.LogError("Whitelist Combiner: Users can't directly be removed from a whitelist combiner. Remove them from the original whitelist instead.");
+            MUIDebug.LogError("_RemoveUser | NOT ENABLED ON AccessTXLWhitelistBridge");
         }
 
         /// <summary>
@@ -70,7 +108,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         /// </summary>
         public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
+            MUIDebug.LogError("_AddUsers | NOT ENABLED ON AccessTXLWhitelistBridge");
         }
         
         /// <summary>
@@ -78,7 +116,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         /// </summary>
         public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            MUIDebug.LogError("Whitelist Combiner: Users can't directly be added to a whitelist combiner. Add another whitelist to the combiner instead.");
+            MUIDebug.LogError("_AddUsers | NOT ENABLED ON AccessTXLWhitelistBridge");
         }
 
         /// <summary>
@@ -86,7 +124,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         /// </summary>
         public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            MUIDebug.LogError("Whitelist Combiner: Whitelist can't directly be replaced on a whitelist combiner.");
+            MUIDebug.LogError("_ReplaceWhitelist | NOT ENABLED ON AccessTXLWhitelistBridge");
         }
         #endregion
     }

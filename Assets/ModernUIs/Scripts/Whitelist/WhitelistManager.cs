@@ -44,13 +44,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <summary>
         /// Returns a bool for if a username is on the whitelist.
         /// </summary>
-        public bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
+        public virtual bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
             if (playerApi == null) return false;
             return whitelist.Contains(playerApi.displayName);;
         }
         
-        public bool _IsPlayerWhitelisted(string username)
+        /// <summary>
+        /// Returns a bool for if a username is on the whitelist.
+        /// </summary>
+        public virtual bool _IsPlayerWhitelisted(string username)
         {
             if (username == null) return false;
             return whitelist.Contains(username);
@@ -59,7 +62,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <summary>
         /// Returns a formatted string with all whitelisted usernames. Formatted to one line per username.
         /// </summary>
-        public string _GetNamesFormatted()
+        public virtual string _GetNamesFormatted()
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < whitelist.Count; i++)
@@ -76,7 +79,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <summary>
         /// Returns the whitelist as an array. This is slow! it's recommended to do "_GetUsersAsList() instead"
         /// </summary>
-        public string[] _GetUsersAsArray()
+        public virtual string[] _GetUsersAsArray()
         {
             string[] usernames = new string[whitelist.Count];
 
@@ -91,7 +94,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <summary>
         /// Returns a copy of the whitelist DataList. Don't use this for editing!
         /// </summary>
-        public DataList _GetUsersAsList()
+        public virtual DataList _GetUsersAsList()
         {
             return whitelist.DeepClone();
         }
