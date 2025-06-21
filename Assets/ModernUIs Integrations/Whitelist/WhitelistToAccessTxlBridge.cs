@@ -14,10 +14,17 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
     public class WhitelistToAccessTxlBridge : AccessControlUserSource
     {
         [SerializeField] private WhitelistManager whitelistManager;
-
-        private void OnEnable()
+        private bool connectedToWhitelist = false;
+        
+        protected override void _Init()
         {
-            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            if (!connectedToWhitelist)
+            {
+                whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+                connectedToWhitelist = true;
+                Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAA");
+            }
+            base._Init();
         }
 
         public void _WhitelistUpdated()
