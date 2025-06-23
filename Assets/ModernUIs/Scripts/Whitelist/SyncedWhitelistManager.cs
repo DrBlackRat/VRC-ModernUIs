@@ -19,11 +19,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected bool noneAdminAccess;
         
         [UdonSynced] protected string serializedWhitelist;
-        protected bool hasAccess;
+        protected bool canEdit;
 
         protected override void Start()
         {
-            base.Start();
+            if (Networking.LocalPlayer.IsOwner(gameObject))
+            {
+                base.Start();
+            }
+
             if (adminWhitelistManager != null)
             {
                 adminWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
@@ -33,13 +37,49 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 noneAdminAccess = true;
             }
         }
+        
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            if (Networking.LocalPlayer.IsOwner(gameObject))
+            {
+                base.OnPlayerJoined(player);
+            }
+        }
 
         // Only for Admin Whitelist
         public void _WhitelistUpdated()
         {
-            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(Networking.LocalPlayer)) || adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+            canEdit = CanEdit(Networking.LocalPlayer);
         }
 
+
+        // Idk why I suddenly started writing documentation for this, but I should probably do more of this in general, at least for public methods
+        /// <summary>
+        /// Checks if the provided player can edit the whitelist or not.
+        /// </summary>
+        /// <param name="player">VRCPlayerApi of which the edit access should be checked.</param>
+        /// <returns>A bool depending on a player can edit or not.</returns>
+        private bool CanEdit(VRCPlayerApi player)
+        {
+            return (noneAdminAccess && _IsPlayerWhitelisted(player)) || 
+                   (adminWhitelistManager != null && adminWhitelistManager._IsPlayerWhitelisted(player));
+        }
+
+        /// <summary>
+        /// Checks if the local player can edit the whitelist and writes an error message if they don't.
+        /// </summary>
+        /// <returns>A bool depending on a player can edit or not.</returns>
+        private bool EditCheck()
+        {
+            if (!canEdit)
+            {
+                MUIDebug.LogError("Whitelist Manager: You are not allowed to edit this whitelist!");
+                return false;
+            }
+
+            return true;
+        }
+        
         public override void OnDeserialization()
         {
             if (VRCJson.TryDeserializeFromJson(serializedWhitelist, out DataToken result))
@@ -48,7 +88,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 WhitelistUpdated(true);
             }
         }
-
+        
         public override void OnPreSerialization()
         {
             if (VRCJson.TrySerializeToJson(whitelist, JsonExportType.Minify, out DataToken result))
@@ -59,7 +99,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
         {
-            if ((noneAdminAccess && _IsPlayerWhitelisted(newOwner)) || (adminWhitelistManager != null && adminWhitelistManager._IsPlayerWhitelisted(newOwner)))
+            if (CanEdit(newOwner) || newOwner.IsOwner(gameObject))
             {
                 MUIDebug.Log($"Whitelist Manager: {requester.displayName} has made {newOwner.displayName} the new Network Owner.");
                 return true; 
@@ -74,8 +114,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected override void WhitelistUpdated(bool fromNet, IUdonEventReceiver senderBehaviour = null)
         {
             var localPlayer = Networking.LocalPlayer;
-            hasAccess = (noneAdminAccess && _IsPlayerWhitelisted(localPlayer)) || adminWhitelistManager!= null && adminWhitelistManager._IsPlayerWhitelisted(localPlayer);
-            if (!hasAccess && !fromNet)
+            canEdit = CanEdit(localPlayer);
+            if (!canEdit && !fromNet && !localPlayer.IsOwner(gameObject))
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
@@ -92,7 +132,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Access Check Overrides
         public override void _AddUser(string username, IUdonEventReceiver senderBehaviour)
         {
-            if (!hasAccess)
+            if (!canEdit)
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
@@ -102,41 +142,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
-            if (!hasAccess)
-            {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
-                return;
-            }
+            if (!EditCheck()) return;
             base._RemoveUser(username, senderBehaviour);
         }
 
         public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            if (!hasAccess)
-            {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
-                return;
-            }
+            if (!EditCheck()) return;
             base._AddUsers(newUsernames, senderBehaviour);
         }
         
         public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            if (!hasAccess)
-            {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
-                return;
-            }
+            if (!EditCheck()) return;
             base._AddUsers(newUsernames, senderBehaviour);
         }
 
         public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
-            if (!hasAccess)
-            {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
-                return;
-            }
+            if (!EditCheck()) return;
             base._ReplaceWhitelist(newUsernames, senderBehaviour);
         }
         #endregion

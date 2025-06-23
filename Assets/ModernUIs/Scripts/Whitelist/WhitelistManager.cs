@@ -18,6 +18,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
         [SerializeField] protected string[] startWhitelist;
+        [Tooltip("Automatically adds the Instance Owner to the whitelist.\nAn Instance Owner only exists in Invite, Invite+, Friends and Friends+ Instances")]
+        [SerializeField] protected bool allowInstanceOwner;
+        [Tooltip("Automatically adds the Instance Master to the whitelist. \nIf the master changes the new master will be added, but the old one wont be removed. (This is due to technical limitations)")]
+        [SerializeField] protected bool allowInstanceMaster;
 
         protected DataList whitelist = new DataList();
         protected DataList connectedBehaviours = new DataList();
@@ -29,7 +33,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 if (whitelist.Contains(username)) continue;
                 whitelist.Add(username);
             }
-            WhitelistUpdated(true);
+            WhitelistUpdated(false);
+        }
+
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            var displayName = player.displayName;
+            if (whitelist.Contains(displayName)) return;
+            
+            if (allowInstanceOwner && player.isInstanceOwner)
+            {
+                whitelist.Add(displayName);
+                WhitelistUpdated(false);
+            }
+
+            if (allowInstanceMaster && player.isMaster)
+            {
+                whitelist.Add(displayName);
+                WhitelistUpdated(false);
+            }
         }
 
         #region UdonBehaviour connection & external API to get info
