@@ -15,6 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs.MirrorUI
         [SerializeField] private MirrorUI mirrorBehaviour;
         
         private Collider zoneCollider;
+        private bool inZone; // Workaround for OnPlayerTriggerEnter being fired twice when respawning
 
         private void Start()
         {
@@ -22,14 +23,17 @@ namespace DrBlackRat.VRC.ModernUIs.MirrorUI
         }
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            if (!player.isLocal) return;
+            Debug.LogWarning("Enter");
+            if (!player.isLocal || inZone) return;
+            inZone = true;
             mirrorBehaviour._ZoneUpdated(true);
-            
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
+            Debug.LogWarning("Exit");
             if (!player.isLocal) return;
+            inZone = false;
             mirrorBehaviour._ZoneUpdated(false);
             
         }
