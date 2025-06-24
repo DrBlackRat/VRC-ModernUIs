@@ -35,7 +35,6 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
         public override void OnDeserialization()
         {
-            Debug.LogWarning($"NET RECIVED: {netValue}");
             UpdateValue(netValue, true, false, true);
         }
         
@@ -67,7 +66,6 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
                 if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
                 netValue = value;
                 RequestSerialization();
-                Debug.LogError($"NET UDPATED: {netValue}");
             }
 
             return true;
