@@ -14,6 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs
         private UIMover uiMover;
         private int id;
         private Collider zoneCollider;
+        private bool inZone; // Workaround for OnPlayerTriggerEnter being fired twice when respawning
 
         private void Start()
         {
@@ -28,13 +29,15 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            if (!player.isLocal) return;
+            if (!player.isLocal || inZone) return;
+            inZone = true;
             uiMover._PlayerEnteredZone(id);
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
+            inZone = false;
             uiMover._PlayerLeftZone(id);
         }
         

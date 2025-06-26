@@ -1,4 +1,4 @@
-Version 0.1.1
+Version 0.1.2
 
 Modern UIs Integrations is a collection of scripts that integrates other scripts / tools with Modern UIs!
 Requires Modern UIs to be installed.
