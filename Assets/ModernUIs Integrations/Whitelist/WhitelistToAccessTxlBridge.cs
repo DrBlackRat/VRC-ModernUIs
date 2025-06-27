@@ -22,7 +22,6 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             {
                 whitelistManager._SetUpConnection((IUdonEventReceiver)this);
                 connectedToWhitelist = true;
-                Debug.LogError("AAAAAAAAAAAAAAAAAAAAAAAA");
             }
             base._Init();
         }

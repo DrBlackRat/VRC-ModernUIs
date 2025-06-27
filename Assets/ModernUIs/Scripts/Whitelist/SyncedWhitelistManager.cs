@@ -5,6 +5,7 @@ using UnityEngine;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Economy;
 using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
@@ -43,6 +44,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (Networking.LocalPlayer.IsOwner(gameObject))
             {
                 base.OnPlayerJoined(player);
+            }
+        }
+
+        public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
+        {
+            if (Networking.LocalPlayer.IsOwner(gameObject))
+            {
+                base.OnPurchaseConfirmed(result, player, purchased);
             }
         }
 

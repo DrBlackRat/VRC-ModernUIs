@@ -4,6 +4,7 @@ using System.Text;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VRC.Economy;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -22,6 +23,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected bool allowInstanceOwner;
         [Tooltip("Automatically adds the Instance Master to the whitelist. \nIf the master changes the new master will be added, but the old one wont be removed. (This is due to technical limitations)")]
         [SerializeField] protected bool allowInstanceMaster;
+        [Tooltip("Automatically adds everyone in the instance who owns this Udon Product to the Whitelist. \nIf the product expires while the user is in the instance they wont be removed unless they rejoin.")]
+        [SerializeField] protected UdonProduct productAccess;
 
         protected DataList whitelist = new DataList();
         protected DataList connectedBehaviours = new DataList();
@@ -52,6 +55,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 whitelist.Add(displayName);
                 WhitelistUpdated(false);
             }
+        }
+        
+        public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
+        {
+            if (result.ID != productAccess.ID) return;
+            
+            var displayName = player.displayName;
+            if (whitelist.Contains(displayName)) return;
+            
+            whitelist.Add(displayName);
+            WhitelistUpdated(false);
         }
 
         #region UdonBehaviour connection & external API to get info
