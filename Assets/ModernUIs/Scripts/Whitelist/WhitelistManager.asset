@@ -359,19 +359,19 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: productAccess
+      Data: products
     - Name: $v
       Entry: 7
       Data: 21|UdonSharp.Compiler.FieldDefinition, UdonSharp.Editor
     - Name: <Name>k__BackingField
       Entry: 1
-      Data: productAccess
+      Data: products
     - Name: <UserType>k__BackingField
       Entry: 7
       Data: 22|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VRC.Economy.UdonProduct, VRCEconomy
+      Data: VRC.Economy.UdonProduct[], VRCEconomy
     - Name: 
       Entry: 8
       Data: 
@@ -395,21 +395,27 @@ MonoBehaviour:
       Data: 23|System.Collections.Generic.List`1[[System.Attribute, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 24|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
-    - Name: tooltip
-      Entry: 1
-      Data: "Automatically adds everyone in the instance who owns this Udon Product
-        to the Whitelist. \nIf the product expires while the user is in the instance
-        they wont be removed unless they rejoin."
+      Data: 24|UnityEngine.Serialization.FormerlySerializedAsAttribute, UnityEngine.CoreModule
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 7
-      Data: 25|UnityEngine.SerializeField, UnityEngine.CoreModule
+      Data: 25|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
+    - Name: tooltip
+      Entry: 1
+      Data: "Automatically adds everyone in the instance who owns one of these Udon
+        Product to the Whitelist. \nIf the product expires while the user is in the
+        instance they wont be removed unless they rejoin."
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 26|UnityEngine.SerializeField, UnityEngine.CoreModule
     - Name: 
       Entry: 8
       Data: 
