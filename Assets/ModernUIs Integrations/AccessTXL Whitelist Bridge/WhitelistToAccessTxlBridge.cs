@@ -6,6 +6,8 @@ using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 using Texel;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 
 namespace DrBlackRat.VRC.ModernUIs.Integrations
@@ -13,14 +15,15 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistToAccessTxlBridge : AccessControlUserSource
     {
-        [SerializeField] private WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")] 
+        [SerializeField] private WhitelistGetterBase whitelist;
         private bool connectedToWhitelist = false;
         
         protected override void _Init()
         {
             if (!connectedToWhitelist)
             {
-                whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+                whitelist._SetUpConnection((IUdonEventReceiver)this);
                 connectedToWhitelist = true;
             }
             base._Init();
@@ -38,7 +41,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
 
             foreach (var player in players)
             {
-                if (whitelistManager._IsPlayerWhitelisted(player)) return true;
+                if (whitelist._IsPlayerWhitelisted(player)) return true;
             }
 
             return false;
@@ -46,12 +49,12 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         
         public override bool _ContainsPlayer(VRCPlayerApi player)
         {
-            return whitelistManager._IsPlayerWhitelisted(player);
+            return whitelist._IsPlayerWhitelisted(player);
         }
 
         public override bool _ContainsName(string name)
         {
-            return whitelistManager._IsPlayerWhitelisted(name);
+            return whitelist._IsPlayerWhitelisted(name);
         }
         
         

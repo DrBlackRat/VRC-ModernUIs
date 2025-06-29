@@ -1,6 +1,8 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
@@ -10,8 +12,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistObjectToggle : UdonSharpBehaviour
     {
+        [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
-        [SerializeField] private WhitelistManager whitelistManager;
+        [SerializeField] private WhitelistGetterBase whitelist;
         
         [Tooltip("Objects that should only be enabled for whitelisted users.")]
         [SerializeField] private GameObject[] whitelistedObjs;
@@ -20,12 +23,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         private void Start()
         {
-            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            whitelist._SetUpConnection((IUdonEventReceiver)this);
         }
 
         public void _WhitelistUpdated()
         {
-            var isWhitelisted = whitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+            var isWhitelisted = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
             if (whitelistedObjs != null && whitelistedObjs.Length != 0)
             {

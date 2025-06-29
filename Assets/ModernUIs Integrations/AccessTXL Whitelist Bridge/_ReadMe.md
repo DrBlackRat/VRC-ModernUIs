@@ -1,7 +1,7 @@
-Version 0.1.2
+Version 0.0.2
 
-Modern UIs Integrations is a collection of scripts that integrates other scripts / tools with Modern UIs!
-Requires Modern UIs to be installed.
+Allows importing & exporting Access TXL to Modern UI Whitelists.
+Requires Modern UIs V0.2.0 or newer to be installed.
 
 For Documentation please visit:
 https://docs.drblackrat.xyz/docs/modern-ui/about

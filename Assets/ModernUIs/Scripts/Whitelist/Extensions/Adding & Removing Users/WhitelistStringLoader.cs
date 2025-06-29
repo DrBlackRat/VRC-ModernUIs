@@ -1,6 +1,8 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.StringLoading;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
@@ -12,7 +14,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public class WhitelistStringLoader : UdonSharpBehaviour
     {
         [SerializeField] private VRCUrl url;
-        [SerializeField] private WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")] 
+        [SerializeField] private WhitelistSetterBase whitelist;
         
         [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
         [SerializeField] private bool autoReload = false;
@@ -34,7 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         private void ApplyString(string newString)
         {
-            whitelistManager._AddUsers(newString.Split(new string[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries));
+            whitelist._AddUsers(newString.Split(new string[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries));
         }
         private void AutoReload()
         {

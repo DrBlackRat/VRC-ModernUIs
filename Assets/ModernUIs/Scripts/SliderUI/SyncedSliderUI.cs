@@ -40,9 +40,9 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
         {
-            if (whitelistManager != null)
+            if (whitelist != null)
             {
-                if (whitelistManager._IsPlayerWhitelisted(newOwner))
+                if (whitelist._IsPlayerWhitelisted(newOwner))
                 {
                     MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner.");
                     return true; 

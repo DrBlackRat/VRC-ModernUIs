@@ -1,6 +1,8 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -21,12 +23,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform notWhitelistedTransform;
 
-        [Tooltip("Whitelist Manager that will be adjusted.")]
-        [SerializeField] protected WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")]
+        [Tooltip("Whitelist that will be adjusted.")]
+        [SerializeField] protected WhitelistSetterBase whitelist;
         [Tooltip("If being on the Admin Whitelist is required to edit.")]
         [SerializeField] protected bool requireWhitelisted;
-        [Tooltip("Admin Whitelist Manager, if left empty the normal Whitelist Manger will be used.")]
-        [SerializeField] protected WhitelistManager adminWhitelistManager;
+        [FormerlySerializedAs("adminWhitelistManager")]
+        [Tooltip("Admin Whitelist, if left empty the normal Whitelist Manger will be used.")]
+        [SerializeField] protected WhitelistGetterBase adminWhitelist;
         [Tooltip("If Admins should be shown in the \"Not Whitelisted\" section. It is recommended to keep this off.")]
         [SerializeField] protected bool showAdmins;
 
@@ -40,21 +44,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         private void Start()
         {
-            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            whitelist._SetUpConnection((IUdonEventReceiver)this);
             
-            if (whitelistManager.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
+            if (whitelist.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
             if (requireWhitelisted)
             {
-                if (adminWhitelistManager == null)
+                if (adminWhitelist == null)
                 {
-                    adminWhitelistManager = whitelistManager;
+                    adminWhitelist = whitelist;
                     hasAdminWhitelist = false;
                 }
                 else
                 {
                     hasAdminWhitelist = true;
                 }
-                adminWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
+                adminWhitelist._SetUpConnection((IUdonEventReceiver)this);
             }
             else
             {
@@ -78,10 +82,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public void _WhitelistUpdated()
         {
-            if (requireWhitelisted) UpdateAccess(adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer));
+            if (requireWhitelisted) UpdateAccess(adminWhitelist._IsPlayerWhitelisted(Networking.LocalPlayer));
             
             // Add if not on whitelistedUsers
-            var whitelist = whitelistManager._GetUsersAsList();
+            var whitelist = this.whitelist._GetUsersAsList();
             for (var i = 0; i < whitelist.Count; i++)
             {
                 if (whitelistedUsers.ContainsKey(whitelist[i].String)) continue;
@@ -98,7 +102,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             if (hasAdminWhitelist && !showAdmins)
             {
-                var admins = adminWhitelistManager._GetUsersAsList();
+                var admins = adminWhitelist._GetUsersAsList();
                 for (var i = 0; i < admins.Count; i++)
                 {
                     RemoveNotWhitelistUser(admins[i].String); 
@@ -156,7 +160,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected virtual void AddNotWhitelistUser(string username)
         {
             if (notWhitelistedUsers.ContainsKey(username) || whitelistedUsers.ContainsKey(username) || !allUsers.Contains(username)) return;
-            if (hasAdminWhitelist && !showAdmins && adminWhitelistManager._IsPlayerWhitelisted(username)) return;
+            if (hasAdminWhitelist && !showAdmins && adminWhitelist._IsPlayerWhitelisted(username)) return;
             
             var newUserObj = Instantiate(notWhitelistedPrefab, notWhitelistedTransform.position, notWhitelistedTransform.rotation, notWhitelistedTransform);
             newUserObj.transform.localScale = Vector3.one;
@@ -181,14 +185,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasAccess) return;
             AddWhitelistUser(username);
-            whitelistManager._AddUser(username, (IUdonEventReceiver)this);
+            whitelist._AddUser(username, (IUdonEventReceiver)this);
         }
 
         public override void _Remove(string username)
         {
             if (!hasAccess) return;
             RemoveWhitelistUser(username);
-            whitelistManager._RemoveUser(username, (IUdonEventReceiver)this);
+            whitelist._RemoveUser(username, (IUdonEventReceiver)this);
         }
     }
 }
