@@ -23,7 +23,6 @@ namespace DrBlackRat.VRC.ModernUIs.MirrorUI
         }
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            Debug.LogWarning("Enter");
             if (!player.isLocal || inZone) return;
             inZone = true;
             mirrorBehaviour._ZoneUpdated(true);
@@ -31,7 +30,6 @@ namespace DrBlackRat.VRC.ModernUIs.MirrorUI
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
-            Debug.LogWarning("Exit");
             if (!player.isLocal) return;
             inZone = false;
             mirrorBehaviour._ZoneUpdated(false);
