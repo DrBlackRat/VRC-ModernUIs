@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistCombiner : WhitelistGetterBase
     {
-        
+        [Tooltip("Remove duplicates from the combined whitelist. This is slow, so only use it when really necessary!")]
+        [SerializeField] protected bool removeDuplicates;
         [FormerlySerializedAs("whitelistManagers")]
         [Tooltip("Whitelists that you want to combine into one. Useful for combining a local and synced whitelist.")]
         [SerializeField] protected WhitelistGetterBase[] whitelists;
@@ -33,13 +35,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (whitelists == null || whitelists.Length == 0) return;
             
             whitelist.Clear();
+            
             foreach (var whitelistManager in whitelists)
             {
                 var users = whitelistManager._GetUsersAsList();
                 if (users == null) continue;
                 whitelist.AddRange(users);
             }
-            WhitelistUpdated( );
+
+            if (removeDuplicates)
+            {
+                whitelist = DataListExtensions.RemoveDuplicates(whitelist);
+            }
+            
+            WhitelistUpdated();
         }
+
+
     }
 }

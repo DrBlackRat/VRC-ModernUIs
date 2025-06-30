@@ -40,6 +40,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Request Button TMP. Will be changed between \"Already Whitelisted\", \"Request Access\", \"Remove Request\" and \"You're an Admin\".")]
         [SerializeField] protected TextMeshProUGUI requestButtonText;
         
+        [Tooltip("Text that is displayed on the Request Button if you are Whitelisted.")]
+        [SerializeField] protected string whitelistedText = "Already Whitelisted";
+        [Tooltip("Text that is displayed on the Request Button if you are an Admin and \"Allow Admins To Request\" is disabled.")]
+        [SerializeField] protected string adminText = "You're an Admin";
+        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and can request.")]
+        [SerializeField] protected string requestText = "Request Access";
+        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and are currently requesting")]
+        [SerializeField] protected string removeRequestText = "Remove Request";
+        
+        
+        
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary requestingUsers = new DataDictionary();
 
@@ -172,18 +183,18 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             requestButton.interactable = !(isWhitelisted || isBlockingAdmin);
             if (isWhitelisted)
             {
-                requestButtonText.text = "Already Whitelisted";
+                requestButtonText.text = whitelistedText;
             } else if (isRequesting)
             {
-                requestButtonText.text = "Remove Request";
+                requestButtonText.text = removeRequestText;
             }
             else if (isBlockingAdmin)
             {
-                requestButtonText.text = "You're an Admin";
+                requestButtonText.text = adminText;
             }
             else
             {
-                requestButtonText.text = "Request Access";
+                requestButtonText.text = requestText;
             }
         }
         

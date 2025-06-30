@@ -31,6 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             {
                 if (downloader.TryGetGuildMembersByRoleId(roleId, out DataList members))
                 {
+                    members.Contains("");
                     allMembers.AddRange(members);
                 }
             }
