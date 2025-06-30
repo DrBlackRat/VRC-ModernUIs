@@ -41,22 +41,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 noneAdminAccess = true;
             }
         }
-        
-        public override void OnPlayerJoined(VRCPlayerApi player)
-        {
-            if (Networking.LocalPlayer.IsOwner(gameObject))
-            {
-                base.OnPlayerJoined(player);
-            }
-        }
-
-        public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
-        {
-            if (Networking.LocalPlayer.IsOwner(gameObject))
-            {
-                base.OnPurchaseConfirmed(result, player, purchased);
-            }
-        }
 
         // Only for Admin Whitelist
         public void _WhitelistUpdated()
