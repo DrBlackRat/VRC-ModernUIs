@@ -14,7 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void _InputFinished()
         {
             if (requireWhitelisted && !hasAccess) return;
-            whitelistManager._RemoveUser(inputField.text);
+            whitelist._RemoveUser(inputField.text);
             inputField.SetTextWithoutNotify(String.Empty);
         }
     }

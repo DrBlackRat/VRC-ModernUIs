@@ -1,7 +1,9 @@
 ﻿using System;
 using BestHTTP.JSON;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -14,8 +16,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedWhitelistManager : WhitelistManager
     {
+        [FormerlySerializedAs("adminWhitelistManager")]
         [Tooltip("Whitelist of Admins which can change the Synced Whitelist without being on it them self.")]
-        [SerializeField] protected WhitelistManager adminWhitelistManager;
+        [SerializeField] protected WhitelistGetterBase adminWhitelist;
         [Tooltip("Allow none Admins, but users who are on the whitelist it self to change it. Will be set to true if no Admin Whitelist is provided.")]
         [SerializeField] protected bool noneAdminAccess;
         
@@ -29,29 +32,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 base.Start();
             }
 
-            if (adminWhitelistManager != null)
+            if (adminWhitelist != null)
             {
-                adminWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
+                adminWhitelist._SetUpConnection((IUdonEventReceiver)this);
             }
             else
             {
                 noneAdminAccess = true;
-            }
-        }
-        
-        public override void OnPlayerJoined(VRCPlayerApi player)
-        {
-            if (Networking.LocalPlayer.IsOwner(gameObject))
-            {
-                base.OnPlayerJoined(player);
-            }
-        }
-
-        public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
-        {
-            if (Networking.LocalPlayer.IsOwner(gameObject))
-            {
-                base.OnPurchaseConfirmed(result, player, purchased);
             }
         }
 
@@ -61,8 +48,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             canEdit = CanEdit(Networking.LocalPlayer);
         }
 
-
-        // Idk why I suddenly started writing documentation for this, but I should probably do more of this in general, at least for public methods
+        
         /// <summary>
         /// Checks if the provided player can edit the whitelist or not.
         /// </summary>
@@ -71,7 +57,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private bool CanEdit(VRCPlayerApi player)
         {
             return (noneAdminAccess && _IsPlayerWhitelisted(player)) || 
-                   (adminWhitelistManager != null && adminWhitelistManager._IsPlayerWhitelisted(player));
+                   (adminWhitelist != null && adminWhitelist._IsPlayerWhitelisted(player));
         }
 
         /// <summary>
@@ -94,7 +80,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (VRCJson.TryDeserializeFromJson(serializedWhitelist, out DataToken result))
             {
                 whitelist = result.DataList;
-                WhitelistUpdated(true);
+                base.WhitelistUpdated(); // Calls base class to skip the added access checks
             }
         }
         
@@ -120,32 +106,26 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         
-        protected override void WhitelistUpdated(bool fromNet, IUdonEventReceiver senderBehaviour = null)
+        protected override void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null)
         {
             var localPlayer = Networking.LocalPlayer;
-            canEdit = CanEdit(localPlayer);
-            if (!canEdit && !fromNet && !localPlayer.IsOwner(gameObject))
+            
+            if (!CanEdit(localPlayer) && !localPlayer.IsOwner(gameObject))
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
             }
             
-            if (!fromNet)
-            {
-                if (!localPlayer.IsOwner(gameObject)) Networking.SetOwner(localPlayer, gameObject);
-                RequestSerialization();
-            }
-            base.WhitelistUpdated(fromNet, senderBehaviour);
+            if (!localPlayer.IsOwner(gameObject)) Networking.SetOwner(localPlayer, gameObject);
+            RequestSerialization();
+
+            base.WhitelistUpdated(senderBehaviour);
         }
 
         #region Access Check Overrides
-        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour)
+        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
-            if (!canEdit)
-            {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
-                return;
-            }
+            if (!EditCheck()) return;
             base._AddUser(username, senderBehaviour);
         }
 

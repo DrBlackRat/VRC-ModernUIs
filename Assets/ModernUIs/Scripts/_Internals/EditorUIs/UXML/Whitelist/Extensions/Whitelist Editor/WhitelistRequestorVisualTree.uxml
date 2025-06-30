@@ -9,14 +9,19 @@
     <ui:Foldout text="Settings" view-data-key="WhitelistRequestorSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="Connection" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="whitelistManager" name="whitelistManager" label="Whitelist Manager" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="whitelist" name="whitelist" label="Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Admin Control" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="adminWhitelistManager" name="adminWhitelistManager" label="Admin Whitelist Manager" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="adminWhitelist" name="adminWhitelist" label="Admin Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="requireWhitelisted" name="requireWhitelisted" label="Require Whitelisted" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="allowAdminsToRequest" name="allowAdminsToRequest" label="Allow Admins To Request" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Request Button" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="requestButton" name="requestButton" label="Button" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="requestButtonText" name="requestButtonText" label="Button TMP" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Request Button Text" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelistedText" name="whitelistedText" label="Whitelisted Text" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="adminText" name="adminText" label="Admin Text" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="requestText" name="requestText" label="Request Text" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="removeRequestText" name="removeRequestText" label="Remove Request Text" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
     <ui:Foldout text="UI Prefabs" view-data-key="WhitelistRequestorPrefabSettings" name="UIPrefab" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">

@@ -10,23 +10,25 @@ using VRC.SDKBase;
 using VRC.Udon;
 using DrBlackRat.VRC.ModernUIs.Helpers;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 
 namespace DrBlackRat.VRC.ModernUIs.SliderUI
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistSliderUI : SliderUI
     {
-        [Tooltip("Whitelist Manager that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
-        [SerializeField] protected WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")]
+        [Tooltip("Whitelist that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
+        [SerializeField] protected WhitelistSetterBase whitelist;
         
         protected bool hasAccess;
         
         protected override void Start()
         {
             base.Start();
-            if (whitelistManager != null)
+            if (whitelist != null)
             {
-                whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+                whitelist._SetUpConnection(GetComponent<UdonBehaviour>());
             }
             hasAccess = CheckAccess();
             UpdateInteractable();
@@ -47,13 +49,13 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         protected bool CheckAccess()
         {
             var access = false;
-            if (whitelistManager == null)
+            if (whitelist == null)
             {
                 access = true;
             }
             else
             {
-                access = whitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+                access = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
             }
             return access;
         }

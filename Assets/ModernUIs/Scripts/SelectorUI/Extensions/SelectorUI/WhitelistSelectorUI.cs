@@ -1,5 +1,6 @@
 ﻿using System;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,8 +15,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     public class WhitelistSelectorUI : SelectorUI
     {
 
-        [SerializeField] [Tooltip("Whitelist Manager that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
-        protected WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")] 
+        [SerializeField] [Tooltip("Whitelist that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
+        protected WhitelistGetterBase whitelist;
         [Tooltip("Color for the selector if a user is whitelisted.")]
         [SerializeField] protected Color whitelistedColor;
         [Tooltip("Color for the selector if a user NOT is whitelisted.")]
@@ -26,9 +28,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected override void Start()
         {
             base.Start();
-            if (whitelistManager != null)
+            if (whitelist != null)
             {
-                whitelistManager._SetUpConnection(GetComponent<UdonBehaviour>());
+                whitelist._SetUpConnection(GetComponent<UdonBehaviour>());
             }
             selector._SetDefaultColors(whitelistedColor, notWhitelistedColor);
             hasAccess = CheckAccess();
@@ -44,13 +46,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected bool CheckAccess()
         {
             var access = false;
-            if (whitelistManager == null)
+            if (whitelist == null)
             {
                 access = true;
             }
             else
             {
-                access = whitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+                access = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
             }
             return access;
         }

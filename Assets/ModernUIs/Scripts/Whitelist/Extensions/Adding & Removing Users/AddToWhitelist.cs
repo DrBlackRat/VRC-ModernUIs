@@ -1,7 +1,9 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,15 +14,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class AddToWhitelist : UdonSharpBehaviour
     {
+        [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist Manager that will be adjusted")]
-        [SerializeField] protected WhitelistManager whitelistManager;
+        [SerializeField] protected WhitelistSetterBase whitelist;
         [Tooltip("Input Field of which to get the username from.")]
         [SerializeField] protected TMP_InputField inputField;
         
         [Tooltip("Requires user to be whitelisted to be able to add / remove a username. This will be enabled automatically when using the Synced Whitelist Manager.")]
         [SerializeField] protected bool requireWhitelisted;
+        [FormerlySerializedAs("inputWhitelistManager")]
         [Tooltip("Whitelist a user needs to be on to add / remove a username. If left empty it will be the same as the whitelistManager")]
-        [SerializeField] protected WhitelistManager inputWhitelistManager;
+        [SerializeField] protected WhitelistGetterBase inputWhitelist;
 
         [Tooltip("Text Mesh Pro UGUI component that will have it's text changed depending on if you are on the whitelist or not.")]
         [SerializeField] protected TextMeshProUGUI placeholderText;
@@ -33,15 +37,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected void Start()
         {
-            if (whitelistManager.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
-            if (inputWhitelistManager == null) inputWhitelistManager = whitelistManager;
-            inputWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            if (whitelist.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
+            if (inputWhitelist == null) inputWhitelist = whitelist;
+            inputWhitelist._SetUpConnection((IUdonEventReceiver)this);
         }
 
         public void _WhitelistUpdated()
         {
             if (!requireWhitelisted) return;
-            hasAccess = inputWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer);
+            hasAccess = inputWhitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
             inputField.interactable = hasAccess;
             placeholderText.text = hasAccess ? whitelistedText : notWhitelistedText;
@@ -54,7 +58,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 MUIDebug.LogError("You are not whitelisted!");
                 return;
             }
-            whitelistManager._AddUser(inputField.text);
+            whitelist._AddUser(inputField.text);
             inputField.SetTextWithoutNotify(String.Empty);
         }
     }

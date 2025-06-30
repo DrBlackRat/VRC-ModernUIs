@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -23,12 +24,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform requestingTransform;
 
-        [Tooltip("Whitelist Manager that will be adjusted.")]
-        [SerializeField] protected WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")]
+        [Tooltip("Whitelist that will be adjusted.")]
+        [SerializeField] protected WhitelistSetterBase whitelist;
         [Tooltip("If being on the Admin Whitelist is required to edit.")]
         [SerializeField] protected bool requireWhitelisted;
-        [Tooltip("Admin Whitelist Manager, if left empty the normal Whitelist Manger will be used.")]
-        [SerializeField] protected WhitelistManager adminWhitelistManager;
+        [FormerlySerializedAs("adminWhitelistManager")]
+        [Tooltip("Admin Whitelist, if left empty the normal Whitelist Manger will be used.")]
+        [SerializeField] protected WhitelistGetterBase adminWhitelist;
         [Tooltip("If Admins should be allowed to Request Access. It is recommended to keep this off.")]
         [SerializeField] protected bool allowAdminsToRequest;
 
@@ -36,6 +39,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected Button requestButton;
         [Tooltip("Request Button TMP. Will be changed between \"Already Whitelisted\", \"Request Access\", \"Remove Request\" and \"You're an Admin\".")]
         [SerializeField] protected TextMeshProUGUI requestButtonText;
+        
+        [Tooltip("Text that is displayed on the Request Button if you are Whitelisted.")]
+        [SerializeField] protected string whitelistedText = "Already Whitelisted";
+        [Tooltip("Text that is displayed on the Request Button if you are an Admin and \"Allow Admins To Request\" is disabled.")]
+        [SerializeField] protected string adminText = "You're an Admin";
+        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and can request.")]
+        [SerializeField] protected string requestText = "Request Access";
+        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and are currently requesting")]
+        [SerializeField] protected string removeRequestText = "Remove Request";
+        
+        
         
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary requestingUsers = new DataDictionary();
@@ -48,21 +62,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         private void Start()
         {
-            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            whitelist._SetUpConnection((IUdonEventReceiver)this);
             
-            if (whitelistManager.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
+            if (whitelist.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
             if (requireWhitelisted)
             {
-                if (adminWhitelistManager == null)
+                if (adminWhitelist == null)
                 {
-                    adminWhitelistManager = whitelistManager;
+                    adminWhitelist = whitelist;
                     hasAdminWhitelist = false;
                 }
                 else
                 {
                     hasAdminWhitelist = true;
                 }
-                adminWhitelistManager._SetUpConnection((IUdonEventReceiver)this);
+                adminWhitelist._SetUpConnection((IUdonEventReceiver)this);
             }
             else
             {
@@ -110,10 +124,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public void _WhitelistUpdated()
         {
-            if (requireWhitelisted) UpdateAccess(adminWhitelistManager._IsPlayerWhitelisted(Networking.LocalPlayer));
+            if (requireWhitelisted) UpdateAccess(adminWhitelist._IsPlayerWhitelisted(Networking.LocalPlayer));
             
             // Add if not on whitelistedUsers
-            var whitelist = whitelistManager._GetUsersAsList();
+            var whitelist = this.whitelist._GetUsersAsList();
             for (var i = 0; i < whitelist.Count; i++)
             {
                 if (whitelistedUsers.ContainsKey(whitelist[i])) continue;
@@ -130,7 +144,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             if (hasAdminWhitelist && !allowAdminsToRequest)
             {
-                var admins = adminWhitelistManager._GetUsersAsList();
+                var admins = adminWhitelist._GetUsersAsList();
                 for (var i = 0; i < admins.Count; i++)
                 {
                     RemoveRequestingUser(admins[i].String, true); 
@@ -164,23 +178,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var localName = Networking.LocalPlayer.displayName;
             var isWhitelisted = whitelistedUsers.ContainsKey(localName);
             var isRequesting = requestingUsers.ContainsKey(localName);
-            var isBlockingAdmin = hasAdminWhitelist && !allowAdminsToRequest && adminWhitelistManager._IsPlayerWhitelisted(localName);
+            var isBlockingAdmin = hasAdminWhitelist && !allowAdminsToRequest && adminWhitelist._IsPlayerWhitelisted(localName);
             
             requestButton.interactable = !(isWhitelisted || isBlockingAdmin);
             if (isWhitelisted)
             {
-                requestButtonText.text = "Already Whitelisted";
+                requestButtonText.text = whitelistedText;
             } else if (isRequesting)
             {
-                requestButtonText.text = "Remove Request";
+                requestButtonText.text = removeRequestText;
             }
             else if (isBlockingAdmin)
             {
-                requestButtonText.text = "You're an Admin";
+                requestButtonText.text = adminText;
             }
             else
             {
-                requestButtonText.text = "Request Access";
+                requestButtonText.text = requestText;
             }
         }
         
@@ -212,7 +226,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected virtual void AddRequestingUser(string username, bool skipNet)
         {
             if (requestingUsers.ContainsKey(username) || whitelistedUsers.ContainsKey(username)) return;
-            if (hasAdminWhitelist && !allowAdminsToRequest && adminWhitelistManager._IsPlayerWhitelisted(username)) return;
+            if (hasAdminWhitelist && !allowAdminsToRequest && adminWhitelist._IsPlayerWhitelisted(username)) return;
             
             var newUserObj = Instantiate(requestingPrefab, requestingTransform.position, requestingTransform.rotation, requestingTransform);
             newUserObj.transform.localScale = Vector3.one;
@@ -248,7 +262,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasAccess) return;
             AddWhitelistUser(username);
-            whitelistManager._AddUser(username, (IUdonEventReceiver)this);
+            whitelist._AddUser(username, (IUdonEventReceiver)this);
             UpdateRequestButton();
         }
         
@@ -256,7 +270,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasAccess) return;
             RemoveWhitelistUser(username);
-            whitelistManager._RemoveUser(username, (IUdonEventReceiver)this);
+            whitelist._RemoveUser(username, (IUdonEventReceiver)this);
             UpdateRequestButton();
         }
 

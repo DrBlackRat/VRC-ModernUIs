@@ -1,7 +1,9 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -18,19 +20,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] private Transform usernameTransform;
 
-        [SerializeField] private WhitelistManager whitelistManager;
+        [FormerlySerializedAs("whitelistManager")] 
+        [SerializeField] private WhitelistGetterBase whitelist;
 
         private DataDictionary whitelistDisplays = new DataDictionary();
 
         private void Start()
         {
-            whitelistManager._SetUpConnection((IUdonEventReceiver)this);
+            whitelist._SetUpConnection((IUdonEventReceiver)this);
         }
         
         public void _WhitelistUpdated()
         {
             // Add if not on whitelistedUsers
-            var whitelist = whitelistManager._GetUsersAsList();
+            var whitelist = this.whitelist._GetUsersAsList();
             for (var i = 0; i < whitelist.Count; i++)
             {
                 if (whitelistDisplays.ContainsKey(whitelist[i].String)) continue;
