@@ -35,7 +35,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("If Admins should be allowed to Request Access. It is recommended to keep this off.")]
         [SerializeField] protected bool allowAdminsToRequest;
 
-        [Tooltip("Button for Requesting Access. Will have it's interacable set.")]
+        [Tooltip("Button for Requesting Access. Will have it's interactable set.")]
         [SerializeField] protected Button requestButton;
         [Tooltip("Request Button TMP. Will be changed between \"Already Whitelisted\", \"Request Access\", \"Remove Request\" and \"You're an Admin\".")]
         [SerializeField] protected TextMeshProUGUI requestButtonText;
@@ -49,7 +49,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and are currently requesting")]
         [SerializeField] protected string removeRequestText = "Remove Request";
         
-        
+        [Tooltip("If enabled admins can only add a limited amount of users. They will also only be able to remove the ones they added.")]
+        [SerializeField] protected bool limitAdding;
+        [Range(0, 40)] [Tooltip("The amount of users a single admin can add.")]
+        [SerializeField] protected int maxAddAmount = 2;
+
         
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary requestingUsers = new DataDictionary();
@@ -59,6 +63,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected bool hasAccess;
         protected bool hasAdminWhitelist;
+
+        protected DataList usersAdded = new DataList();
+        protected bool canAdd = true;
 
         private void Start()
         {
@@ -84,6 +91,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 hasAdminWhitelist = false;
             }
             UpdateRequestButton();
+            CheckMaxUsersAdded(true);
         }
         
         public override void OnDeserialization()
@@ -147,7 +155,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 var admins = adminWhitelist._GetUsersAsList();
                 for (var i = 0; i < admins.Count; i++)
                 {
-                    RemoveRequestingUser(admins[i].String, true); 
+                    RemoveRequestingUser(admins[i].String, true);
                 }
             }
             UpdateRequestButton();
@@ -158,19 +166,48 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (hasAccess != newHasAccess)
             {
                 hasAccess = newHasAccess;
-                var whitelistKeys = whitelistedUsers.GetKeys();
-                for (var i = 0; i < whitelistKeys.Count; i++)
-                {
-                    var user = (WhitelistUser)whitelistedUsers[whitelistKeys[i]].Reference;
-                    user.HasAccess = hasAccess;
-                }
-                var requestingUsersKeys = requestingUsers.GetKeys();
-                for (var i = 0; i < requestingUsersKeys.Count; i++)
-                {
-                    var user = (WhitelistRequestingUser)requestingUsers[requestingUsersKeys[i]].Reference;
-                    user.HasAccess = hasAccess;
-                }
+                UpdateWhitelistedAccess();
+                UpdateRequestingAccess();
             }
+        }
+        
+        private void UpdateWhitelistedAccess()
+        {
+            var whitelistKeys = whitelistedUsers.GetKeys();
+            for (var i = 0; i < whitelistKeys.Count; i++)
+            {
+                var user = (WhitelistUser)whitelistedUsers[whitelistKeys[i]].Reference;
+                if (limitAdding)
+                {
+                    user.HasAccess = hasAccess && usersAdded.Contains(user.DisplayName);
+                }
+                else
+                {
+                    user.HasAccess = hasAccess;
+                }
+            } 
+        }
+        
+        private void UpdateRequestingAccess()
+        {
+            var requestingUsersKeys = requestingUsers.GetKeys();
+            for (var i = 0; i < requestingUsersKeys.Count; i++)
+            {
+                var user = (WhitelistRequestingUser)requestingUsers[requestingUsersKeys[i]].Reference;
+                user.HasAccess = hasAccess && canAdd;
+            }
+        }
+        
+        private void CheckMaxUsersAdded(bool skipSameCheck = false)
+        {
+            if (!limitAdding) return;
+            
+            var newCanAdd = usersAdded.Count < maxAddAmount;
+            if (newCanAdd == canAdd && !skipSameCheck) return;
+
+            canAdd = newCanAdd;
+            UpdateWhitelistedAccess();
+            UpdateRequestingAccess();
         }
 
         protected void UpdateRequestButton()
@@ -205,7 +242,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var newUserObj = Instantiate(whitelistedPrefab, whitelistedTransform.position, whitelistedTransform.rotation, whitelistedTransform);
             newUserObj.transform.localScale = Vector3.one;
             var whitelistUser = newUserObj.GetComponent<WhitelistUser>();
-            whitelistUser._Setup(this, username, true, hasAccess);
+            if (limitAdding)
+            {
+                whitelistUser._Setup(this, username, true, hasAccess && usersAdded.Contains(username));
+            }
+            else
+            {
+                whitelistUser._Setup(this, username, true, hasAccess);
+            }
             whitelistedUsers.Add(username, whitelistUser);
             
             RemoveRequestingUser(username, true);
@@ -221,6 +265,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 whitelistUser._Destroy();
                 whitelistedUsers.Remove(username);
             }
+            
+            if (limitAdding && usersAdded.Contains(username))
+            {
+                usersAdded.Remove(username);
+                CheckMaxUsersAdded();
+            }
         }
 
         protected virtual void AddRequestingUser(string username, bool skipNet)
@@ -231,7 +281,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var newUserObj = Instantiate(requestingPrefab, requestingTransform.position, requestingTransform.rotation, requestingTransform);
             newUserObj.transform.localScale = Vector3.one;
             var requestingUser = newUserObj.GetComponent<WhitelistRequestingUser>();
-            requestingUser._Setup(this, username, hasAccess);
+            requestingUser._Setup(this, username, hasAccess && canAdd);
             requestingUsers.Add(username, requestingUser);
 
             if (!skipNet)
@@ -261,6 +311,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void _Add(string username)
         {
             if (!hasAccess) return;
+            
+            if (limitAdding)
+            {
+                usersAdded.Add(username);
+                CheckMaxUsersAdded();  
+            }
+            
             AddWhitelistUser(username);
             whitelist._AddUser(username, (IUdonEventReceiver)this);
             UpdateRequestButton();

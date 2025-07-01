@@ -24,7 +24,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 displayName = value;
                 if (usernameTMP != null) usernameTMP.text = value;
-            } 
+            }
+            get => displayName;
         }
         
         protected bool hasAccess;
@@ -35,6 +36,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 hasAccess = value;
                 if (buttonObj != null) buttonObj.SetActive(value);
             }
+            get => hasAccess;
         }
         
         public void _Setup(IWhitelistEditor newWhitelistEditor, string newDisplayname, bool newIsRemover, bool newHasAccess)

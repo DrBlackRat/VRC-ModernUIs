@@ -137,7 +137,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -34.44532, y: 54.888}
-  m_SizeDelta: {x: 60, y: 21}
+  m_SizeDelta: {x: 70, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2285680331972652185
 Canvas:
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &1307447845584874842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -645,11 +645,10 @@ MonoBehaviour:
   usePersistence: 0
   dataKey: CHANGE THIS
   itemObjs: []
-  externalBehaviours: []
+  externalBehaviours:
+  - {fileID: 0}
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  selectorUIButtons: []
-  selector: {fileID: 0}
   buttonNormalScale: {x: -2, y: -2}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 40
@@ -660,7 +659,7 @@ MonoBehaviour:
   iconSelectedPos: {x: 0, y: 0}
   textNormalPos: {x: 0, y: 0}
   textSelectedPos: {x: 0, y: 0}
-  animationCurve:
+  smoothingCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -703,6 +702,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  selectorUIButtons: []
+  selector: {fileID: 0}
 --- !u!114 &4270540110030001448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -850,6 +851,8 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4038745995248189110}
   overrideDefaults: 0
+  fixedSize: 0
+  fixedRounding: 0
   smoothingCurve:
     serializedVersion: 2
     m_Curve: []
@@ -857,8 +860,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
-  enabledColor: {r: 0, g: 0, b: 0, a: 0}
-  disabledColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4038745995248189110
 MonoBehaviour:
   m_ObjectHideFlags: 0

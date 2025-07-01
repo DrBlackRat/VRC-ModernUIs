@@ -6465,7 +6465,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<size=8><color=grey>                                                                                                               
-    Version 0.2.0</color></size>\nThis world showcases my UI System which has a big
+    Version 0.2.1</color></size>\nThis world showcases my UI System which has a big
     focus on animations!\n\nIt can be used to make any sort of UIs and has been used
     in Worlds like:\n- The Furry Hideout | By Lt_Shadow\n- Golden Hour 2 | By Itz
     Soph\n\nIf you would like to commission me for a World UI / want to get a quote
@@ -13508,8 +13508,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
+  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 1db6643092e001940902578f00e86981, type: 2}
   - {fileID: 2100000, guid: e24faad0a475f434ea0a938dda24792b, type: 2}
   - {fileID: 2100000, guid: cbc2271e96ecf9a4d922cc9f31573a5c, type: 2}
@@ -14573,6 +14573,18 @@ MonoBehaviour:
     - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 533993111}
     ID: 532
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 541
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 542
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 543
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
@@ -21266,6 +21278,11 @@ PrefabInstance:
       objectReference: {fileID: 1467401746}
     - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
+      propertyPath: limitAddAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
       propertyPath: whitelistManager
       value: 
       objectReference: {fileID: 961923760}
@@ -21577,12 +21594,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 421185185}
     m_Modifications:
-    - target: {fileID: 95104164799072044, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializedProgramAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 80bc529c0152dc74abf5a5149a744fcf,
-        type: 2}
     - target: {fileID: 708274135316909444, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: m_Pivot.x
@@ -21689,28 +21700,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2639932124138466170, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
-    - target: {fileID: 2639932124138466170, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: externalBehaviours.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2639932124138466170, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: externalBehaviours.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 3823164631907702902, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
-    - target: {fileID: 4038745995248189110, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializedProgramAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: dd23706675fd3e14d946351bdc0fca2c,
-        type: 2}
     - target: {fileID: 4131570335132442762, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -21741,12 +21736,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4270540110030001448, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializedProgramAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 5b8ebf0f0f57b044aaa6230b91302dc7,
-        type: 2}
     - target: {fileID: 4439893429101827132, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: m_Name
@@ -21788,18 +21777,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5266515496357171399, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
+    - target: {fileID: 5400066617427153485, guid: fd671aceddd13564184bf18ec0b0c675,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6986101289647312825, guid: fd671aceddd13564184bf18ec0b0c675,
         type: 3}
-    - target: {fileID: 9027765281397002141, guid: fd671aceddd13564184bf18ec0b0c675,
-        type: 3}
-      propertyPath: serializedProgramAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 80bc529c0152dc74abf5a5149a744fcf,
-        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
