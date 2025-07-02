@@ -8,7 +8,9 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    public class WhitelistedZone : UdonSharpBehaviour
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [RequireComponent(typeof(BoxCollider))]
+    public class WhitelistZone : UdonSharpBehaviour
     {
         [SerializeField] private WhitelistGetterBase whitelist;
         [SerializeField] private Transform exitTransform;
@@ -47,6 +49,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (inZone && !hasAccess)
             {
+                MUIDebug.LogWarning("You were in a Whitelist Zone without being whitelisted! You have been moved to the exist position.");
                 Networking.LocalPlayer.TeleportTo(exitTransform.position, exitTransform.rotation);
             }
         }
