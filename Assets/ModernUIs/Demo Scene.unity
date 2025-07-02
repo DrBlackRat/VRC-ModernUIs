@@ -4734,6 +4734,12 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 895138096}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &596349578 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4653145771975485057, guid: 8299ff95a323fa643ba750b341e78e08,
+    type: 3}
+  m_PrefabInstance: {fileID: 1164931641136551289}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &601355573 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8453244469693104466, guid: 96d56b9c77e58ce4a93f336d7ac5b689,
@@ -6465,7 +6471,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<size=8><color=grey>                                                                                                               
-    Version 0.2.1</color></size>\nThis world showcases my UI System which has a big
+    Version 0.2.2</color></size>\nThis world showcases my UI System which has a big
     focus on animations!\n\nIt can be used to make any sort of UIs and has been used
     in Worlds like:\n- The Furry Hideout | By Lt_Shadow\n- Golden Hour 2 | By Itz
     Soph\n\nIf you would like to commission me for a World UI / want to get a quote
@@ -13945,8 +13951,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
+  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 1db6643092e001940902578f00e86981, type: 2}
   - {fileID: 2100000, guid: e24faad0a475f434ea0a938dda24792b, type: 2}
   - {fileID: 2100000, guid: cbc2271e96ecf9a4d922cc9f31573a5c, type: 2}
@@ -15018,6 +15024,10 @@ MonoBehaviour:
     - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 1598077480}
     ID: 534
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 596349578}
+    ID: 535
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
@@ -19035,6 +19045,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 462127268747135866, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
+    - target: {fileID: 496751295680713814, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 496751295680713814, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
     - target: {fileID: 560390678773785082, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -19666,6 +19682,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2485002664198576047, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553807116174497471, guid: 8299ff95a323fa643ba750b341e78e08,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2556008062355007984, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -20607,36 +20653,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5571929484488320600, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6017559571762234102, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -20966,11 +20982,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7437767843989772393, guid: 8299ff95a323fa643ba750b341e78e08,
-        type: 3}
-      propertyPath: teleportTransform
-      value: 
-      objectReference: {fileID: 139806015}
     - target: {fileID: 7437767843989772393, guid: 8299ff95a323fa643ba750b341e78e08,
         type: 3}
       propertyPath: serializationData.Prefab

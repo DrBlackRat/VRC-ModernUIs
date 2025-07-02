@@ -13,6 +13,8 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     {
         [Tooltip("This is the default state the multi select will be in.")]
         [SerializeField] protected int selectedState;
+        public int SelectedState => selectedState;
+
         [Tooltip("When enabled, clicking on an activated button again will make the selection go back to the default state.")]
         [SerializeField] protected bool secondClick;
         [Tooltip("State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
@@ -124,16 +126,22 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             }
         }
 
-        public void _ButtonSelected(int buttonId)
+        /// <summary>
+        /// Sets the state of the Selector UI, acts the same way as if it was done through the UI.
+        /// </summary>
+        /// <param name="buttonId">State that should be selected.</param>
+        /// <returns>True if successful, false if not.</returns>
+        public bool _ButtonSelected(int buttonId)
         {
+            if (buttonId < 0 || buttonId >= selectorUIButtons.Length)  return false; 
             if (secondClick && buttonId == selectedState)
             {
-                if (buttonId == secondClickState) return;
-                UpdateSelection(secondClickState, false, false, false);
+                if (buttonId == secondClickState) return false;
+                return UpdateSelection(secondClickState, false, false, false);
             }
             else
             {
-                UpdateSelection(buttonId, false, false, false);
+                return UpdateSelection(buttonId, false, false, false);
             }
         }
         

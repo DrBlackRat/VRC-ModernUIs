@@ -17,6 +17,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
     {
         [Tooltip("This is the default value the slider will have.")]
         [SerializeField] protected float value = 0f;
+        public virtual float Value => value;
 
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
         [SerializeField] protected PostProcessVolume postProcessVolume;
@@ -33,7 +34,8 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected string dataKey = "CHANGE THIS";
         
         [SerializeField] protected Slider slider;
-        
+        public virtual Slider Slider => slider;
+
         [Tooltip("Text that the slider value should be displayed at. Formated as whole numbers from 0 - 100, so 0.5 would be 50. Can be left empty if not needed.")]
         [SerializeField] protected TextMeshProUGUI sliderText;
         [Tooltip("Changes what the slider number will be multiplied by for display.\n- 1 would keep 0.5 as 0.5\n- 100 would turn 0.5 to 50")]
@@ -62,7 +64,20 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             }
 
         }
+
+        /// <summary>
+        /// Sets the value of the slider, acts the same way as if it was done through the UI.
+        /// </summary>
+        /// <param name="newValue">Value the slider should be set to.</param>
+        /// <returns>True if successful, false if not.</returns>
+        public bool _UpdateValue(float newValue)
+        {
+            return UpdateValue(newValue, false, false, false);
+        }
         
+        /// <summary>
+        /// Grabs the value of the slider and updates everything accordingly. Should only be used by the UI it self.
+        /// </summary>
         public void _ValueUpdated()
         {
             UpdateValue(slider.value, false, false, false);
