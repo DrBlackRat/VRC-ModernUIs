@@ -37,6 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void Start()
         {
+            hasInfoCanvas = infoCanvas != null;
             zoneCollider = GetComponent<Collider>();
             if (zoneCollider == null)
             {
@@ -44,8 +45,6 @@ namespace DrBlackRat.VRC.ModernUIs
                 return;
             }
             UpdateHiddenState(true);
-
-            hasInfoCanvas = infoCanvas != null;
         }
         
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
