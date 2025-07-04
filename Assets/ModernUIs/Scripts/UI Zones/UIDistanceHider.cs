@@ -33,6 +33,8 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private bool hidden;
 
+        private bool hasInfoCanvas;
+
         private void Start()
         {
             zoneCollider = GetComponent<Collider>();
@@ -42,6 +44,8 @@ namespace DrBlackRat.VRC.ModernUIs
                 return;
             }
             UpdateHiddenState(true);
+
+            hasInfoCanvas = infoCanvas != null;
         }
         
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
@@ -134,7 +138,10 @@ namespace DrBlackRat.VRC.ModernUIs
                 hidingCanvas.alpha = Mathf.Lerp(prevHiddenAlpha, newHiddenAlpha, transition);
             }
 
-            infoCanvas.alpha = Mathf.Lerp(prevShownAlpha, newShownAlpha, transition);
+            if (hasInfoCanvas)
+            {
+                infoCanvas.alpha = Mathf.Lerp(prevShownAlpha, newShownAlpha, transition);
+            }
             
             if (transition >= 1f)
             {
@@ -143,7 +150,10 @@ namespace DrBlackRat.VRC.ModernUIs
                     hidingCanvas.alpha = newHiddenAlpha;
                 }
 
-                infoCanvas.alpha = newShownAlpha;
+                if (hasInfoCanvas)
+                {
+                    infoCanvas.alpha = newShownAlpha;
+                }
             }
         }
     }
