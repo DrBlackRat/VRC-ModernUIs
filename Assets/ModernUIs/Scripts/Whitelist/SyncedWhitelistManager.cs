@@ -12,7 +12,6 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(900)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedWhitelistManager : WhitelistManager
     {
@@ -40,6 +39,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 noneAdminAccess = true;
             }
+            canEdit = CanEdit(Networking.LocalPlayer);
         }
 
         // Only for Admin Whitelist

@@ -12,7 +12,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     /// Extends <see cref="WhitelistGetterBase"/> to add functionality for modifying the whitelist.
     /// Provides methods to add and remove users.
     /// </summary>
-    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class WhitelistSetterBase : WhitelistGetterBase
     {

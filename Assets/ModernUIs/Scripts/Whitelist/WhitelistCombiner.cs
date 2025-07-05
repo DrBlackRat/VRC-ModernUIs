@@ -11,7 +11,6 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(800)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistCombiner : WhitelistGetterBase
     {

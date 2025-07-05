@@ -11,7 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     /// Basic usable whitelist, only supports <see cref="WhitelistSetterBase"/> functionality.
     /// Should only be used in combination with other scripts that are setting the whitelist.
     /// </summary>
-    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class BasicWhitelist : WhitelistSetterBase
     {

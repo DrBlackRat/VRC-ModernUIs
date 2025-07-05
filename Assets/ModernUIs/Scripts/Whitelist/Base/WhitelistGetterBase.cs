@@ -13,7 +13,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     /// Handles <c>_WhitelistUpdated</c> connections and provides methods to check if a player is whitelisted, 
     /// as well as to retrieve the full whitelist.
     /// </summary>
-    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class WhitelistGetterBase : UdonSharpBehaviour
     {
