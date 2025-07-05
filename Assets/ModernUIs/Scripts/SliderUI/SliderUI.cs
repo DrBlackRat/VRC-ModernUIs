@@ -21,6 +21,9 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
         [SerializeField] protected PostProcessVolume postProcessVolume;
+        [Tooltip("Audio Source of which the volume will be set by the slider.")]
+        [SerializeField] protected AudioSource audioSource;
+        
         [Tooltip("Udon Behaviours that should be updated.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;
         [Tooltip("Event that will be called on the Slider Behaviour if the value changes.")]
@@ -103,6 +106,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         protected void UpdateExternal(float newValue)
         {
             if (postProcessVolume != null) postProcessVolume.weight = newValue;
+            if (audioSource != null) audioSource.volume = newValue;
 
             if (externalBehaviours != null && externalBehaviours.Length > 0)
             {
