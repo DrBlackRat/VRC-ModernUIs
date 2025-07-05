@@ -20,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Adds a specific user to the white list. Skips duplicate username.
         /// </summary>
         /// <param name="username">The username to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null)
         {
             if (whitelist.Contains(username))
@@ -37,7 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Removes a specific user from the white list.
         /// </summary>
         /// <param name="username">The username to remove from the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _RemoveUser(string username , IUdonEventReceiver senderBehaviour = null)
         {
             if (!whitelist.Contains(username))
@@ -55,7 +55,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Adds a DataList of usernames to the whitelist. Skips duplicate usernames.
         /// </summary>
         /// <param name="newUsernames">DataList usernames to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (newUsernames == null || newUsernames.Count == 0) return;
@@ -82,7 +82,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Adds an Array of usernames to the whitelist. Skips duplicate usernames.
         /// </summary>
         /// <param name="newUsernames">Array of usernames to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (newUsernames == null || newUsernames.Length == 0) return;
@@ -104,7 +104,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Fully replaces the current whitelist with a new one. This is usually not recommended, try _AddUsers or _RemoveUser first.
         /// </summary>
         /// <param name="newUsernames">DataList of usernames to replace the whitelist with.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             whitelist = newUsernames;

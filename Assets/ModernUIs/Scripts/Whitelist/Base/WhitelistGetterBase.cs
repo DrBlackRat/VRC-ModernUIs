@@ -25,15 +25,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         
         /// <summary>
         /// Sets up a connection with the Whitelist Manager.
-        /// Used to receive an event if the whitelist changes.
+        /// Used to receive an update event if the whitelist changes.
         /// </summary>
-        /// <param name="behaviour">Event Receiver which should have the "_WhitelistUpdated called on." </param>
-        /// <param name="eventName">Optional | If left empty "_WhitelistUpdated" will be used.</param>
+        /// <param name="behaviour">Event Receiver which should have the update event called on.</param>
+        /// <param name="eventName">Optional | Event what should be called, if left empty "_WhitelistUpdated" will be used.</param>
         public virtual void _SetUpConnection(IUdonEventReceiver behaviour, string eventName = WHITELIST_UPDATED_EVENT)
         {
             connectedBehaviours.Add((UnityEngine.Object)behaviour);
             updateEventNames.Add(eventName);
-            behaviour.SendCustomEvent(eventName);
+            behaviour.SendCustomEventDelayedFrames(eventName, 1); // Send delayed by one frame to prevent too much happening inside one frame
         }
         
         /// <summary>
@@ -122,8 +122,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 var receiver = (IUdonEventReceiver)connectedBehaviours[i].Reference;
                 if (receiver == senderBehaviour) continue;
                 
-                // Send delayed by one frame for performance reasons
-                receiver.SendCustomEventDelayedFrames((string)updateEventNames[i], 1);
+                receiver.SendCustomEventDelayedFrames((string)updateEventNames[i], 1); // Send delayed by one frame to prevent too much happening inside one frame
             }
         }
     }
