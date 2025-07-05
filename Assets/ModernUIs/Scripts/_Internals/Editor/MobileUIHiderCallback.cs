@@ -9,7 +9,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
         public static void OnPostProcessScene()
         {
 #if UNITY_ANDROID || UNITY_IPHONE
-            MobileUIHider[] mobileUIHiders = Object.FindObjectsOfType<MobileUIHider>();
+            MobileUIHider[] mobileUIHiders = Object.FindObjectsOfType<MobileUIHider>(true);
             foreach (var mobileUIHider in mobileUIHiders)
             {
                 foreach (var obj in mobileUIHider.objectsToDisable)

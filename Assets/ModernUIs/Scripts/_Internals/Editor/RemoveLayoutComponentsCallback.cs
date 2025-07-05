@@ -10,38 +10,38 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
         [PostProcessScene(-50)]
         public static void OnPostProcessScene()
         {
-            RemoveLayoutComponents[] removers = Object.FindObjectsOfType<RemoveLayoutComponents>();
+            RemoveLayoutComponents[] removers = Object.FindObjectsOfType<RemoveLayoutComponents>(true);
             Canvas.ForceUpdateCanvases();
             
             foreach (var remover in removers)
             {
                 if (!remover.removeLayoutComponents) continue;
                 
-                var fitterComponents = remover.GetComponentsInChildren<ContentSizeFitter>();
+                var fitterComponents = remover.GetComponentsInChildren<ContentSizeFitter>(true);
                 for (int i = fitterComponents.Length - 1; i >= 0; i--)
                 {
                     Object.DestroyImmediate(fitterComponents[i]);
                 }
                 
-                var verticalComponents = remover.GetComponentsInChildren<VerticalLayoutGroup>();
+                var verticalComponents = remover.GetComponentsInChildren<VerticalLayoutGroup>(true);
                 for (int i = verticalComponents.Length - 1; i >= 0; i--)
                 {
                     Object.DestroyImmediate(verticalComponents[i]);
                 }
                 
-                var horizontalComponents = remover.GetComponentsInChildren<HorizontalLayoutGroup>();
+                var horizontalComponents = remover.GetComponentsInChildren<HorizontalLayoutGroup>(true);
                 for (int i = horizontalComponents.Length - 1; i >= 0; i--)
                 {
                     Object.DestroyImmediate(horizontalComponents[i]);
                 }
                 
-                var gridComponents = remover.GetComponentsInChildren<GridLayoutGroup>();
+                var gridComponents = remover.GetComponentsInChildren<GridLayoutGroup>(true);
                 for (int i = gridComponents.Length - 1; i >= 0; i--)
                 {
                     Object.DestroyImmediate(gridComponents[i]);
                 }
                 
-                var layoutElementComponents = remover.GetComponentsInChildren<LayoutElement>();
+                var layoutElementComponents = remover.GetComponentsInChildren<LayoutElement>(true);
                 for (int i = layoutElementComponents.Length - 1; i >= 0; i--)
                 {
                     Object.DestroyImmediate(layoutElementComponents[i]);

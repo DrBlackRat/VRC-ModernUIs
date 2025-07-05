@@ -27,7 +27,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 whitelist._SetUpConnection((IUdonEventReceiver)this);
             }
-            WhitelistUpdated();
         }
 
         public void _WhitelistUpdated()

@@ -19,15 +19,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     {
         protected DataList whitelist = new DataList();
         protected DataList connectedBehaviours = new DataList();
+        protected DataList updateEventNames = new DataList();
+
+        protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
         
         /// <summary>
         /// Sets up a connection with the Whitelist Manager.
-        /// Used to receive the <c>_WhitelistUpdated</c> event if the whitelist changes.
+        /// Used to receive an event if the whitelist changes.
         /// </summary>
         /// <param name="behaviour">Event Receiver which should have the "_WhitelistUpdated called on." </param>
-        public virtual void _SetUpConnection(IUdonEventReceiver behaviour)
+        /// <param name="eventName">Optional | If left empty "_WhitelistUpdated" will be used.</param>
+        public virtual void _SetUpConnection(IUdonEventReceiver behaviour, string eventName = WHITELIST_UPDATED_EVENT)
         {
             connectedBehaviours.Add((UnityEngine.Object)behaviour);
+            updateEventNames.Add(eventName);
+            behaviour.SendCustomEvent(eventName);
         }
         
         /// <summary>
@@ -117,7 +123,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 if (receiver == senderBehaviour) continue;
                 
                 // Send delayed by one frame for performance reasons
-                receiver.SendCustomEventDelayedFrames("_WhitelistUpdated", 1);
+                receiver.SendCustomEventDelayedFrames((string)updateEventNames[i], 1);
             }
         }
     }

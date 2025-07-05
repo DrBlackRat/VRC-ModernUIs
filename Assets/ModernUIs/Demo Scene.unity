@@ -7074,6 +7074,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7875719733778587625, guid: e685e33d41aa4904d835c3f21eab4a31,
         type: 3}
+    - target: {fileID: 7974367871502212451, guid: e685e33d41aa4904d835c3f21eab4a31,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9095132452805180464, guid: e685e33d41aa4904d835c3f21eab4a31,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -13951,8 +13956,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
   - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
+  - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
   - {fileID: 2100000, guid: 1db6643092e001940902578f00e86981, type: 2}
   - {fileID: 2100000, guid: e24faad0a475f434ea0a938dda24792b, type: 2}
   - {fileID: 2100000, guid: cbc2271e96ecf9a4d922cc9f31573a5c, type: 2}
@@ -15028,10 +15033,6 @@ MonoBehaviour:
     - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 596349578}
     ID: 535
-    SerializedTypeNames:
-    - VRC.Udon.UdonBehaviour
-  - gameObject: {fileID: 0}
-    ID: 536
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
@@ -23963,19 +23964,9 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5909396013654442601, guid: 08da920dff8f7794f92b7666d4effe73,
         type: 3}
-      propertyPath: itemObjs.Array.data[1]
-      value: 
-      objectReference: {fileID: 1605987807}
-    - target: {fileID: 5909396013654442601, guid: 08da920dff8f7794f92b7666d4effe73,
-        type: 3}
-      propertyPath: itemObjs.Array.data[2]
-      value: 
-      objectReference: {fileID: 253245723}
-    - target: {fileID: 5909396013654442601, guid: 08da920dff8f7794f92b7666d4effe73,
-        type: 3}
-      propertyPath: itemObjs.Array.data[3]
-      value: 
-      objectReference: {fileID: 281767568}
+      propertyPath: movementDuration
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5909396013654442601, guid: 08da920dff8f7794f92b7666d4effe73,
         type: 3}
       propertyPath: serializationData.Prefab
