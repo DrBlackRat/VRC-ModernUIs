@@ -40,6 +40,19 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [SerializeField] protected float buttonSelectedPixelPerUnit;
         
         [SerializeField] protected Color normalColor;
+
+        public Color NormalColor
+        {
+            get => normalColor;
+            set => normalColor = value;
+        }
+
+        public Color SelectedColor
+        {
+            get => selectedColor;
+            set => selectedColor = value;
+        }
+
         [SerializeField] protected Color selectedColor;
         
         [SerializeField] protected Vector2 iconNormalPos;

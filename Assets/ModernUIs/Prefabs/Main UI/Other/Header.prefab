@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 6624237616275312861}
   - component: {fileID: 6746844001356733868}
   - component: {fileID: 5581883047273378631}
+  - component: {fileID: 1576010692635659427}
   m_Layer: 17
   m_Name: Title
   m_TagString: Untagged
@@ -192,6 +193,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1576010692635659427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2968299743378182042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 9
+  graphic: {fileID: 5581883047273378631}
+  selectorUI: {fileID: 0}
 --- !u!1 &8244945142229298098
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +219,7 @@ GameObject:
   - component: {fileID: 3549195200197939036}
   - component: {fileID: 6211737331782458684}
   - component: {fileID: 29875427515676919}
+  - component: {fileID: 1384098659321312547}
   m_Layer: 17
   m_Name: Icon
   m_TagString: Untagged
@@ -267,3 +284,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1384098659321312547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8244945142229298098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 7
+  graphic: {fileID: 29875427515676919}
+  selectorUI: {fileID: 0}
