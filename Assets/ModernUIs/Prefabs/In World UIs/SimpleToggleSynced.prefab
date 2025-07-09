@@ -208,6 +208,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8188744302806295668, guid: 6da3bf48f90f8ed43b5f684a5c2a41ac,
+        type: 3}
+      propertyPath: selectorUI
+      value: 
+      objectReference: {fileID: 3496878993547009411}
     - target: {fileID: 8590799335973176295, guid: 6da3bf48f90f8ed43b5f684a5c2a41ac,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -284,8 +289,6 @@ MonoBehaviour:
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
-  selectorUIButtons: []
-  selector: {fileID: 0}
   buttonNormalScale: {x: -2, y: -2}
   buttonSelectedScale: {x: 0, y: 0}
   buttonNormalPixelPerUnit: 40
@@ -296,7 +299,7 @@ MonoBehaviour:
   iconSelectedPos: {x: 0, y: 0}
   textNormalPos: {x: 0, y: 0}
   textSelectedPos: {x: 0, y: 0}
-  animationCurve:
+  smoothingCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -339,7 +342,9 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
-  whitelistManager: {fileID: 0}
+  selectorUIButtons: []
+  selector: {fileID: 0}
+  whitelist: {fileID: 0}
   whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
   notWhitelistedColor: {r: 1, g: 1, b: 1, a: 0.2}
 --- !u!114 &6889684302270198416

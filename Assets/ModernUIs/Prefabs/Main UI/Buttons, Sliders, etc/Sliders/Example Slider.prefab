@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 5235137579834667099}
   - component: {fileID: 1949844146858577490}
   - component: {fileID: 4879546821368169726}
+  - component: {fileID: 3884205569474625565}
   m_Layer: 17
   m_Name: Title
   m_TagString: Untagged
@@ -170,6 +171,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3884205569474625565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817554978377709792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 9
+  graphic: {fileID: 4879546821368169726}
+  selectorUI: {fileID: 0}
 --- !u!1 &1050644940877558603
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,6 +255,7 @@ GameObject:
   - component: {fileID: 6636870260845176043}
   - component: {fileID: 1340624019516558410}
   - component: {fileID: 6271115001712803689}
+  - component: {fileID: 4252503793079805814}
   m_Layer: 17
   m_Name: Fill
   m_TagString: Untagged
@@ -303,6 +320,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 60
+--- !u!114 &4252503793079805814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2338364711903872204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 3
+  graphic: {fileID: 6271115001712803689}
+  selectorUI: {fileID: 0}
 --- !u!1 &4475045530704551987
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,6 +538,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 8012476625405821664}
   value: 0
   postProcessVolume: {fileID: 0}
+  audioSource: {fileID: 0}
   externalBehaviours: []
   updateEventName: _SliderUpdated
   variableName: sliderValue
@@ -644,6 +677,7 @@ GameObject:
   - component: {fileID: 5561450698014255471}
   - component: {fileID: 2823995273481200729}
   - component: {fileID: 1137113251520049532}
+  - component: {fileID: 234423938632055787}
   m_Layer: 17
   m_Name: Background
   m_TagString: Untagged
@@ -708,3 +742,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 35
+--- !u!114 &234423938632055787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8966145588620772964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 2
+  graphic: {fileID: 1137113251520049532}
+  selectorUI: {fileID: 0}

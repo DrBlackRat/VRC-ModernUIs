@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Modern UI | Theme" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Allows storing colors for a theme as well as applying it." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+    </ui:VisualElement>
+    <ui:Foldout text="Colors" view-data-key="ThemeSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Backgrounds" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="background" name="background" label="Primary" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="secondaryBackground" name="secondaryBackground" label="Secondary" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="fieldBackground" name="fieldBackground" label="Fields" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Buttons &amp; Sliders" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="buttonPrimary" name="buttonPrimary" label="Primary" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="buttonInactivePrimary" name="buttonInactivePrimary" label="Inactive" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="buttonTextIcon" name="buttonTextIcon" label="Text &amp; Icons" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="buttonInactiveTextIcon" name="buttonInactiveTextIcon" label="Inactive Text &amp; Icons" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="icon" name="icon" label="Icons" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="secondaryIcon" name="secondaryIcon" label="Secondary Icons" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="text" name="text" label="Text" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="secondaryText" name="secondaryText" label="Secondary Text" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:VisualElement class="section" style="flex-grow: 1;">
+        <ui:Button text="Apply Theme" parse-escape-sequences="true" display-tooltip-when-elided="true" binding-path="applyButton" name="applyButton" tooltip="Applies the Theme to everything using it." style="height: 30px;" />
+        <ui:Button text="Apply Theme To Everything" parse-escape-sequences="true" display-tooltip-when-elided="true" binding-path="applyEverythingButton" name="applyEverythingButton" tooltip="Applies the Theme to everything inside the scene." style="height: 30px;" />
+    </ui:VisualElement>
+</ui:UXML>

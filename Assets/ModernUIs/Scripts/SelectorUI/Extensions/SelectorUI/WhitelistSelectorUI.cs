@@ -23,6 +23,18 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [Tooltip("Color for the selector if a user NOT is whitelisted.")]
         [SerializeField] protected Color notWhitelistedColor;
 
+        public Color WhitelistedColor
+        {
+            get => whitelistedColor;
+            set => whitelistedColor = value;
+        }
+
+        public Color NotWhitelistedColor
+        {
+            get => notWhitelistedColor;
+            set => notWhitelistedColor = value;
+        }
+
         protected bool hasAccess;
 
         protected override void Start()

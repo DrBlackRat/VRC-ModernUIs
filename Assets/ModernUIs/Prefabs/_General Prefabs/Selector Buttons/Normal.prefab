@@ -64,16 +64,8 @@ MonoBehaviour:
   iconObj: {fileID: 0}
   textObj: {fileID: 3727510616961715434}
   overrideDefaults: 0
-  buttonNormalScale: {x: 0, y: 0}
-  buttonSelectedScale: {x: 0, y: 0}
-  buttonNormalPixelPerUnit: 0
-  buttonSelectedPixelPerUnit: 0
   normalColor: {r: 0, g: 0, b: 0, a: 0}
   selectedColor: {r: 0, g: 0, b: 0, a: 0}
-  iconNormalPos: {x: 0, y: 0}
-  iconSelectedPos: {x: 0, y: 0}
-  textNormalPos: {x: 0, y: 0}
-  textSelectedPos: {x: 0, y: 0}
   smoothingCurve:
     serializedVersion: 2
     m_Curve: []
@@ -81,6 +73,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
+  buttonNormalScale: {x: 0, y: 0}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 0
+  buttonSelectedPixelPerUnit: 0
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
 --- !u!114 &3030181000637941607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,6 +118,7 @@ GameObject:
   - component: {fileID: 8065958949476993102}
   - component: {fileID: 77564425780341755}
   - component: {fileID: 4760564080596429883}
+  - component: {fileID: 1111918984127161826}
   m_Layer: 17
   m_Name: Text
   m_TagString: Untagged
@@ -172,7 +173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Normal
+  m_text: Off
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8.95
+  m_fontSize: 3.55
   m_fontSizeBase: 8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -241,6 +242,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1111918984127161826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3727510616961715434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 6
+  graphic: {fileID: 4760564080596429883}
+  selectorUI: {fileID: 0}
 --- !u!1 &5283158966640965916
 GameObject:
   m_ObjectHideFlags: 0

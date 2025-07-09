@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 3231642358326078378}
   - component: {fileID: 8345243605772741570}
   - component: {fileID: 5395015848894557278}
+  - component: {fileID: 1312382896397337959}
   m_Layer: 17
   m_Name: Background
   m_TagString: Untagged
@@ -223,6 +224,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1312382896397337959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7700197201638175377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 1
+  graphic: {fileID: 8345243605772741570}
+  selectorUI: {fileID: 0}
 --- !u!1001 &4840766551876080233
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -372,10 +388,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 834496324422105527, guid: c0620d622c3647044a63899246c1d9de,
         type: 3}
+    - target: {fileID: 1010448371062276259, guid: c0620d622c3647044a63899246c1d9de,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 8.95
+      objectReference: {fileID: 0}
     - target: {fileID: 1022112639384878490, guid: c0620d622c3647044a63899246c1d9de,
         type: 3}
       propertyPath: m_fontSize
-      value: 5.35
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 2256841099375921630, guid: c0620d622c3647044a63899246c1d9de,
         type: 3}
@@ -585,6 +606,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 834496324422105527, guid: c0620d622c3647044a63899246c1d9de,
         type: 3}
+    - target: {fileID: 1010448371062276259, guid: c0620d622c3647044a63899246c1d9de,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 8.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 1022112639384878490, guid: c0620d622c3647044a63899246c1d9de,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 7.15
+      objectReference: {fileID: 0}
     - target: {fileID: 2256841099375921630, guid: c0620d622c3647044a63899246c1d9de,
         type: 3}
       propertyPath: serializationData.Prefab
