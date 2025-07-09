@@ -7,7 +7,7 @@ using UdonSharp;
 using UnityEngine.Serialization;
 using VRC.Udon;
 
-namespace ModernUIs.Scripts.Theming
+namespace ModernUIs.Theming
 {
     public class ThemedComponent : MonoBehaviour
     {
@@ -20,6 +20,7 @@ namespace ModernUIs.Scripts.Theming
         [Tooltip("Selector UI of which the Selected, Not Selected, Whitelisted & Not Whitelisted Colors will be set.")]
         [SerializeField] private SelectorUI selectorUI;
 
+#if UNITY_EDITOR
         private void Reset()
         {
             if (selectorUI == null) selectorUI = GetComponent<SelectorUI>();
@@ -28,14 +29,15 @@ namespace ModernUIs.Scripts.Theming
 
         public void ApplyTheme(Theme theme)
         {
-            Debug.LogError("APPLYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
             if (graphic != null)
             {
+                UnityEditor.EditorUtility.SetDirty(graphic);
                 graphic.color = theme.GetColor(themeColor);
             }
             
             if (selectorUI != null)
             {
+                UnityEditor.EditorUtility.SetDirty(selectorUI);
                 selectorUI.SelectedColor = theme.GetColor(ThemeColor.ButtonTextIcon);
                 selectorUI.NormalColor = theme.GetColor(ThemeColor.ButtonInactiveTextIcon);
 
@@ -46,5 +48,6 @@ namespace ModernUIs.Scripts.Theming
                 }
             }
         }
+#endif
     }
 }

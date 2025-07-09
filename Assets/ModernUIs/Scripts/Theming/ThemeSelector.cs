@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DrBlackRat.VRC.ModernUIs;
 using UnityEngine;
 
-namespace ModernUIs.Scripts.Theming
+namespace ModernUIs.Theming
 {
     [ExecuteAlways]
     public class ThemeSelector : MonoBehaviour
@@ -15,25 +15,33 @@ namespace ModernUIs.Scripts.Theming
             set => theme = value;
         }
 
+        private Theme prevTheme;
+        #if UNITY_EDITOR
         private void OnValidate() 
         {
+            if (theme == prevTheme) return; // To prevent trying to apply the theme to often, as without it every single change in the scene causes it to be applied
+            prevTheme = theme;
+            
             ApplyThemeToChildren();
         }
         
-        [ContextMenu("Apply Theme")]
+        [ContextMenu("Apply")]
         public void ApplyThemeToChildren()
         {
+            UnityEditor.EditorUtility.SetDirty(this);
             if (theme == null)
             {
-                MUIDebug.LogWarning("Could not apply Theme: No Theme Provided!");
+                MUIDebug.LogWarning($"Could not apply Theme to {gameObject.name}: No Theme Provided!");
                 return;
             }
             
+            MUIDebug.Log($"Applying {theme.name} Theme to {gameObject.name}.");
             var themeComponents = GetComponentsInChildren<ThemedComponent>(true);
             foreach (var themeComponent in themeComponents)
             {
                themeComponent.ApplyTheme(theme); 
             }
         }
+#endif
     }
 }

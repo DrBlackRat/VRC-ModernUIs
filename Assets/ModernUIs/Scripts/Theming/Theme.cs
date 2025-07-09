@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace ModernUIs.Scripts.Theming{
+namespace ModernUIs.Theming
+{
     [CreateAssetMenu(menuName = "ModernUIs / Theme")]
     public class Theme : ScriptableObject
     {
@@ -55,10 +56,11 @@ namespace ModernUIs.Scripts.Theming{
         public Color SecondaryText => secondaryText;
         
 
+#if UNITY_EDITOR
         /// <summary>
         /// Applies the Theme to everything using it.
         /// </summary>
-        [ContextMenu("Apply Theme")]
+        [ContextMenu("Apply")]
         public void ApplyToAllUsing()
         {
             var themeSelectors = FindObjectsOfType<ThemeSelector>(true);
@@ -71,7 +73,7 @@ namespace ModernUIs.Scripts.Theming{
             }
         }
 
-        [ContextMenu("Apply Theme To Everything")]
+        [ContextMenu("Apply To Everything")]
         public void ApplyToEverything()
         {
             var themeSelectors = FindObjectsOfType<ThemeSelector>(true);
@@ -117,6 +119,7 @@ namespace ModernUIs.Scripts.Theming{
                     return Color.magenta;
             }
         }
+#endif
     }
 
     public enum ThemeColor
