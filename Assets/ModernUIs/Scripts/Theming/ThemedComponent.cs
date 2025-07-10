@@ -20,7 +20,7 @@ namespace ModernUIs.Theming
         [Tooltip("Selector UI of which the Selected, Not Selected, Whitelisted & Not Whitelisted Colors will be set.")]
         [SerializeField] private SelectorUI selectorUI;
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
             if (selectorUI == null) selectorUI = GetComponent<SelectorUI>();

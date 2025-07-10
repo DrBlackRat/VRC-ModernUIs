@@ -56,13 +56,14 @@ namespace ModernUIs.Theming
         public Color SecondaryText => secondaryText;
         
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
         /// <summary>
         /// Applies the Theme to everything using it.
         /// </summary>
         [ContextMenu("Apply")]
         public void ApplyToAllUsing()
         {
+            if (Application.isPlaying) return;
             var themeSelectors = FindObjectsOfType<ThemeSelector>(true);
             foreach (var themeSelector in themeSelectors)
             {
@@ -76,6 +77,7 @@ namespace ModernUIs.Theming
         [ContextMenu("Apply To Everything")]
         public void ApplyToEverything()
         {
+            if (Application.isPlaying) return;
             var themeSelectors = FindObjectsOfType<ThemeSelector>(true);
             foreach (var themeSelector in themeSelectors)
             {
@@ -91,33 +93,21 @@ namespace ModernUIs.Theming
         /// <returns>The <see cref="Color"/> value associated with the specified <paramref name="themeColor"/> role.</returns>
         public Color GetColor(ThemeColor themeColor)
         {
-            switch (themeColor)
+            return themeColor switch
             {
-                case ThemeColor.Background:
-                    return Background;
-                case ThemeColor.SecondaryBackground:
-                    return SecondaryBackground;
-                case ThemeColor.FieldBackground:
-                    return FieldBackground;
-                case ThemeColor.ButtonPrimary:
-                    return ButtonPrimary;
-                case ThemeColor.ButtonInactivePrimary:
-                    return ButtonInactivePrimary;
-                case ThemeColor.ButtonTextIcon:
-                    return ButtonTextIcon;
-                case ThemeColor.ButtonInactiveTextIcon:
-                    return ButtonInactiveTextIcon;
-                case ThemeColor.Icon:
-                    return Icon;
-                case ThemeColor.SecondaryIcon:
-                    return SecondaryIcon;                
-                case ThemeColor.Text:
-                    return Text;
-                case ThemeColor.SecondaryText:
-                    return SecondaryText;                
-                default:
-                    return Color.magenta;
-            }
+                ThemeColor.Background => Background,
+                ThemeColor.SecondaryBackground => SecondaryBackground,
+                ThemeColor.FieldBackground => FieldBackground,
+                ThemeColor.ButtonPrimary => ButtonPrimary,
+                ThemeColor.ButtonInactivePrimary => ButtonInactivePrimary,
+                ThemeColor.ButtonTextIcon => ButtonTextIcon,
+                ThemeColor.ButtonInactiveTextIcon => ButtonInactiveTextIcon,
+                ThemeColor.Icon => Icon,
+                ThemeColor.SecondaryIcon => SecondaryIcon,
+                ThemeColor.Text => Text,
+                ThemeColor.SecondaryText => SecondaryText,
+                _ => Color.magenta
+            };
         }
 #endif
     }

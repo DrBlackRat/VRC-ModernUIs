@@ -16,7 +16,7 @@ namespace ModernUIs.Theming
         }
 
         private Theme prevTheme;
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void OnValidate() 
         {
             if (theme == prevTheme) return; // To prevent trying to apply the theme to often, as without it every single change in the scene causes it to be applied
@@ -28,6 +28,7 @@ namespace ModernUIs.Theming
         [ContextMenu("Apply")]
         public void ApplyThemeToChildren()
         {
+            if (Application.isPlaying) return;
             UnityEditor.EditorUtility.SetDirty(this);
             if (theme == null)
             {

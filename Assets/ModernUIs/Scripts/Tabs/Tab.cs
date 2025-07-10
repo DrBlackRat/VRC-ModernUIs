@@ -22,14 +22,14 @@ namespace DrBlackRat.VRC.ModernUIs
             tabPos = TabPos(rectTransform);
         }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
         /// <summary>
         /// Only used in Editor to switch to this Tab
         /// </summary>
         [ContextMenu("Move To Tab")]
         public void MoveToTab()
         {
-            //if (Application.isPlaying) return;
+            if (Application.isPlaying) return;
             var parentTransform = (RectTransform)transform.parent;
             parentTransform.anchoredPosition = TabPos((RectTransform)transform);
         }
