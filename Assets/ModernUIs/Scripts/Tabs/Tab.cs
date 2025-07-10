@@ -19,7 +19,25 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             canvasGroup = GetComponent<CanvasGroup>();
             rectTransform = GetComponent<RectTransform>();
-            tabPos = new Vector2(-rectTransform.anchoredPosition.x, -rectTransform.anchoredPosition.y);
+            tabPos = TabPos(rectTransform);
+        }
+
+#if UNITY_EDITOR
+        /// <summary>
+        /// Only used in Editor to switch to this Tab
+        /// </summary>
+        [ContextMenu("Move To Tab")]
+        public void MoveToTab()
+        {
+            if (Application.isPlaying) return;
+            var parentTransform = (RectTransform)transform.parent;
+            parentTransform.anchoredPosition = TabPos((RectTransform)transform);
+        }
+#endif
+        
+        private Vector2 TabPos(RectTransform tabTransform)
+        {
+            return new Vector2(-tabTransform.anchoredPosition.x, -tabTransform.anchoredPosition.y);
         }
 
         // Tab Moving Stuff

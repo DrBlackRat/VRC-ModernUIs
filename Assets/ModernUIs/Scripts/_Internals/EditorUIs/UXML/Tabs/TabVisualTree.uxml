@@ -6,4 +6,7 @@
     <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Marks a Tab for a Tab Switcher, uses it&apos;s position to animate. Will adjust alpha of Canavas Group on the same Game Object to hide the Tab when not visible.&#10;Required for a Tab Switcher to function." parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
     </ui:VisualElement>
+    <ui:VisualElement class="section" style="flex-grow: 1;">
+        <ui:Button text="Move To Tab" parse-escape-sequences="true" display-tooltip-when-elided="true" binding-path="moveToButton" name="moveToButton" tooltip="Moves to this Tab on the UI. Only works while not in play mode." style="height: 30px;" />
+    </ui:VisualElement>
 </ui:UXML>

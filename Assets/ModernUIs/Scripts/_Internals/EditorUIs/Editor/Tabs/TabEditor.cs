@@ -16,9 +16,12 @@ namespace DrBlackRat.VRC.ModernUIs
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement root = new VisualElement();
-            
-            // UXML
             visualTree.CloneTree(root);
+            
+            var theme = (Tab)target;
+            var button = root.Q<Button>("moveToButton");
+            if (button != null)
+                button.clicked += () => theme.MoveToTab();
             
             return root;
         }
