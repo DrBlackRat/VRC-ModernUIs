@@ -29,7 +29,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [ContextMenu("Move To Tab")]
         public void MoveToTab()
         {
-            if (Application.isPlaying) return;
+            //if (Application.isPlaying) return;
             var parentTransform = (RectTransform)transform.parent;
             parentTransform.anchoredPosition = TabPos((RectTransform)transform);
         }
