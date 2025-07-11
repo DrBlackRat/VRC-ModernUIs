@@ -13,20 +13,22 @@ namespace DrBlackRat.VRC.ModernUIs
     public class ThemeSelectorEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
+        private UnityEditor.Editor themeEditor;
 
         public override VisualElement CreateInspectorGUI()
         {
             VisualElement root = new VisualElement();
             visualTree.CloneTree(root);
             
-            var theme = (ThemeSelector)target;
+            var selector = (ThemeSelector)target;
             
             var applyButton = root.Q<Button>("applyButton");
 
             if (applyButton != null)
-                applyButton.clicked += () => theme.ApplyThemeToChildren();
+                applyButton.clicked += () => selector.ApplyThemeToChildren();
             
             return root;
         }
+        
     }
 }
