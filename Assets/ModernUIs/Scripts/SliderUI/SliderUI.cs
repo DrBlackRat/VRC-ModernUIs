@@ -63,7 +63,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             if (!player.isLocal || !usePersistence) return;
             if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
             {
-                UpdateValue(value, true, false, false);
+                UpdateValue(newValue, true, false, false);
             }
 
         }

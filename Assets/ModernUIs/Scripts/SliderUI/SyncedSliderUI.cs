@@ -24,12 +24,12 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             
             if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
             
-            if (PlayerData.TryGetFloat(player, dataKey, out float value))
+            if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
             {
                 persistenceLoaded = true;
                 RequestSerialization();
                 
-                UpdateValue(value, true, false, false);
+                UpdateValue(newValue, true, false, false);
             }
         }
 

@@ -1,4 +1,4 @@
-Version 0.3.1
+Version 0.3.2
 
 Modern UIs is a collection of scripts and prefabs for making beautifully looking and animated UIs in VRChat!
 
