@@ -1,6 +1,7 @@
 using System.Text;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -16,6 +17,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     public abstract class WhitelistSetterBase : WhitelistGetterBase
     {
         /// <summary>
+        /// If adding / removing users should log which users were added / removed.
+        /// </summary>
+        [Tooltip("If adding / removing users should log which users were added / removed.")]
+        [SerializeField] protected bool debugLogging;
+
+        /// <summary>
         /// Adds a specific user to the white list. Skips duplicate username.
         /// </summary>
         /// <param name="username">The username to add to the whitelist.</param>
@@ -24,11 +31,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             if (whitelist.Contains(username))
             {
-                MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
+                if (debugLogging)
+                    MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
                 return;
             }
             whitelist.Add(username);
-            MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+            if (debugLogging)
+                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
             WhitelistUpdated(senderBehaviour);
         }
         
@@ -41,12 +50,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             if (!whitelist.Contains(username))
             {
-                MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
+                if (debugLogging)
+                    MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
                 return;
             }
 
             whitelist.Remove(username);
-            MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
+            if (debugLogging)
+                MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
             WhitelistUpdated(senderBehaviour);
         }
         
@@ -68,11 +79,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
 
                 if (whitelist.Contains(username))
                 {
-                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
+                    if (debugLogging)
+                       MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
                     continue;
                 }
                 whitelist.Add(username);
-                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                if (debugLogging)
+                    MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
             }
             WhitelistUpdated(senderBehaviour);
         }
@@ -90,11 +103,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 if (whitelist.Contains(username))
                 {
-                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
+                    if (debugLogging)
+                        MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
                     continue;
                 }
                 whitelist.Add(username);
-                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                if (debugLogging)
+                    MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
             }
             WhitelistUpdated(senderBehaviour);
         }
@@ -106,8 +121,26 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
+            if (newUsernames == null || newUsernames.Count == 0) return;
             whitelist = newUsernames;
             WhitelistUpdated(senderBehaviour);
+        }
+
+        /// <summary>
+        /// Fully replaces the current whitelist with a new one. This is usually not recommended, try _AddUsers or _RemoveUser first.
+        /// </summary>
+        /// <param name="newUsernames">Array of usernames to replace the whitelist with</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        public virtual void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
+        {
+            if (newUsernames == null || newUsernames.Length == 0) return;
+            DataList userList = new DataList();
+            foreach (var username in newUsernames)
+            {
+                userList.Add(username);
+            }
+            
+            _ReplaceWhitelist(userList, senderBehaviour);
         }
     }
 }

@@ -16,6 +16,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private VRCUrl url;
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] private WhitelistSetterBase whitelist;
+        [Tooltip("If enabled the entire Whitelist will be replaced instead of just adding new users to it.")]
+        [SerializeField] private bool replaceWhitelist;
         
         [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
         [SerializeField] private bool autoReload = false;
@@ -37,7 +39,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         private void ApplyString(string newString)
         {
-            whitelist._AddUsers(newString.Split(new string[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries));
+            var users = newString.Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (replaceWhitelist)
+            {
+                whitelist._ReplaceWhitelist(users);
+            }
+            else
+            {
+                whitelist._AddUsers(users);
+            }
+            
         }
         private void AutoReload()
         {
