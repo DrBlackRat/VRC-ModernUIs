@@ -10,8 +10,11 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class UIDistanceHider : UdonSharpBehaviour
     {
+        [Tooltip("Root Game Object of the UI, used to grab the UI Collider.")]
+        [SerializeField] private GameObject canvasObj;
         [Tooltip("Canvas Group that will be hidden when Player is outside of the trigger.")]
         [SerializeField] private CanvasGroup[] hidingCanvases;
+        
         [Tooltip("GameObjects that will be disabled when Player is outside of the trigger.")]
         [SerializeField] private GameObject[] objectsToDisable;
         [Tooltip("Canvas Group that will be shown when Player is outside of the trigger. Use full for things like a distance hidden info message.")]
@@ -35,8 +38,12 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private bool hasInfoCanvas;
 
+        private Collider uiCollider;
+
         private void Start()
         {
+            if (canvasObj != null)
+                uiCollider = canvasObj.GetComponent<Collider>();
             hasInfoCanvas = infoCanvas != null;
             zoneCollider = GetComponent<Collider>();
             if (zoneCollider == null)
@@ -92,6 +99,10 @@ namespace DrBlackRat.VRC.ModernUIs
                     disableOb.SetActive(!hidden);
                 }
             }
+            
+            //UI Collider
+            if (uiCollider != null)
+                uiCollider.enabled = !hidden;
             
             // UI Animation
             animate = false;
