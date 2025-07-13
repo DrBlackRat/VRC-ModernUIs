@@ -127,7 +127,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
-            RemoveRequestingUser(player.displayName, true);
+            if (Networking.LocalPlayer.isMaster)
+                RemoveRequestingUser(player.displayName, false); 
         }
         
         public void _WhitelistUpdated()
