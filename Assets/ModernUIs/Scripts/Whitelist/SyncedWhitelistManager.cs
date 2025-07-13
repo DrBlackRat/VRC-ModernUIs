@@ -106,6 +106,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         
+        //Networked Version of update Event, if local only is needed use base. instead
         protected override void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null)
         {
             var localPlayer = Networking.LocalPlayer;
