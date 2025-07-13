@@ -87,6 +87,13 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             UpdateTxlData();
             return base._GetUsersAsList();
         }
+
+        public override int _GetCount()
+        {
+            UpdateTxlData();
+            return base._GetCount();
+        }
+
         #endregion
     }
 

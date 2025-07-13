@@ -21,6 +21,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         [Tooltip("Text Mesh Pro UGUI component that should get the names added to it.")]
         [SerializeField] private TextMeshProUGUI textMesh;
+        
+        [Tooltip("Text Mesh Pro UGUI component that will have the amount of people on the whitelist displayed.")]
+        [SerializeField] private TextMeshProUGUI countDisplay;
 
         private void Start()
         {
@@ -30,6 +33,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _WhitelistUpdated()
         {
             textMesh.text = whitelist._GetNamesFormatted();
+            if (countDisplay != null)
+                countDisplay.text = whitelist._GetCount().ToString();
         }
     }
 }

@@ -7,6 +7,7 @@ using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
+using TMPro;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
@@ -17,11 +18,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected GameObject whitelistedPrefab;
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform whitelistedTransform;
+        [Tooltip("Text Mesh Pro UGUI component that will have the amount of people on the whitelist displayed.")]
+        [SerializeField] private TextMeshProUGUI whitelistedCountDisplay;
         
         [Tooltip("Prefab that will be instantiated for each user that is NOT on the whitelist.")]
         [SerializeField] protected GameObject notWhitelistedPrefab;
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform notWhitelistedTransform;
+        [Tooltip("Text Mesh Pro UGUI component that will have the amount of people NOT on whitelist displayed.")]
+        [SerializeField] private TextMeshProUGUI notWhitelistedCountDisplay;
 
         [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist that will be adjusted.")]
@@ -75,6 +80,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             CheckMaxUsersAdded(true);
+            UpdateCountDisplays(); 
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -82,12 +88,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var username = player.displayName;
             allUsers.Add(username);
             AddNotWhitelistUser(username);
+            UpdateCountDisplays();
         }
 
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             allUsers.Remove(player.displayName);
             RemoveNotWhitelistUser(player.displayName);
+            UpdateCountDisplays();
+        }
+
+        private void UpdateCountDisplays()
+        {
+            if (notWhitelistedCountDisplay != null)
+                notWhitelistedCountDisplay.text = notWhitelistedUsers.Count.ToString();
+            if (whitelistedCountDisplay != null)
+                whitelistedCountDisplay.text = whitelistedUsers.Count.ToString();
         }
 
         public void _WhitelistUpdated()
@@ -118,6 +134,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                     RemoveNotWhitelistUser(admins[i].String); 
                 }
             }
+            UpdateCountDisplays();
         }
 
         protected void UpdateAccess(bool newHasAccess)
@@ -220,6 +237,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var notWhitelistUser = newUserObj.GetComponent<WhitelistUser>();
             notWhitelistUser._Setup(this, username,  false, hasAccess && canAdd);
             notWhitelistedUsers.Add(username, notWhitelistUser);
+            
+            UpdateCountDisplays();
         }
 
         protected virtual void RemoveNotWhitelistUser(string username)
@@ -246,6 +265,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             AddWhitelistUser(username);
             whitelist._AddUser(username, (IUdonEventReceiver)this);
+            UpdateCountDisplays();
         }
 
         public override void _Remove(string username)
@@ -253,6 +273,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasAccess) return;
             RemoveWhitelistUser(username);
             whitelist._RemoveUser(username, (IUdonEventReceiver)this);
+            UpdateCountDisplays();
         }
     }
 }

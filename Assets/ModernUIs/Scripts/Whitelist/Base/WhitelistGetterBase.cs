@@ -100,6 +100,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             return whitelist.DeepClone();
         }
+
+        /// <summary>
+        /// Returns the whitelist user count.
+        /// </summary>
+        /// <returns>Amount of users on the whitelist.</returns>
+        public virtual int _GetCount()
+        {
+            return whitelist.Count;
+        }
         
         /// <summary>
         /// Should be called whenever the whitelist is changed or updated. 

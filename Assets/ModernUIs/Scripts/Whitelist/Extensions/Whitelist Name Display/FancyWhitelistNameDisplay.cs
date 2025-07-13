@@ -19,6 +19,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private GameObject usernamePrefab;
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] private Transform usernameTransform;
+        
+        [Tooltip("Text Mesh Pro UGUI component that will have the amount of people on the whitelist displayed.")]
+        [SerializeField] private TextMeshProUGUI countDisplay;
 
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] private WhitelistGetterBase whitelist;
@@ -47,6 +50,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 if (whitelist.Contains(keys[i])) continue;
                 RemoveUsernameDisplay(keys[i].String);
             }
+            
+            if (countDisplay != null)
+                countDisplay.text = whitelistDisplays.Count.ToString();
         }
 
         private void AddUsernameDisplay(string username)
