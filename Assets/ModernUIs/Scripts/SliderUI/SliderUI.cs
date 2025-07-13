@@ -55,7 +55,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
         protected virtual void Start()
         {
-            UpdateValue(value, false, true, true);
+            UpdateValue(value, true, true, true);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
