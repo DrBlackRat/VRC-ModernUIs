@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
-  m_Color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 0.9019608}
+  m_Color: {r: 0.15, g: 0.15, b: 0.15, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -178,6 +178,9 @@ MonoBehaviour:
   themeColor: 0
   graphic: {fileID: 8576483736333387152}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1386767724085070933
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
-  m_Color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 0.9019608}
+  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -320,6 +323,9 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 662209282715048130}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &3634417803259350319
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +407,7 @@ GameObject:
   - component: {fileID: 2088202330129321416}
   - component: {fileID: 1246363711400082885}
   - component: {fileID: 8417327202462942889}
+  - component: {fileID: 702346069189309483}
   m_Layer: 17
   m_Name: Fancy Whitelist Name Display
   m_TagString: Untagged
@@ -540,6 +547,8 @@ MonoBehaviour:
     type: 3}
   usernameTransform: {fileID: 1980191925765318613}
   countDisplay: {fileID: 1825071061960022063}
+  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   whitelist: {fileID: 0}
 --- !u!114 &1246363711400082885
 MonoBehaviour:
@@ -580,6 +589,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theme: {fileID: 11400000, guid: a345979c1a25cdf48a4b3d4462134e04, type: 2}
+--- !u!114 &702346069189309483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3936133528946811208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 0
+  graphic: {fileID: 0}
+  selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 2088202330129321416}
 --- !u!1 &4199090312690182190
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,7 +834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
-  m_Color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 0.9019608}
+  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -839,6 +866,9 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 5370338584706909598}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &6987736152971098795
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 0.9019608}
+  m_Color: {r: 0.1, g: 0.1, b: 0.1, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -951,6 +981,9 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 7814698717038652391}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &7055764203424627871
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,6 +1111,9 @@ MonoBehaviour:
   themeColor: 3
   graphic: {fileID: 4939033698106439114}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &8315460923796043245
 GameObject:
   m_ObjectHideFlags: 0
@@ -1228,6 +1264,9 @@ MonoBehaviour:
   themeColor: 9
   graphic: {fileID: 2869059199252372484}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &2949033512676948874
 PrefabInstance:
   m_ObjectHideFlags: 0

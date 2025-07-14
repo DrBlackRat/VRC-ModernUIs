@@ -427,6 +427,8 @@ MonoBehaviour:
   graphic: {fileID: 18046596}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &18129560
 GameObject:
   m_ObjectHideFlags: 0
@@ -1283,6 +1285,8 @@ MonoBehaviour:
   graphic: {fileID: 70322252}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &71528392 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1191107368729617060, guid: 0c23cb16c2c5d8f47a2dbdf3cd07d0e9,
@@ -1672,6 +1676,8 @@ MonoBehaviour:
   graphic: {fileID: 182842691}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &182856138 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2881853063895156773, guid: cf1e2106d92c63a4aba62392f4941985,
@@ -3628,6 +3634,8 @@ MonoBehaviour:
   graphic: {fileID: 329029564}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &330224268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5422,6 +5430,8 @@ MonoBehaviour:
   graphic: {fileID: 533569794}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &533993111 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6638325579577908903, guid: 96d56b9c77e58ce4a93f336d7ac5b689,
@@ -8694,6 +8704,8 @@ MonoBehaviour:
   graphic: {fileID: 847085634}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &847844342
 GameObject:
   m_ObjectHideFlags: 0
@@ -12022,6 +12034,8 @@ MonoBehaviour:
   graphic: {fileID: 1218922172}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1226148752 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3486920700196651785, guid: 5c14d7977ccc82247bc457e42322b1a2,
@@ -13366,6 +13380,8 @@ MonoBehaviour:
   graphic: {fileID: 1368378362}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1374101968 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8761153806726886533, guid: 816f5cce62be35f42b2fd892c50b6b36,
@@ -13529,6 +13545,8 @@ MonoBehaviour:
   graphic: {fileID: 1379942803}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1380160867 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5395442703717976131, guid: 8299ff95a323fa643ba750b341e78e08,
@@ -14270,6 +14288,8 @@ MonoBehaviour:
   graphic: {fileID: 1478462535}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1493578436 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3686124374563378163, guid: 8299ff95a323fa643ba750b341e78e08,
@@ -19643,6 +19663,8 @@ MonoBehaviour:
   graphic: {fileID: 2114474977}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &2116298847 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5084863470786301146, guid: 8299ff95a323fa643ba750b341e78e08,
@@ -19836,6 +19858,8 @@ MonoBehaviour:
   graphic: {fileID: 2135855952}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &2142091154
 GameObject:
   m_ObjectHideFlags: 0
@@ -33128,6 +33152,11 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4279900698
       objectReference: {fileID: 0}
+    - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: m_Size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 862253780348901514, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_Color.b
@@ -33470,6 +33499,41 @@ PrefabInstance:
       objectReference: {fileID: 1467401746}
     - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
+      propertyPath: prefabTextColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabTextColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabTextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 4741706782563548447, guid: c584f53b5c724724eb0b59f277303599,
@@ -33490,6 +33554,41 @@ PrefabInstance:
       propertyPath: adminWhitelist
       value: 
       objectReference: {fileID: 1467401746}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabTextColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabTextColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabTextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: prefabBackgroundColor.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -33525,6 +33624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6798810265078039205, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6881844160607779181, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -41953,6 +42057,41 @@ PrefabInstance:
       objectReference: {fileID: 6990642348403997151}
     - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
         type: 3}
+      propertyPath: prefabTextColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabTextColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabTextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabBackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabBackgroundColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabBackgroundColor.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
+      propertyPath: prefabBackgroundColor.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 2088202330129321416, guid: b8eab919ddb27d4468babbad8554998f,
@@ -46097,6 +46236,8 @@ MonoBehaviour:
   graphic: {fileID: 5129728797193478845}
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &6990642348403997149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50371,6 +50512,41 @@ PrefabInstance:
       objectReference: {fileID: 482489429}
     - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
         type: 3}
+      propertyPath: prefabTextColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabTextColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabTextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 3582495322266074854, guid: f91b31302138a004aaf65fe126526676,
@@ -50906,9 +51082,44 @@ PrefabInstance:
       objectReference: {fileID: 961923760}
     - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
         type: 3}
+      propertyPath: prefabTextColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabTextColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabTextColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
       propertyPath: adminWhitelistManager
       value: 
       objectReference: {fileID: 482489429}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: prefabBackgroundColor.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
         type: 3}
       propertyPath: serializationData.Prefab

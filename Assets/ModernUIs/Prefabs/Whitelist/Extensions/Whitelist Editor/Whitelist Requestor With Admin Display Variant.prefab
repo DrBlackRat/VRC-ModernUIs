@@ -150,6 +150,8 @@ MonoBehaviour:
   themeColor: 5
   graphic: {fileID: 6602118447333344108}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &7325157356411290861
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,6 +314,8 @@ MonoBehaviour:
   themeColor: 3
   graphic: {fileID: 8126729622114039545}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1001 &8104924284665218041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -338,7 +342,7 @@ PrefabInstance:
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.99997413
       objectReference: {fileID: 0}
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -569,7 +573,7 @@ PrefabInstance:
     - target: {fileID: 4211645044567480229, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00022270388
+      value: 0.0035643282
       objectReference: {fileID: 0}
     - target: {fileID: 4624464464858873013, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -643,7 +647,7 @@ PrefabInstance:
     - target: {fileID: 6798810265078039205, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6881844160607779181, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -825,6 +829,11 @@ PrefabInstance:
       propertyPath: m_text
       value: Requesting
       objectReference: {fileID: 0}
+    - target: {fileID: 8648294128947394068, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: whitelistEditorBase
+      value: 
+      objectReference: {fileID: 9125241762169984877}
     - target: {fileID: 8844639601199100053, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -933,6 +942,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5889592607255745873}
+  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   whitelistedPrefab: {fileID: 3591901342350911823, guid: ddbdfd92a32eddd4b854d5a5a11795cd,
     type: 3}
   whitelistedTransform: {fileID: 6530049149709805432}

@@ -101,7 +101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0049527986}
+  m_AnchoredPosition: {x: 0, y: 0.0032604635}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5914837358680332356
@@ -354,6 +354,8 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 7084994152991270191}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &3363555116044395082
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,6 +570,8 @@ MonoBehaviour:
   themeColor: 9
   graphic: {fileID: 4298069446018878362}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &5289221963441951185
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,6 +684,8 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 3700164852561034629}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &5604290925533326105
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +905,8 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 4612625246454444723}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &5915821961625577377
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,6 +1035,8 @@ MonoBehaviour:
   themeColor: 1
   graphic: {fileID: 8471209553952511927}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &6278334752919869722
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,6 +1054,7 @@ GameObject:
   - component: {fileID: 512697697608567891}
   - component: {fileID: 449565039791212113}
   - component: {fileID: 4178145523877371336}
+  - component: {fileID: 3742747163927780397}
   m_Layer: 17
   m_Name: Whitelist Editor
   m_TagString: Untagged
@@ -1118,7 +1129,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4546111215493225822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1179,6 +1190,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 449565039791212113}
+  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   whitelistedPrefab: {fileID: 3591901342350911823, guid: ddbdfd92a32eddd4b854d5a5a11795cd,
     type: 3}
   whitelistedTransform: {fileID: 6994404324405563064}
@@ -1232,6 +1245,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theme: {fileID: 11400000, guid: a345979c1a25cdf48a4b3d4462134e04, type: 2}
+--- !u!114 &3742747163927780397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6278334752919869722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 0
+  graphic: {fileID: 0}
+  selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 512697697608567891}
 --- !u!1 &8533372689308977404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,6 +1353,8 @@ MonoBehaviour:
   themeColor: 3
   graphic: {fileID: 8918145209338080063}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1 &8718952140625184670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1414,6 +1446,8 @@ MonoBehaviour:
   themeColor: 0
   graphic: {fileID: 2786168931867494004}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
 --- !u!1001 &843096038658322043
 PrefabInstance:
   m_ObjectHideFlags: 0

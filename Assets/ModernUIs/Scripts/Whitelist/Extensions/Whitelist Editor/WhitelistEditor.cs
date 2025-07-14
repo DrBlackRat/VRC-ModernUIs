@@ -12,7 +12,7 @@ using TMPro;
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class WhitelistEditor : IWhitelistEditor
+    public class WhitelistEditor : WhitelistEditorBase
     {
         [Tooltip("Prefab that will be instantiated for each user on the whitelist.")]
         [SerializeField] protected GameObject whitelistedPrefab;
@@ -202,6 +202,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 whitelistUser._Setup(this, username, true, hasAccess);
             }
+            whitelistUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             whitelistedUsers.Add(username, whitelistUser);
             
             RemoveNotWhitelistUser(username);
@@ -236,6 +237,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newUserObj.transform.localScale = Vector3.one;
             var notWhitelistUser = newUserObj.GetComponent<WhitelistUser>();
             notWhitelistUser._Setup(this, username,  false, hasAccess && canAdd);
+            notWhitelistUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             notWhitelistedUsers.Add(username, notWhitelistUser);
             
             UpdateCountDisplays();

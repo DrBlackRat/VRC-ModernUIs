@@ -14,6 +14,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected TextMeshProUGUI usernameTMP;
         [SerializeField] protected GameObject buttonObj;
         
+        [SerializeField] protected Image background;
+        
         protected WhitelistRequestor whitelistRequestor;
         
         protected string displayName;
@@ -41,6 +43,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             whitelistRequestor = newWhitelistRequestor;
             DisplayName = newDisplayname;
             HasAccess = newHasAccess;
+        }
+        
+        public void _ApplyThemeColors(Color textColor, Color backgroundColor)
+        {
+            usernameTMP.color = textColor;
+            background.color = backgroundColor;
         }
 
         public void _AddPressed()

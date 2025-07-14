@@ -12,7 +12,7 @@ using VRC.Udon.Common.Interfaces;
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class WhitelistRequestor : IWhitelistEditor
+    public class WhitelistRequestor : WhitelistEditorBase
     {
         [Tooltip("Prefab that will be instantiated for each user on the whitelist.")]
         [SerializeField] protected GameObject whitelistedPrefab;
@@ -269,6 +269,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 whitelistUser._Setup(this, username, true, hasAccess);
             }
+            whitelistUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             whitelistedUsers.Add(username, whitelistUser);
             
             RemoveRequestingUser(username, true);
@@ -301,6 +302,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newUserObj.transform.localScale = Vector3.one;
             var requestingUser = newUserObj.GetComponent<WhitelistRequestingUser>();
             requestingUser._Setup(this, username, hasAccess && canAdd);
+            requestingUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             requestingUsers.Add(username, requestingUser);
 
             if (!skipNet)

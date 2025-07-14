@@ -1,8 +1,11 @@
-﻿using TMPro;
+﻿using System.Drawing;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
+using Color = UnityEngine.Color;
+using Image = UnityEngine.UI.Image;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
@@ -12,10 +15,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [SerializeField] protected TextMeshProUGUI usernameTMP;
         [SerializeField] protected GameObject buttonObj;
+
+        [SerializeField] protected Image background;
         
         protected bool isRemover;
 
-        protected IWhitelistEditor whitelistEditor;
+        protected WhitelistEditorBase WhitelistEditorBase;
         
         protected string displayName;
         public string DisplayName
@@ -39,12 +44,18 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             get => hasAccess;
         }
         
-        public void _Setup(IWhitelistEditor newWhitelistEditor, string newDisplayname, bool newIsRemover, bool newHasAccess)
+        public void _Setup(WhitelistEditorBase newWhitelistEditorBase, string newDisplayname, bool newIsRemover, bool newHasAccess)
         {
-            whitelistEditor = newWhitelistEditor;
+            WhitelistEditorBase = newWhitelistEditorBase;
             DisplayName = newDisplayname;
             isRemover = newIsRemover;
             HasAccess = newHasAccess;
+        }
+
+        public void _ApplyThemeColors(Color textColor, Color backgroundColor)
+        {
+            usernameTMP.color = textColor;
+            background.color = backgroundColor;
         }
 
         public void _ButtonPressed()
@@ -52,11 +63,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasAccess) return;
             if (isRemover)
             {
-                whitelistEditor._Remove(displayName);
+                WhitelistEditorBase._Remove(displayName);
             }
             else
             {
-                whitelistEditor._Add(displayName);
+                WhitelistEditorBase._Add(displayName);
             }
         }
 
