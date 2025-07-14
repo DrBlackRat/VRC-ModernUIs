@@ -21,7 +21,20 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         [SerializeField] protected Color normalColor;
         [SerializeField] protected Color selectedColor;
+
+        public virtual Color NormalColor
+        {
+            get => normalColor;
+            set => normalColor = value;
+        }
         
+        public virtual Color SelectedColor
+        {
+            get => selectedColor;
+            set => selectedColor = value;
+        }
+    
+
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
         

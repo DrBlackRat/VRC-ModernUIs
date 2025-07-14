@@ -19,12 +19,15 @@ namespace ModernUIs.Theming
 
         [Tooltip("Selector UI of which the Selected, Not Selected, Whitelisted & Not Whitelisted Colors will be set.")]
         [SerializeField] private SelectorUI selectorUI;
+        [Tooltip("Selector UI of which the Selected & Not Selected Colors will be set.")]
+        [SerializeField] private SelectorUIButton selectorUIButton;
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
-            if (selectorUI == null) selectorUI = GetComponent<SelectorUI>();
             if (graphic == null) graphic = GetComponent<Graphic>();
+            if (selectorUI == null) selectorUI = GetComponent<SelectorUI>();
+            if (graphic == null) selectorUIButton = GetComponent<SelectorUIButton>();
         }
 
         public void ApplyTheme(Theme theme)
@@ -46,6 +49,13 @@ namespace ModernUIs.Theming
                     whitelistSelectorUI.WhitelistedColor = theme.GetColor(ThemeColor.ButtonPrimary);
                     whitelistSelectorUI.NotWhitelistedColor = theme.GetColor(ThemeColor.ButtonInactivePrimary);
                 }
+            }
+
+            if (selectorUIButton != null)
+            {
+                UnityEditor.EditorUtility.SetDirty(selectorUIButton);
+                selectorUIButton.SelectedColor = theme.GetColor(ThemeColor.ButtonTextIcon);
+                selectorUIButton.NormalColor = theme.GetColor(ThemeColor.ButtonInactiveTextIcon);
             }
         }
 #endif
