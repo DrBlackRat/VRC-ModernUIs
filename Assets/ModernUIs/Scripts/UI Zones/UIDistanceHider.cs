@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
+    [RequireComponent(typeof(Collider))]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class UIDistanceHider : UdonSharpBehaviour
     {

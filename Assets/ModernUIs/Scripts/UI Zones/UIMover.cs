@@ -12,6 +12,8 @@ namespace DrBlackRat.VRC.ModernUIs
     {
         [Tooltip("Menu / Object you want to move.")]
         [SerializeField] private Transform menu;
+        [Tooltip("If enabled, the scale of the zone transform will also be applied. Should be left off unless you specifically want the scale to change.")]
+        [SerializeField] private bool applyScale;
         
         [Tooltip("Default Position and Rotation of the Menu, used when ever player isn't in a different Zone.")]
         [SerializeField] private Transform defaultTransform;
@@ -36,6 +38,8 @@ namespace DrBlackRat.VRC.ModernUIs
             zoneCounter++;
             if (zones[id] == null) return;
             menu.SetPositionAndRotation(zones[id].transform.position, zones[id].transform.rotation);
+            if (applyScale)
+                menu.localScale = zones[id].transform.localScale;
         }
 
         public void _PlayerLeftZone(int id)
@@ -44,6 +48,8 @@ namespace DrBlackRat.VRC.ModernUIs
             if (zoneCounter == 0)
             {
                 menu.SetPositionAndRotation(defaultTransform.position, defaultTransform.rotation);
+                if (applyScale)
+                    menu.localScale = defaultTransform.localScale;
             }
         }
     }
