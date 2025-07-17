@@ -50,7 +50,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             WhitelistUpdated();
         }
 
-
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            var displayName = player.displayName;
+            if (whitelist.Contains(displayName))
+            {
+                whitelist.Remove(displayName);
+                WhitelistUpdated();
+            }
+        }
     }
     
 
