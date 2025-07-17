@@ -1,6 +1,6 @@
 Version 0.0.1
 
-Allows importing & exporting Access TXL to Modern UI Whitelists.
+Allows importing DisBridge to Modern UI Whitelists.
 Requires Modern UIs V0.3.3 or newer to be installed.
 
 For Documentation please visit:
