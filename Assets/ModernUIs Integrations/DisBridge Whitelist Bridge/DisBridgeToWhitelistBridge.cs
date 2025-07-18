@@ -10,16 +10,16 @@ using VRC.SDK3.Data;
 
 namespace DrBlackRat.VRC.ModernUIs.Integrations
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [RequireComponent(typeof(BasicWhitelist))]
     public class DisBridgeToWhitelistBridge : DisBridgePlugin
     {
         private BasicWhitelist whitelist;
-        private DataDictionary allPlayers = new DataDictionary();
-        private DataList users = new DataList();
         
         private void Start()
         {
             whitelist = gameObject.GetComponent<BasicWhitelist>();
-            disBridge.AddPlugin(gameObject);
+            disBridge.AddPlugin(this);
         }
 
         //Runs when DisBridge finishes pulling the roles.
@@ -31,46 +31,17 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         //Runs when a RoleContainer's user list has updated.
         public override void _UVR_Update()
         {
-            users = new DataList();
-            var keys = allPlayers.GetKeys();
-            for (int i = 0; i < keys.Count; i++)
-            {
-                var displayName = keys[i];
-                var player = (VRCPlayerApi)allPlayers[displayName].Reference;
-                if (_IsMemberInRoles(player))
-                {
-                    users.Add(displayName);
-                }
-            }
+
         }
 
-        public override void OnPlayerJoined(VRCPlayerApi player)
+        public override void _UVR_UserJoined(VRCPlayerApi _player)
         {
-            var token = new DataToken(player);
-            var displayName = player.displayName;
-            
-            allPlayers.Add(displayName, token);
-
-            if (_IsMemberInRoles(player))
-            {
-                users.Add(displayName);
-                whitelist._ReplaceWhitelist(users);
-            }
-                
+            whitelist._AddUser(_player.displayName);
         }
-
-        public override void OnPlayerLeft(VRCPlayerApi player)
+        
+        public override void _UVR_UserLeft(VRCPlayerApi _player)
         {
-            if (player.isLocal) return;
-            var displayName = player.displayName;
-            
-            allPlayers.Remove(displayName);
-
-            if (users.Contains(displayName))
-            {
-                users.Remove(displayName);
-                whitelist._ReplaceWhitelist(users);
-            }
+            whitelist._RemoveUser(_player.displayName);
         }
     }
 }
