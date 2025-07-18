@@ -20,12 +20,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private bool replaceWhitelist;
         
         [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
-        [SerializeField] private bool autoReload = false;
+        [SerializeField] private bool autoReload = true;
         [Range(1, 60)]
         [Tooltip("Time after which the whitelist will be downloaded again in minutes.")]
         [SerializeField] private int autoReloadTime = 10;
+        [Tooltip("If enabled the system will try to downloaded the whitelist again after 20s if it errored out.")]
+        [SerializeField] private bool autoReloadOnError = true;
         
         private bool loading = false;
+        private string prevString;
+        
+        private const string DEBUG_PREFIX = "String Loader | ";
 
         private void Start()
         {
@@ -39,6 +44,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         private void ApplyString(string newString)
         {
+            if (newString == prevString) return;
+            prevString = newString;
+            
             var users = newString.Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             if (replaceWhitelist)
             {
@@ -53,21 +61,30 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private void AutoReload()
         {
             if (!autoReload) return;
+            MUIDebug.Log($"{DEBUG_PREFIX}Auto Reload Enabled: Next update in {autoReloadTime} minutes.");
             SendCustomEventDelayedSeconds("_LoadString", autoReloadTime * 60);
         }
         
         public override void OnStringLoadSuccess(IVRCStringDownload result)
         {
-            MUIDebug.Log($"Whitelist from {url} loaded successfully!");
+            MUIDebug.Log($"{DEBUG_PREFIX}Whitelist from {url} loaded successfully!");
             loading = false;
             ApplyString(result.Result);
             AutoReload();
         }
         public override void OnStringLoadError(IVRCStringDownload result)
         {
-            MUIDebug.LogError($"Couldn't load whitelist from {url} because {result.Error}!");
             loading = false;
-            AutoReload();
+            if (autoReloadOnError)
+            {
+                MUIDebug.LogError($"{DEBUG_PREFIX}Couldn't load whitelist from {url} because {result.Error}! Tying again in 20s.");
+                SendCustomEventDelayedSeconds("_LoadString", 20);
+            }
+            else
+            {
+                MUIDebug.LogError($"{DEBUG_PREFIX}Couldn't load whitelist from {url} because {result.Error}!");
+                AutoReload();
+            }
         }
     }
 }
