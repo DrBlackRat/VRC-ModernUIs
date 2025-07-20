@@ -6,11 +6,12 @@ using UnityEngine.Serialization;
 using VRC.SDK3.StringLoading;
 using VRC.SDKBase;
 using VRC.Udon.Common.Interfaces;
+using VRC.Udon.Serialization.OdinSerializer.Utilities;
 
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class WhitelistStringLoader : UdonSharpBehaviour
     {
         [SerializeField] private VRCUrl url;
@@ -18,6 +19,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private WhitelistSetterBase whitelist;
         [Tooltip("If enabled the entire Whitelist will be replaced instead of just adding new users to it.")]
         [SerializeField] private bool replaceWhitelist;
+        
+        [Tooltip("If enabled, only the master will load and update the string for everyone. This means if they aren't the master they can't spoof this list externally, but if they are they can spoof it for everyone.")]
+        [SerializeField] private bool masterMode;
         
         [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
         [SerializeField] private bool autoReload = true;
@@ -29,20 +33,63 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         private bool loading = false;
         private string prevString;
+
+        [UdonSynced]
+        private string netString;
+        private VRCPlayerApi localPlayer;
         
         private const string DEBUG_PREFIX = "String Loader | ";
 
         private void Start()
         {
-            _LoadString();
+            localPlayer = Networking.LocalPlayer;
+            if (!masterMode || localPlayer.IsOwner(gameObject))
+            {
+                _LoadString();
+            }
         }
+        
+        public override void OnDeserialization()
+        {
+            ApplyString(netString, true);
+        }
+        
+        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
+        {
+
+            if (newOwner.IsOwner(gameObject) || newOwner.isMaster)
+            {
+                MUIDebug.Log($"{DEBUG_PREFIX}{requester.displayName} has made {newOwner.displayName} the new Network Owner.");
+                return true; 
+            }
+            else 
+            {
+                MUIDebug.LogError($"{DEBUG_PREFIX}{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!"); 
+                return false;
+            }
+        }
+        
+        public override void OnOwnershipTransferred(VRCPlayerApi newOwner)
+        {
+            if (masterMode && localPlayer == newOwner)
+            {
+                MUIDebug.Log($"{DEBUG_PREFIX}You are now the owner.");
+                _LoadString();
+            }
+        }
+        
         public void _LoadString()
         {
-            if (loading) return;
+            if (loading || (masterMode && !localPlayer.IsOwner(gameObject)))
+            {
+                MUIDebug.LogWarning($"{DEBUG_PREFIX}You are either already loading this list, or are doing something nasty!");
+                return;
+            }
             loading = true;
             VRCStringDownloader.LoadUrl(url, (IUdonEventReceiver)this);
         }
-        private void ApplyString(string newString)
+        
+        private void ApplyString(string newString, bool fromNet)
         {
             if (newString == prevString) return;
             prevString = newString;
@@ -55,6 +102,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             else
             {
                 whitelist._AddUsers(users);
+            }
+
+            if (!fromNet)
+            {
+                if (!localPlayer.IsOwner(gameObject))
+                    Networking.SetOwner(localPlayer, gameObject);
+                
+                netString = newString;
+                RequestSerialization();
             }
             
         }
@@ -69,7 +125,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             MUIDebug.Log($"{DEBUG_PREFIX}Whitelist from {url} loaded successfully!");
             loading = false;
-            ApplyString(result.Result);
+            ApplyString(result.Result, false);
             AutoReload();
         }
         public override void OnStringLoadError(IVRCStringDownload result)
