@@ -18,8 +18,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         [Tooltip("Objects that should only be enabled for whitelisted users.")]
         [SerializeField] private GameObject[] whitelistedObjs;
-        [Tooltip("Objects that should be enabled for everyone, but disabled for whitlisted users.")]
+        [Tooltip("Objects that should be enabled for everyone, but disabled for whitelisted users.")]
         [SerializeField] private GameObject[] notWhitelistedObjs;
+
+        [Tooltip("Canvases that should only be enabled for whitelisted users.")]
+        [SerializeField] private Canvas[] whitelistedCanvases;
+        [Tooltip("Canvases that should be enabled for everyone, but disabled for whitelisted users.")]
+        [SerializeField] private Canvas[] notWhitelistedCanvases;
         
         private void Start()
         {
@@ -30,6 +35,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             var isWhitelisted = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
+            // Game Objects
             if (whitelistedObjs != null && whitelistedObjs.Length != 0)
             {
                 foreach (var obj in whitelistedObjs)
@@ -38,7 +44,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                     obj.SetActive(isWhitelisted);
                 }
             }
-
             if (notWhitelistedObjs != null && notWhitelistedObjs.Length != 0)
             {
                 foreach (var obj in notWhitelistedObjs)
@@ -46,6 +51,24 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                     if (obj == null) continue;
                     obj.SetActive(!isWhitelisted);
                 }  
+            }
+            
+            // Canvases
+            if (whitelistedCanvases != null && whitelistedCanvases.Length != 0)
+            {
+                foreach (var canvas in whitelistedCanvases)
+                {
+                    if (canvas == null) continue;
+                    canvas.enabled = isWhitelisted;
+                }
+            }
+            if (notWhitelistedCanvases != null && notWhitelistedCanvases.Length != 0)
+            {
+                foreach (var canvas in notWhitelistedCanvases)
+                {
+                    if (canvas == null) continue;
+                    canvas.enabled = !isWhitelisted;
+                }
             }
 
         }
