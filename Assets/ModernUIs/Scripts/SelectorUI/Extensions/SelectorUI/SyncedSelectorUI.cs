@@ -29,7 +29,6 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 {
                     if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned)
                     {
-                        PlayerData.SetInt(dataKey, selectedState);
                         return;
                     }
                 }
