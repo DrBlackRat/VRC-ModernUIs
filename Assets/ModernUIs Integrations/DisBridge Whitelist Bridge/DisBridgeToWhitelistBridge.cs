@@ -6,6 +6,7 @@ using VRC.SDKBase;
 using VRC.Udon;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
 using DrBlackRat.VRC.ModernUIs.Helpers;
+using DrBlackRat.VRC.ModernUIs.Helpers;
 using VRC.SDK3.Data;
 
 namespace DrBlackRat.VRC.ModernUIs.Integrations
