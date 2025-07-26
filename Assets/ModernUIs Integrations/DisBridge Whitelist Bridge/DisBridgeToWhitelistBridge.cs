@@ -57,7 +57,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 EditorFunctions.DrawPluginManagerCheck(myScript, false,true);
-                EditorFunctions.DrawPermissions(myScript, true);
+                EditorFunctions.DrawPermissions(myScript, false);
                 //EditorFunctions.DrawRoleContainerSelector(myScript);
                 //EditorFunctions.DrawStaffSupporterSelector(myScript);
             }
