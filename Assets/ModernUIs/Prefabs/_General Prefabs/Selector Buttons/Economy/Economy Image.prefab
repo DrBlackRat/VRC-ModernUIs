@@ -258,7 +258,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.15
+  m_fontSize: 1
   m_fontSizeBase: 8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -315,6 +315,9 @@ MonoBehaviour:
   themeColor: 9
   graphic: {fileID: 6866239391429343947}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &652087277294925100
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -323,6 +326,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 391275574362758237}
     m_Modifications:
+    - target: {fileID: 7831528628589912691, guid: ad6f09d5a671ddf4db41cac4f75d4cd0,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8961119927799330628, guid: ad6f09d5a671ddf4db41cac4f75d4cd0,
         type: 3}
       propertyPath: m_Pivot.x
@@ -668,16 +676,6 @@ PrefabInstance:
       propertyPath: m_Colors.m_HighlightedColor.r
       value: 0.9607843
       objectReference: {fileID: 0}
-    - target: {fileID: 3800297868663232104, guid: bc08df8a5eb99dd40a32f28c87c74d58,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3800297868663232104, guid: bc08df8a5eb99dd40a32f28c87c74d58,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: VRC.Udon.UdonBehaviour, VRC.Udon
-      objectReference: {fileID: 0}
     - target: {fileID: 4504410142694902839, guid: bc08df8a5eb99dd40a32f28c87c74d58,
         type: 3}
       propertyPath: m_Name
@@ -936,6 +934,9 @@ MonoBehaviour:
   themeColor: 2
   graphic: {fileID: 7281127456716518881}
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &8102502281964362793
 PrefabInstance:
   m_ObjectHideFlags: 0

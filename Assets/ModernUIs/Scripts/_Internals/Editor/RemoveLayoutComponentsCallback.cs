@@ -20,31 +20,31 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
                 var horizontalComponents = remover.GetComponentsInChildren<HorizontalLayoutGroup>(true);
                 for (int i = horizontalComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(horizontalComponents[i]);
+                    Object.DestroyImmediate(horizontalComponents[i]);
                 }
                 
                 var verticalComponents = remover.GetComponentsInChildren<VerticalLayoutGroup>(true);
                 for (int i = verticalComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(verticalComponents[i]);
+                    Object.DestroyImmediate(verticalComponents[i]);
                 }
                 
                 var gridComponents = remover.GetComponentsInChildren<GridLayoutGroup>(true);
                 for (int i = gridComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(gridComponents[i]);
+                    Object.DestroyImmediate(gridComponents[i]);
                 }
                 
                 var layoutElementComponents = remover.GetComponentsInChildren<LayoutElement>(true);
                 for (int i = layoutElementComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(layoutElementComponents[i]);
+                    Object.DestroyImmediate(layoutElementComponents[i]);
                 }
                 
                 var fitterComponents = remover.GetComponentsInChildren<ContentSizeFitter>(true);
                 for (int i = fitterComponents.Length - 1; i >= 0; i--)
                 {
-                    Object.Destroy(fitterComponents[i]);
+                    Object.DestroyImmediate(fitterComponents[i]);
                 }
             }
         }

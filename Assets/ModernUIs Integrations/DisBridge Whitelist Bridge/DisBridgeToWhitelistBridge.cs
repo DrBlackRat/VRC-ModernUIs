@@ -10,7 +10,10 @@ using DrBlackRat.VRC.ModernUIs.Helpers;
 using VRC.SDK3.Data;
 using System.Collections;
 using System.Collections.Generic;
+#if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UdonVR.DisBridge.Editors;
+#endif
+
 using UnityEditor;
 using UnityEngine;
 
@@ -39,7 +42,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         }
     }
     
-    #if !COMPILER_UDONSHARP
+    #if !COMPILER_UDONSHARP && UNITY_EDITOR
     [CustomEditor(typeof(DisBridgeToWhitelistBridge))]
     public class DisBridgeToWhitelistBridge_Editor : Editor
     {
