@@ -1,21 +1,14 @@
-﻿
-using UdonSharp;
+﻿using UdonSharp;
 using UdonVR.DisBridge;
 using UnityEngine;
 using VRC.SDKBase;
-using VRC.Udon;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
-using DrBlackRat.VRC.ModernUIs.Helpers;
-using DrBlackRat.VRC.ModernUIs.Helpers;
-using VRC.SDK3.Data;
-using System.Collections;
-using System.Collections.Generic;
+
 #if !COMPILER_UDONSHARP && UNITY_EDITOR
 using UdonVR.DisBridge.Editors;
 #endif
 
 using UnityEditor;
-using UnityEngine;
 
 namespace DrBlackRat.VRC.ModernUIs.Integrations
 {

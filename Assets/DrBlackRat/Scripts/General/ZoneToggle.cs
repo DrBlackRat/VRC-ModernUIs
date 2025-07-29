@@ -16,13 +16,13 @@ namespace DrBlackRat.VRC.General
         [Tooltip("Game Objects that should only be enabled if the player is NOT inside the zone. This is rarely used.")]
         [SerializeField] private GameObject[] objsDisable;
         
-        private Collider collider;
+        private Collider zoneCollider;
         private bool inZone; // Workaround for OnPlayerTriggerEnter being fired twice when respawning
         
         private void Start()
         {
             ToggleObjs(false);
-            collider = GetComponent<Collider>();
+            zoneCollider = GetComponent<Collider>();
         }
         
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
@@ -59,18 +59,18 @@ namespace DrBlackRat.VRC.General
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            collider.enabled = false;
+            zoneCollider.enabled = false;
             SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
         }
         public override void OnPlayerRespawn(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            collider.enabled = false;
+            zoneCollider.enabled = false;
             SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
         }
         public void _EnableCollider()
         {
-            collider.enabled = true;
+            zoneCollider.enabled = true;
         }
     }
 }
