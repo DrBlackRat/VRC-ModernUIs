@@ -13,4 +13,10 @@
             <uie:PropertyField binding-path="movementDuration" name="movementDuration" label="Duration" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
+    <ui:Foldout text="Tab Adjustment" view-data-key="TabAdjustmentSettings" name="TabAdjustment" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <uie:PropertyField binding-path="tabPrefab" name="tabPrefab" label="Tab Prefab" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Button text="Add Tab" parse-escape-sequences="true" display-tooltip-when-elided="true" binding-path="AddTabButton" name="AddTabButton" tooltip="Applies the Theme to all children of this Game Object." style="height: 30px;" />
+        </ui:VisualElement>
+    </ui:Foldout>
 </ui:UXML>

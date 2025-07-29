@@ -15,10 +15,16 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new VisualElement();
-            
-            // UXML
+            VisualElement root = new VisualElement(); 
             visualTree.CloneTree(root);
+            
+            var tabSwitcher = (TabSwitcher)target;
+            
+            var addTabButton = root.Q<Button>("AddTabButton");
+
+            if (addTabButton != null)
+                addTabButton.clicked += () => tabSwitcher.AddTab();
+
             
             return root;
         }

@@ -14,6 +14,9 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
+        [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
+        [SerializeField] private GameObject tabPrefab;
+        
         private bool animate;
         private float animationElapsedTime;
         private Vector2 oldTabPos;
@@ -85,5 +88,27 @@ namespace DrBlackRat.VRC.ModernUIs
                 animate = false;
             }
         }
+
+        #region Adding Tabs
+
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        [ContextMenu("Add Tab")]
+        public void AddTab()
+        {
+            var prevTabs = GetComponentsInChildren<Tab>();
+            
+            var newTab = Instantiate(tabPrefab, transform);
+            newTab.name = $"Page {prevTabs.Length + 1}";
+
+            if (prevTabs.Length < 2)
+            {
+                MUIDebug.LogWarning("Tab Switcher | Could not automatically align newly generated Tab as a minimum of 2 Tabs is required for that. Please align the newly generated Tab manually.");
+                return;
+            }
+            var tabOffset = prevTabs[1].transform.localPosition - prevTabs[0].transform.localPosition;
+            newTab.transform.localPosition = prevTabs[^1].transform.localPosition + tabOffset;
+        }
+#endif
+        #endregion
     }
 }
