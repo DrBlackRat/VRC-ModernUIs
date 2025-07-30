@@ -3,6 +3,7 @@ using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
@@ -10,7 +11,7 @@ using VRC.Udon.Common.Interfaces;
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class WhitelistObjectToggle : UdonSharpBehaviour
+    public class WhitelistToggler : UdonSharpBehaviour
     {
         [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
@@ -25,6 +26,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private Canvas[] whitelistedCanvases;
         [Tooltip("Canvases that should be enabled for everyone, but disabled for whitelisted users.")]
         [SerializeField] private Canvas[] notWhitelistedCanvases;
+
+        [Tooltip("\"Selectables\" or Buttons, Toggles, Sliders etc. that should only be interactable for whitelisted users." +
+                 "\nDO NOT USE FOR MODERN UIs")]
+        [SerializeField] private Selectable[] whitelistedSelectables;
+        [Tooltip("\"Selectables\" or Buttons, Toggles, Sliders etc. that should be interactable for everyone, but be NOT interactable for whitelisted users." +
+                 "\nDO NOT USE FOR MODERN UIs")]
+        [SerializeField] private Selectable[] notWhitelistedSelectables;
         
         private void Start()
         {
@@ -68,6 +76,24 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 {
                     if (canvas == null) continue;
                     canvas.enabled = !isWhitelisted;
+                }
+            }
+            
+            // Selectables / UI Buttons etc.
+            if (whitelistedSelectables != null && whitelistedSelectables.Length != 0)
+            {
+                foreach (var selectable in whitelistedSelectables)
+                {
+                    if (selectable == null) continue;
+                    selectable.interactable = isWhitelisted;
+                }
+            }
+            if (notWhitelistedSelectables != null && notWhitelistedSelectables.Length != 0)
+            {
+                foreach (var selectable in notWhitelistedSelectables)
+                {
+                    if (selectable == null) continue;
+                    selectable.interactable = !isWhitelisted;
                 }
             }
 

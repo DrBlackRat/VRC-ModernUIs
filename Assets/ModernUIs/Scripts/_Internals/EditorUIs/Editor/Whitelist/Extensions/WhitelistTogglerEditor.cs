@@ -9,8 +9,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(WhitelistObjectToggle))]
-    public class WhitelistObjectToggleEditor : UnityEditor.Editor
+    [CustomEditor(typeof(WhitelistToggler))]
+    public class WhitelistTogglerEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 
