@@ -18,6 +18,12 @@ namespace ModernUIs.Theming
         [Tooltip("Unity Image, Text, Text Mesh Pro, etc. the Theme Color should be applied to.")]
         [SerializeField] private Graphic graphic;
 
+        [Tooltip("If enabled, alpha will be overriden with that's set here.")]
+        [SerializeField] private bool overrideAlpha;
+        [Range(0, 1)]
+        [Tooltip("Alpha that is used instead of the theme provided one, requires \"Override Alpha\" to be enabled.")]
+        [SerializeField] private float alpha;
+
         [Tooltip("Selector UI of which the Selected, Not Selected, Whitelisted & Not Whitelisted Colors will be set.")]
         [SerializeField] private SelectorUI selectorUI;
         [Tooltip("Selector UI of which the Selected & Not Selected Colors will be set.")]
@@ -42,7 +48,12 @@ namespace ModernUIs.Theming
             if (graphic != null)
             {
                 UnityEditor.EditorUtility.SetDirty(graphic);
-                graphic.color = theme.GetColor(themeColor);
+                var color = theme.GetColor(themeColor);
+
+                if (overrideAlpha)
+                    color.a = alpha;
+                
+                graphic.color = color;
             }
             
             if (selectorUI != null)
