@@ -1,4 +1,5 @@
 ﻿
+using System.Security.Policy;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -8,22 +9,31 @@ namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(100)]
-    [RequireComponent(typeof(BoxCollider))]
-    public class UIZone : UdonSharpBehaviour
+    [RequireComponent(typeof(Collider))]
+    public class ObjectZone : UdonSharpBehaviour
     {
-        private UIMover uiMover;
+        [Tooltip("Transform of which the position, rotation and scale will be used. If left empty the transform this is attached to will be used. ")]
+        [SerializeField] private Transform zoneTransform;
+        /// <summary>
+        /// Transform of which the positions, rotation & scale should be used for this zone.
+        /// </summary>
+        public Transform ZoneTransform => zoneTransform;
+        
+        private ObjectMover objectMover;
         private int id;
         private Collider zoneCollider;
         private bool inZone; // Workaround for OnPlayerTriggerEnter being fired twice when respawning
 
         private void Start()
         {
+            if (zoneTransform == null)
+                zoneTransform = transform;
             zoneCollider = GetComponent<Collider>();
         }
 
-        public void _SetupUIMover(UIMover newUIMover, int newID)
+        public void _SetupObjectZone(ObjectMover newObjectMover, int newID)
         {
-            uiMover = newUIMover;
+            objectMover = newObjectMover;
             id = newID;
         }
 
@@ -31,14 +41,14 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             if (!player.isLocal || inZone) return;
             inZone = true;
-            uiMover._PlayerEnteredZone(id);
+            objectMover._PlayerEnteredZone(id);
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
             inZone = false;
-            uiMover._PlayerLeftZone(id);
+            objectMover._PlayerLeftZone(id);
         }
         
         // Spawn / Respawn Fixes

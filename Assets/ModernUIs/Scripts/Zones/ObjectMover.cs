@@ -1,6 +1,7 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -8,18 +9,19 @@ namespace DrBlackRat.VRC.ModernUIs
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [DefaultExecutionOrder(-100)]
-    public class UIMover : UdonSharpBehaviour
+    public class ObjectMover : UdonSharpBehaviour
     {
+        [FormerlySerializedAs("menu")]
         [Tooltip("Menu / Object you want to move.")]
-        [SerializeField] private Transform menu;
+        [SerializeField] private Transform moveableTransform;
         [Tooltip("If enabled, the scale of the zone transform will also be applied. Should be left off unless you specifically want the scale to change.")]
         [SerializeField] private bool applyScale;
         
         [Tooltip("Default Position and Rotation of the Menu, used when ever player isn't in a different Zone.")]
         [SerializeField] private Transform defaultTransform;
 
-        [Tooltip("Zones the UI should move to.")]
-        [SerializeField] private UIZone[] zones;
+        [Tooltip("Zones the Menu / Object should move to.")]
+        [SerializeField] private ObjectZone[] zones;
 
         private int zoneCounter;
 
@@ -29,7 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs
             for (int i = 0; i < zones.Length; i++)
             {
                 if (zones[i] == null) continue;
-                zones[i]._SetupUIMover(this, i);
+                zones[i]._SetupObjectZone(this, i);
             }
         }
 
@@ -37,9 +39,9 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             zoneCounter++;
             if (zones[id] == null) return;
-            menu.SetPositionAndRotation(zones[id].transform.position, zones[id].transform.rotation);
+            moveableTransform.SetPositionAndRotation(zones[id].ZoneTransform.position, zones[id].ZoneTransform.rotation);
             if (applyScale)
-                menu.localScale = zones[id].transform.localScale;
+                moveableTransform.localScale = zones[id].ZoneTransform.localScale;
         }
 
         public void _PlayerLeftZone(int id)
@@ -47,9 +49,9 @@ namespace DrBlackRat.VRC.ModernUIs
             zoneCounter--;
             if (zoneCounter == 0)
             {
-                menu.SetPositionAndRotation(defaultTransform.position, defaultTransform.rotation);
+                moveableTransform.SetPositionAndRotation(defaultTransform.position, defaultTransform.rotation);
                 if (applyScale)
-                    menu.localScale = defaultTransform.localScale;
+                    moveableTransform.localScale = defaultTransform.localScale;
             }
         }
     }

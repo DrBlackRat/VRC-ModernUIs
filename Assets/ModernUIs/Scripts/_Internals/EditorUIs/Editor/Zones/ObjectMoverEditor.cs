@@ -8,8 +8,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(UIZone))]
-    public class UIZoneEditor : UnityEditor.Editor
+    [CustomEditor(typeof(ObjectMover))]
+    public class ObjectMoverEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 
