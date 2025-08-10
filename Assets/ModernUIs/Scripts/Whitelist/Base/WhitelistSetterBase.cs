@@ -27,7 +27,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// </summary>
         /// <param name="username">The username to add to the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
-        public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null)
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
+        public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null, bool notify = true)
         {
             if (whitelist.Contains(username))
             {
@@ -38,7 +39,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             whitelist.Add(username);
             if (debugLogging)
                 MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
-            WhitelistUpdated(senderBehaviour);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour);
         }
         
         /// <summary>
@@ -76,16 +78,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 if (token.IsNull) continue;
                 
                 var username = token.String;
-
-                if (whitelist.Contains(username))
-                {
-                    if (debugLogging)
-                       MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
-                    continue;
-                }
-                whitelist.Add(username);
-                if (debugLogging)
-                    MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                _AddUser(username, null, false);
             }
             WhitelistUpdated(senderBehaviour);
         }
@@ -101,15 +94,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
 
             foreach (var username in newUsernames)
             {
-                if (whitelist.Contains(username))
-                {
-                    if (debugLogging)
-                        MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
-                    continue;
-                }
-                whitelist.Add(username);
-                if (debugLogging)
-                    MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                _AddUser(username, null, false);
             }
             WhitelistUpdated(senderBehaviour);
         }

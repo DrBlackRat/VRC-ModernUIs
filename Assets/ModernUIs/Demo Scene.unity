@@ -10204,6 +10204,16 @@ PrefabInstance:
       objectReference: {fileID: 1467401746}
     - target: {fileID: 8722473979200048220, guid: 694ea58e9d28a5747a00d086e0e8b375,
         type: 3}
+      propertyPath: autoRemoveOnLeave
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8722473979200048220, guid: 694ea58e9d28a5747a00d086e0e8b375,
+        type: 3}
+      propertyPath: autoRemoveOnAdderLeft
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8722473979200048220, guid: 694ea58e9d28a5747a00d086e0e8b375,
+        type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 8722473979200048220, guid: 694ea58e9d28a5747a00d086e0e8b375,
@@ -16061,8 +16071,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
   - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
+  - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
   - {fileID: 2100000, guid: 1db6643092e001940902578f00e86981, type: 2}
   - {fileID: 2100000, guid: e24faad0a475f434ea0a938dda24792b, type: 2}
   - {fileID: 2100000, guid: cbc2271e96ecf9a4d922cc9f31573a5c, type: 2}
@@ -18522,6 +18532,10 @@ MonoBehaviour:
     - VRC.Udon.UdonBehaviour
   - gameObject: {fileID: 2000916337}
     ID: 908
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 909
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}

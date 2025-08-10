@@ -44,8 +44,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Range(0, 40)] [Tooltip("The amount of users a single admin can add.")]
         [SerializeField] protected int maxAddAmount = 2;
         
-        [Tooltip("Automatically removes every player if the person that added them left.")]
-        [SerializeField] protected bool autoRemoveOnAdderLeft;
 
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary notWhitelistedUsers = new DataDictionary();
@@ -101,14 +99,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             allUsers.Remove(displayName);
             RemoveNotWhitelistUser(displayName);
             UpdateCountDisplays();
-            
-            if (autoRemoveOnAdderLeft && player.isLocal && usersAdded.Count > 0)
-            {
-                for (int i = 0; i < usersAdded.Count; i++)
-                {
-                    RemoveWhitelistUser((string)usersAdded[i]);
-                }
-            }
         }
 
         private void UpdateCountDisplays()

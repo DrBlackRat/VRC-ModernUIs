@@ -17,8 +17,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     public abstract class WhitelistGetterBase : UdonSharpBehaviour
     {
         protected DataList whitelist = new DataList();
-        protected DataList connectedBehaviours = new DataList();
-        protected DataList updateEventNames = new DataList();
+        
+        protected DataDictionary connectedBehaviours = new DataDictionary(); // key: Udon Behaviour value: event name
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
         
@@ -30,8 +30,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="eventName">Optional | Event what should be called, if left empty "_WhitelistUpdated" will be used.</param>
         public virtual void _SetUpConnection(IUdonEventReceiver behaviour, string eventName = WHITELIST_UPDATED_EVENT)
         {
-            connectedBehaviours.Add((UnityEngine.Object)behaviour);
-            updateEventNames.Add(eventName);
+            connectedBehaviours.Add((UnityEngine.Object)behaviour, eventName);
             behaviour.SendCustomEventDelayedFrames(eventName, 1); // Send delayed by one frame to prevent too much happening inside one frame
         }
         
@@ -122,15 +121,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             MUIDebug.Log($"Whitelist Manager: Whitelist Updated");
             
             if (connectedBehaviours == null) return;
-            for (int i = 0; i < connectedBehaviours.Count; i++)
+            var keys = connectedBehaviours.GetKeys();
+            for (int i = 0; i < keys.Count; i++)
             {
-                if (connectedBehaviours[i].IsNull) continue;
+                if (keys[i].IsNull) continue;
                 
                 // Prevent Sending update event to sender
-                var receiver = (IUdonEventReceiver)connectedBehaviours[i].Reference;
+                var receiver = (IUdonEventReceiver)keys[i].Reference;
                 if (receiver == senderBehaviour) continue;
                 
-                receiver.SendCustomEventDelayedFrames((string)updateEventNames[i], 1); // Send delayed by one frame to prevent too much happening inside one frame
+                if (connectedBehaviours.TryGetValue(keys[i], out DataToken output))
+                {
+                    receiver.SendCustomEventDelayedFrames((string)output, 1); // Send delayed by one frame to prevent too much happening inside one frame
+                }
             }
         }
     }
