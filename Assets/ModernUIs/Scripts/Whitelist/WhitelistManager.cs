@@ -29,6 +29,5 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             WhitelistUpdated();
         }
-        
     }
 }

@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.5, y: 0}
-  m_SizeDelta: {x: -70, y: -3}
+  m_AnchoredPosition: {x: 2, y: 0}
+  m_SizeDelta: {x: -71, y: -4}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1220753616192482197
 CanvasRenderer:
@@ -90,7 +90,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 6
   graphic: {fileID: 1281543343846813851}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
+  whitelistEditorBase: {fileID: 0}
+  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &401720366776672010
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -107,7 +112,12 @@ PrefabInstance:
     - target: {fileID: 1268163809751384690, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: m_Name
-      value: Normal Variant
+      value: Normal Variant Vertical
+      objectReference: {fileID: 0}
+    - target: {fileID: 3758414106615218927, guid: be00b570ce73c8e44af2d09ea50ce1e6,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.a
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4760564080596429883, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
@@ -117,7 +127,12 @@ PrefabInstance:
     - target: {fileID: 4760564080596429883, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: m_fontSize
-      value: 12.5
+      value: 11.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4760564080596429883, guid: be00b570ce73c8e44af2d09ea50ce1e6,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 4760564080596429883, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
@@ -238,12 +253,22 @@ PrefabInstance:
     - target: {fileID: 8065958949476993102, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: -17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065958949476993102, guid: be00b570ce73c8e44af2d09ea50ce1e6,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 8065958949476993102, guid: be00b570ce73c8e44af2d09ea50ce1e6,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 7.5
+      value: 7.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065958949476993102, guid: be00b570ce73c8e44af2d09ea50ce1e6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -20,6 +20,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected WhitelistGetterBase adminWhitelist;
         [Tooltip("Allow none Admins, but users who are on the whitelist it self to change it. Will be set to true if no Admin Whitelist is provided.")]
         [SerializeField] protected bool noneAdminAccess;
+        [Tooltip("Automatically remove a player when they leave the instance.")]
+        [SerializeField] protected bool autoRemoveOnLeave;
         
         [UdonSynced] protected string serializedWhitelist;
         protected bool canEdit;
@@ -40,6 +42,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 noneAdminAccess = true;
             }
             canEdit = CanEdit(Networking.LocalPlayer);
+        }
+        
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            if (!Networking.LocalPlayer.IsOwner(gameObject)) return;
+            if (autoRemoveOnLeave && whitelist.Contains(player.displayName))
+            {
+                _RemoveUser(player.displayName);
+            }
         }
 
         // Only for Admin Whitelist

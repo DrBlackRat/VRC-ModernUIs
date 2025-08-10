@@ -58,6 +58,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Range(0, 40)] [Tooltip("The amount of users a single admin can add.")]
         [SerializeField] protected int maxAddAmount = 2;
 
+        [Tooltip("Automatically removes every player if the person that added them left.")]
+        [SerializeField] protected bool autoRemoveOnAdderLeft;
         
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary requestingUsers = new DataDictionary();
@@ -133,10 +135,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
+            var displayName = player.displayName;
             if (Networking.LocalPlayer.isMaster)
             {
-                RemoveRequestingUser(player.displayName, false); 
-                UpdateCountDisplays(); 
+                RemoveRequestingUser(displayName, false); 
+                UpdateCountDisplays();
+            }
+
+            if (autoRemoveOnAdderLeft && player.isLocal && usersAdded.Count > 0)
+            {
+                for (int i = 0; i < usersAdded.Count; i++)
+                {
+                    RemoveWhitelistUser((string)usersAdded[i]);
+                }
             }
         }
         
@@ -286,7 +297,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 whitelistedUsers.Remove(username);
             }
             
-            if (limitAdding && usersAdded.Contains(username))
+            if (usersAdded.Contains(username))
             {
                 usersAdded.Remove(username);
                 CheckMaxUsersAdded();
@@ -333,11 +344,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasAccess) return;
             
-            if (limitAdding)
-            {
-                usersAdded.Add(username);
-                CheckMaxUsersAdded();  
-            }
+            usersAdded.Add(username);
+            CheckMaxUsersAdded();  
             
             AddWhitelistUser(username);
             whitelist._AddUser(username, (IUdonEventReceiver)this);
