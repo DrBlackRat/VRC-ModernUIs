@@ -101,7 +101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0030752658}
+  m_AnchoredPosition: {x: 0, y: 0.002557871}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5914837358680332356
@@ -353,6 +353,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 1
   graphic: {fileID: 7084994152991270191}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -570,6 +572,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 9
   graphic: {fileID: 4298069446018878362}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -685,6 +689,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 1
   graphic: {fileID: 3700164852561034629}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -887,7 +893,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8918145209338080063}
   m_HandleRect: {fileID: 3551785244096354988}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99998707
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -907,6 +913,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 1
   graphic: {fileID: 4612625246454444723}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -1038,6 +1046,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 1
   graphic: {fileID: 8471209553952511927}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -1196,22 +1206,21 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 449565039791212113}
-  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
-  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   whitelistedPrefab: {fileID: 3591901342350911823, guid: ddbdfd92a32eddd4b854d5a5a11795cd,
     type: 3}
   whitelistedTransform: {fileID: 6994404324405563064}
   whitelistedCountDisplay: {fileID: 7550887355252818335}
-  notWhitelistedPrefab: {fileID: 3423734140893842230, guid: 0edfda35df850b64292f2c2ad84ffee0,
+  otherUsersPrefab: {fileID: 3423734140893842230, guid: 0edfda35df850b64292f2c2ad84ffee0,
     type: 3}
-  notWhitelistedTransform: {fileID: 6540177671408026189}
-  notWhitelistedCountDisplay: {fileID: 4183176983932866014}
+  otherUsersTransform: {fileID: 6540177671408026189}
+  otherUsersCountDisplay: {fileID: 4183176983932866014}
   whitelist: {fileID: 0}
-  requireWhitelisted: 1
   adminWhitelist: {fileID: 0}
-  showAdmins: 0
+  showOrAllowAdmins: 0
   limitAdding: 0
   maxAddAmount: 2
+  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0.9490196}
 --- !u!114 &449565039791212113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1265,6 +1274,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 0
   graphic: {fileID: 0}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 512697697608567891}
@@ -1359,6 +1370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 3
   graphic: {fileID: 8918145209338080063}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -1587,6 +1600,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 0
   graphic: {fileID: 2786168931867494004}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}

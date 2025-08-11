@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Data;
@@ -17,11 +18,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     public abstract class WhitelistGetterBase : UdonSharpBehaviour
     {
         protected DataList whitelist = new DataList();
+        protected DataDictionary usersAddedBy = new DataDictionary(); // Key: User Who added, Value: DataList of users they added
         
         protected DataDictionary connectedBehaviours = new DataDictionary(); // key: Udon Behaviour value: event name
+        
+        protected string localName;
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
-        
+
+        protected virtual void Start()
+        {
+            localName = Networking.LocalPlayer.displayName;
+        }
+
         /// <summary>
         /// Sets up a connection with the Whitelist Manager.
         /// Used to receive an update event if the whitelist changes.
@@ -30,10 +39,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="eventName">Optional | Event what should be called, if left empty "_WhitelistUpdated" will be used.</param>
         public virtual void _SetUpConnection(IUdonEventReceiver behaviour, string eventName = WHITELIST_UPDATED_EVENT)
         {
-            connectedBehaviours.Add((UnityEngine.Object)behaviour, eventName);
+            connectedBehaviours.SetValue((UnityEngine.Object)behaviour, eventName);
             behaviour.SendCustomEventDelayedFrames(eventName, 1); // Send delayed by one frame to prevent too much happening inside one frame
         }
-        
+
+        #region Whitelist Checks
         /// <summary>
         /// Checks if a player is whitelisted.
         /// </summary>
@@ -108,6 +118,79 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             return whitelist.Count;
         }
+        #endregion
+
+        #region Added By Checks
+        /// <summary>
+        /// Retrieves a list of all users that were added to the whitelist by the specified user.
+        /// </summary>
+        /// <param name="username">Display name of the user whose added entries should be returned.</param>
+        /// <returns>
+        /// A deep-cloned <see cref="DataList"/> containing the users added by the specified player. 
+        /// Returns an empty list if none are found.
+        /// </returns>
+        public virtual DataList _GetUsersAddedBy(string username)
+        {
+            if (usersAddedBy.TryGetValue(username, out DataToken added))
+            {
+                return added.DataList.DeepClone();
+            }
+            else
+            {
+                return new DataList();
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of users added to the whitelist by the specified user.
+        /// </summary>
+        /// <param name="username">Display name of the user whose additions should be counted.</param>
+        /// <returns>
+        /// The count of users added by the specified player. 
+        /// Returns 0 if the player has not added any users.
+        /// </returns>
+        public virtual int _GetUsersAddedByCount(string username)
+        {
+            if (usersAddedBy.TryGetValue(username, out DataToken added))
+            {
+                return added.DataList.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the display name of the user who added the specified username to the whitelist.
+        /// This is slow! Try to avoid this when possible.
+        /// </summary>
+        /// <param name="username">Display name of the user whose adder should be found.</param>
+        /// <returns>
+        /// The display name of the player who added the specified user, or <c>null</c> if not found.
+        /// </returns>
+        public virtual string _GetWhoAdded(string username)
+        {
+            DataList addedKeys = usersAddedBy.GetKeys();
+            for (int i = 0; i < addedKeys.Count; i++)
+            {
+                if (usersAddedBy.TryGetValue(addedKeys[i], out DataToken value))
+                {
+                    DataList users = value.DataList;
+                    for (int j = 0; j < users.Count; j++)
+                    {
+                        if (username == users[j].String)
+                        {
+                            return addedKeys[i].String;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+        #endregion
+        
         
         /// <summary>
         /// Should be called whenever the whitelist is changed or updated. 

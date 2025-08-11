@@ -20,8 +20,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Whitelists that you want to combine into one. Useful for combining a local and synced whitelist.")]
         [SerializeField] protected WhitelistGetterBase[] whitelists;
         
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             foreach (var whitelist in whitelists)
             {
                 whitelist._SetUpConnection((IUdonEventReceiver)this);

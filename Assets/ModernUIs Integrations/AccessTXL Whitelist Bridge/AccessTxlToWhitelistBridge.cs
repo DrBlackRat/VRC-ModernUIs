@@ -18,8 +18,9 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         [SerializeField] protected AccessControl accessControl;
         protected bool txlHasChanged = true;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             accessControl._Register(AccessControl.EVENT_VALIDATE, this, nameof(_UpdateAccessList));
             _UpdateAccessList();
         }
@@ -35,6 +36,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             if (!txlHasChanged) return;
 
             whitelist = new DataList();
+            usersAddedBy = new DataDictionary();
             
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
             VRCPlayerApi.GetPlayers(players);
@@ -43,6 +45,8 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
                 if (!player.IsValid() || !accessControl._HasAccess(player)) continue;
                 whitelist.Add(player.displayName);
             }
+            
+            usersAddedBy.SetValue(localName, whitelist.DeepClone());
             
             txlHasChanged = false;
         }
@@ -92,6 +96,24 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         {
             UpdateTxlData();
             return base._GetCount();
+        }
+
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            UpdateTxlData();
+            return base._GetUsersAddedBy(username);
+        }
+
+        public override int _GetUsersAddedByCount(string username)
+        {
+            UpdateTxlData();
+            return base._GetUsersAddedByCount(username);
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            UpdateTxlData();
+            return base._GetWhoAdded(username);
         }
 
         #endregion

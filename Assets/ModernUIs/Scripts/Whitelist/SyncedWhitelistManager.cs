@@ -29,24 +29,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [UdonSynced] protected string serializedWhitelist;
         protected bool canEdit;
         
-        protected DataList addedBy = new DataList();
         [UdonSynced] protected string serializedAddedBy;
-
-        protected string localName;
 
         protected override void Start()
         {
             localName = Networking.LocalPlayer.displayName;
+            canEdit = CanEdit(Networking.LocalPlayer);
             
             if (Networking.LocalPlayer.IsOwner(gameObject))
             {
-                foreach (var username in startWhitelist)
-                {
-                    if (whitelist.Contains(username)) continue;
-                    addedBy.Add(localName);
-                    whitelist.Add(username);
-                }
-                WhitelistUpdated();
+                _AddUsers(startWhitelist);
             }
 
             if (adminWhitelist != null)
@@ -57,7 +49,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 noneAdminAccess = true;
             }
-            canEdit = CanEdit(Networking.LocalPlayer);
         }
         
         public override void OnPlayerLeft(VRCPlayerApi player)
@@ -114,7 +105,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (VRCJson.TryDeserializeFromJson(serializedAddedBy, out DataToken addedByResult))
             {
-                addedBy = addedByResult.DataList;
+                usersAddedBy = addedByResult.DataDictionary;
             }
             
             if (VRCJson.TryDeserializeFromJson(serializedWhitelist, out DataToken whitelistResult))
@@ -131,7 +122,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 serializedWhitelist = whitelistResult.String;
             }
 
-            if (VRCJson.TrySerializeToJson(addedBy, JsonExportType.Minify, out DataToken addedByResult))
+            if (VRCJson.TrySerializeToJson(usersAddedBy, JsonExportType.Minify, out DataToken addedByResult))
             {
                 serializedAddedBy = addedByResult.String;
             }
@@ -161,7 +152,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             var localPlayer = Networking.LocalPlayer;
             
-            if (!CanEdit(localPlayer) && !localPlayer.IsOwner(gameObject))
+            if (!CanEdit(localPlayer))
             {
                 MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
                 return;
@@ -173,27 +164,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base.WhitelistUpdated(senderBehaviour);
         }
 
-        #region Add & Remove Overrides
+        #region Overrides
         public override void _AddUser(string username, IUdonEventReceiver senderBehaviour = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            addedBy.Add(localName);
             base._AddUser(username, senderBehaviour, notify);
         }
-
-        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null)
-        {
-            if (!EditCheck()) return;
-
-            var index = whitelist.IndexOf(username);
-            if (index != -1)
-            {
-                addedBy.RemoveAt(index);
-            }
-            
-            base._RemoveUser(username, senderBehaviour);
-        }
-
+        
         public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!EditCheck()) return;
@@ -206,98 +183,34 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._AddUsers(newUsernames, senderBehaviour);
         }
 
+        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, bool notify = true)
+        {
+            if (!EditCheck()) return;
+            base._RemoveUser(username, senderBehaviour);
+        }
+
+        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null)
+        {
+            if (!EditCheck()) return;
+            base._RemoveUsers(usernamesToRemove, senderBehaviour);
+        }
+
+        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null)
+        {
+            if (!EditCheck()) return;
+            base._RemoveUsers(usernamesToRemove, senderBehaviour);
+        }
+
         public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!EditCheck()) return;
-
-            addedBy = new DataList();
-            for (int i = 0; i < newUsernames.Count; i++)
-            {
-                addedBy.Add(localName);
-            }
-            
             base._ReplaceWhitelist(newUsernames, senderBehaviour);
         }
 
         public override void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
         {
             if (!EditCheck()) return;
-            
-            addedBy = new DataList();
-            for (int i = 0; i < newUsernames.Length; i++)
-            {
-                addedBy.Add(localName);
-            }
-            
             base._ReplaceWhitelist(newUsernames, senderBehaviour);
-        }
-        #endregion
-
-        #region Added By
-        /// <summary>
-        /// Allows you to check who added a specific user.
-        /// </summary>
-        /// <param name="username">Display Name of the user you want to check.</param>
-        /// <returns>Display Name of the user who added them, null if that user is not whitelisted.</returns>
-        public string _AddedBy(string username)
-        {
-            var index = whitelist.IndexOf(username);
-            if (index != -1)
-            {
-                return addedBy[index].String;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Returns how many users a single user has added. This is slow! So please cache this if possible!
-        /// </summary>
-        /// <param name="username">Display Name of the user you want to check.</param>
-        /// <returns>Count of how many people this user has added.</returns>
-        public int _AddedCount(string username)
-        {
-            DataList sorted = addedBy.ShallowClone();
-            sorted.Sort();
-
-            int count = 0;
-            bool prevMatched = false;
-            for (int i = 0; i < addedBy.Count; i++)
-            {
-                if (addedBy[i].String == username)
-                {
-                    count++;
-                    prevMatched = true;
-                }
-                else if (prevMatched) // Reached end of our matched user occuring
-                {
-                    break;
-                }
-            }
-
-            return count;
-        }
-
-        /// <summary>
-        /// Removed everyone that was added by the provided user.
-        /// </summary>
-        /// <param name="username">Display Name of the user who you want to remove ever added user of.</param>
-        public void _RemoveAddedBy(string username)
-        {
-            if (!EditCheck()) return;
-
-            for (int i = addedBy.Count - 1; i >= 0; i--)
-            {
-                if (addedBy[i].String == username)
-                {
-                    addedBy.RemoveAt(i);
-                    whitelist.RemoveAt(i);
-                }
-            }
-            
-            WhitelistUpdated();
         }
         #endregion
         

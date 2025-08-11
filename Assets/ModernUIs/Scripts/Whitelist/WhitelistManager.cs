@@ -20,14 +20,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
         [SerializeField] protected string[] startWhitelist;
 
-        protected virtual void Start()
+        protected override void Start()
         {
-            foreach (var username in startWhitelist)
-            {
-                if (whitelist.Contains(username)) continue;
-                whitelist.Add(username);
-            }
-            WhitelistUpdated();
+            localName = Networking.LocalPlayer.displayName;
+            _AddUsers(startWhitelist);
         }
     }
 }

@@ -149,6 +149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 5
   graphic: {fileID: 6602118447333344108}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -314,6 +316,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 3
   graphic: {fileID: 8126729622114039545}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -344,7 +348,7 @@ PrefabInstance:
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999763
+      value: 0.99998546
       objectReference: {fileID: 0}
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -575,7 +579,7 @@ PrefabInstance:
     - target: {fileID: 4211645044567480229, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00006269546
+      value: 0.00539521
       objectReference: {fileID: 0}
     - target: {fileID: 4624464464858873013, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -649,7 +653,7 @@ PrefabInstance:
     - target: {fileID: 6798810265078039205, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6881844160607779181, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -944,28 +948,27 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5889592607255745873}
-  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
-  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   whitelistedPrefab: {fileID: 3591901342350911823, guid: ddbdfd92a32eddd4b854d5a5a11795cd,
     type: 3}
   whitelistedTransform: {fileID: 6530049149709805432}
   whitelistedCountDisplay: {fileID: 6000022571879786591}
-  requestingPrefab: {fileID: 156115952792550872, guid: 65003806abce47541a42817f55f4e76d,
+  otherUsersPrefab: {fileID: 3423734140893842230, guid: 0edfda35df850b64292f2c2ad84ffee0,
     type: 3}
-  requestingTransform: {fileID: 7011286886326643597}
-  requestingCountDisplay: {fileID: 109170491839063070}
+  otherUsersTransform: {fileID: 7011286886326643597}
+  otherUsersCountDisplay: {fileID: 109170491839063070}
   whitelist: {fileID: 0}
-  requireWhitelisted: 1
   adminWhitelist: {fileID: 0}
-  allowAdminsToRequest: 0
+  showOrAllowAdmins: 0
+  limitAdding: 0
+  maxAddAmount: 2
+  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0.9490196}
   requestButton: {fileID: 4676116046370900021}
   requestButtonText: {fileID: 6602118447333344108}
   whitelistedText: Already Whitelisted
   adminText: You're an Admin
   requestText: Request Access
   removeRequestText: Remove Request
-  limitAdding: 0
-  maxAddAmount: 2
 --- !u!114 &5889592607255745873
 MonoBehaviour:
   m_ObjectHideFlags: 0

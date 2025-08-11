@@ -14,7 +14,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public class WhitelistUser : UdonSharpBehaviour
     {
         [SerializeField] protected TextMeshProUGUI usernameTMP;
+        
         [SerializeField] protected GameObject buttonObj;
+        [SerializeField] protected GameObject declineButtonObj;
 
         [SerializeField] protected Image background;
         
@@ -23,6 +25,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected WhitelistEditorBase WhitelistEditorBase;
         
         protected string displayName;
+        protected bool isRequestor;
         public string DisplayName
         {
             set
@@ -50,6 +53,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             DisplayName = newDisplayname;
             isRemover = newIsRemover;
             HasAccess = newHasAccess;
+
+            isRequestor = WhitelistEditorBase.GetUdonTypeID() == GetUdonTypeID<WhitelistRequestor>();
+            if (declineButtonObj != null) declineButtonObj.SetActive(isRequestor && !isRemover);
         }
 
         public void _ApplyThemeColors(Color textColor, Color backgroundColor)
@@ -69,6 +75,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 WhitelistEditorBase._Add(displayName);
             }
+        }
+        
+        public void _DeclinePressed()
+        {
+            if (!hasAccess || isRemover) return;
+            var requestor = (WhitelistRequestor)WhitelistEditorBase;
+            requestor._Decline(displayName);
         }
 
         public void _Destroy()

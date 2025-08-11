@@ -1,4 +1,4 @@
-Version 0.0.3
+Version 0.1.0
 
 Allows importing DisBridge to Modern UI Whitelists.
 Requires Modern UIs V0.3.3 & DisBridge 3.0.0-beta.54 or newer to be installed.

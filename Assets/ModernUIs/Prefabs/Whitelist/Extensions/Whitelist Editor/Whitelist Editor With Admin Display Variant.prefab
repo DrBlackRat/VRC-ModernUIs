@@ -236,7 +236,7 @@ MonoBehaviour:
   usernameTransform: {fileID: 2187189121021422897}
   countDisplay: {fileID: 8101115043913889346}
   prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
-  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
+  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0.9490196}
   whitelist: {fileID: 0}
 --- !u!114 &1575812230655316410
 MonoBehaviour:
@@ -278,6 +278,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 0
   graphic: {fileID: 0}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -467,6 +469,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 9
   graphic: {fileID: 402296257227390746}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -582,6 +586,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 1
   graphic: {fileID: 8074838514018088547}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
@@ -1085,12 +1091,12 @@ PrefabInstance:
     - target: {fileID: 5644786740308808962, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_Size
-      value: 0.99998707
+      value: 0.999977
       objectReference: {fileID: 0}
     - target: {fileID: 5644786740308808962, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6278334752919869722, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
@@ -1195,7 +1201,7 @@ PrefabInstance:
     - target: {fileID: 8180443326856560028, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0027637947
+      value: 0.006658057
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
