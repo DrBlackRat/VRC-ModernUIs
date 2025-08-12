@@ -19,10 +19,12 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected float value = 0f;
         public virtual float Value => value;
 
+        [FormerlySerializedAs("postProcessVolume")]
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
-        [SerializeField] protected PostProcessVolume postProcessVolume;
+        [SerializeField] protected PostProcessVolume[] postProcessVolumes;
+        [FormerlySerializedAs("audioSource")]
         [Tooltip("Audio Source of which the volume will be set by the slider.")]
-        [SerializeField] protected AudioSource audioSource;
+        [SerializeField] protected AudioSource[] audioSources;
         
         [Tooltip("Udon Behaviours that should be updated.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;
@@ -105,8 +107,24 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         protected void UpdateExternal(float newValue)
         {
-            if (postProcessVolume != null) postProcessVolume.weight = newValue;
-            if (audioSource != null) audioSource.volume = newValue;
+            if (audioSources != null && audioSources.Length > 0)
+            {
+                foreach (var audioSource in audioSources)
+                {
+                    if (audioSource == null) continue;
+                    audioSource.volume = newValue;
+                }
+            }
+            
+
+            if (postProcessVolumes != null && postProcessVolumes.Length > 0)
+            {
+                foreach (var postProcessVolume in postProcessVolumes)
+                {
+                    if (postProcessVolume == null) continue;
+                    postProcessVolume.weight = newValue;
+                }
+            }
 
             if (externalBehaviours != null && externalBehaviours.Length > 0)
             {

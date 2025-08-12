@@ -95,6 +95,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         #endregion
+        
+        #region Accces Checks & Related UI Updates
         protected void UpdateRequestButton()
         {
             var isWhitelisted = whitelistedUsers.ContainsKey(localName);
@@ -118,6 +120,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 requestButtonText.text = requestText;
             }
         }
+        #endregion
         
         #region Adding & Removing Users
         protected override bool AddOtherUser(string username, bool sendNet)
