@@ -6,12 +6,6 @@
     <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Allows swapping out text, sprites, materials and audio clips depending on what language someone has selected.&#10;Should be used in combination with a Selector UI, same order will be used" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
     </ui:VisualElement>
-    <ui:Foldout text="Settings" view-data-key="LocalizedComponentSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
-        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
-            <ui:Label tabindex="-1" text="Persistence" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="dataKey" name="dataKey" label="Data Key" style="font-size: 12px; -unity-font-style: normal;" />
-        </ui:VisualElement>
-    </ui:Foldout>
     <ui:Foldout text="Components" view-data-key="LocalizedComponentComponents" name="Components" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="Text Mesh Pro UGUI" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />

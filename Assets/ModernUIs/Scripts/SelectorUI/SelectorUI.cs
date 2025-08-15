@@ -115,7 +115,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             }
         }
 
-        protected void ChangeExternalSelection(int id, bool skipBehaviour)
+        protected virtual void ChangeExternalSelection(int id, bool skipBehaviour)
         {
             if (itemObjs != null && itemObjs.Length != 0)
             {

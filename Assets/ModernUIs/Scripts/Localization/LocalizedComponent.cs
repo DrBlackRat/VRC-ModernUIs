@@ -7,14 +7,11 @@ using VRC.SDKBase;
 using VRC.Udon;
 using UnityEngine.UI;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Localization
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class LocalizedComponent : UdonSharpBehaviour
     {
-        [Tooltip("Data Key that will be used to load what language is selected, should be the same for all Localized Components as well as on the Selector UI.")]
-        [SerializeField] private string dataKey = "UI_Localization";
-
         [Tooltip("Text Mesh Pro UGUI component to change the text of.")]
         [SerializeField] private TextMeshProUGUI textMeshProUGUI;
         [TextArea(1, 8)] [Tooltip("Text for each language, same order as on a Selector UI will be used.")]
@@ -35,33 +32,11 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Audio Clips for each language, same order as on a Selector UI will be used.")]
         [SerializeField] private AudioClip[] audioClips;
 
-        private void Start()
-        {
-            ApplyLocalization(0);
-        }
-
-        public override void OnPlayerDataUpdated(VRCPlayerApi player, PlayerData.Info[] infos)
-        {
-            if (!player.isLocal) return;
-            
-            foreach (var info in infos)
-            {
-                if (info.Key == dataKey)
-                {
-                    if (info.State != PlayerData.State.Unchanged)
-                    {
-                        ApplyLocalization(PlayerData.GetInt(player, dataKey));
-                        return;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-        }
-
-        private void ApplyLocalization(int index)
+        /// <summary>
+        /// Swaps out everything that can be localized to the provided index.
+        /// </summary>
+        /// <param name="index">Index of the language that should be applied.</param>
+        public void ApplyLocalization(int index)
         {
             if (index < 0) return;
 

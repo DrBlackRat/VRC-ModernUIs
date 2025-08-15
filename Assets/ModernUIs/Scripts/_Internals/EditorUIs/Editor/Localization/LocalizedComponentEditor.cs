@@ -7,9 +7,9 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(LocalizedComponent))]
+    [CustomEditor(typeof(Localization.LocalizedComponent))]
     public class LocalizedComponentEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
