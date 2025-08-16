@@ -39,9 +39,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             get => prefabBackgroundColor;
             set => prefabBackgroundColor = value;
         }
-
-
-
+        
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] private WhitelistGetterBase whitelist;
 

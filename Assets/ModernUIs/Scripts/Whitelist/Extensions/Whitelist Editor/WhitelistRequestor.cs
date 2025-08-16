@@ -16,17 +16,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [Tooltip("Button for Requesting Access. Will have it's interactable set.")]
         [SerializeField] protected Button requestButton;
-        [Tooltip("Request Button TMP. Will be changed between \"Already Whitelisted\", \"Request Access\", \"Remove Request\" and \"You're an Admin\".")]
-        [SerializeField] protected TextMeshProUGUI requestButtonText;
-        
-        [Tooltip("Text that is displayed on the Request Button if you are Whitelisted.")]
-        [SerializeField] protected string whitelistedText = "Already Whitelisted";
-        [Tooltip("Text that is displayed on the Request Button if you are an Admin and \"Allow Admins To Request\" is disabled.")]
-        [SerializeField] protected string adminText = "You're an Admin";
-        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and can request.")]
-        [SerializeField] protected string requestText = "Request Access";
-        [Tooltip("Text that is displayed on the Request Button if you aren't whitelisted and are currently requesting")]
-        [SerializeField] protected string removeRequestText = "Remove Request";
+
+        [Tooltip("GameObject that is enabled on the Request Button if you are Whitelisted.")] 
+        [SerializeField] protected GameObject whitelistedText;
+        [Tooltip("GameObject that is enabled on the Request Button if you are an Admin and \"Allow Admins To Request\" is disabled.")]
+        [SerializeField] protected GameObject adminText;
+        [Tooltip("GameObject that is enabled on the Request Button if you aren't whitelisted and can request.")]
+        [SerializeField] protected GameObject requestText;
+        [Tooltip("GameObject that is enabled on the Request Button if you aren't whitelisted and are currently requesting")]
+        [SerializeField] protected GameObject removeRequestText;
 
         [UdonSynced]
         protected string serializedRequestingUsers;
@@ -99,26 +97,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Accces Checks & Related UI Updates
         protected void UpdateRequestButton()
         {
-            var isWhitelisted = whitelistedUsers.ContainsKey(localName);
-            var isRequesting = otherUsers.ContainsKey(localName);
-            var isBlockingAdmin = hasAdminWhitelist && !showOrAllowAdmins && adminWhitelist._IsPlayerWhitelisted(localName);
+            bool isWhitelisted = whitelistedUsers.ContainsKey(localName);
+            bool isRequesting = otherUsers.ContainsKey(localName);
+            bool isBlockingAdmin = hasAdminWhitelist && !showOrAllowAdmins && adminWhitelist._IsPlayerWhitelisted(localName);
             
             requestButton.interactable = !(isWhitelisted || isBlockingAdmin);
-            if (isWhitelisted)
-            {
-                requestButtonText.text = whitelistedText;
-            } else if (isRequesting)
-            {
-                requestButtonText.text = removeRequestText;
-            }
-            else if (isBlockingAdmin)
-            {
-                requestButtonText.text = adminText;
-            }
-            else
-            {
-                requestButtonText.text = requestText;
-            }
+            
+            whitelistedText.SetActive(isWhitelisted);
+            removeRequestText.SetActive(isRequesting);
+            adminText.SetActive(isBlockingAdmin);
+            requestText.SetActive(!isWhitelisted && !isRequesting && !isBlockingAdmin);
         }
         #endregion
         

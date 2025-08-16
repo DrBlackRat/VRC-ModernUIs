@@ -23,6 +23,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected override void Start()
         {
             base.Start();
+            
             foreach (var whitelist in whitelists)
             {
                 whitelist._SetUpConnection((IUdonEventReceiver)this);
@@ -34,14 +35,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (whitelists == null || whitelists.Length == 0) return;
             
             whitelist.Clear();
-            
-            foreach (var whitelistManager in whitelists)
+
+            for (int i = 0; i < whitelists.Length; i++)
             {
-                var users = whitelistManager._GetUsersAsList();
-                if (users == null) continue;
+                var users = whitelists[i]._GetUsersAsList();
                 whitelist.AddRange(users);
             }
-
+            
             if (removeDuplicates)
             {
                 whitelist = DataListExtensions.RemoveDuplicates(whitelist);
@@ -50,6 +50,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             WhitelistUpdated();
         }
 
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
+        }
 
+        public override int _GetUsersAddedByCount(string username)
+        {
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            return localName;
+        }
     }
 }
