@@ -21,12 +21,10 @@ namespace DrBlackRat.VRC.ModernUIs
         
         [Tooltip("Button that will have it's intractability enabled / disabled depending on if you are on the whitelist or not.")]
         [SerializeField] private Button teleportButton;
-        [Tooltip("Text Mesh Pro UGUI component that will have it's text changed depending on if you are on the whitelist or not.")]
-        [SerializeField] private TextMeshProUGUI teleportButtonText;
-        [Tooltip("Text that is displayed if you are on the whitelist.")]
-        [SerializeField] private string whitelistedText = "Teleport";
-        [Tooltip("Text that is displayed if you are NOT on the whitelist.")]
-        [SerializeField] private string notWhitelistedText = "Locked";
+        [Tooltip("Game Object that is enabled if you are on the whitelist.")]
+        [SerializeField] private GameObject whitelistedText;
+        [Tooltip("Game Object that is enabled if you are NOT on the whitelist.")]
+        [SerializeField] private GameObject notWhitelistedText;
 
         private bool hasAccess;
 
@@ -40,8 +38,9 @@ namespace DrBlackRat.VRC.ModernUIs
             hasAccess = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
             
             if (teleportButton != null) teleportButton.interactable = hasAccess;
-            if (teleportButtonText != null) teleportButtonText.text = hasAccess ? whitelistedText : notWhitelistedText;
             
+            if (whitelistedText != null) whitelistedText.SetActive(hasAccess);
+            if (notWhitelistedText != null) notWhitelistedText.SetActive(!hasAccess);
         }
         
         public void _Teleport()

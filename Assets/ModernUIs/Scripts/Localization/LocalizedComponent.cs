@@ -14,23 +14,26 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
     {
         [Tooltip("Text Mesh Pro UGUI component to change the text of.")]
         [SerializeField] private TextMeshProUGUI textMeshProUGUI;
-        [TextArea(1, 8)] [Tooltip("Text for each language, same order as on a Selector UI will be used.")]
+        [TextArea(1, 8)] [Tooltip("Text for each language, same order as on the Language Selector UI will be used.")]
         [SerializeField] private string[] texts;
 
         [Tooltip("Unity UI Image component to change the texture of.")]
         [SerializeField] private Image uiImage;
-        [Tooltip("Sprites for each language, same order as on a Selector UI will be used.")]
+        [Tooltip("Sprites for each language, same order as on the Language Selector UI will be used.")]
         [SerializeField] private Sprite[] sprites;
 
         [Tooltip("Renderer component to change the material of.")]
         [SerializeField] private Renderer materialRenderer;
-        [Tooltip("Materials for each language, same order as on a Selector UI will be used.")]
+        [Tooltip("Materials for each language, same order as on the Language Selector UI will be used.")]
         [SerializeField] private Material[] materials;
 
         [Tooltip("Audio Source Component to change the audio clip of.")] 
         [SerializeField] private AudioSource audioSource;
-        [Tooltip("Audio Clips for each language, same order as on a Selector UI will be used.")]
+        [Tooltip("Audio Clips for each language, same order as on the Language Selector UI will be used.")]
         [SerializeField] private AudioClip[] audioClips;
+
+        [Tooltip("Game Objects of which one is enabled for each language, same order as on the Language Selector UI will be used.")]
+        [SerializeField] private GameObject[] gameObjects;
 
         /// <summary>
         /// Swaps out everything that can be localized to the provided index.
@@ -87,6 +90,22 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                     MUIDebug.LogWarning($"Localized Component | Missing audio clip for Index: {index} on {gameObject.name}!");
                 }
             }
+
+            if (gameObjects != null && gameObjects.Length != 0)
+            {
+                if (index < gameObjects.Length && gameObjects[index] != null)
+                {
+                    foreach (var gameObject in gameObjects)
+                    {
+                        gameObject.SetActive(false);
+                    }
+                    gameObjects[index].SetActive(true);
+                }
+                else
+                {
+                    MUIDebug.LogWarning($"Localized Component | Missing game object for Index: {index} on {gameObject.name}!");
+                }
+            }
         }
 
         #region Grabbing Defaults
@@ -119,7 +138,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 if (materialRenderer != null && (materials == null || materials.Length == 0))
                 {
                     materials = new Material[1];
-                    materials[0] = materialRenderer.material;
+                    materials[0] = materialRenderer.sharedMaterial;
                 }
             }
 
