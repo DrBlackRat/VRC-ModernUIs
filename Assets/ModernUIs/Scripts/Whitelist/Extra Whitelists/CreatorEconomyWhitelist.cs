@@ -1,5 +1,6 @@
 ﻿using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Economy;
@@ -59,6 +60,27 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 WhitelistUpdated();
             }
         }
+        
+        #region Get Added By Overrides
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
+        }
+
+        public override int _GetUsersAddedByCount(string username)
+        {
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            return localName;
+        }
+        #endregion
     }
     
 

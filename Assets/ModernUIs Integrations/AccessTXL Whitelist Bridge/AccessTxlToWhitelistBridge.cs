@@ -98,23 +98,26 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             return base._GetCount();
         }
 
+        #region Get Added By Overrides
         public override DataList _GetUsersAddedBy(string username)
         {
-            UpdateTxlData();
-            return base._GetUsersAddedBy(username);
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
         }
 
         public override int _GetUsersAddedByCount(string username)
         {
-            UpdateTxlData();
-            return base._GetUsersAddedByCount(username);
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
         }
 
         public override string _GetWhoAdded(string username)
         {
-            UpdateTxlData();
-            return base._GetWhoAdded(username);
+            return localName;
         }
+        #endregion
 
         #endregion
     }

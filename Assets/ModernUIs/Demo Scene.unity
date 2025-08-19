@@ -9986,6 +9986,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 928423954}
   allowInstanceOwner: 1
   allowInstanceMaster: 1
+  allowFirstPlayer: 0
 --- !u!114 &928423954
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -10005,7 +10006,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 1
+  _syncMethod: 3
   serializedProgramAsset: {fileID: 11400000, guid: 4bf144c726a915749bee276623331520,
     type: 2}
   programSource: {fileID: 11400000, guid: eff42c1ff5d7bd64dad20084b7c541bb, type: 2}
@@ -16967,8 +16968,8 @@ MonoBehaviour:
   useAssignedLayers: 0
   DynamicPrefabs: []
   DynamicMaterials:
-  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 03548d63cd30357468d952179c932a3c, type: 2}
+  - {fileID: 2100000, guid: 7ae149455dfb7d34baf980c99576ec0f, type: 2}
   - {fileID: 2100000, guid: 1db6643092e001940902578f00e86981, type: 2}
   - {fileID: 2100000, guid: e24faad0a475f434ea0a938dda24792b, type: 2}
   - {fileID: 2100000, guid: cbc2271e96ecf9a4d922cc9f31573a5c, type: 2}
@@ -19518,6 +19519,14 @@ MonoBehaviour:
     ID: 1077
     SerializedTypeNames:
     - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 1078
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
+  - gameObject: {fileID: 0}
+    ID: 1079
+    SerializedTypeNames:
+    - VRC.Udon.UdonBehaviour
   portraitCameraPositionOffset: {x: 0, y: 0, z: 0}
   portraitCameraRotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   PlayerPersistence: []
@@ -20380,6 +20389,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 1891960672}
   allowInstanceOwner: 0
   allowInstanceMaster: 1
+  allowFirstPlayer: 0
 --- !u!114 &1891960672
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -20399,7 +20409,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 1
+  _syncMethod: 3
   serializedProgramAsset: {fileID: 11400000, guid: 4bf144c726a915749bee276623331520,
     type: 2}
   programSource: {fileID: 11400000, guid: eff42c1ff5d7bd64dad20084b7c541bb, type: 2}
