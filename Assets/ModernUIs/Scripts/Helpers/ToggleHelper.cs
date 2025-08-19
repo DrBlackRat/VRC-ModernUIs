@@ -11,10 +11,14 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
     public class ToggleHelper : UdonSharpBehaviour
     {
         [FormerlySerializedAs("toggleObjects")]
-        [Tooltip("Game Objects to toggle on / off")]
+        [Tooltip("Game Objects to enable / disable.")]
         [SerializeField] private GameObject[] gameObjects;
-
+        [Tooltip("Colliders to enable / disable.")]
         [SerializeField] private Collider[] colliders;
+        [Tooltip("Canvases to enable / disable.")]
+        [SerializeField] private Canvas[] canvases;
+        [Tooltip("Pickups to change the Pickupable state of.")]
+        [SerializeField] private VRC_Pickup[] pickups;
         
         
         [Tooltip("ID at which everything should be turned on. Should be left at 1 for a simple two state Selector UI Toggle.")]
@@ -41,6 +45,24 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                 {
                     if (toggleCollider == null) continue;
                     toggleCollider.enabled = state;
+                }
+            }
+
+            if (canvases != null && canvases.Length != 0)
+            {
+                foreach (var canvase in canvases)
+                {
+                    if (canvase == null) continue;
+                    canvase.enabled = state;
+                }
+            }
+
+            if (pickups != null && pickups.Length != 0)
+            {
+                foreach (var pickup in pickups)
+                {
+                    if (pickup == null) continue;
+                    pickup.pickupable = state;
                 }
             }
         }
