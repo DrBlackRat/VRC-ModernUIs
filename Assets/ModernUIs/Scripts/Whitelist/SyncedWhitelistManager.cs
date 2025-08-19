@@ -18,8 +18,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [FormerlySerializedAs("adminWhitelistManager")]
         [Tooltip("Whitelist of Admins which can change the Synced Whitelist without being on it them self.")]
         [SerializeField] protected WhitelistGetterBase adminWhitelist;
-        [Tooltip("Allow none Admins, but users who are on the whitelist it self to change it. Will be set to true if no Admin Whitelist is provided.")]
-        [SerializeField] protected bool noneAdminAccess;
+        [Tooltip("If enabled everyone can edit. This reduces security! So only enable if you really need to.")]
+        [SerializeField] protected bool allowEveryoneToEdit;
         
         [Tooltip("Automatically remove a player when they leave the instance.")]
         [SerializeField] protected bool autoRemoveOnLeave;
@@ -27,10 +27,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected bool autoRemoveOnAdderLeft;
         
         [UdonSynced] protected string serializedWhitelist;
-        protected bool canEdit;
-        
         [UdonSynced] protected string serializedAddedBy;
-
+        
+        protected bool canEdit;
+        protected bool noneAdminAccess;
+        
+        
         protected override void Start()
         {
             localName = Networking.LocalPlayer.displayName;
@@ -81,7 +83,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <returns>A bool depending on a player can edit or not.</returns>
         private bool CanEdit(VRCPlayerApi player)
         {
-            return (noneAdminAccess && _IsPlayerWhitelisted(player)) || 
+            return allowEveryoneToEdit || 
+                   (noneAdminAccess && _IsPlayerWhitelisted(player)) || 
                    (adminWhitelist != null && adminWhitelist._IsPlayerWhitelisted(player)) ||
                    player.IsOwner(gameObject);
         }

@@ -20,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Input Field of which to get the username from.")]
         [SerializeField] protected TMP_InputField inputField;
         
-        [Tooltip("Requires user to be whitelisted to be able to add / remove a username. This will be enabled automatically when using the Synced Whitelist Manager.")]
+        [Tooltip("Requires user to be whitelisted to be able to add / remove a username. This should be enabled when using the Synced Whitelist Manager.")]
         [SerializeField] protected bool requireWhitelisted;
         [FormerlySerializedAs("inputWhitelistManager")]
         [Tooltip("Whitelist a user needs to be on to add / remove a username. If left empty it will be the same as the whitelistManager")]
@@ -37,7 +37,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected void Start()
         {
-            if (whitelist.GetUdonTypeID() == GetUdonTypeID<SyncedWhitelistManager>()) requireWhitelisted = true;
             if (inputWhitelist == null) inputWhitelist = whitelist;
             inputWhitelist._SetUpConnection((IUdonEventReceiver)this);
         }
