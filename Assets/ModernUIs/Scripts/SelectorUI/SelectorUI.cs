@@ -103,13 +103,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             
             if (PlayerData.TryGetInt(player, dataKey, out int value))
             {
-                if (selectorUIButtons[value].GetUdonTypeID() == GetUdonTypeID<EconomySelectorUIButton>())
+                if (!selectorUIButtons[value].Selectable)
                 {
-                    if (!((EconomySelectorUIButton)selectorUIButtons[value]).Owned)
-                    {
-                        PlayerData.SetInt(dataKey, selectedState);
-                        return;
-                    }
+                    PlayerData.SetInt(dataKey, selectedState);
+                    return;
                 }
                 UpdateSelection(value, true, false, false);
             }

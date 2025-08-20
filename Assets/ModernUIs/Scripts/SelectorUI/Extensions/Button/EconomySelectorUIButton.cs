@@ -13,12 +13,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EconomySelectorUIButton : SelectorUIButton
     {
-        [Tooltip("If enabled, a user will be treated as if they own the product, useful for testing.")]
-        [SerializeField] public bool owned;
         [Tooltip("Product a user needs to own to be able to select this button.")]
         [SerializeField] protected UdonProduct product;
 
-        public bool Owned => owned;
+        public override void _Setup(SelectorUI newSelectorUI, int newButtonId)
+        {
+            selectable = false;
+            base._Setup(newSelectorUI, newButtonId);
+        }
 
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
@@ -27,8 +29,8 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (product == null) return;
             if (result.ID != product.ID) return;
 
-            owned = true;
-            _UpdateLocked(locked);
+            selectable = true;
+            UpdateInteractable();
         }
         
         public override void OnPurchaseExpired(IProduct result, VRCPlayerApi player)
@@ -38,20 +40,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (product == null) return;
             if (result.ID != product.ID) return;
 
-            owned = false;
-            _UpdateLocked(locked);
+            selectable = false;
+            UpdateInteractable();
         }
 
         public override void _ButtonPressed()
         {
-            if (!owned) return;
+            if (!selectable) return;
             base._ButtonPressed();
-        }
-
-        public override void _UpdateLocked(bool newLocked)
-        {
-            locked = newLocked;
-            button.interactable = !locked && owned;
         }
     }
 }

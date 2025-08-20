@@ -49,8 +49,6 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         [SerializeField] protected Vector2 textNormalPos;
         [SerializeField] protected Vector2 textSelectedPos;
-        
-
 
         protected Button button;
         protected RectTransform buttonTransform;
@@ -84,6 +82,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected int buttonId;
 
         protected bool locked;
+        // Only used by versions that implement it
+        protected bool selectable = true;
+        protected bool selected;
+
+        /// <summary>
+        /// If this selector UI button can be selected. Can be false due to CE or Whitelists.
+        /// </summary>
+        public bool Selectable => selectable;
 
         #region SelectorUI Connection
         public virtual void _Setup(SelectorUI newSelectorUI, int newButtonId)
@@ -113,7 +119,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             buttonId = newButtonId;
             
             // Reset
-            _UpdateLocked(locked);
+            UpdateInteractable();
             UpdateUIState(false);
             UpdateUI(1f);
         }
@@ -183,8 +189,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             return buttonSelectedPixelPerUnit;
         }
 
-        public void _UpdateSelected(bool selected)
+        public void _UpdateSelected(bool newSelected)
         {
+            selected = newSelected;
             UpdateUIState(selected);
             
             // UI Animation
@@ -202,11 +209,17 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public virtual void _UpdateLocked(bool newLocked)
         {
             locked = newLocked;
-            button.interactable = !locked;
+            UpdateInteractable();
         }
+
+        protected virtual void UpdateInteractable()
+        {
+            button.interactable = !locked && selectable;
+        }
+        
         #endregion
         #region UI Animation
-        protected void UpdateUIState(bool selected)
+        protected void UpdateUIState(bool newSelected)
         {
             if (buttonTransform) prevButtonScale = buttonTransform.sizeDelta;
             if (buttonImage) prevButtonPixelPerUnit = buttonImage.pixelsPerUnitMultiplier;
@@ -215,7 +228,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (textTransform) prevTextPos = textTransform.anchoredPosition;
             if (text) prevTextColor = text.color;
 
-            if (selected)
+            if (newSelected)
             {
                 newButtonScale = buttonSelectedScale;
                 newButtonPixelPerUnit = buttonSelectedPixelPerUnit;
