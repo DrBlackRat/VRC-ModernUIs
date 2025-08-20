@@ -65,7 +65,6 @@ public class WhitelistPersistence : UdonSharpBehaviour
         // Needs to be local, have access, be the first who joined and requires an empty whitelist.
         if (player != localPlayer) return; 
         SendCustomEventDelayedSeconds(nameof(_DelayedLoad), loadDelay);
-
     }
 
     public void _DelayedLoad()
