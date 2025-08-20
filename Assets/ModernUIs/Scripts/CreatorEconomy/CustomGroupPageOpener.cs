@@ -20,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [UdonSynced] [SerializeField] private string groupID;
         
         [Tooltip("Whitelist Manager to lock access.")]
-        [SerializeField] private WhitelistSetterBase whitelist;
+        [SerializeField] private WhitelistGetterBase whitelist;
         [Tooltip("Input Field of which to get the group id from.")]
         [SerializeField] private TMP_InputField inputField;
         
