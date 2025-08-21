@@ -134,7 +134,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 whitelistedCountDisplay.text = whitelistedUsers.Count.ToString();
         }
 
-        private void CheckMaxUsersAdded(bool skipSameCheck = false)
+        protected void CheckMaxUsersAdded(bool skipSameCheck = false)
         {
             if (!limitAdding) return;
             
@@ -146,7 +146,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             UpdateOtherUsersAccess();
         }
 
-        private void UpdateAccess(bool newHasAccess)
+        protected void UpdateAccess(bool newHasAccess)
         {
             if (hasAccess == newHasAccess) return;
             hasAccess = newHasAccess;

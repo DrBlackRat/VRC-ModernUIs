@@ -15,6 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public class WhitelistEditor : WhitelistEditorBase
     {
         protected DataList allUsers = new DataList();
+        protected DataList prevAdmins = new DataList();
 
         #region Unity, VRChat & ModernUIs Events
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -33,6 +34,34 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             RemoveOtherUser(displayName, false);
             UpdateCountDisplays();
         }
+
+        public override void _AdminWhitelistUpdated()
+        {
+            UpdateAccess(adminWhitelist._IsPlayerWhitelisted(localName));
+            
+            if (hasAdminWhitelist && !showOrAllowAdmins)
+            {
+                var admins = adminWhitelist._GetUsersAsList();
+                
+                for (var i = 0; i < admins.Count; i++)
+                {
+                    RemoveOtherUser(admins[i].String, false); 
+                }
+                for (var i = 0; i < prevAdmins.Count; i++)
+                {
+                    if (admins.Contains(prevAdmins[i])) continue;
+                    
+                    AddOtherUser(prevAdmins[i].String, false); 
+                }
+                prevAdmins = admins;
+            }
+            
+            UpdateCountDisplays();
+            
+            addedList = this.whitelist._GetUsersAddedBy(localName);
+            CheckMaxUsersAdded();
+        }
+
         #endregion
         
         #region Adding & Removing Users
