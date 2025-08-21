@@ -1,4 +1,5 @@
 ﻿using System;
+using DrBlackRat.VRC.ModernUIs.Helpers;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
@@ -16,6 +17,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
         [SerializeField] private WhitelistGetterBase whitelist;
+
+        [Tooltip("Toggle Helpers to allow user to toggle more things using a whitelist. \n Will have it's state set to 0 if not whitelisted and 1 if a player is.")]
+        [SerializeField] private ToggleHelper[] toggleHelpers;
         
         [Tooltip("Objects that should only be enabled for whitelisted users.")]
         [SerializeField] private GameObject[] whitelistedObjs;
@@ -43,6 +47,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             var isWhitelisted = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
+            // Toggle Helper
+            if (toggleHelpers != null && toggleHelpers.Length != 0)
+            {
+                foreach (var toggleHelper in toggleHelpers)
+                {
+                    if (toggleHelper == null) continue;
+                    
+                    toggleHelper.selectionId = isWhitelisted ? 1 : 0;
+                    toggleHelper._SelectionChanged();
+                }
+            }
+            
+            
             // Game Objects
             if (whitelistedObjs != null && whitelistedObjs.Length != 0)
             {
