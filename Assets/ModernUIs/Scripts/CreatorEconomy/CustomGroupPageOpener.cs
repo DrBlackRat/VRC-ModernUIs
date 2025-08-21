@@ -81,9 +81,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!hasAccess || !localPlayer.IsOwner(gameObject)) return;
             if (PlayerData.TryGetString(localPlayer, dataKey, out string result))
             {
-                groupId = result;
-                inputField.SetTextWithoutNotify(groupId);
-                RequestSerialization();
+                UpdateGroupID(result, false, true);
             }
         }
         
