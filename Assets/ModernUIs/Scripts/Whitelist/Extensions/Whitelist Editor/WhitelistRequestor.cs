@@ -105,7 +105,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             whitelistedText.SetActive(isWhitelisted);
             removeRequestText.SetActive(isRequesting);
-            adminText.SetActive(isBlockingAdmin);
+            adminText.SetActive(isBlockingAdmin && !isWhitelisted);
             requestText.SetActive(!isWhitelisted && !isRequesting && !isBlockingAdmin);
         }
         #endregion
@@ -144,7 +144,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void _Add(string username)
         {
             base._Add(username);
-            UpdateCountDisplays(); 
+            UpdateCountDisplays();
+            if (showOrAllowAdmins)
+                UpdateRequestButton();
         }
         
         public override void _Remove(string username)
