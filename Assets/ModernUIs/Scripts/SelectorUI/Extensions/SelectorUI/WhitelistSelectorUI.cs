@@ -15,6 +15,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     public class WhitelistSelectorUI : SelectorUI
     {
 
+        [Range(0f, 30f)] [Tooltip("Persistence Load delay, useful if you need to wait for the Whitelist to finish updating etc.")]
+        [SerializeField] protected float loadDelay = 5f;
+        
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] [Tooltip("Whitelist that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
         protected WhitelistGetterBase whitelist;
@@ -80,10 +83,25 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
-            if (!hasAccess) return;
-            base.OnPlayerRestored(player);
+            if (!player.isLocal || !usePersistence) return;
+            SendCustomEventDelayedSeconds(nameof(_DelayedLoad), loadDelay);
+            
         }
-        
+
+        public virtual void _DelayedLoad()
+        {
+            if (!hasAccess) return;
+            if (PlayerData.TryGetInt(Networking.LocalPlayer, dataKey, out int value))
+            {
+                if (!selectorUIButtons[value].Selectable)
+                {
+                    PlayerData.SetInt(dataKey, selectedState);
+                    return;
+                }
+                UpdateSelection(value, true, false, false);
+            }
+        }
+
         protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
             if (!hasAccess && !skipSameCheck && !fromNet)

@@ -20,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [Tooltip("State that is being set when clicking on an activated again. Only used if Double Click To Default is enabled. ")]
         [SerializeField] protected int secondClickState;
         
-        [Tooltip("Turn on if this SelectorUI should be saved using Persistence.")]
+        [Tooltip("Turn on if this SelectorUI should be saved using Persistence. For Synced Selector UIs it will only try to load for the first player.")]
         [SerializeField] protected bool usePersistence;
         [Tooltip("Data Key that will be used to save / load this Setting, everything using Persistence should have a different Data Key.")]
         [SerializeField] protected string dataKey = "CHANGE THIS";

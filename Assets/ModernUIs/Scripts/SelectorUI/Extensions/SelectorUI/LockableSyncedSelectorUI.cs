@@ -75,11 +75,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             UpdateLock(locked, true);
         }
-        public override void OnPlayerRestored(VRCPlayerApi player)
+
+        public override void _DelayedLoad()
         {
             if (!canChangeState) return;
-            base.OnPlayerRestored(player);
+            base._DelayedLoad();
         }
+
         #endregion
 
         protected void UpdateLock(bool newlocked, bool fromNet)

@@ -11,28 +11,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSelectorUI : WhitelistSelectorUI
     {
-        [UdonSynced] protected bool persistenceLoaded;
         [UdonSynced] protected int netSelectedState;
 
 
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
-            if (!player.isLocal || !usePersistence || !hasAccess || persistenceLoaded) return;
-            if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
-            
-            if (PlayerData.TryGetInt(player, dataKey, out int value))
-            {
-                if (!selectorUIButtons[value].Selectable)
-                {
-                    PlayerData.SetInt(dataKey, selectedState);
-                    return;
-                }
-                
-                persistenceLoaded = true;
-                RequestSerialization();
-                
-                UpdateSelection(value, true, false, false);
-            }
+            if (!player.IsOwner(gameObject)) return;
+            base.OnPlayerRestored(player);
         }
 
         public override void OnDeserialization()
