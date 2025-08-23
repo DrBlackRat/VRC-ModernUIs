@@ -160,7 +160,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         public virtual void _ButtonPressed()
         {
-            if (locked) return;
+            if (locked && !selectable)
+            {
+                MUIDebug.LogError($"Selector UI Button {buttonId} | Locked: {locked}, Selectable: {selectable} | You should not be ale to press this button!");
+                return;
+            }
             selectorUI._ButtonSelected(buttonId);
         }
         
