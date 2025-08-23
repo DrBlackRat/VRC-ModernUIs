@@ -15,22 +15,12 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSliderUI : WhitelistSliderUI
     {
-        [UdonSynced] protected bool persistenceLoaded;
         [UdonSynced] protected float netValue;
         
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
-            if (!player.isLocal || !usePersistence || !hasAccess || persistenceLoaded) return;
-            
-            if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
-            
-            if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
-            {
-                persistenceLoaded = true;
-                RequestSerialization();
-                
-                UpdateValue(newValue, true, false, false);
-            }
+            if (!player.IsOwner(gameObject)) return;
+            base.OnPlayerRestored(player);
         }
 
         public override void OnDeserialization()

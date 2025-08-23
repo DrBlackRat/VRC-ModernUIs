@@ -85,7 +85,6 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             if (!player.isLocal || !usePersistence) return;
             SendCustomEventDelayedSeconds(nameof(_DelayedLoad), loadDelay);
-            
         }
 
         public virtual void _DelayedLoad()
