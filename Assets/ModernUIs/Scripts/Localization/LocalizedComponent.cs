@@ -51,7 +51,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 }
                 else
                 {
-                    MUIDebug.LogWarning($"Localized Component | Missing text for Index: {index} on {gameObject.name}!");
+                    MUIDebug.LogWarning($"Localized Component | Missing text for Index: {index} on {gameObject.name}!", gameObject);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 }
                 else
                 {
-                    MUIDebug.LogWarning($"Localized Component | Missing sprite for Index: {index} on {gameObject.name}!");
+                    MUIDebug.LogWarning($"Localized Component | Missing sprite for Index: {index} on {gameObject.name}!", gameObject);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 }
                 else
                 {
-                    MUIDebug.LogWarning($"Localized Component | Missing material for Index: {index} on {gameObject.name}!");
+                    MUIDebug.LogWarning($"Localized Component | Missing material for Index: {index} on {gameObject.name}!", gameObject);
                 }
             }
 
@@ -87,7 +87,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 }
                 else
                 {
-                    MUIDebug.LogWarning($"Localized Component | Missing audio clip for Index: {index} on {gameObject.name}!");
+                    MUIDebug.LogWarning($"Localized Component | Missing audio clip for Index: {index} on {gameObject.name}!", gameObject);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 }
                 else
                 {
-                    MUIDebug.LogWarning($"Localized Component | Missing game object for Index: {index} on {gameObject.name}!");
+                    MUIDebug.LogWarning($"Localized Component | Missing game object for Index: {index} on {gameObject.name}!", gameObject);
                 }
             }
         }

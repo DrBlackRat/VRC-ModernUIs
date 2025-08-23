@@ -54,7 +54,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                     }
                     else
                     {
-                        MUIDebug.LogWarning($"Language Selector UI | Could not apply Linked Language Code \"{linkedLanguageCodes[i]}\" as there is no available state for this index.");
+                        MUIDebug.LogWarning($"Language Selector UI | Could not apply Linked Language Code \"{linkedLanguageCodes[i]}\" as there is no available state for this index.", gameObject);
                     }
                 }
             }
