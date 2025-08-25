@@ -60,6 +60,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected DataList addedList = new DataList();
         protected bool canAdd = true;
 
+        protected bool whitelistCollapsed;
+        protected bool otherUsersCollapsed;
+
         #region Unity, VRChat & ModernUIs Events
         protected virtual void Start()
         {
@@ -181,6 +184,32 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
         #endregion
+
+        #region Collapsing
+
+        public virtual void _UpdateWhitelistCollapsed(bool newCollapsed)
+        {
+            whitelistCollapsed = newCollapsed;
+
+            var values = whitelistedUsers.GetValues();
+            for (int i = 0; i < values.Count; i++)
+            {
+                ((WhitelistUser)values[i].Reference).gameObject.SetActive(!whitelistCollapsed);
+            }
+        }
+
+        public virtual void _UpdateOtherUsersCollapsed(bool newCollapsed)
+        {
+            otherUsersCollapsed = newCollapsed;
+
+            var values = otherUsers.GetValues();
+            for (int i = 0; i < values.Count; i++)
+            {
+                ((WhitelistUser)values[i].Reference).gameObject.SetActive(!otherUsersCollapsed);
+            }
+        }
+
+        #endregion
         
         #region Adding & Removing Users
         protected virtual bool AddWhitelistUser(string username)
@@ -201,6 +230,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
 
             whitelistUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
+            newUserObj.SetActive(!whitelistCollapsed);
             whitelistedUsers.Add(username, whitelistUser);
 
             RemoveOtherUser(username, false);
@@ -238,6 +268,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var otherUser = newUserObj.GetComponent<WhitelistUser>();
             otherUser._Setup(this, username,  false, hasAccess && canAdd);
             otherUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
+            newUserObj.SetActive(!otherUsersCollapsed);
             otherUsers.Add(username, otherUser);
             
             UpdateCountDisplays();

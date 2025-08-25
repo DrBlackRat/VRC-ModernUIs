@@ -44,10 +44,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private WhitelistGetterBase whitelist;
 
         private DataDictionary whitelistDisplays = new DataDictionary();
+        protected bool collapsed;
 
         private void Start()
         {
             whitelist._SetUpConnection((IUdonEventReceiver)this);
+        }
+        
+        public virtual void _UpdateCollapsed(bool newCollapsed)
+        {
+            collapsed = newCollapsed;
+
+            var values = whitelistDisplays.GetValues();
+            for (int i = 0; i < values.Count; i++)
+            {
+                ((GameObject)values[i].Reference).SetActive(!collapsed);
+            }
         }
         
         public void _WhitelistUpdated()
@@ -81,6 +93,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             var userDisplay = newUserObj.GetComponent<WhitelistUserDisplay>();
             userDisplay._Setup(username, prefabTextColor, prefabBackgroundColor);
+            newUserObj.SetActive(!collapsed);
             
             whitelistDisplays.Add(username, newUserObj);
         }
