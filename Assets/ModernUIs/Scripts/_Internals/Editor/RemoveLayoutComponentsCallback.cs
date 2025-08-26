@@ -22,6 +22,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
                 {
                     var component = layoutComponents[i];
                     if (remover.layoutGroupsToIgnore.Contains<LayoutGroup>(component)) continue;
+                    if (component.gameObject.GetComponent<KeepLayoutComponents>()) continue;
                     
                     Object.DestroyImmediate(component);
                 }
@@ -31,6 +32,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
                 {
                     var fitterComponent = fitterComponents[i];
                     if (remover.contentSizeFittersToIgnore.Contains<ContentSizeFitter>(fitterComponent)) continue;
+                    if (fitterComponent.gameObject.GetComponent<KeepLayoutComponents>()) continue;
                     
                     Object.DestroyImmediate(fitterComponent);
                 }
@@ -40,29 +42,16 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
                 {
                     var layoutElement = layoutElementComponents[i];
                     if (remover.layoutElementsToIgnore.Contains<LayoutElement>(layoutElement)) continue;
+                    if (layoutElement.gameObject.GetComponent<KeepLayoutComponents>()) continue;
                     
                     Object.DestroyImmediate(layoutElement);
                 }
-                
-                /* Prev Code, just here in case I need it again
-                var horizontalComponents = remover.GetComponentsInChildren<HorizontalLayoutGroup>(true);
-                for (int i = horizontalComponents.Length - 1; i >= 0; i--)
-                {
-                    Object.DestroyImmediate(horizontalComponents[i]);
-                }
-                
-                var verticalComponents = remover.GetComponentsInChildren<VerticalLayoutGroup>(true);
-                for (int i = verticalComponents.Length - 1; i >= 0; i--)
-                {
-                    Object.DestroyImmediate(verticalComponents[i]);
-                }
-                
-                var gridComponents = remover.GetComponentsInChildren<GridLayoutGroup>(true);
-                for (int i = gridComponents.Length - 1; i >= 0; i--)
-                {
-                    Object.DestroyImmediate(gridComponents[i]);
-                }
-                */
+            }
+            
+            KeepLayoutComponents[] keepers = Object.FindObjectsOfType<KeepLayoutComponents>(true);
+            foreach (var keeper in keepers)
+            {
+                Object.DestroyImmediate(keeper);
             }
         }
     }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8575739110766910507}
   - component: {fileID: 7258031168544422676}
   - component: {fileID: 5731643066067939358}
+  - component: {fileID: 6336977730854866837}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -117,6 +118,18 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+--- !u!114 &6336977730854866837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2472220662961431842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8323658672642238587
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +143,7 @@ GameObject:
   - component: {fileID: 1866031224398226059}
   - component: {fileID: 5729135066141060988}
   - component: {fileID: 3821629107406459964}
+  - component: {fileID: 3419570398260115126}
   m_Layer: 0
   m_Name: Display Names
   m_TagString: Untagged
@@ -259,6 +273,18 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 1866031224398226059}
+--- !u!114 &3419570398260115126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8323658672642238587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1955376171944332197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -267,6 +293,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 550753801610533125}
     m_Modifications:
+    - target: {fileID: 1518589925163766439, guid: c43437296df18354dad5c248ca01593c,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1518589925163766439, guid: c43437296df18354dad5c248ca01593c,
+        type: 3}
     - target: {fileID: 3426542613873200385, guid: c43437296df18354dad5c248ca01593c,
         type: 3}
       propertyPath: m_Name
