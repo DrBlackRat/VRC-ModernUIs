@@ -64,6 +64,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
         {
             foreach (var localizedComponent in localizedComponents)
             {
+                if (localizedComponent == null) continue;
                 localizedComponent.ApplyLocalization(id);
             }
         }
