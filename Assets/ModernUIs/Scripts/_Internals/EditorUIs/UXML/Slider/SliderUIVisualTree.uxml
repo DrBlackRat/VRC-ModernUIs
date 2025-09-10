@@ -11,6 +11,7 @@
             <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="value" name="selectedState" label="Default Value" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="snapInterval" name="snapInterval" label="Snapping Interval" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="sliderCurve" name="sliderCurve" label="Slider Curve" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Persistence" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="usePersistence" name="usePersistence" label="Enable Persistence" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="dataKey" name="dataKey" label="Data Key" style="font-size: 12px; -unity-font-style: normal;" />
@@ -28,6 +29,9 @@
             <ui:Label tabindex="-1" text="Default" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="postProcessVolumes" name="postProcessVolume" label="Post Process Volumes" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="audioSources" name="audioSources" label="Audio Sources" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Animators" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="animators" name="animators" label="Animators" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="animParamName" name="animParamName" label="Parameter" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Udon Behaviours" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="externalBehaviours" name="externalBehaviours" label="External Behaviours" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="variableName" name="variableName" label="Value Variable Name" style="font-size: 12px; -unity-font-style: normal;" />

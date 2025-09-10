@@ -19,12 +19,20 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected float value = 0f;
         public virtual float Value => value;
 
+        [Tooltip("Curve that is used when applying the slider, should be left linear but can be changed to e.g. be logarithmic for volume sliders.")]
+        [SerializeField] protected AnimationCurve sliderCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
         [FormerlySerializedAs("postProcessVolume")]
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
         [SerializeField] protected PostProcessVolume[] postProcessVolumes;
         [FormerlySerializedAs("audioSource")]
         [Tooltip("Audio Source of which the volume will be set by the slider.")]
         [SerializeField] protected AudioSource[] audioSources;
+        
+        [Tooltip("Animators that should have a float with the given parameter name set for the Slider Value.")]
+        [SerializeField] private Animator[] animators;
+        [Tooltip("Parameter Name of the float that should be set.")]
+        [SerializeField] private string animParamName = "sliderValue";
         
         [Tooltip("Udon Behaviours that should be updated.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;
@@ -107,6 +115,8 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         protected void UpdateExternal(float newValue)
         {
+            newValue = sliderCurve.Evaluate(newValue);
+            
             if (audioSources != null && audioSources.Length > 0)
             {
                 foreach (var audioSource in audioSources)
@@ -115,7 +125,6 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
                     audioSource.volume = newValue;
                 }
             }
-            
 
             if (postProcessVolumes != null && postProcessVolumes.Length > 0)
             {
@@ -123,6 +132,15 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
                 {
                     if (postProcessVolume == null) continue;
                     postProcessVolume.weight = newValue;
+                }
+            }
+
+            if (animators != null && animators.Length > 0)
+            {
+                foreach (var animator in animators)
+                {
+                    if (animator == null) continue;
+                    animator.SetFloat(animParamName, newValue);
                 }
             }
 

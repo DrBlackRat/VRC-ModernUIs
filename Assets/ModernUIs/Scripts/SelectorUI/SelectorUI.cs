@@ -27,6 +27,12 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         [Tooltip("Objects that should be turned on / off. The same order as buttons in the children of the Selector UI will be used (top to bottom).")]
         [SerializeField] protected GameObject[] itemObjs;
+        
+        [Tooltip("Animators that should have an int with the given parameter name set for the selected button.")]
+        [SerializeField] protected Animator[] animators;
+        [Tooltip("Parameter Name of the int that should be set.")]
+        [SerializeField] protected string animParamName = "selectionId";
+        
         [Tooltip("Udon Behaviours that the connection data will be send to.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;
         [Tooltip("Name of the Integer Variable that will be set when the selection changes.")]
@@ -122,6 +128,15 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                     item.SetActive(false);
                 }
                 if (itemObjs.Length - 1 >= id && itemObjs[id] != null) itemObjs[id].SetActive(true);
+            }
+            
+            if (animators != null && animators.Length > 0)
+            {
+                foreach (var animator in animators)
+                {
+                    if (animator == null) continue;
+                    animator.SetInteger(animParamName, id);
+                }
             }
 
             // skipBehaviour is currently only used by the Mirror UI to prevent the seperator from moving
