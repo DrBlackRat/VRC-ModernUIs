@@ -17,13 +17,18 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("If enabled, the scale of the zone transform will also be applied. Should be left off unless you specifically want the scale to change.")]
         [SerializeField] private bool applyScale;
         
-        [Tooltip("Default Position and Rotation of the Menu, used when ever player isn't in a different Zone.")]
-        [SerializeField] private Transform defaultTransform;
 
         [Tooltip("Zones the Menu / Object should move to.")]
         [SerializeField] private ObjectZone[] zones;
 
         private int zoneCounter;
+
+        private int normalZoneId; // used to restore the correct Zone if it was previsuly forced
+        private bool preventZoneChange;
+        
+        private bool constrain;
+        private Transform currentTransform;
+        private int prevZoneId;
 
         private void Start()
         {
@@ -33,26 +38,83 @@ namespace DrBlackRat.VRC.ModernUIs
                 if (zones[i] == null) continue;
                 zones[i]._SetupObjectZone(this, i);
             }
+            SelectZone(0);
         }
 
+        public override void PostLateUpdate()
+        {
+            if (constrain)
+              MoveAndScale();
+        }
+
+        /// <summary>
+        /// Allows forcing an object to a Zone, even though it would technically be in a different Zone.
+        /// </summary>
+        /// <param name="id">Int | Zone that the object should be force moved to.</param>
+        public void ForceZone(int id)
+        {
+            preventZoneChange = false;
+            SelectZone(id, false);
+            preventZoneChange = true;
+            Debug.LogError($"Forcing Blocking: {preventZoneChange}");
+        }
+
+        /// <summary>
+        /// Unforces a Zone if it was previously forced. Moves the object to the actual current Zone.
+        /// </summary>
+        public void UnforceZone()
+        { 
+            preventZoneChange = false;
+            Debug.LogWarning($"NormalID: {normalZoneId}");
+            SelectZone(normalZoneId, false);
+            Debug.LogError($"Unforceing Blocking: {preventZoneChange}");
+        }
+        
+        /// <summary>
+        /// Send by an Object Zone if a player enters it.
+        /// </summary>
+        /// <param name="id"> Int | Zone that was entered.</param>
         public void _PlayerEnteredZone(int id)
         {
             zoneCounter++;
-            if (zones[id] == null) return;
-            moveableTransform.SetPositionAndRotation(zones[id].ZoneTransform.position, zones[id].ZoneTransform.rotation);
-            if (applyScale)
-                moveableTransform.localScale = zones[id].ZoneTransform.localScale;
-        }
+            SelectZone(id);
+        } 
 
+        /// <summary>
+        /// Send by an Object Zone if a player leaves it.
+        /// </summary>
+        /// <param name="id"> Int | Zone that was left.</param>
         public void _PlayerLeftZone(int id)
         {
             zoneCounter--;
             if (zoneCounter == 0)
             {
-                moveableTransform.SetPositionAndRotation(defaultTransform.position, defaultTransform.rotation);
-                if (applyScale)
-                    moveableTransform.localScale = defaultTransform.localScale;
+                SelectZone(0);
             }
+        }
+
+        private void SelectZone(int id, bool saveZoneId = true)
+        {
+            if (id < 0 || id >= zones.Length || zones[id] == null) return;
+            if (saveZoneId) normalZoneId = id;
+            
+            Debug.LogError($"Select Zone Blocking: {preventZoneChange}");
+            if (preventZoneChange) return;
+            
+            zones[prevZoneId]._ZoneSelected(false);
+            prevZoneId = id;
+            zones[id]._ZoneSelected(true);
+            
+            currentTransform = zones[id].ZoneTransform;
+            constrain = zones[id].ConstraintMode;
+            MoveAndScale();
+        }
+
+        private void MoveAndScale()
+        {
+            moveableTransform.SetPositionAndRotation(currentTransform.position, currentTransform.rotation);
+            if (applyScale)
+                moveableTransform.localScale = currentTransform.lossyScale; 
         }
     }
 }
