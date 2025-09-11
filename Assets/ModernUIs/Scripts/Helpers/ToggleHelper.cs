@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,6 +8,7 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUIs.Helpers
 {
+    [DefaultExecutionOrder(-50)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class ToggleHelper : UdonSharpBehaviour
     {
@@ -24,12 +26,42 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [Tooltip("ID at which everything should be turned on. Should be left at 1 for a simple two state Selector UI Toggle.")]
         [SerializeField] private int enabledId = 1;
 
+        /// <summary>
+        /// ID of the current selected state of a Selector UI. Needs to be set before calling <see cref="_SelectionChanged"/>.
+        /// </summary>
         [HideInInspector] public int selectionId;
 
+        private void Start()
+        {
+            Toggle(false);
+        }
+
+        /// <summary>
+        /// Gets called by a Selector UI when the state changes, before doing so the <see cref="selectionId"/> should be set.
+        /// </summary>
         public void _SelectionChanged()
         {
-            bool state = selectionId == enabledId;
+            Toggle(selectionId == enabledId);
+        }
 
+        /// <summary>
+        /// Turns everything on.
+        /// </summary>
+        public void _TurnOn()
+        {
+            Toggle(true);
+        }
+
+        /// <summary>
+        /// Turns everything off.
+        /// </summary>
+        public void _TurnOff()
+        {
+            Toggle(false);
+        }
+
+        private void Toggle(bool state)
+        {
             if (gameObjects != null && gameObjects.Length != 0)
             {
                 foreach (var toggleObject in gameObjects)

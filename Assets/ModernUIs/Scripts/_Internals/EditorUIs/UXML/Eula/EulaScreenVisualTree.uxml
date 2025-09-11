@@ -20,14 +20,25 @@
     </ui:Foldout>
     <ui:Foldout text="References" view-data-key="EulaScreenSeconedView" name="EulaScreenSeconedView" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
-            <ui:Label tabindex="-1" text="Blocker" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="disableObject" name="disableObject" label="Disable Object" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Animated" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="eulaObject" name="eulaObject" label="Eula Object" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="hiddenTransform" name="hiddenTransform" label="Hidden Transform" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="canvasGroup" name="canvasGroup" label="Eula / Rule Canvas Group" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Versions" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="versionChangeInfo" name="versionChangeInfo" label="Version Changed Obj" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="External Connections " view-data-key="EulaExternalConnections" name="ExternalConnections" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Game Objects" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="enableObjects" name="enableObjects" label="Enable Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="disableObjects" name="disableObjects" label="Disable Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Animators" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="animators" name="animators" label="Animators" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="animParamName" name="animParamName" label="Parameter" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Udon Behaviours" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="externalBehaviours" name="externalBehaviours" label="External Behaviours" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="acceptedEventName" name="acceptedEventName" label="Accepted Event Name" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
 </ui:UXML>
