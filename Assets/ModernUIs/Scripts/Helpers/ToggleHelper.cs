@@ -23,8 +23,10 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [SerializeField] private VRC_Pickup[] pickups;
         
         
-        [Tooltip("ID at which everything should be turned on. Should be left at 1 for a simple two state Selector UI Toggle.")]
+        [Tooltip("ID at which everything should be turned on for Selector UIs. Should be left at 1 for a simple two state Selector UI Toggle.")]
         [SerializeField] private int enabledId = 1;
+        [Tooltip("If enabled the enabled state will be inverted.")]
+        [SerializeField] private bool invert;
 
         /// <summary>
         /// ID of the current selected state of a Selector UI. Needs to be set before calling <see cref="_SelectionChanged"/>.
@@ -33,7 +35,7 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
 
         private void Start()
         {
-            Toggle(false);
+            _Toggle(false);
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         /// </summary>
         public void _SelectionChanged()
         {
-            Toggle(selectionId == enabledId);
+            _Toggle(selectionId == enabledId);
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         /// </summary>
         public void _TurnOn()
         {
-            Toggle(true);
+            _Toggle(true);
         }
 
         /// <summary>
@@ -57,11 +59,17 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         /// </summary>
         public void _TurnOff()
         {
-            Toggle(false);
+            _Toggle(false);
         }
 
-        private void Toggle(bool state)
+        /// <summary>
+        /// Allows Toggling everything On / Off.
+        /// </summary>
+        /// <param name="state">bool | On / Off State.</param>
+        public void _Toggle(bool state)
         {
+            state = invert ? !state : state;
+            
             if (gameObjects != null && gameObjects.Length != 0)
             {
                 foreach (var toggleObject in gameObjects)

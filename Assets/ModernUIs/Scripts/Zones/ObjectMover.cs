@@ -56,7 +56,6 @@ namespace DrBlackRat.VRC.ModernUIs
             preventZoneChange = false;
             SelectZone(id, false);
             preventZoneChange = true;
-            Debug.LogError($"Forcing Blocking: {preventZoneChange}");
         }
 
         /// <summary>
@@ -65,9 +64,7 @@ namespace DrBlackRat.VRC.ModernUIs
         public void UnforceZone()
         { 
             preventZoneChange = false;
-            Debug.LogWarning($"NormalID: {normalZoneId}");
             SelectZone(normalZoneId, false);
-            Debug.LogError($"Unforceing Blocking: {preventZoneChange}");
         }
         
         /// <summary>
@@ -98,9 +95,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (id < 0 || id >= zones.Length || zones[id] == null) return;
             if (saveZoneId) normalZoneId = id;
             
-            Debug.LogError($"Select Zone Blocking: {preventZoneChange}");
             if (preventZoneChange) return;
-            
             zones[prevZoneId]._ZoneSelected(false);
             prevZoneId = id;
             zones[id]._ZoneSelected(true);

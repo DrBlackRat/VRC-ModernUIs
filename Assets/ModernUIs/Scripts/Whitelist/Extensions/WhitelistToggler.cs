@@ -18,7 +18,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
         [SerializeField] private WhitelistGetterBase whitelist;
 
-        [Tooltip("Toggle Helpers to allow user to toggle more things using a whitelist. \n Will have it's state set to 0 if not whitelisted and 1 if a player is.")]
+        [Tooltip("Toggle Helpers to allow user to toggle more things using a whitelist.")]
         [SerializeField] private ToggleHelper[] toggleHelpers;
         
         [Tooltip("Objects that should only be enabled for whitelisted users.")]
@@ -53,9 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 foreach (var toggleHelper in toggleHelpers)
                 {
                     if (toggleHelper == null) continue;
-                    
-                    toggleHelper.selectionId = isWhitelisted ? 1 : 0;
-                    toggleHelper._SelectionChanged();
+                    toggleHelper._Toggle(isWhitelisted);
                 }
             }
             

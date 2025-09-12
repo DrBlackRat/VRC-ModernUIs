@@ -45,7 +45,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
 
             if (textMeshProUGUI != null)
             {
-                if (texts != null && index < texts.Length && texts[index] != null)
+                if (texts != null && index < texts.Length && !string.IsNullOrEmpty(texts[index]))
                 {
                     textMeshProUGUI.text = texts[index];
                 }
@@ -112,12 +112,15 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
+            LanguageSelectorUI languageSelector = FindObjectOfType<LanguageSelectorUI>();
+            int length = Math.Max(languageSelector.LinkedLanguageCodes.Length, 1);
+            
             if (textMeshProUGUI == null)
             {
                 textMeshProUGUI = GetComponent<TextMeshProUGUI>();
                 if (textMeshProUGUI != null &&  (texts == null || texts.Length == 0))
                 {
-                    texts = new string[1];
+                    texts = new string[length];
                     texts[0] = textMeshProUGUI.text;
                 }
             }
@@ -127,7 +130,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 uiImage = GetComponent<Image>();
                 if (uiImage != null && (sprites == null || sprites.Length == 0))
                 {
-                    sprites = new Sprite[1];
+                    sprites = new Sprite[length];
                     sprites[0] = uiImage.sprite;
                 }
             }
@@ -137,7 +140,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 materialRenderer = GetComponent<Renderer>();
                 if (materialRenderer != null && (materials == null || materials.Length == 0))
                 {
-                    materials = new Material[1];
+                    materials = new Material[length];
                     materials[0] = materialRenderer.sharedMaterial;
                 }
             }
@@ -147,7 +150,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
                 audioSource = GetComponent<AudioSource>();
                 if (audioSource != null && (audioClips == null || audioClips.Length == 0))
                 {
-                    audioClips = new AudioClip[1];
+                    audioClips = new AudioClip[length];
                     audioClips[0] = audioSource.clip;
                 }
             }

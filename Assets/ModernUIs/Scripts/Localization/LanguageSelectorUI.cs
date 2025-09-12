@@ -13,7 +13,8 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
     {
         [Tooltip("VRChat Language Codes based of the RFC 5646 syntax that are linked with each option on the Selector UI, same order as buttons will be used.")]
         [SerializeField] protected string[] linkedLanguageCodes;
-        
+        public string[] LinkedLanguageCodes => linkedLanguageCodes;
+
         // Set by callback script
         [HideInInspector] public LocalizedComponent[] localizedComponents;
         
