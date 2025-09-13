@@ -32,6 +32,8 @@ namespace ModernUIs.Theming
         [SerializeField] private WhitelistEditorBase whitelistEditorBase;
         [Tooltip("Fancy Whitelist Name Display of which the Prefab Colors will be adjusted.")]
         [SerializeField] private FancyWhitelistNameDisplay fancyWhitelistNameDisplay;
+        [Tooltip("Whitelist Permission Manager of which the Prefab Colors will be adjusted.")]
+        [SerializeField] private WhitelistPermissionManager whitelistPermissionManager;
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
@@ -41,6 +43,8 @@ namespace ModernUIs.Theming
             if (selectorUIButton == null) selectorUIButton = GetComponent<SelectorUIButton>();
             if (whitelistEditorBase == null) whitelistEditorBase = GetComponent<WhitelistEditorBase>();
             if (fancyWhitelistNameDisplay == null) fancyWhitelistNameDisplay = GetComponent<FancyWhitelistNameDisplay>();
+            if (whitelistPermissionManager == null)
+                whitelistPermissionManager = GetComponent<WhitelistPermissionManager>();
         }
 
         public void ApplyTheme(Theme theme)
@@ -88,6 +92,15 @@ namespace ModernUIs.Theming
                 UnityEditor.EditorUtility.SetDirty(fancyWhitelistNameDisplay);
                 fancyWhitelistNameDisplay.PrefabTextColor = theme.GetColor(ThemeColor.Text);
                 fancyWhitelistNameDisplay.PrefabBackgroundColor = theme.GetColor(ThemeColor.FieldBackground);
+            }
+
+            if (whitelistPermissionManager != null)
+            {
+                UnityEditor.EditorUtility.SetDirty(whitelistPermissionManager);
+                whitelistPermissionManager.TextColor = theme.GetColor(ThemeColor.Text);
+                whitelistPermissionManager.BackgroundColor = theme.GetColor(ThemeColor.FieldBackground);
+                whitelistPermissionManager.ButtonColor = theme.GetColor(ThemeColor.ButtonPrimary);
+                whitelistPermissionManager.ButtonTextColor = theme.GetColor(ThemeColor.ButtonTextIcon);
             }
         }
 #endif

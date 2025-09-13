@@ -15,7 +15,7 @@ using VRC.Udon.Common.Interfaces;
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class WhitelistManager : WhitelistSetterBase
+    public class Whitelist : WhitelistSetterBase
     {
         [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
         [SerializeField] protected string[] startWhitelist;

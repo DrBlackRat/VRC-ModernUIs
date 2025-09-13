@@ -9,8 +9,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(SyncedWhitelistManager))]
-    public class SyncedWhitelistManagerEditor : UnityEditor.Editor
+    [CustomEditor(typeof(Whitelist.Whitelist))]
+    public class WhitelistEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 
