@@ -3,6 +3,7 @@ using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -13,12 +14,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistPermissionManager : UdonSharpBehaviour
     {
-        [Tooltip("Whitelists that are being managed, same order and amount as Permission Names.")]
-        [SerializeField] protected WhitelistSetterBase[] whitelists;
-        [Tooltip("Admin Whitelists that control access, same order and amount as Permission Names.")]
+        [Tooltip("Whitelists that are being managed. \nIf the provided whitelist is getter only, it will be treated as read only.")]
+        [SerializeField] protected WhitelistGetterBase[] whitelists;
+        [Tooltip("Admin Whitelists that controls access of the he corresponding whitelist, same order and amount as Whitelists. \nIf left empty it will be treated as if the local player is an Admin.")]
         [SerializeField] protected WhitelistGetterBase[] adminWhitelists;
-        [Tooltip("If enabled admins can add them self to permissions that they are and admin for.")]
-        [SerializeField] protected bool allowAdminAdd;
+        [Tooltip("If enabled the corresponding whitelist will be read only, same order and amount as Whitelists. \nEnabled automatically for getter only Whitelists.")]
+        [SerializeField] protected bool[] readOnly;
+        
+        [Tooltip("If enabled admins for a specific permission will be shown as whitelisted and can't be un whitelisted. \nUseful if in the end they are being combined. ")]
+        [SerializeField] protected bool showAdminAsWhitelisted;
         
         // PM = PermissionManager
         [Tooltip("Prefab that will be instantiated for every user in the instance.")]
@@ -40,6 +44,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         protected VRCPlayerApi localPlayer;
         protected string localDisplayName;
+        
         protected bool[] hasAccess;
 
         private const int MAX_WHITELISTS = 8; // Currently set to 8 due to UI limitations, actual max is 8
@@ -47,27 +52,44 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Unity & VRChat Events
         private void Start()
         {
-            if (whitelists.Length > MAX_WHITELISTS || adminWhitelists.Length > MAX_WHITELISTS)
+            if (whitelists.Length > MAX_WHITELISTS || adminWhitelists.Length > MAX_WHITELISTS || readOnly.Length > MAX_WHITELISTS)
             {
                 MUIDebug.LogError($"Permission Manager | Only a max of {MAX_WHITELISTS} Whitelists can be used!");
                 return;
             }
 
-            if (whitelists.Length != adminWhitelists.Length)
+            if (whitelists.Length != adminWhitelists.Length || whitelists.Length != readOnly.Length)
             {
-                MUIDebug.LogError($"Permission Manager | There needs to be an equal amount of Whitelists and Admin Whitelists!");
+                MUIDebug.LogError($"Permission Manager | There needs to be an equal amount of Whitelists, Admin Whitelists and Read Only toggles!");
                 return;
             }
 
             permissions = whitelists.Length;
-            hasAccess = new bool[permissions];
+            hasAccess = new bool[permissions]; ;
+            
             localPlayer = Networking.LocalPlayer;
             localDisplayName = localPlayer.displayName;
 
             for (int i = 0; i < permissions; i++)
             {
-                whitelists[i]._SetUpConnection((IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
-                adminWhitelists[i]._SetUpConnection((IUdonEventReceiver)this, $"_AdminWhitelistUpdated{i}");
+                var whitelist = whitelists[i];
+                var adminWhitelist = adminWhitelists[i];
+                
+                readOnly[i] = whitelist._IsReadOnly() || readOnly[i];
+                
+                whitelist._SetUpConnection((IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
+
+                if (!readOnly[i])
+                {
+                    if (adminWhitelist != null)
+                    {
+                        adminWhitelist._SetUpConnection((IUdonEventReceiver)this, $"_AdminWhitelistUpdated{i}");;
+                    }
+                    else
+                    {
+                        UpdatePermissionAccess(i, true);
+                    }
+                }
             }
             
             hasInitialized = true;
@@ -136,11 +158,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (hasAccess[i] == access) return;
             hasAccess[i] = access;
             
-            var pmUsersScripts = pmUsers.GetValues();
-            for (int j = 0; j < pmUsersScripts.Count; j++)
+            var pmUsersKeys = pmUsers.GetKeys();
+            for (int j = 0; j < pmUsersKeys.Count; j++)
             {
-                var pmUserScript = (PermissionManagerUser)pmUsersScripts[j].Reference;
-                pmUserScript._UpdatePermissionAccess(i, access);
+                if (pmUsers.TryGetValue(pmUsersKeys[j], TokenType.Reference, out DataToken value))
+                {
+                    var pmUserScript = (PermissionManagerUser)value.Reference;
+                    pmUserScript._UpdatePermissionAccess(i, access);
+                }
             }
         }
 
@@ -170,14 +195,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <param name="state">True if this permission was enabled, false when not.</param>
         public void ButtonStateChange(string username, int i, bool state)
         {
-            if (!hasAccess[i]) return;
+            if (!hasAccess[i] || readOnly[i]) return;
+            var whitelist = (WhitelistSetterBase)whitelists[i];
+            
             if (state)
             {
-                whitelists[i]._AddUser(username, (IUdonEventReceiver)this);
+                whitelist._AddUser(username, (IUdonEventReceiver)this);
             }
             else
             {
-                whitelists[i]._RemoveUser(username, (IUdonEventReceiver)this);
+                whitelist._RemoveUser(username, (IUdonEventReceiver)this);
             }
         }
 

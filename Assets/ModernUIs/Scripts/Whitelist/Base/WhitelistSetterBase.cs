@@ -22,6 +22,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         [Tooltip("If adding / removing users should log which users were added / removed.")]
         [SerializeField] protected bool debugLogging;
 
+        public override bool _IsReadOnly() => false;
+
         #region Adding
         /// <summary>
         /// Adds a specific user to the white list. Skips duplicate username.

@@ -30,6 +30,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             localName = Networking.LocalPlayer.displayName;
         }
+        
+        /// <summary>
+        /// Allows checking if this whitelist can be written to. Usefull to check before casting to <see cref="WhitelistSetterBase"/>.
+        /// </summary>
+        /// <returns>bool | True if Whitelist Getter Base, false if Whitelist Setter Base.</returns>
+        public virtual bool _IsReadOnly() => true;
 
         /// <summary>
         /// Sets up a connection with the Whitelist Manager.
