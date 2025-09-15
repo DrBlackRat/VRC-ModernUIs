@@ -20,7 +20,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected DataList whitelist = new DataList();
         protected DataDictionary usersAddedBy = new DataDictionary(); // Key: User Who added, Value: DataList of users they added
         
-        protected DataDictionary connectedBehaviours = new DataDictionary(); // key: Udon Behaviour value: event name
+        protected DataDictionary connectedBehaviours = new DataDictionary(); // Key: Udon Behaviour, Value: DataList of events (some scripts could try to connect with multiple events)
         
         protected string localName;
 
@@ -45,7 +45,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="eventName">Optional | Event what should be called, if left empty "_WhitelistUpdated" will be used.</param>
         public virtual void _SetUpConnection(IUdonEventReceiver behaviour, string eventName = WHITELIST_UPDATED_EVENT)
         {
-            connectedBehaviours.SetValue((UnityEngine.Object)behaviour, eventName);
+            var behaviourObj = (UnityEngine.Object)behaviour;
+            DataList events;
+            
+            if (connectedBehaviours.TryGetValue(behaviourObj, out DataToken value))
+            {
+                events = value.DataList;
+            }
+            else
+            {
+                events = new DataList();
+            }
+            
+            events.Add(eventName);
+            connectedBehaviours.SetValue(behaviourObj, events);
+            
             behaviour.SendCustomEventDelayedFrames(eventName, 1); // Send delayed by one frame to prevent too much happening inside one frame
         }
 
@@ -219,9 +233,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 var receiver = (IUdonEventReceiver)keys[i].Reference;
                 if (receiver == senderBehaviour) continue;
                 
-                if (connectedBehaviours.TryGetValue(keys[i], out DataToken output))
+                if (connectedBehaviours.TryGetValue(keys[i], out DataToken value))
                 {
-                    receiver.SendCustomEventDelayedFrames((string)output, 1); // Send delayed by one frame to prevent too much happening inside one frame
+                    DataList events = value.DataList;
+
+                    for (int j = 0; j < events.Count; j++)
+                    {
+                        receiver.SendCustomEventDelayedFrames(events[j].String, 1); // Send delayed by one frame to prevent too much happening inside one frame
+                    }
                 }
             }
         }

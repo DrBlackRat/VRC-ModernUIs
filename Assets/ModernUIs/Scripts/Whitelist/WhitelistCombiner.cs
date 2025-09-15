@@ -47,6 +47,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 whitelist = DataListExtensions.RemoveDuplicates(whitelist);
             }
             
+            Debug.LogWarning("COMBINER UPDATED");
             WhitelistUpdated();
         }
 

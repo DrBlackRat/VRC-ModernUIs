@@ -21,9 +21,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("If enabled the corresponding whitelist will be read only, same order and amount as Whitelists. \nEnabled automatically for getter only Whitelists.")]
         [SerializeField] protected bool[] readOnly;
         
-        [Tooltip("If enabled admins for a specific permission will be shown as whitelisted and can't be un whitelisted. \nUseful if in the end they are being combined. ")]
-        [SerializeField] protected bool showAdminAsWhitelisted;
-        
         // PM = PermissionManager
         [Tooltip("Prefab that will be instantiated for every user in the instance.")]
         [SerializeField] protected GameObject pmUserPrefab;
