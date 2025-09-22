@@ -32,6 +32,7 @@ namespace ModernUIs.Theming
         [SerializeField] private WhitelistEditorBase whitelistEditorBase;
         [Tooltip("Fancy Whitelist Name Display of which the Prefab Colors will be adjusted.")]
         [SerializeField] private FancyWhitelistNameDisplay fancyWhitelistNameDisplay;
+        [FormerlySerializedAs("whitelistPermissionManager")]
         [Tooltip("Whitelist Permission Manager of which the Prefab Colors will be adjusted.")]
         [SerializeField] private WhitelistPermissionManager whitelistPermissionManager;
 

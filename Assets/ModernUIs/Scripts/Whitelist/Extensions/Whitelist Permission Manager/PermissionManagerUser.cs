@@ -22,20 +22,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected Image[] checkmarkImages;
 
         private string username;
-        private WhitelistPermissionManager permissionManager;
+        private int permissions;
+        private WhitelistPermissionManagerInstance _permissionManagerInstance;
 
         #region Permission Manager To User Api
         /// <summary>
         /// Sets up this Permission Manger User.
         /// </summary>
-        /// <param name="newPermissionManager">Refernce to the Permission Manager</param>
+        /// <param name="newPermissionManagerInstance">Refernce to the Permission Manager</param>
         /// <param name="permissions">Amount of permissions this user can have.</param>
         /// <param name="newUsername">Username / Display name of this user.</param>
-        public void _Setup(WhitelistPermissionManager newPermissionManager, int permissions, bool[] hasAccess,string newUsername)
+        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess,string newUsername)
         {
-            permissionManager = newPermissionManager;
+            _permissionManagerInstance = newPermissionManagerInstance;
             username = newUsername;
             nameTmp.text = newUsername;
+            permissions = newPermissions;
 
             for (int i = 0; i < permissions; i++)
             {
@@ -52,14 +54,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             nameTmp.color = textColor;
             backgroundImage.color = backgroundColor;
 
-            foreach (var buttonImage in buttonImages)
+            for (int i = 0; i < permissions; i++)
             {
-                buttonImage.color = buttonColor;
+                buttonImages[i].color = buttonColor;
             }
-
-            foreach (var checkmarkImage in checkmarkImages)
+            
+            for (int i = 0; i < permissions; i++)
             {
-                checkmarkImage.color = buttonTextColor;
+                checkmarkImages[i].color = buttonTextColor;
             }
         }
         
@@ -95,7 +97,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region User To Permission Manager Api
         private void ChangeState(int i)
         {
-            permissionManager.ButtonStateChange(username, i, toggles[i].isOn);
+            _permissionManagerInstance.ButtonStateChange(username, i, toggles[i].isOn);
         }
 
         // I don't like this but idk what to do about it...
