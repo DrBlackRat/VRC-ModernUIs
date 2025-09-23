@@ -1,13 +1,8 @@
-﻿using System;
-using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
-using TMPro;
+﻿using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
-using UdonSharpEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
-using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
@@ -15,7 +10,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     /// <summary>
     /// Instance of a Whitelist Permission Manager. (In Game)
     /// </summary>
-    //
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistPermissionManagerInstance : UdonSharpBehaviour
     {
@@ -210,9 +204,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             var newPmUserObj = Instantiate(pmUserPrefab, pmUserTransform.position, pmUserTransform.rotation, pmUserTransform);
             newPmUserObj.transform.localScale = Vector3.one;
+
+            var hasPermission = new bool[permissions];
+            for (int i = 0; i < permissions; i++)
+            {
+                hasPermission[i] = whitelists[i]._IsPlayerWhitelisted(username);
+            }
             
             var newPmUser = newPmUserObj.GetComponent<PermissionManagerUser>();
-            newPmUser._Setup(this, permissions, hasAccess, username);
+            newPmUser._Setup(this, permissions, hasAccess, hasPermission, username);
             newPmUser._ApplyThemeColors(textColor, backgroundColor, buttonColor, buttonTextColor);
             
             pmUsers.Add(username, newPmUser);

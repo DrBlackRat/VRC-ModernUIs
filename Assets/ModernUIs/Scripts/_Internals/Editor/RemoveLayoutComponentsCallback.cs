@@ -5,7 +5,6 @@ using UnityEngine.UI;
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
     public static class RemoveLayoutComponentsCallback
-    
     {
         [PostProcessScene(-50)]
         public static void OnPostProcessScene()

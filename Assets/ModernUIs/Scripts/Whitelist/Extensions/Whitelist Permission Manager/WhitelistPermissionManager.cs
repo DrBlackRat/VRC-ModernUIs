@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
-using UdonSharp;
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
 using UdonSharpEditor;
-using UnityEditor.Callbacks;
+#endif
 using UnityEngine;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
@@ -15,6 +13,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [RequireComponent(typeof(WhitelistPermissionManagerInstance))]
     public class WhitelistPermissionManager : MonoBehaviour
     {
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
         [SerializeField] private Permission[] permissions;
 
         // PM = PermissionManager
@@ -102,9 +101,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             get => buttonTextColor;
             set => buttonTextColor = value;
         }
-        
+#endif
     }
-    
-    
-
 }

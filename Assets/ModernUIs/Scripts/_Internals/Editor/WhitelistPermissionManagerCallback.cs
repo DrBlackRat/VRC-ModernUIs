@@ -14,6 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
             foreach (var permissionManager in permissionManagers)
             {
                 permissionManager.TransferValues();
+                Object.DestroyImmediate(permissionManager);
             }
         }
     }

@@ -117,6 +117,7 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+  whitelistPermissionManager: {fileID: 0}
 --- !u!1 &1881911323322738598
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,6 +235,7 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+  whitelistPermissionManager: {fileID: 0}
 --- !u!1 &2358286736562628520
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,6 +334,8 @@ MonoBehaviour:
   usePersistence: 0
   dataKey: CHANGE THIS
   itemObjs: []
+  animators: []
+  animParamName: selectionId
   externalBehaviours: []
   idValueName: selectionId
   changeEventName: _SelectionChanged
@@ -390,6 +394,7 @@ MonoBehaviour:
   movementDuration: 0.5
   selectorUIButtons: []
   selector: {fileID: 0}
+  loadDelay: 5
   whitelist: {fileID: 0}
   whitelistedColor: {r: 1, g: 1, b: 1, a: 1}
   notWhitelistedColor: {r: 1, g: 1, b: 1, a: 0.2}
@@ -439,6 +444,7 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+  whitelistPermissionManager: {fileID: 0}
 --- !u!1 &3086770706229980287
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,6 +687,7 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+  whitelistPermissionManager: {fileID: 0}
 --- !u!1 &6402055555784594508
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,6 +805,7 @@ MonoBehaviour:
   selectorUIButton: {fileID: 0}
   whitelistEditorBase: {fileID: 0}
   fancyWhitelistNameDisplay: {fileID: 0}
+  whitelistPermissionManager: {fileID: 0}
 --- !u!1001 &1473074492694206143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -821,6 +829,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: Section Selector UI Synced + Lock
+      objectReference: {fileID: 0}
+    - target: {fileID: 6624237616275312861, guid: 9553013338b0aa54eacd3f004dc88e98,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -55
       objectReference: {fileID: 0}
     - target: {fileID: 7355734077570225956, guid: 9553013338b0aa54eacd3f004dc88e98,
         type: 3}
@@ -998,7 +1011,7 @@ PrefabInstance:
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0019133089
+      value: 0.001519918
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -1023,7 +1036,7 @@ PrefabInstance:
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -17.499939
+      value: -17.500023
       objectReference: {fileID: 0}
     - target: {fileID: 497732145109457031, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}
@@ -1060,6 +1073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSize
       value: 12.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5646918818851921497, guid: c5798a6c062e04541be5b6db3133fda1,
+        type: 3}
+      propertyPath: m_IgnoreLayout
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8746875094405886597, guid: c5798a6c062e04541be5b6db3133fda1,
         type: 3}

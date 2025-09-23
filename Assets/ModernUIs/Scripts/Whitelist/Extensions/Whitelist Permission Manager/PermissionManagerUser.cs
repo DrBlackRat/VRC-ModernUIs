@@ -32,7 +32,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <param name="newPermissionManagerInstance">Refernce to the Permission Manager</param>
         /// <param name="permissions">Amount of permissions this user can have.</param>
         /// <param name="newUsername">Username / Display name of this user.</param>
-        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess,string newUsername)
+        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess, bool[] hasPermission,string newUsername)
         {
             _permissionManagerInstance = newPermissionManagerInstance;
             username = newUsername;
@@ -43,6 +43,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 toggleObjs[i].SetActive(true);
                 toggles[i].interactable = hasAccess[i];
+                toggles[i].SetIsOnWithoutNotify(hasPermission[i]);
             }
         }
 
@@ -57,10 +58,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             for (int i = 0; i < permissions; i++)
             {
                 buttonImages[i].color = buttonColor;
-            }
-            
-            for (int i = 0; i < permissions; i++)
-            {
                 checkmarkImages[i].color = buttonTextColor;
             }
         }
