@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9069205148096549052}
   - component: {fileID: 6098571348989663762}
   - component: {fileID: 1365942728294959870}
+  - component: {fileID: 6479226034953394045}
   m_Layer: 0
   m_Name: Add Button
   m_TagString: Untagged
@@ -154,6 +155,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &6479226034953394045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025722586211639833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1747036511254956546
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +180,7 @@ GameObject:
   - component: {fileID: 341889951585985261}
   - component: {fileID: 9200979993177236650}
   - component: {fileID: 6349972200833249012}
+  - component: {fileID: 4757054973811248702}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -249,8 +263,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!114 &6349972200833249012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +283,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4757054973811248702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747036511254956546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2255723799436480597
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,8 +389,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &3423734140893842230
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,6 +402,7 @@ GameObject:
   - component: {fileID: 8732195159952628794}
   - component: {fileID: 5388632389183817891}
   - component: {fileID: 6239439096264441235}
+  - component: {fileID: 1558335551006858722}
   m_Layer: 0
   m_Name: NotWhitelistedUser
   m_TagString: Untagged
@@ -454,7 +477,6 @@ MonoBehaviour:
   usernameTMP: {fileID: 5753044928497958331}
   buttonObj: {fileID: 6139805009186499888}
   declineButtonObj: {fileID: 5330496967131775005}
-  background: {fileID: 341889951585985261}
 --- !u!114 &5388632389183817891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,6 +529,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1558335551006858722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3423734140893842230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5330496967131775005
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +554,7 @@ GameObject:
   - component: {fileID: 5062560742465997191}
   - component: {fileID: 81229027611060437}
   - component: {fileID: 8274147202539262}
+  - component: {fileID: 1062876909068233048}
   m_Layer: 0
   m_Name: Decline
   m_TagString: Untagged
@@ -661,6 +696,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1062876909068233048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330496967131775005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5902151400387576493
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,8 +803,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &6139805009186499888
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,6 +813,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1698866718421444751}
   - component: {fileID: 8843227230358640154}
+  - component: {fileID: 7259334803171657906}
   m_Layer: 0
   m_Name: Buttons
   m_TagString: Untagged
@@ -822,6 +868,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7259334803171657906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6139805009186499888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3e6086a4f392e248b7d4fcfe895451c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6182658202677777210
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,8 +975,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &7808336454409408391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1013,8 +1069,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &8065201197444359817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,7 +1162,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 9.8
+  m_fontSize: 7
   m_fontSizeBase: 9.8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1168,5 +1222,3 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}

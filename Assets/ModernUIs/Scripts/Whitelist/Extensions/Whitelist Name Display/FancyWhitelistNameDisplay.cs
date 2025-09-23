@@ -23,23 +23,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Text Mesh Pro UGUI component that will have the amount of people on the whitelist displayed.")]
         [SerializeField] private TextMeshProUGUI countDisplay;
         
-        [Tooltip("Color of text on instantiated prefabs, e.g. Whitelisted Users")]
-        [SerializeField] protected Color prefabTextColor;
-        [Tooltip("Color of the background on instantiated prefabs, e.g. Whitelisted Users")]
-        [SerializeField] protected Color prefabBackgroundColor;
-
-        public Color PrefabTextColor
-        {
-            get => prefabTextColor;
-            set => prefabTextColor = value;
-        }
-
-        public Color PrefabBackgroundColor
-        {
-            get => prefabBackgroundColor;
-            set => prefabBackgroundColor = value;
-        }
-        
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] private WhitelistGetterBase whitelist;
 
@@ -92,7 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newUserObj.transform.localScale = Vector3.one;
 
             var userDisplay = newUserObj.GetComponent<WhitelistUserDisplay>();
-            userDisplay._Setup(username, prefabTextColor, prefabBackgroundColor);
+            userDisplay._Setup(username);
             newUserObj.SetActive(!collapsed);
             
             whitelistDisplays.Add(username, newUserObj);

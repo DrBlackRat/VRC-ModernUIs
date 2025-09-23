@@ -46,21 +46,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 toggles[i].SetIsOnWithoutNotify(hasPermission[i]);
             }
         }
-
-        /// <summary>
-        /// Sets up the correct Theme colors.
-        /// </summary>
-        public void _ApplyThemeColors(Color textColor, Color backgroundColor, Color buttonColor, Color buttonTextColor)
-        {
-            nameTmp.color = textColor;
-            backgroundImage.color = backgroundColor;
-
-            for (int i = 0; i < permissions; i++)
-            {
-                buttonImages[i].color = buttonColor;
-                checkmarkImages[i].color = buttonTextColor;
-            }
-        }
         
         /// <summary>
         /// Sets if a specific permission can be changed.

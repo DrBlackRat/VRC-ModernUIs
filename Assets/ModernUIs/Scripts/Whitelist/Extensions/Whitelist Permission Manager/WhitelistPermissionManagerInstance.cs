@@ -21,13 +21,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [HideInInspector] public GameObject pmUserPrefab;
         [HideInInspector] public Transform pmUserTransform;
         
-        // Prefab Theming (Provided by Themed Component normally)
-        [HideInInspector] public Color textColor;
-        [HideInInspector] public Color backgroundColor;
-        
-        [HideInInspector] public Color buttonColor;
-        [HideInInspector] public Color buttonTextColor;
-        
         protected DataDictionary pmUsers = new DataDictionary(); // Key: username, Value: Reference to the Permission Manager User
         protected bool hasInitialized;
         protected int permissions;
@@ -204,6 +197,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             var newPmUserObj = Instantiate(pmUserPrefab, pmUserTransform.position, pmUserTransform.rotation, pmUserTransform);
             newPmUserObj.transform.localScale = Vector3.one;
+            newPmUserObj.SetActive(true);
 
             var hasPermission = new bool[permissions];
             for (int i = 0; i < permissions; i++)
@@ -213,7 +207,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             var newPmUser = newPmUserObj.GetComponent<PermissionManagerUser>();
             newPmUser._Setup(this, permissions, hasAccess, hasPermission, username);
-            newPmUser._ApplyThemeColors(textColor, backgroundColor, buttonColor, buttonTextColor);
             
             pmUsers.Add(username, newPmUser);
         }

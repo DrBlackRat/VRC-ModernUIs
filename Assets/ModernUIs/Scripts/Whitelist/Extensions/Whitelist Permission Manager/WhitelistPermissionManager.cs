@@ -22,13 +22,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform pmUserTransform;
         
-        // Prefab Theming (Provided by Themed Component normally)
-        [SerializeField] protected Color textColor;
-        [SerializeField] protected Color backgroundColor;
-        
-        [SerializeField] protected Color buttonColor;
-        [SerializeField] protected Color buttonTextColor;
-        
         [Serializable]
         private class Permission
         {
@@ -69,37 +62,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             instance.pmUserPrefab = pmUserPrefab;
             instance.pmUserTransform = pmUserTransform;
-
-            instance.textColor = textColor;
-            instance.backgroundColor = backgroundColor;
-            instance.buttonColor = buttonColor;
-            instance.buttonTextColor = buttonTextColor;
             
             UdonSharpEditorUtility.CopyProxyToUdon(instance);
-        }
-        
-        public Color TextColor
-        {
-            get => textColor;
-            set => textColor = value;
-        }
-
-        public Color BackgroundColor
-        {
-            get => backgroundColor;
-            set => backgroundColor = value;
-        }
-
-        public Color ButtonColor
-        {
-            get => buttonColor;
-            set => buttonColor = value;
-        }
-
-        public Color ButtonTextColor
-        {
-            get => buttonTextColor;
-            set => buttonTextColor = value;
         }
 #endif
     }

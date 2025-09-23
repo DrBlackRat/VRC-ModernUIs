@@ -153,8 +153,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &1983257494173933777
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,8 +306,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &3455929984038085307
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,8 +459,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &7325157356411290861
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,8 +627,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &8017091067332282619
 GameObject:
   m_ObjectHideFlags: 0
@@ -788,8 +780,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &8104924284665218041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -816,7 +806,7 @@ PrefabInstance:
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_Size
-      value: 0.9999817
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 405973390012481339, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -1035,6 +1025,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3470856714071102074, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3470856714071102074, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
     - target: {fileID: 3811433837001750332, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_SizeDelta.y
@@ -1055,6 +1051,12 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 44a7eec8ab4907943b6a6a7163943b58,
+        type: 3}
+    - target: {fileID: 4156374262927922257, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 4156374262927922257, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
     - target: {fileID: 4211645044567480229, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -1105,6 +1107,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5542091457887463018, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
+    - target: {fileID: 6608028531967247614, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6608028531967247614, guid: c584f53b5c724724eb0b59f277303599,
+        type: 3}
     - target: {fileID: 6779159554899699912, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1138,7 +1146,7 @@ PrefabInstance:
     - target: {fileID: 6798810265078039205, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6881844160607779181, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -1392,6 +1400,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8104924284665218041}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1656758753981286031 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7388019944064714102, guid: c584f53b5c724724eb0b59f277303599,
+    type: 3}
+  m_PrefabInstance: {fileID: 8104924284665218041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1794277971476199684 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7538172551047805693, guid: c584f53b5c724724eb0b59f277303599,
+    type: 3}
+  m_PrefabInstance: {fileID: 8104924284665218041}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6000022571879786591 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2539507976303029158, guid: c584f53b5c724724eb0b59f277303599,
@@ -1444,12 +1464,10 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5889592607255745873}
-  whitelistedPrefab: {fileID: 3591901342350911823, guid: ddbdfd92a32eddd4b854d5a5a11795cd,
-    type: 3}
+  whitelistedPrefab: {fileID: 1794277971476199684}
   whitelistedTransform: {fileID: 6530049149709805432}
   whitelistedCountDisplay: {fileID: 6000022571879786591}
-  otherUsersPrefab: {fileID: 3423734140893842230, guid: 0edfda35df850b64292f2c2ad84ffee0,
-    type: 3}
+  otherUsersPrefab: {fileID: 1656758753981286031}
   otherUsersTransform: {fileID: 7011286886326643597}
   otherUsersCountDisplay: {fileID: 109170491839063070}
   whitelist: {fileID: 0}
@@ -1457,8 +1475,6 @@ MonoBehaviour:
   showOrAllowAdmins: 0
   limitAdding: 0
   maxAddAmount: 2
-  prefabTextColor: {r: 1, g: 1, b: 1, a: 1}
-  prefabBackgroundColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0.9490196}
   requestButton: {fileID: 4676116046370900021}
   whitelistedText: {fileID: 3455929984038085307}
   adminText: {fileID: 1983257494173933777}

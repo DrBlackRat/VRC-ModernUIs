@@ -17,8 +17,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         [SerializeField] protected GameObject buttonObj;
         [SerializeField] protected GameObject declineButtonObj;
-
-        [SerializeField] protected Image background;
         
         protected bool isRemover;
 
@@ -56,12 +54,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             isRequestor = WhitelistEditorBase.GetUdonTypeID() == GetUdonTypeID<WhitelistRequestor>();
             if (declineButtonObj != null) declineButtonObj.SetActive(isRequestor && !isRemover);
-        }
-
-        public void _ApplyThemeColors(Color textColor, Color backgroundColor)
-        {
-            usernameTMP.color = textColor;
-            background.color = backgroundColor;
         }
 
         public void _ButtonPressed()

@@ -44,12 +44,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Range(0, 40)] [Tooltip("The amount of users a single admin can add.")]
         [SerializeField] protected int maxAddAmount = 2;
         
-        // Theming
-        [Tooltip("Color of text on instantiated prefabs, e.g. Whitelisted Users")]
-        [SerializeField] protected Color prefabTextColor;
-        [Tooltip("Color of the background on instantiated prefabs, e.g. Whitelisted Users")]
-        [SerializeField] protected Color prefabBackgroundColor;
-        
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary otherUsers = new DataDictionary();
 
@@ -228,8 +222,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 whitelistUser._Setup(this, username, true, hasAccess);
             }
-
-            whitelistUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             newUserObj.SetActive(!whitelistCollapsed);
             whitelistedUsers.Add(username, whitelistUser);
 
@@ -267,7 +259,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newUserObj.transform.localScale = Vector3.one;
             var otherUser = newUserObj.GetComponent<WhitelistUser>();
             otherUser._Setup(this, username,  false, hasAccess && canAdd);
-            otherUser._ApplyThemeColors(prefabTextColor, prefabBackgroundColor);
             newUserObj.SetActive(!otherUsersCollapsed);
             otherUsers.Add(username, otherUser);
             
@@ -313,20 +304,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             whitelist._RemoveUser(username, (IUdonEventReceiver)this);
             
             UpdateCountDisplays();
-        }
-        #endregion
-        
-        #region Theming
-        public Color PrefabTextColor
-        {
-            get => prefabTextColor;
-            set => prefabTextColor = value;
-        }
-        
-        public Color PrefabBackgroundColor
-        {
-            get => prefabBackgroundColor;
-            set => prefabBackgroundColor = value;
         }
         #endregion
 

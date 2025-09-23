@@ -11,13 +11,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public class WhitelistUserDisplay : UdonSharpBehaviour
     {
         [SerializeField] private TextMeshProUGUI text;
-        [SerializeField] private Image background;
 
-        public void _Setup(string username, Color textColor, Color backgroundColor)
+        public void _Setup(string username)
         {
             text.text = username;
-            text.color = textColor;
-            background.color = backgroundColor;
         }
     }
 }

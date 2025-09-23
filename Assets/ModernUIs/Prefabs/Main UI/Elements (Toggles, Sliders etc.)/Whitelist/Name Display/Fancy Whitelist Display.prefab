@@ -356,8 +356,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1 &7088257503284544955
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,8 +576,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!1001 &7326975045875254471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -705,6 +701,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1866031224398226059, guid: 53f5e7d86bf6b0e4a8c90cd7f983fd89,
         type: 3}
+    - target: {fileID: 5172414474530908707, guid: 53f5e7d86bf6b0e4a8c90cd7f983fd89,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5172414474530908707, guid: 53f5e7d86bf6b0e4a8c90cd7f983fd89,
+        type: 3}
     - target: {fileID: 8126219577626356917, guid: 53f5e7d86bf6b0e4a8c90cd7f983fd89,
         type: 3}
       propertyPath: m_ChildForceExpandHeight
@@ -745,7 +747,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Display Names
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3821629107406459964, guid: 53f5e7d86bf6b0e4a8c90cd7f983fd89, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
