@@ -18,23 +18,14 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
         // Set by callback script
         [HideInInspector] public LocalizedComponent[] localizedComponents;
         
+        
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-
-            if (usePersistence && PlayerData.TryGetInt(player, dataKey, out int value))
-            {
-                if (!selectorUIButtons[value].Selectable)
-                {
-                    PlayerData.SetInt(dataKey, selectedState);
-                    return;
-                }
-                UpdateSelection(value, true, false, false);
-            } 
-            else
-            {
+            base.OnPlayerRestored(player);
+            
+            if (!persistenceLoaded)
                 ApplyMenuLanguage();
-            }
         }
 
         /// <summary>

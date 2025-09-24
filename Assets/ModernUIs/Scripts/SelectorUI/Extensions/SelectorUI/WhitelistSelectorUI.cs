@@ -90,15 +90,25 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public virtual void _DelayedLoad()
         {
             if (!hasAccess) return;
-            if (PlayerData.TryGetInt(Networking.LocalPlayer, dataKey, out int value))
+            
+            int storedSelected = 0;
+            if (PlayerData.TryGetBool(Networking.LocalPlayer, dataKey, out bool boolValue))
             {
-                if (!selectorUIButtons[value].Selectable)
-                {
-                    PlayerData.SetInt(dataKey, selectedState);
-                    return;
-                }
-                UpdateSelection(value, true, false, false);
+                storedSelected = boolValue ? 1 : 0;
             }
+            else if (PlayerData.TryGetInt(Networking.LocalPlayer, dataKey, out int intValue))
+            {
+                storedSelected = intValue;
+            }
+            
+            if (!selectorUIButtons[storedSelected].Selectable)
+            {
+                PlayerData.SetInt(dataKey, selectedState);
+                return;
+            }
+            
+            persistenceLoaded = true;
+            UpdateSelection(storedSelected, true, false, false);
         }
 
         protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)

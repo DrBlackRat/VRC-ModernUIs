@@ -75,6 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [HideInInspector] public Selector selector;
 
         protected int prevSelectedState;
+        protected bool persistenceLoaded; // Currently only used by language selector UI to apply default language if it hasn't
         
         protected virtual void Start()
         {
@@ -106,16 +107,25 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
             if (!player.isLocal || !usePersistence) return;
-            
-            if (PlayerData.TryGetInt(player, dataKey, out int value))
+
+            int storedSelected = 0;
+            if (PlayerData.TryGetBool(player, dataKey, out bool boolValue))
             {
-                if (!selectorUIButtons[value].Selectable)
-                {
-                    PlayerData.SetInt(dataKey, selectedState);
-                    return;
-                }
-                UpdateSelection(value, true, false, false);
+                storedSelected = boolValue ? 1 : 0;
             }
+            else if (PlayerData.TryGetInt(player, dataKey, out int intValue))
+            {
+                storedSelected = intValue;
+            }
+            
+            if (!selectorUIButtons[storedSelected].Selectable)
+            {
+                PlayerData.SetInt(dataKey, selectedState);
+                return;
+            }
+
+            persistenceLoaded = true;
+            UpdateSelection(storedSelected, true, false, false);
         }
 
         protected virtual void ChangeExternalSelection(int id, bool skipBehaviour)
@@ -178,8 +188,18 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             selectedState = newState;
 
             ChangeExternalSelection(selectedState, false);
-            
-            if (usePersistence && !skipPersistence) PlayerData.SetInt(dataKey, selectedState);
+
+            if (usePersistence && !skipPersistence)
+            {
+                if (selectorUIButtons.Length == 2)
+                {
+                    PlayerData.SetBool(dataKey, selectedState == 1); // Save as bool for toggles to save space
+                }
+                else
+                {
+                    PlayerData.SetInt(dataKey, selectedState);
+                }
+            }
             
             // Button Transition
             selectorUIButtons[prevSelectedState]._UpdateSelected(false);
