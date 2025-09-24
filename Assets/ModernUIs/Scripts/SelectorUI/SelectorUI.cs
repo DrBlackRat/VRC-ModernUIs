@@ -112,19 +112,21 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (PlayerData.TryGetBool(player, dataKey, out bool boolValue))
             {
                 storedSelected = boolValue ? 1 : 0;
+                persistenceLoaded = true;
             }
             else if (PlayerData.TryGetInt(player, dataKey, out int intValue))
             {
                 storedSelected = intValue;
+                persistenceLoaded = true;
             }
-            
+
+            if (!persistenceLoaded) return;
             if (!selectorUIButtons[storedSelected].Selectable)
             {
                 PlayerData.SetInt(dataKey, selectedState);
                 return;
             }
-
-            persistenceLoaded = true;
+            
             UpdateSelection(storedSelected, true, false, false);
         }
 
