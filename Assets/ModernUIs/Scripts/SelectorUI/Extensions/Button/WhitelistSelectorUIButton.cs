@@ -31,7 +31,16 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             selectable = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
             if (disableButton)
-                buttonObj.SetActive(selectable);
+            {
+                gameObject.SetActive(selectable);
+                selectorUI._ForceUpdateSelector();
+
+                if (selected && !selectable && !locked)
+                {
+                    int id = buttonId > 0 ? buttonId - 1 : buttonId + 1;
+                    selectorUI._ButtonSelected(id);
+                }
+            }
             
             UpdateInteractable();
         }

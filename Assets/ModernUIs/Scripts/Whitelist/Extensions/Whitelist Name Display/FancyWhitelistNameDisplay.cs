@@ -47,13 +47,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public void _WhitelistUpdated()
         {
-            // Add if not on whitelistedUsers
             var whitelist = this.whitelist._GetUsersAsList();
-            for (var i = 0; i < whitelist.Count; i++)
-            {
-                if (whitelistDisplays.ContainsKey(whitelist[i].String)) continue;
-                AddUsernameDisplay(whitelist[i].String);
-            }
             
             // Remove if on whitelistedUsers but not on whitelist
             var keys = whitelistDisplays.GetKeys();
@@ -61,6 +55,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 if (whitelist.Contains(keys[i])) continue;
                 RemoveUsernameDisplay(keys[i].String);
+            }
+            
+            // Add if not on whitelistedUsers
+            for (var i = 0; i < whitelist.Count; i++)
+            {
+                if (whitelistDisplays.ContainsKey(whitelist[i].String)) continue;
+                AddUsernameDisplay(whitelist[i].String);
             }
             
             if (countDisplay != null)

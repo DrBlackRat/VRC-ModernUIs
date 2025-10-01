@@ -2,6 +2,7 @@
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Persistence;
@@ -44,7 +45,16 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [SerializeField] protected Vector2 buttonSelectedScale;
         [SerializeField] protected float buttonNormalPixelPerUnit;
         [SerializeField] protected float buttonSelectedPixelPerUnit;
-        
+
+        public Vector2 ButtonNormalScale => buttonNormalScale;
+        public Vector2 ButtonSelectedScale => buttonSelectedScale;
+        public float ButtonNormalPixelPerUnit => buttonNormalPixelPerUnit;
+        public float ButtonSelectedPixelPerUnit => buttonSelectedPixelPerUnit;
+        public Vector2 IconNormalPos => iconNormalPos;
+        public Vector2 IconSelectedPos => iconSelectedPos;
+        public Vector2 TextNormalPos => textNormalPos;
+        public Vector2 TextSelectedPos => textSelectedPos;
+
         [SerializeField] protected Color normalColor;
 
         public Color NormalColor
@@ -181,7 +191,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 return UpdateSelection(buttonId, false, false, false);
             }
         }
-        
+
+        /// <summary>
+        /// Forces updates the Selector to update the position, size, corner radius to the correct button.
+        /// </summary>
+        public void _ForceUpdateSelector()
+        {
+            selector._MoveTo(selectorUIButtons[selectedState]);
+        }
 
         protected virtual bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
