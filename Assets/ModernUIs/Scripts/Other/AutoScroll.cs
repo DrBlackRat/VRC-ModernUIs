@@ -1,6 +1,7 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,14 +13,14 @@ namespace DrBlackRat.VRC.ModernUIs
     public class AutoScroll : UdonSharpBehaviour
     {
         [Tooltip("Units in the UI to move per second.")]
-        [SerializeField] private float unitsPerSec = 25f;
+        [SerializeField] private float unitsPerSec = 50f;
         
+        [FormerlySerializedAs("startEndCurve")]
         [Tooltip("Curve used for smoothing the start & end.")]
-        [SerializeField] private AnimationCurve startEndCurve;
-        [Range(0f, 0.5f)]
-        [SerializeField] private float startPercentage = 0.25f;
-        [Range(0f, 0.5f)]
-        [SerializeField] private float endPercentage = 0.25f;
+        [SerializeField] private AnimationCurve smoothingCurve;
+        [Range(0f, 10f)]
+        [SerializeField] private float startTime = 5f;
+        //[Range(0f, 5f)] [SerializeField] private float endTime = 2.5f;
 
         [Tooltip("If the Scroll Info should be updated continuously. Needs to be enabled for anything that can change it's size later on.")]
         [SerializeField] private bool autoUpdateScrollInfo = true;
@@ -30,6 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs
         
         private bool autoScroll;
         private float normalizedSpeed;
+        private float elapsedTime;
         private ScrollState state = ScrollState.ScrollDown;
 
 
@@ -51,7 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs
             autoScroll = scrollHeight > 0;
 
             if (autoScroll)
-                normalizedSpeed = scrollHeight / unitsPerSec;
+                normalizedSpeed = unitsPerSec / scrollHeight;
             
             if (autoUpdateScrollInfo)
                 SendCustomEventDelayedSeconds(nameof(_UpdateScrollInfo), scrollInfoUpdateInterval);
@@ -60,57 +62,48 @@ namespace DrBlackRat.VRC.ModernUIs
         private void AnimateScroll()
         {
             if (!autoScroll) return;
-            var normalizedPos= scrollRect.verticalNormalizedPosition;
-            var invertedNormalizedPos = 1f - normalizedPos;
-            
-            
 
+            elapsedTime += Time.deltaTime;
+            var normalizedPos= scrollRect.verticalNormalizedPosition;
+            //var invertedNormalizedPos = 1f - normalizedPos;
+            //var remainingTime = duration - elapsedTime;
+            
+            var moveSpeed = 0f;
+            if (elapsedTime < startTime)
+            {
+                var percentageComplete = Mathf.InverseLerp(0f, startTime, elapsedTime);
+                 moveSpeed = normalizedSpeed * Time.deltaTime * smoothingCurve.Evaluate(percentageComplete);
+            }
+            /*
+            else if (remainingTime < endTime)
+            {
+                var percentageComplete = Mathf.InverseLerp(0f, endTime, remainingTime);
+                moveSpeed = normalizedSpeed * Time.deltaTime * startEndCurve.Evaluate(percentageComplete);
+            }
+            */
+            else
+            {
+                moveSpeed = normalizedSpeed * Time.deltaTime;
+            }
+            
             if (state == ScrollState.ScrollDown)
             {
-                if (invertedNormalizedPos < startPercentage)
-                {
-                    var percentageComplete = Mathf.InverseLerp(0f, startPercentage, invertedNormalizedPos);
-                    var curveMod = startEndCurve.Evaluate(percentageComplete);
-                    scrollRect.verticalNormalizedPosition -= normalizedSpeed * Time.deltaTime * curveMod;
-                }
-                else if (normalizedPos < endPercentage)
-                {
-                    var percentageComplete = Mathf.InverseLerp(0f, endPercentage, normalizedPos);
-                    var curveMod = startEndCurve.Evaluate(percentageComplete);
-                    scrollRect.verticalNormalizedPosition -= normalizedSpeed * Time.deltaTime * curveMod;
-                }
-                else
-                {
-                    scrollRect.verticalNormalizedPosition -= normalizedSpeed * Time.deltaTime;
-                }
+                scrollRect.verticalNormalizedPosition -= moveSpeed;
                 
                 if (normalizedPos <= 0f)
                 {
                     state = ScrollState.ScrollUp;
+                    elapsedTime = 0f;
                 }
             }
             else
             {
-                if (invertedNormalizedPos < startPercentage)
-                {
-                    var percentageComplete = Mathf.InverseLerp(0f, startPercentage, invertedNormalizedPos);
-                    var curveMod = startEndCurve.Evaluate(percentageComplete);
-                    scrollRect.verticalNormalizedPosition += normalizedSpeed * Time.deltaTime * curveMod;
-                }
-                else if (normalizedPos < endPercentage)
-                {
-                    var percentageComplete = Mathf.InverseLerp(0f, endPercentage, normalizedPos);
-                    var curveMod = startEndCurve.Evaluate(percentageComplete);
-                    scrollRect.verticalNormalizedPosition += normalizedSpeed * Time.deltaTime * curveMod;
-                }
-                else
-                {
-                    scrollRect.verticalNormalizedPosition += normalizedSpeed * Time.deltaTime;
-                }
+                scrollRect.verticalNormalizedPosition += moveSpeed;
                 
                 if (normalizedPos >= 1f)
                 {
                     state = ScrollState.ScrollDown;
+                    elapsedTime = 0f;
                 }
             }
         }
