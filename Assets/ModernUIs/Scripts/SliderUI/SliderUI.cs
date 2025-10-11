@@ -19,7 +19,9 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected float value = 0f;
         public virtual float Value => value;
 
-        [Tooltip("Curve that is used when applying the slider, should be left linear but can be changed to e.g. be logarithmic for volume sliders.")]
+        [Tooltip("If enabled, the curve below will be used to evaluate the slider value")]
+        [SerializeField] protected bool useCurve;
+        [Tooltip("Requires \"Use Curve\" to be enabled. E.g. can be changed to be logarithmic for volume sliders.")]
         [SerializeField] protected AnimationCurve sliderCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         [FormerlySerializedAs("postProcessVolume")]
@@ -115,7 +117,8 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         protected void UpdateExternal(float newValue)
         {
-            newValue = sliderCurve.Evaluate(newValue);
+            if (useCurve)
+                newValue = EvaluateCurve(newValue);
             
             if (audioSources != null && audioSources.Length > 0)
             {
@@ -153,6 +156,18 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
                     behaviour.SendCustomEvent(updateEventName);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Normalizes the given value and evaluates it on a curve, then expands it back to the actual range.
+        /// </summary>
+        /// <param name="newValue">Float that should be evaluated.</param>
+        /// <returns>The provided float evaluated along a curve.</returns>
+        protected float EvaluateCurve(float newValue)
+        {
+            newValue = (newValue - slider.minValue) / (slider.maxValue - slider.minValue);
+            newValue = sliderCurve.Evaluate(newValue);
+            return slider.minValue + (newValue * (slider.maxValue - slider.minValue));
         }
 
         protected void UpdateSliderText(float newValue)

@@ -9,8 +9,9 @@
     <ui:Foldout text="Settings" view-data-key="SliderUISettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="value" name="selectedState" label="Default Value" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="value" name="value" label="Default Value" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="snapInterval" name="snapInterval" label="Snapping Interval" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="useCurve" name="useCurve" label="Use Slider Curve" style="font-size: 12px; -unity-font-style: normal; margin-top: 5px;" />
             <uie:PropertyField binding-path="sliderCurve" name="sliderCurve" label="Slider Curve" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Persistence" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="usePersistence" name="usePersistence" label="Enable Persistence" style="font-size: 12px; -unity-font-style: normal;" />
