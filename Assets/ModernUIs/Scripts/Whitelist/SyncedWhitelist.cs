@@ -151,7 +151,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
 
         //Networked Version of update Event, if local only is needed use base instead
-        protected override void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null)
+        protected override void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             var localPlayer = Networking.LocalPlayer;
             
@@ -164,57 +164,65 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!localPlayer.IsOwner(gameObject)) Networking.SetOwner(localPlayer, gameObject);
             RequestSerialization();
 
-            base.WhitelistUpdated(senderBehaviour);
+            base.WhitelistUpdated(senderBehaviour, senderEvent);
         }
 
         #region Overrides
-        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour = null, bool notify = true)
+        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            base._AddUser(username, senderBehaviour, notify);
+            base._AddUser(username, senderBehaviour, senderEvent, notify);
         }
         
-        public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
+        public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._AddUsers(newUsernames, senderBehaviour);
+            base._AddUsers(newUsernames, senderBehaviour, senderEvent);
         }
         
-        public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
+        public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._AddUsers(newUsernames, senderBehaviour);
+            base._AddUsers(newUsernames, senderBehaviour, senderEvent);
         }
 
-        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, bool notify = true)
+        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            base._RemoveUser(username, senderBehaviour);
+            base._RemoveUser(username, senderBehaviour, senderEvent);
         }
 
-        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null)
+        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour);
+            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent);
         }
 
-        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null)
+        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour);
+            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent);
         }
 
-        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
+        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._ReplaceWhitelist(newUsernames, senderBehaviour);
+            base._ReplaceWhitelist(newUsernames, senderBehaviour, senderEvent);
         }
 
-        public override void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
+        public override void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (!EditCheck()) return;
-            base._ReplaceWhitelist(newUsernames, senderBehaviour);
+            base._ReplaceWhitelist(newUsernames, senderBehaviour, senderEvent);
         }
+
+        public override void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        {
+            if (!EditCheck()) return;
+            base._RemoveAddedBy(username, senderBehaviour, senderEvent);
+        }
+
         #endregion
         
     }

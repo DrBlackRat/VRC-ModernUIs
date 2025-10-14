@@ -1,4 +1,4 @@
-Version 0.1.1
+Version 0.1.2
 
 Allows importing & exporting Access TXL to Modern UI Whitelists.
 

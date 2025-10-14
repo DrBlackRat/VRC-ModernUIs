@@ -115,7 +115,9 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
 
         public override string _GetWhoAdded(string username)
         {
-            return localName;
+            if (whitelist.Contains(username))
+                return localName;
+            return null;
         }
         #endregion
 

@@ -183,11 +183,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (state)
             {
-                whitelist._AddUser(username, (IUdonEventReceiver)this);
+                whitelist._AddUser(username, (IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
             }
             else
             {
-                whitelist._RemoveUser(username, (IUdonEventReceiver)this);
+                whitelist._RemoveUser(username, (IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
             }
         }
 

@@ -210,36 +210,39 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             return null;
         }
         #endregion
-        
-        
+
+
         /// <summary>
         /// Should be called whenever the whitelist is changed or updated. 
         /// Notifies all connected behaviours, unless suppressed.
         /// </summary>
-        /// <param name="senderBehaviour">
-        /// Optional | The behaviour that triggered the update. If provided, it will be excluded from receiving the update event.
-        /// </param>
-        protected virtual void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null)
+        /// <param name="senderBehaviour">Optional | The behaviour that triggered the update. If provided, it will be excluded from receiving the update event.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event hat triggered the update. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        protected virtual void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
-            MUIDebug.Log($"Whitelist Manager: Whitelist Updated");
+            MUIDebug.Log($"Whitelist: Whitelist Updated");
             
-            if (connectedBehaviours == null) return;
-            var keys = connectedBehaviours.GetKeys();
-            for (int i = 0; i < keys.Count; i++)
+            if (connectedBehaviours == null || connectedBehaviours.Count == 0) return;
+            var behaviours = connectedBehaviours.GetKeys();
+            for (int i = 0; i < behaviours.Count; i++)
             {
-                if (keys[i].IsNull) continue;
+                if (behaviours[i].IsNull) continue;
                 
-                // Prevent Sending update event to sender
-                var receiver = (IUdonEventReceiver)keys[i].Reference;
-                if (receiver == senderBehaviour) continue;
-                
-                if (connectedBehaviours.TryGetValue(keys[i], out DataToken value))
-                {
-                    DataList events = value.DataList;
+                var behaviour = (IUdonEventReceiver)behaviours[i].Reference;
+                if (behaviour == senderBehaviour && string.IsNullOrEmpty(senderEvent)) continue;
 
-                    for (int j = 0; j < events.Count; j++)
+                if (connectedBehaviours.TryGetValue(behaviours[i], out DataToken value))
+                {
+                    DataList eventNames = value.DataList;
+                    for (int j = 0; j < eventNames.Count; j++)
                     {
-                        receiver.SendCustomEventDelayedFrames(events[j].String, 1); // Send delayed by one frame to prevent too much happening inside one frame
+                        var eventName = eventNames[j].String;
+                        bool send = false;
+                        if (behaviour != senderBehaviour || eventName != senderEvent)
+                        {
+                            behaviour.SendCustomEventDelayedFrames(eventName, 1);
+                            send = true;
+                        }
                     }
                 }
             }
