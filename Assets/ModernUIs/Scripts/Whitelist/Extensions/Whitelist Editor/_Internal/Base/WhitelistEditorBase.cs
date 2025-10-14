@@ -1,4 +1,5 @@
-﻿using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
@@ -291,7 +292,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             CheckMaxUsersAdded(); 
             
             AddWhitelistUser(username);
-            whitelist._AddUser(username, (IUdonEventReceiver)this);
+            whitelist._AddUser(username, (IUdonEventReceiver)this, nameof(_WhitelistUpdated));
             
             UpdateCountDisplays();
         }
@@ -301,7 +302,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasAccess) return;
             
             RemoveWhitelistUser(username);
-            whitelist._RemoveUser(username, (IUdonEventReceiver)this);
+            whitelist._RemoveUser(username, (IUdonEventReceiver)this, nameof(_WhitelistUpdated));
             
             UpdateCountDisplays();
         }
