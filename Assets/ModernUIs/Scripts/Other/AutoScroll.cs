@@ -29,17 +29,37 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Scroll Info Update Interval in seconds."), Range(0.5f, 5f)]
         [SerializeField] private float scrollInfoUpdateInterval = 2.5f;
 
+        private bool scroll = true;
+        /// <summary>
+        /// Enabled / Disables the Auto Scrolling
+        /// </summary>
+        public bool Scroll
+        {
+            get => scroll;
+            set
+            {
+                if (value)
+                {
+                    _UpdateScrollInfo();
+                }
+                else
+                {
+                    elapsedTime = 0f;
+                }
+                scroll = value;
+            }
+        }
+
         private ScrollRect scrollRect;
         
-        private bool autoScroll;
+        private bool enoughHeight;
         private float normalizedSpeed;
         
         private float elapsedTime;
         private bool wait;
         
         private ScrollState state = ScrollState.ScrollDown;
-
-
+        
         private void Start()
         {
             scrollRect = GetComponent<ScrollRect>();
@@ -65,17 +85,33 @@ namespace DrBlackRat.VRC.ModernUIs
         }
 
         /// <summary>
+        /// Enabled Auto Scrolling
+        /// </summary>
+        public void _EnableAutoScroll()
+        {
+            Scroll = true;
+        }
+
+        /// <summary>
+        /// Disables Auto Scrolling
+        /// </summary>
+        public void _DisableAutoScroll()
+        {
+            Scroll = false;
+        }
+
+        /// <summary>
         /// Updates info required for auto scrolling, such as scroll height, scroll speed etc.
         /// </summary>
         public void _UpdateScrollInfo()
         {
             var scrollHeight= scrollRect.content.rect.height - scrollRect.viewport.rect.height;
-            autoScroll = scrollHeight > 0;
+            enoughHeight = scrollHeight > 0;
 
-            if (autoScroll)
+            if (enoughHeight)
                 normalizedSpeed = unitsPerSec / scrollHeight;
             
-            if (autoUpdateScrollInfo)
+            if (autoUpdateScrollInfo && scroll)
                 SendCustomEventDelayedSeconds(nameof(_UpdateScrollInfo), scrollInfoUpdateInterval);
         }
 
@@ -91,7 +127,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void AnimateScroll()
         {
-            if (!autoScroll) return;
+            if (!enoughHeight || !scroll) return;
             elapsedTime += Time.deltaTime;
             
             if (Mathf.Abs(scrollRect.velocity.y) > 0.00f) // Wait if user is manually scrolling, normally there are interfaces for this... but this is Udon....
