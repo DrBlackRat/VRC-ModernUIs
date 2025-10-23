@@ -37,6 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs
         private void OnDisable()
         {
             isOpen = false;
+            animate = false;
             animElpasedTime = 0f;
             
             menuTransform.localScale = Vector3.zero;

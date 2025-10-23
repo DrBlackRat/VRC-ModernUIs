@@ -1,5 +1,6 @@
 ﻿
 using DrBlackRat.VRC.ModernUIs;
+using DrBlackRat.VRC.ModernUIs.Notifications;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
@@ -19,6 +20,6 @@ public class NotificationTest : UdonSharpBehaviour
 
     public void Notify()
     {
-        notificationManager.AddNotification(header, text, playSound, image, duration, width);
+        notificationManager._AddNotification(header, text, playSound, image, duration, width);
     }
 }

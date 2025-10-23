@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DrBlackRat.VRC.ModernUIs.Notifications;
 using ModernUIs.Theming;
 using UnityEngine;
 using UnityEngine.UIElements;

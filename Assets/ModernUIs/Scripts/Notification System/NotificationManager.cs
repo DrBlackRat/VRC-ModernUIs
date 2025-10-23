@@ -9,9 +9,10 @@ using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs
+namespace DrBlackRat.VRC.ModernUIs.Notifications
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    [DefaultExecutionOrder(-1000)]
     public class NotificationManager : UdonSharpBehaviour
     {
         [SerializeField] private GameObject notificationObject;
@@ -77,7 +78,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// <param name="image">Optional Sprite | Image shown next to the header and text. If not provided none will be shown.</param>
         /// <param name="duration">Optional Float | How long the notification should be shown for in seconds, if not provided the default will be used.</param>
         /// <param name="width">Optional Float | How wide the canvas should be. Default is 80, clamped between 50 and 150.</param>
-        public void AddNotification(string header, string text, bool playSound, Sprite image = null,  float duration = 3f, float width = 80f)
+        public void _AddNotification(string header, string text, bool playSound, Sprite image = null,  float duration = 3f, float width = 80f)
         {
             headers.Add(header);
             texts.Add(text);
@@ -93,7 +94,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// Removes the notification at the start of the queue.
         /// </summary>
         /// <returns>Bool | True if successful, false if not.</returns>
-        public bool RemoveFirstNotification()
+        public bool _RemoveFirstNotification()
         {
             if (headers.Count == 0)
                 return false;
@@ -183,7 +184,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 showingNotification = false;
                 notificationObject.SetActive(false);
 
-                RemoveFirstNotification();
+                _RemoveFirstNotification();
             }
         }
 
