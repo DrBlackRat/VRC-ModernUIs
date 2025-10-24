@@ -37,9 +37,9 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Text Mesh Pro UGUI component that will have it's text changed depending on if you are on the whitelist or not.")]
         [SerializeField] private TextMeshProUGUI placeholderText;
         [Tooltip("Text that is displayed if you are on the whitelist and haven't entered an ID yet.")]
-        [SerializeField] private string whitelistedText = "Enter GroupID...";
+        public string whitelistedText = "Enter GroupID...";
         [Tooltip("Text that is displayed if you are NOT on the whitelist.")]
-        [SerializeField] private string notWhitelistedText = "Not Whitelisted!";
+        public string notWhitelistedText = "Not Whitelisted!";
 
         [UdonSynced] private string netGroupID;
         
@@ -65,6 +65,11 @@ namespace DrBlackRat.VRC.ModernUIs
         public void _WhitelistUpdated()
         {
             hasAccess = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
+            UpdateUI();
+        }
+        
+        public void _LocalizationChanged() // Used for applying the changed strings
+        {
             UpdateUI();
         }
 

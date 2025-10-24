@@ -11,6 +11,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
         {
             LanguageSelectorUI[] languageSelectorUIs = Object.FindObjectsOfType<LanguageSelectorUI>(true);
             LocalizedComponent[] localizedComponents = Object.FindObjectsOfType<LocalizedComponent>(true);
+            CustomLocalizedComponent[] customLocalizedComponents = Object.FindObjectsOfType<CustomLocalizedComponent>(true);
 
             if (languageSelectorUIs != null && languageSelectorUIs.Length != 0)
             {
@@ -21,6 +22,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
                 else
                 {
                     languageSelectorUIs[0].localizedComponents = localizedComponents;
+                    languageSelectorUIs[0].customLocalizedComponents = customLocalizedComponents;
                 }
             }
                 

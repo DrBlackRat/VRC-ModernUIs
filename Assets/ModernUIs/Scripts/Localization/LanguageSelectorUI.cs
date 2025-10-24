@@ -17,7 +17,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
 
         // Set by callback script
         [HideInInspector] public LocalizedComponent[] localizedComponents;
-        
+        [HideInInspector] public CustomLocalizedComponent[] customLocalizedComponents;
         
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
@@ -58,6 +58,12 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
             {
                 if (localizedComponent == null) continue;
                 localizedComponent.ApplyLocalization(id);
+            }
+
+            foreach (var customLocalizedComponent in customLocalizedComponents)
+            {
+                if (customLocalizedComponent == null) continue;
+                customLocalizedComponent.ApplyLocalization(id);
             }
         }
     }
