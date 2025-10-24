@@ -83,15 +83,22 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: localPlayer
+      Entry: 6
+      Data: 
   _udonSharpBackingUdonBehaviour: {fileID: 9045184467390852823}
   notificationManager: {fileID: 0}
+  whitelist: {fileID: 0}
+  invertWhitelist: 0
   header: Purchase Successfull
   message: 'You just bought <b>PRODUCT NAME</b>!
 
     Thanks for your support!'
   image: {fileID: 21300000, guid: 22002707f7daf844d876472856ace8db, type: 3}
   playSound: 1
+  soundClip: {fileID: 8300000, guid: 5df0b915c212b1f458d4a459ac0ce9b0, type: 3}
+  soundVolume: 0.4
   duration: 4
   width: 100
 --- !u!114 &9045184467390852823
