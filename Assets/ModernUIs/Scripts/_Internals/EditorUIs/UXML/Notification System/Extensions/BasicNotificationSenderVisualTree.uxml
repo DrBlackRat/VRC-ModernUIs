@@ -4,17 +4,25 @@
         <ui:Label tabindex="-1" text="Modern UI | Basic Notification Sender" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
     </ui:VisualElement>
     <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
-        <ui:Label tabindex="-1" text="Allows setting up a notification in editor and then sending it by calling &quot;_SendNotification&quot;." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+        <ui:Label tabindex="-1" text="Allows setting up a notification in editor and then sending it by calling &quot;_SendNotification&quot;. Can optionally be provided with a whitelist." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
     </ui:VisualElement>
-    <ui:Foldout text="Settings" view-data-key="SelectorUISettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+    <ui:Foldout text="Settings" view-data-key="BasitNotificationSendSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="notificationManager" name="notificationManager" label="Notification Manager" style="font-size: 12px; -unity-font-style: normal;" />
-            <ui:Label tabindex="-1" text="Notification Setting" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <ui:Label tabindex="-1" text="Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelist" name="whitelist" label="Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="invertWhitelist" name="invertWhitelist" label="Invert Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="Notification" view-data-key="BasitNotificationSendNotificationSettings" name="Notification" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <uie:PropertyField binding-path="header" name="header" label="Header" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="message" name="message" label="Message" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="image" name="image" label="Image" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="playSound" name="playSound" label="Play Sound Effect" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="playSound" name="playSound" label="Play Sound Effect" style="font-size: 12px; -unity-font-style: normal; margin-top: 10px;" />
+            <uie:PropertyField binding-path="soundClip" name="soundClip" label="Sound Clip" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="soundVolume" name="playSound" label="Volume" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="duration" name="duration" label="Duration" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="width" name="width" label="Width" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>

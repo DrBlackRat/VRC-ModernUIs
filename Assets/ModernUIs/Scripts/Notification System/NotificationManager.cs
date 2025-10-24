@@ -26,6 +26,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         [Tooltip("Audio Source used for playing the notification sound.")]
         [SerializeField] private AudioSource notificationAudioSource;
+        [Tooltip("Audi Clip used if none is provided by the notification.")]
+        [SerializeField] private AudioClip defaultAudioClip;
         
         [SerializeField] private AnimationCurve smoothingCurve;
         [Tooltip("Time spend animating to show the UI.")] [Range(0f, 5f)]
@@ -42,7 +44,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private DataList headers = new DataList();
         private DataList texts = new DataList();
         private DataList images = new DataList();
+        
         private DataList playSounds = new DataList();
+        private DataList soundVolumes = new DataList();
+        private DataList soundClips = new DataList();
+        
         private DataList durations = new DataList();
         private DataList widths = new DataList();
 
@@ -51,6 +57,15 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private float elpasedTime;
 
         private VRCPlayerApi localPlayer;
+
+        private void OnDisable()
+        {
+            elpasedTime = 0f;
+            showingNotification = false;
+            notificationObject.SetActive(false);
+            
+            _ClearNotifications();
+        }
 
         private void Start()
         {
@@ -68,26 +83,39 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             UpdatePlayerHeadData();
         }
-
+        
         /// <summary>
         /// Adds a notification to the notification queue, if multiple are added they will play one after the other.
         /// </summary>
-        /// <param name="header">String | Title of the notification.</param>
-        /// <param name="text">String | Content of the notification.</param>
-        /// <param name="playSound">Bool | True when a notification sounds should be played, false when not.</param>
-        /// <param name="image">Optional Sprite | Image shown next to the header and text. If not provided none will be shown.</param>
-        /// <param name="duration">Optional Float | How long the notification should be shown for in seconds, if not provided the default will be used.</param>
-        /// <param name="width">Optional Float | How wide the canvas should be. Default is 80, clamped between 50 and 150.</param>
-        public void _AddNotification(string header, string text, bool playSound, Sprite image = null,  float duration = 3f, float width = 80f)
+        /// <param name="header">Title of the notification.</param>
+        /// <param name="text">Content of the notification.</param>
+        /// <param name="image">Image shown next to the header and text. If not provided none will be shown.</param>
+        /// <param name="playSound">If a notification sound should be played.</param>
+        /// <param name="soundClip">Audio Clip used for the notification, if not provided the default will be used.</param>
+        /// <param name="soundVolume">Volume of the notification sound. Default is 0.25, clamped between 0 and 1.</param>
+        /// <param name="duration">How long the notification should be shown for in seconds. Default is 3, clamped between 0 and 60.</param>
+        /// <param name="width">How wide the canvas should be. Default is 80, clamped between 50 and 150.</param>
+        /// <returns>True if successful, false if not.</returns>
+        public bool _AddNotification(string header, string text, Sprite image = null, 
+            bool playSound = true, AudioClip soundClip = null, float soundVolume = 0.25f, 
+            float duration = 3f, float width = 80f)
         {
+            if (!enabled) 
+                return false;
+            
             headers.Add(header);
             texts.Add(text);
             images.Add(image);
+            
             playSounds.Add(playSound);
-            durations.Add(duration);
+            soundClips.Add(soundClip ? soundClip : defaultAudioClip);
+            soundVolumes.Add(Mathf.Clamp(soundVolume, 0, 1));
+            
+            durations.Add(Mathf.Clamp(duration, 0, 60));
             widths.Add(Mathf.Clamp(width, 50, 150));
             
             NotificationQueueChanged();
+            return true;
         }
 
         /// <summary>
@@ -102,12 +130,35 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             headers.RemoveAt(0);
             texts.RemoveAt(0);
             images.RemoveAt(0);
+            
             playSounds.RemoveAt(0);
+            soundClips.RemoveAt(0);
+            soundVolumes.RemoveAt(0);
+            
             durations.RemoveAt(0);
             widths.RemoveAt(0);
             
             NotificationQueueChanged();
             return true;
+        }
+
+        /// <summary>
+        /// Removes all notifications from the queue.
+        /// </summary>
+        public void _ClearNotifications()
+        {
+            headers = new DataList();
+            texts = new DataList();
+            images = new DataList();
+            
+            playSounds = new DataList();
+            soundVolumes = new DataList();
+            soundClips = new DataList();
+            
+            durations = new DataList();
+            widths = new DataList();
+            
+            NotificationQueueChanged();
         }
 
         public void NotificationQueueChanged()
@@ -136,8 +187,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 imageContainer.SetActive(false);
             }
             
-            if (notificationAudioSource != null && playSounds[0].Boolean == true)
-                notificationAudioSource.Play();
+            if (notificationAudioSource != null && playSounds[0].Boolean)
+                notificationAudioSource.PlayOneShot((AudioClip)soundClips[0].Reference, soundVolumes[0].Float);
             
             // Reset
             notificationObject.SetActive(true);

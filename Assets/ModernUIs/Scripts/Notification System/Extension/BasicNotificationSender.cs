@@ -1,8 +1,11 @@
 ﻿
+using System;
 using UdonSharp;
 using UnityEngine;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Notifications
 {
@@ -11,6 +14,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     {
         [Tooltip("Notification Manager / System used to actually display the notification.")]
         [SerializeField] private NotificationManager notificationManager;
+        
+        [Tooltip("If provided the notification will only be send to members of this whitelist.")]
+        [SerializeField] private WhitelistGetterBase whitelist;
+        [Tooltip("If enabled Join / Leave notifications will be send to everyone, BUT members on the provided whitelist.")]
+        [SerializeField] private bool invertWhitelist;
 
         [Tooltip("Header / Title of the notification.")]
         public string header = "Notification";
@@ -18,19 +26,48 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         public string message = "";
         [Tooltip("Image / Sprite used by the notification, if not provided the image will be disabled.")]
         public Sprite image;
-        [Tooltip("If a notification sounds should be played.")]
+        
+        [Tooltip("If a notification sound should be played.")]
         public bool playSound = true;
+        [Tooltip("Audio Clip used for the notification, if not provided the default will be used.")]
+        public AudioClip soundClip;
+        [Tooltip("Volume of the notification sound. Default is 0.25, clamped between 0 and 1.")]
+        public float soundVolume = 0.25f; 
+        
         [Range(0f, 10f)] [Tooltip("How long to show the notification for in seconds, this does NOT include the start / end animation.")]
         public float duration = 3f;
         [Range(50f, 150f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
         public float width = 80f;
+
+        private bool isWhitelisted;
+        public VRCPlayerApi localPlayer;
+
+        private void Start()
+        {
+            localPlayer = Networking.LocalPlayer;
+            if (whitelist != null)
+            {
+                whitelist._SetUpConnection((IUdonEventReceiver)this);
+            }
+            else
+            {
+                isWhitelisted = true;
+            }
+        }
+
+        public void _WhitelistUpdated()
+        {
+            var newIsWhitelisted = whitelist._IsPlayerWhitelisted(localPlayer);
+            isWhitelisted = invertWhitelist ? !newIsWhitelisted : newIsWhitelisted ; 
+        }
 
         /// <summary>
         /// Sends the notification as configured.
         /// </summary>
         public void _SendNotification()
         {
-            notificationManager._AddNotification(header, message, playSound, image, duration, width);
+            if (!isWhitelisted) return;
+            notificationManager._AddNotification(header, message, image, playSound, soundClip, soundVolume, duration, width);
         }
     }
 }

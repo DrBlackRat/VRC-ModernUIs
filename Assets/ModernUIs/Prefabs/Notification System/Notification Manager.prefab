@@ -799,7 +799,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -1462,6 +1462,7 @@ GameObject:
   - component: {fileID: 9028239579775878298}
   - component: {fileID: 5930323010490677426}
   - component: {fileID: 3494267267906453008}
+  - component: {fileID: 7248628187570116807}
   m_Layer: 0
   m_Name: Notification Manager
   m_TagString: Untagged
@@ -1516,6 +1517,7 @@ MonoBehaviour:
   notificationImage: {fileID: 5388970968661071529}
   countdownSlider: {fileID: 4011983279421908908}
   notificationAudioSource: {fileID: 3494267267906453008}
+  defaultAudioClip: {fileID: 8300000, guid: e0108444dd0549642beffaa591859e10, type: 3}
   smoothingCurve:
     serializedVersion: 2
     m_Curve:
@@ -1600,9 +1602,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: e0108444dd0549642beffaa591859e10, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1686,3 +1688,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7248628187570116807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8480000921253119565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 10
+  Far: 80
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 0
+  UseAudioSourceVolumeCurve: 0

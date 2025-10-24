@@ -6,10 +6,11 @@
     <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Allows displaying notifications by using the provided API, will play them after each other if multiple are being send at the same time." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
     </ui:VisualElement>
-    <ui:Foldout text="Settings" view-data-key="SelectorUISettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+    <ui:Foldout text="Settings" view-data-key="NotificationMangerSettubgs" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
-            <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <ui:Label tabindex="-1" text="Audio" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="notificationAudioSource" name="notificationAudioSource" label="Notification Audio Source" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="defaultAudioClip" name="defaultAudioClip" label="Default Audio Clip" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Animation" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="smoothingCurve" name="smoothingCurve" label="Smoothing Curve" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="startAnimDuration" name="startAnimDuration" label="Start Animation Time" style="font-size: 12px; -unity-font-style: normal;" />
@@ -19,7 +20,10 @@
             <uie:PropertyField binding-path="hiddenPos" name="hiddenPos" label="Hidden Pos" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="shownScale" name="shownScale" label="Shown Scale" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="hiddenScale" name="hiddenScale" label="Hidden Scale" style="font-size: 12px; -unity-font-style: normal;" />
-            <ui:Label tabindex="-1" text="UI References" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="UI References" view-data-key="NotificationMangerUI" name="UIReferences" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <uie:PropertyField binding-path="notificationObject" name="notificationObject" label="Game Object" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="notificationTransform" name="notificationTransform" label="Transform" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="canvasRootTransform" name="canvasRootTransform" label="Canvas Transform" style="font-size: 12px; -unity-font-style: normal;" />
