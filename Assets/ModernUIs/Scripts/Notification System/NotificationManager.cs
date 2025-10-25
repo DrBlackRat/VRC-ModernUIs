@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VRC.SDK3.Data;
+using VRC.SDK3.Rendering;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -205,9 +206,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (showingNotification)
             {
-                var headData = localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
-                transform.position = headData.position;
-                transform.rotation = headData.rotation;
+                transform.position = VRCCameraSettings.ScreenCamera.Position;
+                transform.rotation = VRCCameraSettings.ScreenCamera.Rotation;
             }
         }
 
