@@ -5,6 +5,7 @@ using UnityEngine;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
+using DrBlackRat.VRC.ModernUIs;
 using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
@@ -110,14 +111,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <returns>An Array of usernames currently on the whitelist.</returns>
         public virtual string[] _GetUsersAsArray()
         {
-            string[] usernames = new string[whitelist.Count];
-
-            for (int i = 0; i < whitelist.Count; i++)
-            {
-                usernames[i] = whitelist[i].String;
-            }
-            
-            return usernames;
+            return DataListExtensions.ToArray(whitelist);
         }
         
         /// <summary>
@@ -127,7 +121,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <returns>A copy of the whitelist.</returns>>
         public virtual DataList _GetUsersAsList()
         {
-            return whitelist.DeepClone();
+            return whitelist.ShallowClone();
         }
 
         /// <summary>

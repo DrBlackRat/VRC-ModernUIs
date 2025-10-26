@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5493909776771171921}
   - component: {fileID: 6538361064648168842}
   m_Layer: 0
-  m_Name: Global Notification Sender
+  m_Name: Network Notification Relay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,9 +57,16 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 6538361064648168842}
   notificationManager: {fileID: 0}
   whitelist: {fileID: 0}
-  image: {fileID: 21300000, guid: b127e523eb8537845a12d8746dd5a29f, type: 3}
-  soundClip: {fileID: 8300000, guid: e0108444dd0549642beffaa591859e10, type: 3}
-  soundVolume: 0.25
+  images:
+  - {fileID: 21300000, guid: 2c26defe671a3b44486e0767cb84a17c, type: 3}
+  - {fileID: 21300000, guid: 09677af020fd60648aa160bc1016369c, type: 3}
+  - {fileID: 21300000, guid: 8a5b45e77a352d945b6ea22e78ffc631, type: 3}
+  - {fileID: 21300000, guid: 576dc1cfe43e7864ab7c5412cbbfb49d, type: 3}
+  - {fileID: 21300000, guid: 7f2065ea146dc0b4fa2fc8271ea28a90, type: 3}
+  soundClips:
+  - {fileID: 8300000, guid: 1327b09e1c58be341a7fa8e452e66ba6, type: 3}
+  - {fileID: 8300000, guid: 60b548e2b17abeb4bb403efa7be71a25, type: 3}
+  - {fileID: 8300000, guid: 5df0b915c212b1f458d4a459ac0ce9b0, type: 3}
 --- !u!114 &6538361064648168842
 MonoBehaviour:
   m_ObjectHideFlags: 0

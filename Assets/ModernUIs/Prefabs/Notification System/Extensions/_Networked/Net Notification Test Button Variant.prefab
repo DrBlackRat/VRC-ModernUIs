@@ -153,7 +153,7 @@ PrefabInstance:
     - target: {fileID: 8567521793052530854, guid: f0fa2a376c415844bb10d367d9ca5560,
         type: 3}
       propertyPath: m_Name
-      value: Global Notification Test Button Variant
+      value: Net Notification Test Button Variant
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5629809447469224121, guid: f0fa2a376c415844bb10d367d9ca5560, type: 3}
@@ -198,10 +198,14 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6417174708300088858}
-  globalNotificationSender: {fileID: 0}
-  header: Global Notification
-  message: This is a global message!
+  netNotificationRelay: {fileID: 0}
+  receivingWhitelist: {fileID: 0}
+  header: Networked Notification
+  message: 
+  imageId: -1
   playSound: 1
+  soundClipId: -1
+  soundVolume: 0.25
   duration: 3
   width: 80
 --- !u!114 &6417174708300088858

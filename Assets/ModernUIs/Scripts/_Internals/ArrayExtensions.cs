@@ -92,23 +92,6 @@ namespace DrBlackRat.VRC.ModernUIs
             if (Array.IndexOf(array, value) != -1) return true;
             return false;
         }
-
-        /// <summary>
-        /// Turns any array into 
-        /// </summary>
-        /// <param name="array"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static DataList ToDataList<T>(this T[] array)
-        {
-            var list = new DataList();
-            foreach (var element in array)
-            {
-                var token = new DataToken(element);
-                list.Add(token);
-            }
-            return list;
-        }
     }
 }
 

@@ -34,7 +34,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Tooltip("Volume of the notification sound. Default is 0.25, clamped between 0 and 1.")]
         public float soundVolume = 0.25f; 
         
-        [Range(0f, 10f)] [Tooltip("How long to show the notification for in seconds, this does NOT include the start / end animation.")]
+        [Range(0f, 60f)] [Tooltip("How long to show the notification for in seconds, this does NOT include the start / end animation.")]
         public float duration = 3f;
         [Range(50f, 150f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
         public float width = 80f;
