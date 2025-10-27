@@ -10,7 +10,7 @@ using DrBlackRat.VRC.ModernUIs.Notifications;
 using VRC.SDK3.UdonNetworkCalling;
 using VRC.Udon.Common.Interfaces;
 
-namespace DrBlackRat.VRC.ModernUIs.Whitelist
+namespace DrBlackRat.VRC.ModernUIs.Notifications
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class NetNotificationRelay : UdonSharpBehaviour

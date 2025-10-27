@@ -8,12 +8,12 @@ using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 
-namespace DrBlackRat.VRC.ModernUIs.Whitelist
+namespace DrBlackRat.VRC.ModernUIs.Notifications
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class BasicNetNotificationSender : UdonSharpBehaviour
     {
-        [Tooltip("Global Notification Sender used to actually send the notification to everyone.")]
+        [Tooltip("Net Notification Relay used to actually send the notification to everyone.")]
         [SerializeField] private NetNotificationRelay netNotificationRelay;
         [Tooltip("If provided only players who are on this whitelist will receive the notification. If left empty it will be send to everyone.")]
         [SerializeField] private WhitelistGetterBase receivingWhitelist;

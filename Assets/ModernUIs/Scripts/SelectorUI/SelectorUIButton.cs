@@ -3,6 +3,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -14,7 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     {
         [SerializeField] protected GameObject buttonObj;
         [SerializeField] protected GameObject iconObj;
-        [SerializeField] protected GameObject textObj;
+        [FormerlySerializedAs("textObj")] [SerializeField] protected GameObject graphicObj;
         
         [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults provided by the Selector UI will be used.")]
         public bool overrideDefaults;
@@ -55,7 +56,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected Image buttonImage;
         protected Image icon;
         protected RectTransform iconTransform;
-        protected TextMeshProUGUI text;
+        protected Graphic graphic;
         protected RectTransform textTransform;
 
         protected RectTransform parentTransform;
@@ -106,10 +107,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 icon = iconObj.GetComponent<Image>();
                 iconTransform = iconObj.GetComponent<RectTransform>();
             }
-            if (textObj != null)
+            if (graphicObj != null)
             {
-                text = textObj.GetComponent<TextMeshProUGUI>();
-                textTransform = textObj.GetComponent<RectTransform>();
+                graphic = graphicObj.GetComponent<Graphic>();
+                textTransform = graphicObj.GetComponent<RectTransform>();
             }
 
             parentTransform = GetComponent<RectTransform>();
@@ -230,7 +231,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (iconTransform) prevIconPos = iconTransform.anchoredPosition;
             if (icon) prevIconColor = icon.color;
             if (textTransform) prevTextPos = textTransform.anchoredPosition;
-            if (text) prevTextColor = text.color;
+            if (graphic) prevTextColor = graphic.color;
 
             if (newSelected)
             {
@@ -273,7 +274,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected void UpdateUI(float transition)
         {
             if (icon) icon.color = Color.LerpUnclamped(prevIconColor, newIconColor, transition);
-            if (text) text.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
+            if (graphic) graphic.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
             
             if (buttonTransform) buttonTransform.sizeDelta = Vector2.LerpUnclamped(prevButtonScale, newButtonScale, transition);
             if (buttonImage) buttonImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevButtonPixelPerUnit, newButtonPixelPerUnit, transition);
