@@ -210,6 +210,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             }
             WhitelistUpdated(senderBehaviour, senderEvent);
         }
+
+        /// <summary>
+        /// Resets / clears out the whitelist.
+        /// </summary>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _ClearWhitelist( IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            whitelist = new DataList();
+            usersAddedBy = new DataDictionary();
+            WhitelistUpdated(senderBehaviour, senderEvent);
+        }
         #endregion
 
         #region Replacing
