@@ -101,8 +101,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             bool playSound = true, AudioClip soundClip = null, float soundVolume = 0.25f, 
             float duration = 3f, float width = 80f)
         {
-            if (!enabled) 
-                return false;
+            if (!enabled || !gameObject.activeInHierarchy) return false;
             
             headers.Add(header);
             texts.Add(text);

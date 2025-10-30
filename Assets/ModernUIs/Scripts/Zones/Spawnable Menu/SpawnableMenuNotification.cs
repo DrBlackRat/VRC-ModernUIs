@@ -24,20 +24,20 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private float notificationDelay = 2f;
         
         [Tooltip("Header / Title of the notification.")]
-        public string header = "Open Menu Guide";
-        [Tooltip("Text / Message / Body of the notification. \"{menuInfo}\" will be replaced by the options below.")]
+        public string header = "Menu Guide";
+        [TextArea(1, 3)][Tooltip("Text / Message / Body of the notification. \"{menuInfo}\" will be replaced by the options below.")]
         public string message = "You can open the menu by {menuInfo}!";
 
-        [Tooltip("Desktop menu info message. \"{key}\" will be replaced by the selected key.")]
+        [TextArea(1, 3)][Tooltip("Desktop menu info message. \"{key}\" will be replaced by the selected key.")]
         public string desktopInfo = "pressing the <b>{key}</b> on your keyboard";
-        [Tooltip("Mobile / Touch Device info message.")]
-        public string mobileInfo = "pressing on the <b>menu button in the top left corner of your screen</b>";
-        [Tooltip("VR down and up info message.")]
-        public string vrDownUpInfo = "moving your <b>right thumb stick quickly down and up</b>";
-        [Tooltip("VR holding up info message.")]
-        public string vrHoldUpInfo = "holding your <b>right thumb stick up for {holdTime}</b>";
-        [Tooltip("VR holding down info message.")]
-        public string vrHoldDownInfo = "holding your <b>right thumb stick down for {holdTime}</b>";
+        [TextArea(1, 3)][Tooltip("Mobile / Touch Device info message.")]
+        public string mobileInfo = "pressing on the <b>menu button</b> in the <b>top left corner of your screen</b>";
+        [TextArea(1, 3)][Tooltip("VR down and up info message.")]
+        public string vrDownUpInfo = "moving your <b>right thumb stick</b> quickly <b>down and up</b>";
+        [TextArea(1, 3)][Tooltip("VR holding up info message.")]
+        public string vrHoldUpInfo = "holding your <b>right thumb stick</b> up for <b>{holdTime}s</b>";
+        [TextArea(1, 3)][Tooltip("VR holding down info message.")]
+        public string vrHoldDownInfo = "holding your <b>right thumb stick</b> down for <b>{holdTime}s</b>";
         
         [Tooltip("Image / Sprite used by the notification, if not provided the image will be disabled.")]
         public Sprite image;
@@ -50,7 +50,7 @@ namespace DrBlackRat.VRC.ModernUIs
         public float soundVolume = 0.25f; 
         
         [Range(0f, 60f)] [Tooltip("How long to show the notification for in seconds, this does NOT include the start / end animation.")]
-        public float duration = 10f;
+        public float duration = 15f;
         [Range(50f, 150f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
         public float width = 100f;
         
@@ -78,6 +78,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _ShowNotification()
         {
+            if (!enabled || !gameObject.activeInHierarchy) return;
             if (onlyShowOnce) 
                 PlayerData.SetBool(persistenceKey, true);
 

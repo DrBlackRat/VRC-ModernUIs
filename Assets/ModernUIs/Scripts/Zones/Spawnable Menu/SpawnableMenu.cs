@@ -12,12 +12,10 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SpawnableMenu : UdonSharpBehaviour
     {
-        [Header("Input Settings")]
         [Tooltip("Method used for opening the spawnable menu in Desktop.")]
         [SerializeField] private KeyCode openKey = KeyCode.E;
         public KeyCode OpenKey => openKey;
-
-        [Tooltip("Method used for opening the spawnable menu in VR.")]
+        
         [SerializeField] private VRMenuOpenMethod vrOpenMethod = VRMenuOpenMethod.DownAndUp;
         [Range(0, 5)] [Tooltip("Only used if VR Open Method is Hold Up or Hold Down.\nTime for how long you have to hold the button.")]
         [SerializeField] private float vrHoldTime = 1f;
@@ -31,15 +29,16 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("UI that is enabled if a player is on a touch device.")]
         [SerializeField] private GameObject mobileUI;
         
-        [Header("Transform")] 
+        [Tooltip("Transform that should be positioned in front of the player using the offset.")]
         [SerializeField] private Transform menuTransform;
-        [SerializeField] private Vector3 headOffset = new Vector3(0f, 0f, 2f);
-
-        [Header("Connection")] 
+        [Tooltip("Offset from the players camera used to position the menu.")]
+        [SerializeField] private Vector3 headOffset = new Vector3(0f, 0f, 1f);
+        
+        [Tooltip("Object Mover used to force the menu to the provided transform.")]
         [SerializeField] private ObjectMover objectMover;
+        [Tooltip("Id / Index of the zone the transform is attached on the Object Mover.")]
         [SerializeField] private int zoneId;
         
-        [Header("Animation")] 
         [SerializeField] private AnimationCurve smoothingCurve;
         [SerializeField] private float movementDuration = 0.5f;
 
@@ -52,10 +51,12 @@ namespace DrBlackRat.VRC.ModernUIs
 
         // VR Hold Mode
         private bool vrIsHolding;
+        private bool vrHoldingOvertime;
         private float vrHoldElapsed;
         
         // VR Up Down Mode
-        private bool vrStickIsDown;
+        private bool vrStickWasDown;
+        private bool vrStickDownOverTime;
         private float vrStickDownElapsed;
         private const float VrStickDownResetTime = 0.5f;
         
@@ -71,6 +72,15 @@ namespace DrBlackRat.VRC.ModernUIs
 
             menuTransform.localScale = Vector3.zero;
             objectMover.UnforceZone();
+            
+            // VR Reset
+            vrStickWasDown = false;
+            vrStickDownOverTime = false;
+            vrStickDownElapsed = 0f;
+
+            vrIsHolding = false;
+            vrHoldingOvertime = false;
+            vrHoldElapsed = 0f;
         }
 
         private void Start()
@@ -91,6 +101,7 @@ namespace DrBlackRat.VRC.ModernUIs
         #endregion
 
         #region Input Handling
+        // ReSharper disable Unity.PerformanceAnalysis
         private void CheckInput()
         {
             // Desktop
@@ -112,23 +123,21 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void VRHoldUpdateCheck()
         {
-            if (!vrIsHolding) return;
+            if (!vrIsHolding || vrHoldingOvertime) return;
             vrHoldElapsed += Time.deltaTime;
 
             if (vrHoldElapsed < vrHoldTime) return;
             _ToggleMenu();
-            vrHoldElapsed = 0f;
-            vrIsHolding = false;
+            vrHoldingOvertime = true;
         }
 
         private void VRDownUpUpdateCheck()
         {
-            if (!vrStickIsDown) return;
+            if (!vrStickWasDown || vrStickDownOverTime) return;
             vrStickDownElapsed += Time.deltaTime;
 
             if (vrStickDownElapsed < VrStickDownResetTime) return;
-            vrStickIsDown = false;
-            vrStickDownElapsed = 0f;
+            vrStickDownOverTime = true;
         }
 
         public override void InputLookVertical(float value, UdonInputEventArgs args)
@@ -143,25 +152,35 @@ namespace DrBlackRat.VRC.ModernUIs
                     break;
 
                 case VRMenuOpenMethod.HoldDown:
-                    vrIsHolding = value <= 1 - vrStickThreshold;
+                    vrIsHolding = value <= -vrStickThreshold;
                     break;
 
                 case VRMenuOpenMethod.DownAndUp:
-                    if (!vrStickIsDown)
-                        vrStickIsDown = value <= 1 - vrStickThreshold;
-
-                    if (vrStickIsDown && value >= vrStickThreshold)
+                    if (!vrStickWasDown)
                     {
-                        vrStickIsDown = false;
+                        vrStickWasDown = value <= -vrStickThreshold;
+                    }
+                    
+                    if (vrStickDownOverTime && value >= 0)
+                    {
+                        vrStickDownElapsed = 0f;
+                        vrStickDownOverTime = false;
+                        vrStickWasDown = false;
+                    }
+
+                    if (vrStickWasDown && !vrStickDownOverTime && value >= vrStickThreshold)
+                    {
+                        vrStickWasDown = false;
                         vrStickDownElapsed = 0f;
                         _ToggleMenu();
                     }
                     break;
             }
-
+            
             if (!vrIsHolding)
             {
                 vrHoldElapsed = 0f;
+                vrHoldingOvertime = false;
             }
         }
         #endregion
@@ -210,7 +229,6 @@ namespace DrBlackRat.VRC.ModernUIs
             AnimateScale(false);
         }
         #endregion
-        
 
         #region Animation
         private void AnimateScale(bool open)
