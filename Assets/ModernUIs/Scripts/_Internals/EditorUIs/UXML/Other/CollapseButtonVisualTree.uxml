@@ -21,6 +21,7 @@
     <ui:Foldout text="Connections" view-data-key="CollapseButtonExternalConnections" name="ExternalConnections" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="collapsableGameObjects" name="collapsableGameObjects" label="Game Objects" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="fancyWhitelistNameDisplay" name="fancyWhitelistNameDisplay" label="Fancy Whitelist Name Display" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Whitelist Editor / Requestor" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="otherUserMode" name="otherUserMode" label="Other User Mode" style="font-size: 12px; -unity-font-style: normal;" />

@@ -26,6 +26,9 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Icon that is shown if it's collapsed.")]
         [SerializeField] private GameObject collapsedIcon;
         
+        [Tooltip("Game Objects to disable / enable when collapsed or not.")]
+        [SerializeField] private GameObject[] collapsableGameObjects;
+        
         // This makes me sad... why can't we have interfaces....
         [SerializeField] private FancyWhitelistNameDisplay fancyWhitelistNameDisplay;
 
@@ -89,6 +92,15 @@ namespace DrBlackRat.VRC.ModernUIs
                 else
                 {
                     whitelistEditorBase._UpdateWhitelistCollapsed(collapsed);
+                }
+            }
+
+            if (collapsableGameObjects != null && collapsableGameObjects.Length != 0)
+            {
+                foreach (var collapsableObj in collapsableGameObjects)
+                {
+                    if (collapsableObj == null) continue;
+                    collapsableObj.SetActive(!newCollapsed);
                 }
             }
         }
