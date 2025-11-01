@@ -102,6 +102,24 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             }
             WhitelistUpdated(senderBehaviour, senderEvent);
         }
+        
+        /// <summary>
+        /// Adds an Array of <see cref="VRCPlayerApi"/>s to the whitelist. Skips duplicate usernames.
+        /// </summary>
+        /// <param name="newPlayers">Array of usernames to add to the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            if (newPlayers == null || newPlayers.Length == 0) return;
+
+            foreach (var player in newPlayers)
+            {
+                _AddUser(player.displayName, null, null, false);
+            }
+            WhitelistUpdated(senderBehaviour, senderEvent);
+        }
         #endregion
 
         #region Removing

@@ -186,6 +186,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!EditCheck()) return;
             base._AddUsers(newUsernames, senderBehaviour, senderEvent);
         }
+        
+        public override void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        {
+            if (!EditCheck()) return;
+            base._AddUsers(newPlayers, senderBehaviour, senderEvent);
+        }
 
         public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
