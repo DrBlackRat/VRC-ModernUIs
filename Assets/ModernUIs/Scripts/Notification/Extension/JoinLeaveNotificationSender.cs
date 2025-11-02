@@ -124,5 +124,12 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             var isWhitelisted = whitelist._IsPlayerWhitelisted(player);
             return invertWhitelist ? !isWhitelisted : isWhitelisted;
         }
+
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        private void Reset()
+        {
+            notificationManager = FindObjectOfType<NotificationManager>();
+        }
+#endif
     }
 }

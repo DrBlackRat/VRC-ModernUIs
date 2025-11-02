@@ -46,5 +46,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             netNotificationRelay._SendNetNotification(tragetNames, header, message, imageId, playSound, soundClipId,
                 soundVolume, duration, width);
         }
+        
+        private void Reset()
+        {
+            netNotificationRelay = FindObjectOfType<NetNotificationRelay>();
+        }
     }
 }

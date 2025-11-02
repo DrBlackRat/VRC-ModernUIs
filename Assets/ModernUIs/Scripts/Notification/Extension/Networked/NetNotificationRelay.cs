@@ -208,5 +208,12 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             notificationManager._AddNotification(header, text, image, playSound, soundClip, soundVolume, duration,
                 width);
         }
+        
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        private void Reset()
+        {
+            notificationManager = FindObjectOfType<NotificationManager>();
+        }
+#endif
     }
 }
