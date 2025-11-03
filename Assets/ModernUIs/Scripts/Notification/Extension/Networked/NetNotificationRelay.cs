@@ -78,7 +78,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// Index of the image to use from the Images array configured in the Inspector.
         /// Set to -1 to omit the image.
         /// </param>
-        /// <param name="playSound">Whether a notification sound should be played (uses the sound clip and volume set up in the inspector).</param>
+        /// <param name="playSound">Whether a notification sound should be played.</param>
         /// <param name="soundClipId">
         /// Index of the sound clip to use from the Sound Clips array configured in the Inspector.
         /// Set to -1 to use the default sound.
