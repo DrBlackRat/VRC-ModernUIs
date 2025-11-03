@@ -47,9 +47,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 soundVolume, duration, width);
         }
         
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
             netNotificationRelay = FindObjectOfType<NetNotificationRelay>();
         }
+#endif
     }
 }

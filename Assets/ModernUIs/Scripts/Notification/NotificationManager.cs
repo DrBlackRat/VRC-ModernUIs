@@ -41,27 +41,31 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         [SerializeField] private Vector3 shownScale = Vector3.one;
         [SerializeField] private Vector3 hiddenScale = Vector3.zero;
-
-        private DataList headers = new DataList();
-        private DataList texts = new DataList();
-        private DataList images = new DataList();
         
-        private DataList playSounds = new DataList();
-        private DataList soundVolumes = new DataList();
-        private DataList soundClips = new DataList();
-        
-        private DataList durations = new DataList();
-        private DataList widths = new DataList();
-
         private bool showingNotification;
         private float currentShownDuration;
-        private float elpasedTime;
+        private float elapsedTime;
+        
+        // Notification Data:
+        private DataDictionary notifications = new DataDictionary(); 
+        private DataList notificationIds = new DataList();
+        
+        private int lastNotificationId = 0; // Tracks the ID of the last notification that was added.
+        private const string HeaderKey = "header"; // string | title of the notification
+        private const string TextKey = "text"; // string | message of the notification
+        private const string ImageKey = "image"; // reference (Sprite) | the image to use
+        private const string PlaySoundKey = "playSound"; // bool | if sound should be played
+        private const string SoundClipKey = "soundClip"; // reference (Audio Clip) | the audio clip to use
+        private const string SoundVolumeKey = "soundVolume"; // float | volume of the notification sound
+        private const string DurationKey = "duration"; // float | how long the notification stays on screen
+        private const string WidthKey = "width"; // float | how wide the notification should be
 
         private VRCPlayerApi localPlayer;
 
+        #region Unity & VRChat Events
         private void OnDisable()
         {
-            elpasedTime = 0f;
+            elapsedTime = 0f;
             showingNotification = false;
             notificationObject.SetActive(false);
             
@@ -84,7 +88,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             UpdatePlayerHeadData();
         }
+        #endregion
         
+        # region API
         /// <summary>
         /// Adds a notification to the notification queue, if multiple are added they will play one after the other.
         /// </summary>
@@ -96,23 +102,49 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// <param name="soundVolume">Volume of the notification sound. Default is 0.25, clamped between 0 and 1.</param>
         /// <param name="duration">How long the notification should be shown for in seconds. Default is 3, clamped between 0 and 60.</param>
         /// <param name="width">How wide the canvas should be. Default is 80, clamped between 50 and 150.</param>
-        /// <returns>True if successful, false if not.</returns>
-        public bool _AddNotification(string header, string text, Sprite image = null, 
+        /// <returns>-1 if the notification could not be added, otherwise id of the notification.</returns>
+        public int _AddNotification(string header, string text, Sprite image = null, 
             bool playSound = true, AudioClip soundClip = null, float soundVolume = 0.25f, 
             float duration = 3f, float width = 80f)
         {
-            if (!enabled || !gameObject.activeInHierarchy) return false;
+            if (!enabled || !gameObject.activeInHierarchy) 
+                return -1;
             
-            headers.Add(header);
-            texts.Add(text);
-            images.Add(image);
+            DataDictionary notificationDict = new DataDictionary();
+            lastNotificationId++;
             
-            playSounds.Add(playSound);
-            soundClips.Add(soundClip ? soundClip : defaultAudioClip);
-            soundVolumes.Add(Mathf.Clamp(soundVolume, 0, 1));
+            notificationDict.SetValue(HeaderKey, header);
+            notificationDict.SetValue(TextKey, text);
+            notificationDict.SetValue(ImageKey, image);
+            notificationDict.SetValue(PlaySoundKey, playSound);
+            notificationDict.SetValue(SoundClipKey, soundClip ? soundClip : defaultAudioClip);
+            notificationDict.SetValue(SoundVolumeKey, Mathf.Clamp(soundVolume, 0, 1));
+            notificationDict.SetValue(DurationKey, Mathf.Clamp(duration, 0, 60));
+            notificationDict.SetValue(WidthKey, Mathf.Clamp(width, 50, 150));
             
-            durations.Add(Mathf.Clamp(duration, 0, 60));
-            widths.Add(Mathf.Clamp(width, 50, 150));
+            notifications.Add(lastNotificationId,notificationDict);
+            notificationIds.Add(lastNotificationId);
+            
+            NotificationQueueChanged();
+            
+            return lastNotificationId;
+        }
+
+        /// <summary>
+        /// Removes a notification from the queue.
+        /// </summary>
+        /// <param name="id">ID of the notification to remove.</param>
+        /// <returns>True if successful, false if not.</returns>
+        public bool _RemoveNotification(int id)
+        {
+            if (id <= 0 || id >= lastNotificationId)
+                return false;
+
+            if (!notificationIds.Contains(id))
+                return false;
+            
+            notifications.Remove(id);
+            notificationIds.Remove(id);
             
             NotificationQueueChanged();
             return true;
@@ -124,19 +156,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// <returns>Bool | True if successful, false if not.</returns>
         public bool _RemoveFirstNotification()
         {
-            if (headers.Count == 0)
+            if (notifications.Count == 0)
                 return false;
             
-            headers.RemoveAt(0);
-            texts.RemoveAt(0);
-            images.RemoveAt(0);
-            
-            playSounds.RemoveAt(0);
-            soundClips.RemoveAt(0);
-            soundVolumes.RemoveAt(0);
-            
-            durations.RemoveAt(0);
-            widths.RemoveAt(0);
+            notifications.Remove(notificationIds[0]);
+            notificationIds.RemoveAt(0);
             
             NotificationQueueChanged();
             return true;
@@ -147,19 +171,12 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// </summary>
         public void _ClearNotifications()
         {
-            headers = new DataList();
-            texts = new DataList();
-            images = new DataList();
-            
-            playSounds = new DataList();
-            soundVolumes = new DataList();
-            soundClips = new DataList();
-            
-            durations = new DataList();
-            widths = new DataList();
+            notifications.Clear();
+            notificationIds.Clear();
             
             NotificationQueueChanged();
         }
+        #endregion
 
         public void NotificationQueueChanged()
         {
@@ -168,27 +185,45 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         private void PlayNextNotification()
         {
-            if (headers.Count == 0 || showingNotification)
+            if (notifications.Count == 0 || showingNotification) 
                 return;
-
-            // Get & Set Data
-            notificationHeader.text = headers[0].String;
-            notificationText.text = texts[0].String;
-            currentShownDuration = durations[0].Float;
-            canvasRootTransform.sizeDelta = new Vector2(widths[0].Float, canvasRootTransform.sizeDelta.y);
-            var sprite = (Sprite)images[0].Reference;
-            if (sprite != null)
+            
+            var notificationDict = notifications[notificationIds[0]].DataDictionary;
+            
+            // Notification Sound
+            if (notificationDict.TryGetValue(PlaySoundKey, TokenType.Boolean, out var playSoundToken) &&
+                notificationDict.TryGetValue(SoundVolumeKey, TokenType.Float, out var soundVolumeToken) &&
+                notificationDict.TryGetValue(SoundClipKey, TokenType.Reference, out var soundClipToken))
             {
-                imageContainer.SetActive(true);
-                notificationImage.sprite = sprite;
+                if (notificationAudioSource != null && playSoundToken.Boolean)
+                {
+                    notificationAudioSource.PlayOneShot((AudioClip)soundClipToken.Reference, soundVolumeToken.Float);
+                }
             }
-            else
+
+            // Getting & Setting Other Data
+            if (notificationDict.TryGetValue(ImageKey, TokenType.Reference, out var imageToken))
             {
-                imageContainer.SetActive(false);
+                var image = (Sprite)imageToken.Reference;
+                if (image != null)
+                {
+                    imageContainer.SetActive(true);
+                    notificationImage.sprite = image;
+                }
+                else
+                {
+                    imageContainer.SetActive(false);
+                }
             }
             
-            if (notificationAudioSource != null && playSounds[0].Boolean)
-                notificationAudioSource.PlayOneShot((AudioClip)soundClips[0].Reference, soundVolumes[0].Float);
+            if (notificationDict.TryGetValue(HeaderKey, TokenType.String, out var headerToken))
+                notificationHeader.text = headerToken.String;
+            if (notificationDict.TryGetValue(TextKey, TokenType.String, out var textToken))
+                notificationText.text = textToken.String;
+            if (notificationDict.TryGetValue(DurationKey, TokenType.Float, out var durationToken))
+                currentShownDuration = durationToken.Float;
+            if (notificationDict.TryGetValue(WidthKey, TokenType.Float, out var widthToken))
+                canvasRootTransform.sizeDelta = new Vector2(widthToken.Float, canvasRootTransform.sizeDelta.y);
             
             // Reset
             notificationObject.SetActive(true);
@@ -198,7 +233,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             // Animation
             showingNotification = true;
-            elpasedTime = 0f;
+            elapsedTime = 0f;
+            
+            _RemoveFirstNotification();
         }
 
         private void UpdatePlayerHeadData()
@@ -212,17 +249,17 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         private void Animate()
         {
-            elpasedTime += Time.deltaTime;
-            var totalPercentageComplete = elpasedTime / (currentShownDuration + startAnimDuration + endAnimDuration);
+            elapsedTime += Time.deltaTime;
+            var totalPercentageComplete = elapsedTime / (currentShownDuration + startAnimDuration + endAnimDuration);
 
-            if (elpasedTime <= startAnimDuration) // Start
+            if (elapsedTime <= startAnimDuration) // Start
             {
-                var percentageComplete = elpasedTime / startAnimDuration;
+                var percentageComplete = elapsedTime / startAnimDuration;
                 ApplyTransformLerp(smoothingCurve.Evaluate(percentageComplete));
                 
-            } else if (elpasedTime >= currentShownDuration + startAnimDuration) // End
+            } else if (elapsedTime >= currentShownDuration + startAnimDuration) // End
             {
-                var percentageComplete = (elpasedTime - currentShownDuration - startAnimDuration) / endAnimDuration;
+                var percentageComplete = (elapsedTime - currentShownDuration - startAnimDuration) / endAnimDuration;
                 ApplyTransformLerp(smoothingCurve.Evaluate(1f - percentageComplete));
             }
             
@@ -230,11 +267,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
             if (totalPercentageComplete >= 1)
             {
-                elpasedTime = 0f;
+                elapsedTime = 0f;
                 showingNotification = false;
                 notificationObject.SetActive(false);
-
-                _RemoveFirstNotification();
+                
+                PlayNextNotification();
             }
         }
 
