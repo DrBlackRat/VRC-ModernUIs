@@ -61,11 +61,12 @@ namespace ModernUIs.Theming
         
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
+        private const float NewColorMultiplier = 0.80f;
         private void OnValidate()
         {
             // Set up new colors if they haven't been set yet
             if (secondaryFieldBackground == Color.clear) 
-                secondaryFieldBackground = new Color(fieldBackground.r * 0.85f, fieldBackground.g * 0.85f, fieldBackground.b * 0.85f, fieldBackground.a);
+                secondaryFieldBackground = new Color(fieldBackground.r * NewColorMultiplier, fieldBackground.g * NewColorMultiplier, fieldBackground.b * NewColorMultiplier, fieldBackground.a);
         }
         
         
