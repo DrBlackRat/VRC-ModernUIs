@@ -11,12 +11,15 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class ObjectMover : UdonSharpBehaviour
     {
+        [FormerlySerializedAs("moveableTransform")]
         [FormerlySerializedAs("menu")]
         [Tooltip("Menu / Object you want to move.")]
-        [SerializeField] private Transform moveableTransform;
-        [Tooltip("If enabled, the scale of the zone transform will also be applied. Should be left off unless you specifically want the scale to change.")]
+        [SerializeField] private Transform objectTransform;
+        [Tooltip("If enabled, the scale of the Object Transform will also be applied. Should be left off unless you specifically want the scale to change.")]
         [SerializeField] private bool applyScale;
         
+        [Tooltip("Transforms that will only be moved, not scaled.\nUseful for things like Distance Hiders.")]
+        [SerializeField] private Transform[] moveOnlyTransforms;
 
         [Tooltip("Zones the Menu / Object should move to.")]
         [SerializeField] private ObjectZone[] zones;
@@ -107,9 +110,16 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void MoveAndScale()
         {
-            moveableTransform.SetPositionAndRotation(currentTransform.position, currentTransform.rotation);
+            objectTransform.SetPositionAndRotation(currentTransform.position, currentTransform.rotation);
             if (applyScale)
-                moveableTransform.localScale = currentTransform.lossyScale; 
+                objectTransform.localScale = currentTransform.lossyScale;
+
+            foreach (var moveOnlyTransform in moveOnlyTransforms)
+            {
+                if (moveOnlyTransform == null) continue;
+                moveOnlyTransform.SetPositionAndRotation(currentTransform.position, currentTransform.rotation);
+            }
+            
         }
     }
 }
