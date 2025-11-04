@@ -33,10 +33,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         }
         
         /// <summary>
-        /// Allows checking if this whitelist can be written to. Usefull to check before casting to <see cref="WhitelistSetterBase"/>.
+        /// Allows checking if this whitelist can be written to. Useful to check before casting to <see cref="WhitelistSetterBase"/>.
         /// </summary>
         /// <returns>bool | True if Whitelist Getter Base, false if Whitelist Setter Base.</returns>
         public virtual bool _IsReadOnly() => true;
+        
+        /// <summary>
+        /// Allows checking if this whitelist is synced. 
+        /// </summary>
+        /// <returns>bool | True if synced, false if not.</returns>
+        public virtual bool _IsSynced() => false;
 
         /// <summary>
         /// Sets up a connection with the Whitelist Manager.

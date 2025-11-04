@@ -31,8 +31,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         protected bool canEdit;
         protected bool noneAdminAccess;
-        
-        
+
+        public override bool _IsSynced() => true;
+
         protected override void Start()
         {
             localName = Networking.LocalPlayer.displayName;

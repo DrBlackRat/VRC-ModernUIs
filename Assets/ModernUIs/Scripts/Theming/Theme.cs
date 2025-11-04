@@ -18,6 +18,10 @@ namespace ModernUIs.Theming
         [Tooltip("Color of Field Backgrounds, e.g. Slider or Selector UI Backgrounds.")]
         [SerializeField] private Color fieldBackground;
         public Color FieldBackground => fieldBackground;
+        
+        [Tooltip("Color of Secondary Field Backgrounds, only used for things like Permission Managers, Fancy Name Displays etc.")]
+        [SerializeField] private Color secondaryFieldBackground;
+        public Color SecondaryFieldBackground => secondaryFieldBackground;
 
         [FormerlySerializedAs("primary")]
         [Tooltip("Color of the primary interactable UI Elements, e.g. Sliders, Selectors.")]
@@ -57,6 +61,14 @@ namespace ModernUIs.Theming
         
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
+        private void OnValidate()
+        {
+            // Set up new colors if they haven't been set yet
+            if (secondaryFieldBackground == Color.clear) 
+                secondaryFieldBackground = new Color(fieldBackground.r * 0.85f, fieldBackground.g * 0.85f, fieldBackground.b * 0.85f, fieldBackground.a);
+        }
+        
+        
         /// <summary>
         /// Applies the Theme to everything using it.
         /// </summary>
@@ -98,6 +110,7 @@ namespace ModernUIs.Theming
                 ThemeColor.Background => Background,
                 ThemeColor.SecondaryBackground => SecondaryBackground,
                 ThemeColor.FieldBackground => FieldBackground,
+                ThemeColor.SecondaryFieldBackground => SecondaryFieldBackground,
                 ThemeColor.ButtonPrimary => ButtonPrimary,
                 ThemeColor.ButtonInactivePrimary => ButtonInactivePrimary,
                 ThemeColor.ButtonTextIcon => ButtonTextIcon,
@@ -128,5 +141,7 @@ namespace ModernUIs.Theming
         SecondaryIcon,
         Text,
         SecondaryText,
+        // Added Later (0.6.1)
+        SecondaryFieldBackground
     }
 }
