@@ -56,7 +56,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
-            if (!player.IsValid()) return;
             if (!Networking.LocalPlayer.IsOwner(gameObject)) return;
             var displayName = player.displayName;
             
