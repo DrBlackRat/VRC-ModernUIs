@@ -66,13 +66,13 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private VRCPlayerApi localPlayer;
 
         // Cooldown system to prevent spamming notifications on join;
-        private float startCooldown = 2f; // in seconds
+        private float startCooldown = 5f; // in seconds
         private bool cooldownFinished;
+        private bool cooldownStarted;
 
         private void Start()
         {
             localPlayer = Networking.LocalPlayer;
-            SendCustomEventDelayedSeconds(nameof(_FinishCooldown), startCooldown);
             hasWhitelist = whitelist != null;
 
             if (sendToWhitelist != null)
@@ -98,7 +98,15 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
-            if (!showJoinNotification || !cooldownFinished) return;
+            if (!showJoinNotification) return;
+            if (!cooldownFinished)
+            {
+                if (cooldownStarted) return;
+                cooldownStarted = true;
+                SendCustomEventDelayedSeconds(nameof(_FinishCooldown), startCooldown);
+                return;
+            }
+            
             HandleNotification(headerJoined, messageJoined, imageJoined, playSoundJoined, soundClipJoined, soundVolumeJoined, player);
         }
 
