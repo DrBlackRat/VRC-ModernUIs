@@ -16,6 +16,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     [DefaultExecutionOrder(-1000)]
     public class NotificationManager : UdonSharpBehaviour
     {
+        [Tooltip("If enabled the notification queue will be limited to the length set below.\nIf limit is reached you can not add any more notifications until one is removed or has been played.")]
+        [SerializeField] private bool limitNotificationQueueLength = true;
+        [Range(1, 50)][Tooltip("How long the notification queue can get before new notifications can't be added.")]
+        [SerializeField] private int maxNotificationQueueLength = 10;
+        
         [SerializeField] private GameObject notificationObject;
         [SerializeField] private Transform notificationTransform;
         [SerializeField] private RectTransform canvasRootTransform;
@@ -109,6 +114,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (!enabled || !gameObject.activeInHierarchy) 
                 return -1;
+            if (limitNotificationQueueLength && notifications.Count >= maxNotificationQueueLength)
+                return -1;
+            
+            Debug.LogError($"Adding Notification! ID:{lastNotificationId + 1}, Queue Length: {notifications.Count},");
             
             DataDictionary notificationDict = new DataDictionary();
             lastNotificationId++;
