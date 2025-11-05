@@ -1,5 +1,7 @@
 ﻿
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
+using DrBlackRat.VRC.ModernUIs.SliderUI;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
@@ -21,14 +23,26 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [SerializeField] private float soundVolume = 0.25f;
         [Range(50, 150)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
         [SerializeField] private float width = 100f;
-
+        
         [SerializeField] private TMP_InputField headerInputField;
         [SerializeField] private TMP_InputField messageInputField;
+        [SerializeField] private SelectorUI.SelectorUI iconSelector;
+        [SerializeField] private SelectorUI.SelectorUI soundSelector;
+        [SerializeField] private SliderUI.SliderUI durationSlider;
 
         [HideInInspector] public int selectorIconId;
         [HideInInspector] public int selectorSoundId;
         [HideInInspector] public float sliderDuration;
 
+        public void _ApplyValues(string header, string message, int iconId, int soundId, float duration)
+        {
+            headerInputField.text = header;
+            messageInputField.text = message;
+            iconSelector._ButtonSelected(iconId);
+            soundSelector._ButtonSelected(soundId);
+            durationSlider._UpdateValue(duration);
+        }
+        
         public void _SendNotification()
         {
             DataList players = null;

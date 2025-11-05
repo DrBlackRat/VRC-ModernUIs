@@ -38,8 +38,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (!CanAdd())
                 return;
-
-            Debug.LogError("Filling Whitelist with all players!");
+            
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
             VRCPlayerApi.GetPlayers(players);
 
@@ -50,8 +49,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasInitialized || !CanAdd())
                 return;
-
-            Debug.LogError($"Adding {player.displayName} to Whitelist");
+            
             whitelist._AddUser(player.displayName);
         }
         
