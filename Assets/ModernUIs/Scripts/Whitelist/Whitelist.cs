@@ -19,11 +19,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
         [SerializeField] protected string[] startWhitelist;
+        
+        [Tooltip("Automatically remove a player when they leave the instance.")]
+        [SerializeField] protected bool autoRemoveOnLeave;
 
         protected override void Start()
         {
             localName = Networking.LocalPlayer.displayName;
             _AddUsers(startWhitelist);
+        }
+        
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            if (autoRemoveOnLeave)
+                _RemoveUser(player.displayName);
         }
     }
 }

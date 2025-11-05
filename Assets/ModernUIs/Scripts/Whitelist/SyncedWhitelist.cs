@@ -13,8 +13,11 @@ using VRC.Udon.Common.Interfaces;
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
-    public class SyncedWhitelist : Whitelist
+    public class SyncedWhitelist : WhitelistSetterBase
     {
+        [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
+        [SerializeField] protected string[] startWhitelist;
+        
         [FormerlySerializedAs("adminWhitelistManager")]
         [Tooltip("Whitelist of Admins which can change the Synced Whitelist without being on it them self.")]
         [SerializeField] protected WhitelistGetterBase adminWhitelist;

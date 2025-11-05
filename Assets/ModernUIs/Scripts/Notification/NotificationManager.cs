@@ -117,8 +117,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             if (limitNotificationQueueLength && notifications.Count >= maxNotificationQueueLength)
                 return -1;
             
-            Debug.LogError($"Adding Notification! ID:{lastNotificationId + 1}, Queue Length: {notifications.Count},");
-            
             DataDictionary notificationDict = new DataDictionary();
             lastNotificationId++;
             
