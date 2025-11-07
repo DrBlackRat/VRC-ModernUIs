@@ -85,13 +85,10 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void Start()
         {
-            openScale = menuTransform.localScale;
             localPlayer = Networking.LocalPlayer;
-
-            menuTransform.localScale = Vector3.zero;
             
-            if (mobileUI != null)
-                mobileUI.SetActive(InputManager.GetLastUsedInputMethod() == VRCInputMethod.Touch);
+            openScale = menuTransform.localScale;
+            menuTransform.localScale = Vector3.zero;
         }
 
         private void Update()
