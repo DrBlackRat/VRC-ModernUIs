@@ -98,6 +98,8 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             CheckInput();
         }
+
+        private bool IsEnabled() => enabled && gameObject.activeInHierarchy;
         #endregion
 
         #region Input Handling
@@ -142,6 +144,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public override void InputLookVertical(float value, UdonInputEventArgs args)
         {
+            if (!IsEnabled()) return;
             if (!localPlayer.IsUserInVR())
                 return;
             
@@ -206,6 +209,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _OpenMenu()
         {
+            if (!IsEnabled()) return;
             if (isOpen) return;
             isOpen = true;
 
@@ -223,6 +227,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _CloseMenu()
         {
+            if (!IsEnabled()) return;
             if (!isOpen) return;
             isOpen = false;
 

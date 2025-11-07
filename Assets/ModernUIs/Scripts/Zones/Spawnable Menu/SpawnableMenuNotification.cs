@@ -53,24 +53,23 @@ namespace DrBlackRat.VRC.ModernUIs
         public float duration = 15f;
         [Range(50f, 150f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
         public float width = 100f;
-        
-        // Keys to replace: key, holdTime, menuInfo
+
         private VRCPlayerApi localPlayer;
+        private bool hasSeenNotification;
 
         private void Start()
         {
             localPlayer = Networking.LocalPlayer;
-        }
-
-        public override void OnPlayerRestored(VRCPlayerApi player)
-        {
-            if (player != localPlayer) return;
 
             if (!onlyShowOnce)
             {
                 SendCustomEventDelayedSeconds(nameof(_ShowNotification), notificationDelay);
-                return;
             }
+        }
+        
+        public override void OnPlayerRestored(VRCPlayerApi player)
+        {
+            if (!onlyShowOnce || player != localPlayer) return;
             
             if (!PlayerData.GetBool(localPlayer, persistenceKey))
                 SendCustomEventDelayedSeconds(nameof(_ShowNotification), notificationDelay);
@@ -78,12 +77,13 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _ShowNotification()
         {
-            if (!enabled || !gameObject.activeInHierarchy) return;
+            if (!enabled || !gameObject.activeInHierarchy || hasSeenNotification) return;
             if (onlyShowOnce) 
                 PlayerData.SetBool(persistenceKey, true);
 
             notificationManager._AddNotification(header, GenerateMessage(), image, playSound, soundClip, soundVolume,
                 duration, width);
+            hasSeenNotification = true;
         }
 
         private string GenerateMessage()
