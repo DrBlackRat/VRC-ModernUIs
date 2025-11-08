@@ -24,11 +24,14 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [SerializeField] private GameObject notificationObject;
         [SerializeField] private Transform notificationTransform;
         [SerializeField] private RectTransform canvasRootTransform;
-        [SerializeField] private TextMeshProUGUI notificationHeader;
-        [SerializeField] private TextMeshProUGUI notificationText;
+        [SerializeField] private GameObject notificationHeaderObj;
+        [SerializeField] private GameObject notificationTextObj;
         [SerializeField] private GameObject imageContainer;
         [SerializeField] private Image notificationImage;
         [SerializeField] private Slider countdownSlider;
+        
+        private TextMeshProUGUI notificationHeader;
+        private TextMeshProUGUI notificationText;
         
         [Tooltip("Audio Source used for playing the notification sound.")]
         [SerializeField] private AudioSource notificationAudioSource;
@@ -81,6 +84,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             notificationObject.SetActive(false);
             localPlayer = Networking.LocalPlayer;
+            
+            notificationHeader = notificationHeaderObj.GetComponent<TextMeshProUGUI>();
+            notificationText = notificationTextObj.GetComponent<TextMeshProUGUI>();
         }
 
         private void Update()
@@ -222,11 +228,20 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                     imageContainer.SetActive(false);
                 }
             }
-            
             if (notificationDict.TryGetValue(HeaderKey, TokenType.String, out var headerToken))
-                notificationHeader.text = headerToken.String;
+            {
+                var header = headerToken.String;
+                notificationHeader.text = header;
+                notificationHeaderObj.SetActive(!string.IsNullOrEmpty(header));
+            }
+
             if (notificationDict.TryGetValue(TextKey, TokenType.String, out var textToken))
-                notificationText.text = textToken.String;
+            {
+                var text = textToken.String;
+                notificationText.text = text;
+                notificationTextObj.SetActive(!string.IsNullOrEmpty(text));
+            }
+            
             if (notificationDict.TryGetValue(DurationKey, TokenType.Float, out var durationToken))
                 currentShownDuration = durationToken.Float;
             if (notificationDict.TryGetValue(WidthKey, TokenType.Float, out var widthToken))
