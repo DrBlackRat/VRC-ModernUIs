@@ -38,6 +38,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                  "\nDO NOT USE FOR MODERN UIs")]
         [SerializeField] private Selectable[] notWhitelistedSelectables;
         
+        [Tooltip("Renderer component to change the material of.")]
+        [SerializeField] private Renderer materialRenderer;
+        [Tooltip("Materials applied when whitelisted.")]
+        [SerializeField] private Material[] whitelistedMaterials;
+        [Tooltip("Materials applied when not whitelisted.")]
+        [SerializeField] private Material[] notWhitelistedMaterials;
+        
         private void Start()
         {
             whitelist._SetUpConnection((IUdonEventReceiver)this);
@@ -112,6 +119,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 }
             }
 
+            if (materialRenderer != null)
+                materialRenderer.materials = isWhitelisted ? whitelistedMaterials : notWhitelistedMaterials;
         }
     }
 }

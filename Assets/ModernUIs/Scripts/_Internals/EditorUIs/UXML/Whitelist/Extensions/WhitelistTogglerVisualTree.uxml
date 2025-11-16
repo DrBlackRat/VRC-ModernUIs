@@ -25,6 +25,10 @@
             <ui:Label tabindex="-1" text="Selectables / Buttons / Toggles / Sliders" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="whitelistedSelectables" name="whitelistedSelectables" label="Whitelisted Selectables" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="notWhitelistedSelectables" name="notWhitelistedSelectables" label="Not Whitelisted Selectables" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Materials" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="materialRenderer" name="materialRenderer" label="Renderer" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
+            <uie:PropertyField binding-path="whitelistedMaterials" name="whitelistedMaterials" label="Whitelised Materials" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notWhitelistedMaterials" name="disabledMaterials" label="Not Whitelised Materials" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
 </ui:UXML>

@@ -21,7 +21,13 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [SerializeField] private Canvas[] canvases;
         [Tooltip("Pickups to change the Pickupable state of.")]
         [SerializeField] private VRC_Pickup[] pickups;
-        
+
+        [Tooltip("Renderer component to change the material of.")]
+        [SerializeField] private Renderer materialRenderer;
+        [Tooltip("Materials applied when enabled.")]
+        [SerializeField] private Material[] enabledMaterials;
+        [Tooltip("Materials applied when disabled.")]
+        [SerializeField] private Material[] disabledMaterials;
         
         [Tooltip("ID at which everything should be turned on for Selector UIs. Should be left at 1 for a simple two state Selector UI Toggle.")]
         [SerializeField] private int enabledId = 1;
@@ -105,6 +111,9 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                     pickup.pickupable = state;
                 }
             }
+            
+            if (materialRenderer != null) 
+                materialRenderer.materials = state ? enabledMaterials : disabledMaterials;
         }
     }
 }
