@@ -250,13 +250,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="newUsernames">DataList of usernames to replace the whitelist with.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="directReplacement">Optional | If enabled, none of the normal duplication and safety checks will be done. Only enable if you know what you are doing!</param>
         public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool directReplacement = false)
         {
             if (newUsernames == null) return;
             whitelist = new DataList();
             usersAddedBy = new DataDictionary();
-            _AddUsers(newUsernames, senderBehaviour, senderEvent);
+
+            if (directReplacement)
+            {
+                whitelist.AddRange(newUsernames);
+                usersAddedBy.Add(localName, new DataList(newUsernames));
+                WhitelistUpdated(senderBehaviour, senderEvent);
+            }
+            else
+            {
+                _AddUsers(newUsernames, senderBehaviour, senderEvent);
+            }
+            
         }
 
         /// <summary>

@@ -215,10 +215,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent);
         }
 
-        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool directReplacement = false)
         {
             if (!EditCheck()) return;
-            base._ReplaceWhitelist(newUsernames, senderBehaviour, senderEvent);
+            base._ReplaceWhitelist(newUsernames, senderBehaviour, senderEvent, directReplacement);
         }
 
         public override void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
