@@ -69,8 +69,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="newUsernames">DataList of usernames to add to the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
         public virtual void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (newUsernames == null || newUsernames.Count == 0) return;
 
@@ -82,7 +83,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 var username = token.String;
                 _AddUser(username, null, null,false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
         /// <summary>
@@ -91,8 +93,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="newUsernames">Array of usernames to add to the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
         public virtual void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (newUsernames == null || newUsernames.Length == 0) return;
 
@@ -100,7 +103,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 _AddUser(username, null, null, false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
         /// <summary>
@@ -109,8 +113,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="newPlayers">Array of usernames to add to the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
         public virtual void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (newPlayers == null || newPlayers.Length == 0) return;
 
@@ -118,7 +123,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 _AddUser(player.displayName, null, null, false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         #endregion
 
@@ -255,20 +261,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             string senderEvent = null, bool directReplacement = false)
         {
             if (newUsernames == null) return;
-            whitelist = new DataList();
+            
             usersAddedBy = new DataDictionary();
 
             if (directReplacement)
             {
-                whitelist.AddRange(newUsernames);
+                whitelist = newUsernames.ShallowClone();
                 usersAddedBy.Add(localName, new DataList(newUsernames));
-                WhitelistUpdated(senderBehaviour, senderEvent);
             }
             else
             {
-                _AddUsers(newUsernames, senderBehaviour, senderEvent);
+                whitelist = new DataList();
+                _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
+                
             }
-            
+            WhitelistUpdated(senderBehaviour, senderEvent);
         }
 
         /// <summary>
@@ -283,7 +290,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             if (newUsernames == null) return;
             whitelist = new DataList();
             usersAddedBy = new DataDictionary();
-            _AddUsers(newUsernames, senderBehaviour, senderEvent);
+            
+            _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
+            WhitelistUpdated(senderBehaviour, senderEvent);
         }
         #endregion
         
