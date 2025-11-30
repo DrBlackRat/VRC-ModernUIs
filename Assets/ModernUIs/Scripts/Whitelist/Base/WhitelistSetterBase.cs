@@ -267,7 +267,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             if (directReplacement)
             {
                 whitelist = newUsernames.ShallowClone();
-                usersAddedBy.Add(localName, new DataList(newUsernames));
+                usersAddedBy.Add(localName, newUsernames.ShallowClone());
             }
             else
             {
