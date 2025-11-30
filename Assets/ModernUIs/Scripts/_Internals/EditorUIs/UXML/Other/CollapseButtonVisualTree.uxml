@@ -22,6 +22,17 @@
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="collapsableGameObjects" name="collapsableGameObjects" label="Game Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Udon Behaviours" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="collapseButtonID" name="collapseButtonID" label="Collapse Button ID" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="collapseButtonIdValueName" name="collapseButtonIdValueName" label="ID Value Name" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="externalBehaviours" name="externalBehaviours" label="External Behaviours" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
+            <uie:PropertyField binding-path="collapsedEventName" name="collapsedEventName" label="Collapsed Event" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="expandedEventName" name="expandedEventName" label="Expanded Event" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="Connections (Legacy)" view-data-key="CollapseButtonExternalConnectionsOld" name="ExternalConnectionsOld" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Name Display" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="fancyWhitelistNameDisplay" name="fancyWhitelistNameDisplay" label="Fancy Whitelist Name Display" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Whitelist Editor / Requestor" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="otherUserMode" name="otherUserMode" label="Other User Mode" style="font-size: 12px; -unity-font-style: normal;" />

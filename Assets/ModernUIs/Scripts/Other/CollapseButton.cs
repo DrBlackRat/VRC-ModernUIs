@@ -29,9 +29,22 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Game Objects to disable / enable when collapsed or not.")]
         [SerializeField] private GameObject[] collapsableGameObjects;
         
-        // This makes me sad... why can't we have interfaces....
+        [Tooltip("ID of this collapse button, set on the external Udon Behaviours to identify this specific collapse button.")]
+        [SerializeField] private int collapseButtonID;
+        [Tooltip("Name of the Integer Variable of the collapse button ID that will be set when the collapse button changes state.")]
+        [SerializeField] private string collapseButtonIdValueName = "collapseButtonID";
+        
+        [Tooltip("Udon Behaviours that will have events send to.")]
+        [SerializeField] private UdonBehaviour[] externalBehaviours;
+        [Tooltip("Name of the event that will be fired if the collapse button is collapsed.")]
+        [SerializeField] private string collapsedEventName = "_Collapsed";
+        [Tooltip("Name of the event that will be fired if the collapse button is expanded.")]
+        [SerializeField] private string expandedEventName = "_Expanded";
+        
+        // Legacy
         [SerializeField] private FancyWhitelistNameDisplay fancyWhitelistNameDisplay;
 
+        // Legacy
         [Tooltip("If enabled the \"Other Users\" collapsed state will be changed, if not it will change the \"Whitelisted Users\"collapsed state.")]
         [SerializeField] private bool otherUserMode;
         [SerializeField] private WhitelistEditorBase whitelistEditorBase;
@@ -80,9 +93,30 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void UpdateExternal(bool newCollapsed)
         {
+            if (collapsableGameObjects != null && collapsableGameObjects.Length > 0)
+            {
+                foreach (var collapsableObj in collapsableGameObjects)
+                {
+                    if (collapsableObj == null) continue;
+                    collapsableObj.SetActive(!newCollapsed);
+                }
+            }
+
+            if (externalBehaviours != null && externalBehaviours.Length > 0)
+            {
+                foreach (var behaviour in externalBehaviours)
+                {
+                    if (behaviour == null) continue;
+                    behaviour.SetProgramVariable(collapseButtonIdValueName, collapseButtonID);
+                    behaviour.SendCustomEvent(collapsed ? collapsedEventName : expandedEventName);
+                }
+            }
+            
+            // Legacy
             if (fancyWhitelistNameDisplay != null)
                 fancyWhitelistNameDisplay._UpdateCollapsed(collapsed);
 
+            // Legacy
             if (whitelistEditorBase != null)
             {
                 if (otherUserMode)
@@ -92,15 +126,6 @@ namespace DrBlackRat.VRC.ModernUIs
                 else
                 {
                     whitelistEditorBase._UpdateWhitelistCollapsed(collapsed);
-                }
-            }
-
-            if (collapsableGameObjects != null && collapsableGameObjects.Length != 0)
-            {
-                foreach (var collapsableObj in collapsableGameObjects)
-                {
-                    if (collapsableObj == null) continue;
-                    collapsableObj.SetActive(!newCollapsed);
                 }
             }
         }
