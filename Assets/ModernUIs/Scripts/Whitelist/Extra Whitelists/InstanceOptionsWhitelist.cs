@@ -19,6 +19,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private bool allowInstanceMaster;
         [Tooltip("Automatically adds the first player who joins to the whitelist. \nUseful for when you want the Instance Owner, but need it to work in Group and Public instances.")]
         [SerializeField] private bool allowFirstPlayer;
+        [Tooltip("Automatically adds the local player to the whitelist.")]
+        [SerializeField] private bool allowLocalPlayer;
 
         private string instanceOwnerName;
         private string currentMasterName;
@@ -27,6 +29,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected override void Start()
         {
             base.Start();
+            
+            if (allowLocalPlayer) Add(localName);
             if (allowFirstPlayer && Networking.LocalPlayer.IsOwner(gameObject))
             {
                 firstPlayer = localName;
@@ -61,27 +65,28 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void OnMasterTransferred(VRCPlayerApi newMaster)
         {
             if (!allowInstanceMaster) return;
-            var displayName = newMaster.displayName;
-
-            if (currentMasterName != null && instanceOwnerName != currentMasterName && firstPlayer != currentMasterName)
-            {
-                if (whitelist.Contains(currentMasterName))
-                    whitelist.Remove(currentMasterName);
-            }
             
-            Add(displayName);
+            var prevMasterName = currentMasterName;
+            currentMasterName = newMaster.displayName;
+            Add(currentMasterName);
+            
+            if (allowInstanceOwner && instanceOwnerName == prevMasterName) return;
+            if (allowFirstPlayer && firstPlayer == prevMasterName) return;
+            if (allowLocalPlayer && localName == prevMasterName) return;
+
+            Remove(currentMasterName);
         }
         
         /// <summary>
         /// Adds a player if they aren't already on the list.
         /// </summary>
         /// <param name="displayName"> Display Name of the player you want to add.</param>
-        private void Add(string displayName)
+        private void Add(string displayName, bool notify = true)
         {
             if (!whitelist.Contains(displayName))
             {
                 whitelist.Add(displayName);
-                WhitelistUpdated();
+                if (notify) WhitelistUpdated();
             }
         }
 
@@ -89,12 +94,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// Adds a player if they are on the list.
         /// </summary>
         /// <param name="displayName">Display Name of the player you want to remove.</param>
-        private void Remove(string displayName)
+        private void Remove(string displayName, bool notify = true)
         {
             if (whitelist.Contains(displayName))
             {
                 whitelist.Remove(displayName);
-                WhitelistUpdated();
+                if (notify) WhitelistUpdated();
             }
         }
 

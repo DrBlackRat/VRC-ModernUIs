@@ -14,8 +14,10 @@ namespace DrBlackRat.VRC.ModernUIs
     {
         [Tooltip("Units in the UI to move per second.")]
         [SerializeField] private float unitsPerSec = 25f;
-        [Tooltip("Whether to start scrolling from the top or bottom.")]
-        [SerializeField] private StartAt startAt = StartAt.Top;
+        [Tooltip("Whether to scroll horizontally or vertically.")]
+        [SerializeField] private bool horizontal = false;
+        [Tooltip("Whether to start scrolling from the \"Start\" (Top / Left) or the \"End\" (Bottom / Right) ")]
+        [SerializeField] private StartAt startAt = StartAt.Start;
 
         [Tooltip("Curve used for smoothing the start & end.")] [SerializeField]
         private AnimationCurve startCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -52,13 +54,13 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private ScrollRect scrollRect;
         
-        private bool enoughHeight;
+        private bool enoughDistance;
         private float normalizedSpeed;
         
         private float elapsedTime;
         private bool wait;
         
-        private ScrollState state = ScrollState.ScrollDown;
+        private ScrollState state = ScrollState.ScrollToEnd;
         
         private void Start()
         {
@@ -66,13 +68,15 @@ namespace DrBlackRat.VRC.ModernUIs
 
             switch (startAt)
             {
-                case StartAt.Top:
+                case StartAt.Start:
                     scrollRect.verticalNormalizedPosition = 1f;
-                    state = ScrollState.ScrollDown;
+                    scrollRect.horizontalNormalizedPosition = 0f;
+                    state = ScrollState.ScrollToEnd;
                     break;
-                case StartAt.Bottom:
+                case StartAt.End:
                     scrollRect.verticalNormalizedPosition = 0f;
-                    state = ScrollState.ScrollUp;
+                    scrollRect.horizontalNormalizedPosition = 1f;
+                    state = ScrollState.ScrollToStart;
                     break;
             }
 
@@ -105,11 +109,12 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _UpdateScrollInfo()
         {
-            var scrollHeight= scrollRect.content.rect.height - scrollRect.viewport.rect.height;
-            enoughHeight = scrollHeight > 0;
+            var scrollDistance= horizontal ? scrollRect.content.rect.width - scrollRect.viewport.rect.width : 
+                scrollRect.content.rect.height - scrollRect.viewport.rect.height;
+            enoughDistance = scrollDistance > 0;
 
-            if (enoughHeight)
-                normalizedSpeed = unitsPerSec / scrollHeight;
+            if (enoughDistance)
+                normalizedSpeed = unitsPerSec / scrollDistance;
             
             if (autoUpdateScrollInfo && scroll)
                 SendCustomEventDelayedSeconds(nameof(_UpdateScrollInfo), scrollInfoUpdateInterval);
@@ -127,10 +132,10 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void AnimateScroll()
         {
-            if (!enoughHeight || !scroll) return;
+            if (!enoughDistance || !scroll) return;
             elapsedTime += Time.deltaTime;
-            
-            if (Mathf.Abs(scrollRect.velocity.y) > 0.00f) // Wait if user is manually scrolling, normally there are interfaces for this... but this is Udon....
+
+            if (Mathf.Abs(horizontal ? scrollRect.velocity.x : scrollRect.velocity.y) > 0.00f) // Wait if user is manually scrolling, normally there are interfaces for this... but this is Udon....
                 _Wait();
             
             // Waiting
@@ -145,7 +150,7 @@ namespace DrBlackRat.VRC.ModernUIs
             }
             
             // Speed
-            var normalizedPos= scrollRect.verticalNormalizedPosition;
+            var normalizedPos= horizontal ? 1 - scrollRect.horizontalNormalizedPosition : scrollRect.verticalNormalizedPosition;
             var moveSpeed = 0f;
             if (elapsedTime < startCurveDuration)
             {
@@ -158,23 +163,37 @@ namespace DrBlackRat.VRC.ModernUIs
             }
             
             // Direction
-            if (state == ScrollState.ScrollDown)
+            if (state == ScrollState.ScrollToEnd)
             {
-                scrollRect.verticalNormalizedPosition -= moveSpeed;
+                if (horizontal)
+                {
+                    scrollRect.horizontalNormalizedPosition += moveSpeed;
+                }
+                else
+                {
+                    scrollRect.verticalNormalizedPosition -= moveSpeed;
+                }
                 
                 if (normalizedPos <= 0f)
                 {
-                    state = ScrollState.ScrollUp;
+                    state = ScrollState.ScrollToStart;
                     _Wait();
                 }
             }
             else
             {
-                scrollRect.verticalNormalizedPosition += moveSpeed;
+                if (horizontal)
+                {
+                    scrollRect.horizontalNormalizedPosition -= moveSpeed;
+                }
+                else
+                {
+                    scrollRect.verticalNormalizedPosition += moveSpeed;
+                }
                 
                 if (normalizedPos >= 1f)
                 {
-                    state = ScrollState.ScrollDown;
+                    state = ScrollState.ScrollToEnd;
                     _Wait();
                 }
             }
@@ -183,14 +202,14 @@ namespace DrBlackRat.VRC.ModernUIs
 
     internal enum ScrollState
     {
-        ScrollDown,
-        ScrollUp,
+        ScrollToEnd, // Scrolling from top to bottom or left to right       
+        ScrollToStart, // Scrolling from bottom to top or right to left
     }
 
     internal enum StartAt
     {
-        Top,
-        Bottom
+        Start, // Top or Left
+        End // Bottom or Right
     }
 }
 
