@@ -33,7 +33,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _WhitelistUpdated()
         {
             if (whitelists == null || whitelists.Length == 0) return;
-            
             whitelist.Clear();
 
             for (int i = 0; i < whitelists.Length; i++)
@@ -44,7 +43,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (removeDuplicates)
             {
-                whitelist = DataListExtensions.RemoveDuplicates(whitelist);
+                whitelist = whitelist.RemoveDuplicates();
             }
 
             WhitelistUpdated();

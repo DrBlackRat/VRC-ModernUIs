@@ -71,8 +71,6 @@ namespace DrBlackRat.VRC.ModernUIs
 
             return tempArray;
         }
-
-
     }
 }
 

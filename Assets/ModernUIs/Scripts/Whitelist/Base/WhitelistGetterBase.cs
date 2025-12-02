@@ -237,11 +237,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                     for (int j = 0; j < eventNames.Count; j++)
                     {
                         var eventName = eventNames[j].String;
-                        bool send = false;
                         if (behaviour != senderBehaviour || eventName != senderEvent)
                         {
                             behaviour.SendCustomEventDelayedFrames(eventName, 1);
-                            send = true;
                         }
                     }
                 }
