@@ -59,17 +59,18 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private DataList notificationIds = new DataList();
         
         private int lastNotificationId = 0; // Tracks the ID of the last notification that was added.
-        private const string HeaderKey = "header"; // string | title of the notification
-        private const string TextKey = "text"; // string | message of the notification
-        private const string ImageKey = "image"; // reference (Sprite) | the image to use
-        private const string PlaySoundKey = "playSound"; // bool | if sound should be played
-        private const string SoundClipKey = "soundClip"; // reference (Audio Clip) | the audio clip to use
-        private const string SoundVolumeKey = "soundVolume"; // float | volume of the notification sound
-        private const string DurationKey = "duration"; // float | how long the notification stays on screen
-        private const string WidthKey = "width"; // float | how wide the notification should be
-
+        private readonly DataToken HeaderKey      = new DataToken("header");      // string | title of the notification
+        private readonly DataToken TextKey        = new DataToken("text");        // string | message of the notification
+        private readonly DataToken ImageKey       = new DataToken("image");       // reference (Sprite) | the image to use
+        private readonly DataToken PlaySoundKey   = new DataToken("playSound");   // bool | if sound should be played
+        private readonly DataToken SoundClipKey   = new DataToken("soundClip");   // reference (Audio Clip) | the audio clip to use
+        private readonly DataToken SoundVolumeKey = new DataToken("soundVolume"); // float | volume of the notification sound
+        private readonly DataToken DurationKey    = new DataToken("duration");    // float | how long the notification stays on screen
+        private readonly DataToken WidthKey       = new DataToken("width");       // float | how wide the notification should be
+        
         private VRCPlayerApi localPlayer;
-
+        private float rootCanvasSizeY;
+        
         #region Unity & VRChat Events
         private void OnDisable()
         {
@@ -84,6 +85,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             notificationObject.SetActive(false);
             localPlayer = Networking.LocalPlayer;
+            rootCanvasSizeY = canvasRootTransform.sizeDelta.y;
             
             notificationHeader = notificationHeaderObj.GetComponent<TextMeshProUGUI>();
             notificationText = notificationTextObj.GetComponent<TextMeshProUGUI>();
@@ -145,6 +147,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         /// <summary>
         /// Removes a notification from the queue.
+        /// If the notification is already playing it will not be removed.
         /// </summary>
         /// <param name="id">ID of the notification to remove.</param>
         /// <returns>True if successful, false if not.</returns>
@@ -202,50 +205,34 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 return;
             
             var notificationDict = notifications[notificationIds[0]].DataDictionary;
-            
+
             // Notification Sound
-            if (notificationDict.TryGetValue(PlaySoundKey, TokenType.Boolean, out var playSoundToken) &&
-                notificationDict.TryGetValue(SoundVolumeKey, TokenType.Float, out var soundVolumeToken) &&
-                notificationDict.TryGetValue(SoundClipKey, TokenType.Reference, out var soundClipToken))
+            if (notificationAudioSource != null && notificationDict[PlaySoundKey].Boolean)
             {
-                if (notificationAudioSource != null && playSoundToken.Boolean)
-                {
-                    notificationAudioSource.PlayOneShot((AudioClip)soundClipToken.Reference, soundVolumeToken.Float);
-                }
-            }
-
-            // Getting & Setting Other Data
-            if (notificationDict.TryGetValue(ImageKey, TokenType.Reference, out var imageToken))
-            {
-                var image = (Sprite)imageToken.Reference;
-                if (image != null)
-                {
-                    imageContainer.SetActive(true);
-                    notificationImage.sprite = image;
-                }
-                else
-                {
-                    imageContainer.SetActive(false);
-                }
-            }
-            if (notificationDict.TryGetValue(HeaderKey, TokenType.String, out var headerToken))
-            {
-                var header = headerToken.String;
-                notificationHeader.text = header;
-                notificationHeaderObj.SetActive(!string.IsNullOrEmpty(header));
-            }
-
-            if (notificationDict.TryGetValue(TextKey, TokenType.String, out var textToken))
-            {
-                var text = textToken.String;
-                notificationText.text = text;
-                notificationTextObj.SetActive(!string.IsNullOrEmpty(text));
+                notificationAudioSource.PlayOneShot((AudioClip)notificationDict[SoundClipKey].Reference, notificationDict[SoundVolumeKey].Float);
             }
             
-            if (notificationDict.TryGetValue(DurationKey, TokenType.Float, out var durationToken))
-                currentShownDuration = durationToken.Float;
-            if (notificationDict.TryGetValue(WidthKey, TokenType.Float, out var widthToken))
-                canvasRootTransform.sizeDelta = new Vector2(widthToken.Float, canvasRootTransform.sizeDelta.y);
+            var image = (Sprite)notificationDict[ImageKey].Reference;
+            if (image != null)
+            {
+                imageContainer.SetActive(true);
+                notificationImage.sprite = image;
+            }
+            else
+            {
+                imageContainer.SetActive(false);
+            }
+            
+            var header = notificationDict[HeaderKey].String;
+            notificationHeader.text = header;
+            notificationHeaderObj.SetActive(!string.IsNullOrEmpty(header));
+
+            var text = notificationDict[TextKey].String;
+            notificationText.text = text;
+            notificationTextObj.SetActive(!string.IsNullOrEmpty(text));
+            
+            currentShownDuration = notificationDict[DurationKey].Float;
+            canvasRootTransform.sizeDelta = new Vector2(notificationDict[WidthKey].Float, rootCanvasSizeY);
             
             // Reset
             notificationObject.SetActive(true);
