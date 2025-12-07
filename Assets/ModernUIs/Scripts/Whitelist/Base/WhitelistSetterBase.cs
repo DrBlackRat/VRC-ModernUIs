@@ -19,8 +19,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <summary>
         /// If adding / removing users should log which users were added / removed.
         /// </summary>
-        [Tooltip("If adding / removing users should log which users were added / removed.")]
-        [SerializeField] protected bool debugLogging;
 
         public override bool _IsReadOnly() => false;
 

@@ -18,6 +18,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class WhitelistGetterBase : UdonSharpBehaviour
     {
+        [Tooltip("If enabled the Whitelist Updated Event will be logged in the console.")]
+        [SerializeField] protected bool debugLogging;
+        
         protected DataList whitelist = new DataList();
         protected DataDictionary usersAddedBy = new DataDictionary(); // Key: User Who added, Value: DataList of users they added
         
@@ -220,7 +223,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderEvent">Optional | The Whitelist Updated event hat triggered the update. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         protected virtual void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
-            MUIDebug.Log($"Whitelist: Whitelist Updated");
+            if (debugLogging)
+                MUIDebug.Log($"Whitelist: {gameObject.name} Whitelist Updated.", this);
             
             if (connectedBehaviours == null || connectedBehaviours.Count == 0) return;
             var behaviours = connectedBehaviours.GetKeys();

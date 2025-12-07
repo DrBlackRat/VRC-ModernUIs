@@ -10,6 +10,8 @@
         <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <uie:PropertyField binding-path="removeDuplicates" name="removeDuplicates" label="Remove Duplicates" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="whitelists" name="whitelists" label="Whitelists" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Debug" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="debugLogging" name="DebugLogging" label="Debug Logging" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
 </ui:UXML>
