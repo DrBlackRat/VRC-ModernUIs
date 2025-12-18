@@ -15,7 +15,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedWhitelist : WhitelistSetterBase
     {
-        [Tooltip("Display Name of each User you would want to be on the whitelist. Only correct on start!")]
+        [Tooltip("Display Name of each User you would want to be whitelisted by default.")]
         [SerializeField] protected string[] startWhitelist;
         
         [FormerlySerializedAs("adminWhitelistManager")]
@@ -34,6 +34,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         protected bool canEdit;
         protected bool noneAdminAccess;
+        protected VRCPlayerApi lastOwner;
 
         public override bool _IsSynced() => true;
 
@@ -41,11 +42,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             localName = Networking.LocalPlayer.displayName;
             canEdit = CanEdit(Networking.LocalPlayer);
-            
-            if (Networking.LocalPlayer.IsOwner(gameObject))
-            {
-                _AddUsers(startWhitelist);
-            }
+
+            var startList = startWhitelist.ToDataList();
+            whitelist = startList;
+            usersAddedBy.SetValue(Networking.GetOwner(gameObject).displayName, startList.ShallowClone());
+            base.WhitelistUpdated();
 
             if (adminWhitelist != null)
             {
@@ -89,8 +90,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             return allowEveryoneToEdit || 
                    (noneAdminAccess && _IsPlayerWhitelisted(player)) || 
-                   (adminWhitelist != null && adminWhitelist._IsPlayerWhitelisted(player)) ||
-                   player.IsOwner(gameObject);
+                   (adminWhitelist != null && adminWhitelist._IsPlayerWhitelisted(player));
         }
 
         /// <summary>
@@ -109,6 +109,38 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         
         public override void OnDeserialization()
+        {
+            lastOwner = Networking.GetOwner(gameObject);
+            if (!CanEdit(lastOwner))
+            {
+                MUIDebug.LogWarning($"{lastOwner.displayName} is not an admin but tried to deserialize a Synced Whitelisted. Delaying deserialization by 5s.");
+                SendCustomEventDelayedSeconds(nameof(_DelayedOnDeserialization), 5);
+                return;
+            }
+            
+            ApplyNetData();
+        }
+
+        public void _DelayedOnDeserialization()
+        {
+            var newOwner = Networking.GetOwner(gameObject);
+            if (newOwner != lastOwner)
+            {
+                MUIDebug.Log($"Delayed On Deserialization | Owner changed since original deserialization, aborting delayed deserialization.  Current owner: {newOwner.displayName}.");
+                return;
+            }
+
+            if (!CanEdit(lastOwner))
+            {
+                MUIDebug.LogError($"Delayed On Deserialization | {lastOwner.displayName} is still not whitelisted! Aborting deserialization.");
+                return;
+            }
+            
+            MUIDebug.Log($"Delayed On Deserialization | {lastOwner.displayName} is now whitelisted! Running Deserialization.");
+            ApplyNetData();
+        }
+
+        private void ApplyNetData()
         {
             if (VRCJson.TryDeserializeFromJson(serializedAddedBy, out DataToken addedByResult))
             {
@@ -137,7 +169,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
         {
-            if (CanEdit(newOwner) || newOwner.IsOwner(gameObject))
+            if (CanEdit(newOwner))
             {
                 MUIDebug.Log($"Whitelist Manager: {requester.displayName} has made {newOwner.displayName} the new Network Owner.");
                 return true; 

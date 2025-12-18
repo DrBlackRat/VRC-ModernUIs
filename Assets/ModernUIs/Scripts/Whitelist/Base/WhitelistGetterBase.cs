@@ -21,7 +21,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         [Tooltip("If enabled the Whitelist Updated Event will be logged in the console.")]
         [SerializeField] protected bool debugLogging;
         
-        protected DataList whitelist = new DataList();
+        protected DataList whitelist = new DataList(); // Note: In the futrue this could be replaced with a Dictionary for better performance.
         protected DataDictionary usersAddedBy = new DataDictionary(); // Key: User Who added, Value: DataList of users they added
         
         protected DataDictionary connectedBehaviours = new DataDictionary(); // Key: Udon Behaviour, Value: DataList of events (some scripts could try to connect with multiple events)

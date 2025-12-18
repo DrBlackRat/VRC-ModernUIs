@@ -33,6 +33,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 
                 MUIDebug.LogWarning($"{lastOwner.displayName} is not whitelisted but tried to deserialize a synced SelectorUI. Delaying deserialization by {loadDelay}s.");
                 SendCustomEventDelayedSeconds(nameof(_DelayedOnDeserialization), loadDelay);
+                return;
             }
 
             UpdateSelection(netSelectedState, true, false, true);
@@ -53,7 +54,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 return;
             }
             
-            MUIDebug.Log($"Delayed On Deserialization | {lastOwner.displayName} is now whitelisted! Running Deserialization,");
+            MUIDebug.Log($"Delayed On Deserialization | {lastOwner.displayName} is now whitelisted! Running Deserialization.");
             UpdateSelection(netSelectedState, true, false, true);
         }
 

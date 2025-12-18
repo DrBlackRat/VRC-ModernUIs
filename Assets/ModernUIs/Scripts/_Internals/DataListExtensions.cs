@@ -27,13 +27,14 @@ namespace DrBlackRat.VRC.ModernUIs
             return tempList;
         }
         
+        #region To Datalist
         /// <summary>
         /// Converts an array of elements into a <see cref="DataList"/> by wrapping each element in a <see cref="DataToken"/>.
         /// </summary>
         /// <typeparam name="T">The element type of the array.</typeparam>
         /// <param name="array">The array to convert.</param>
         /// <returns>
-        /// A new <see cref="DataList"/> containing a <see cref="DataToken"/> for each element in <paramref name="array"/>.
+        /// A new <see cref="DataList"/> containing a <see cref="DataToken"/> for each element in the <paramref name="array"/>.
         /// If the array is <c>null</c>, an empty <see cref="DataList"/> is returned.
         /// </returns>
         public static DataList ToDataList<T>(this T[] array)
@@ -50,7 +51,31 @@ namespace DrBlackRat.VRC.ModernUIs
             }
             return dataList;
         }
+        
+        /// <summary>
+        /// Converts an array of strings into a <see cref="DataList"/> by wrapping each string in a <see cref="DataToken"/>.
+        /// </summary>
+        /// <param name="array">The string array to convert.</param>
+        /// <returns>
+        /// A new <see cref="DataList"/> containing a <see cref="DataToken"/> for each string in the <paramref name="array"/>.
+        /// If the array is <c>null</c>, an empty <see cref="DataList"/> is returned.
+        /// </returns>
+        public static DataList ToDataList(this string[] array)
+        {
+            var dataList = new DataList();
+            
+            if (array == null)
+                return dataList;
+            foreach (var element in array)
+            {
+                var token = new DataToken(element);
+                dataList.Add(token);
+            }
+            return dataList;
+        }
+        #endregion
 
+        #region To Array
         /// <summary>
         /// Converts a <see cref="DataList"/> containing string entries into a <see cref="string"/> array.
         /// </summary>
@@ -71,6 +96,8 @@ namespace DrBlackRat.VRC.ModernUIs
 
             return tempArray;
         }
+        #endregion
+
     }
 }
 

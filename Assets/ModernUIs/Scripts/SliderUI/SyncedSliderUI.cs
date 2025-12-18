@@ -37,6 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
                 MUIDebug.LogWarning($"{lastOwner.displayName} is not whitelisted but tried to deserialize a synced SliderUI. Delaying deserialization by {loadDelay}s.");
                 SendCustomEventDelayedSeconds(nameof(_DelayedOnDeserialization), loadDelay);
+                return;
             }
             
             UpdateValue(netValue, true, false, true);
