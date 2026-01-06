@@ -97,6 +97,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             UpdateTxlData();
             return base._GetCount();
         }
+        #endregion
 
         #region Get Added By Overrides
         public override DataList _GetUsersAddedBy(string username)
@@ -120,8 +121,16 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             return null;
         }
         #endregion
+        
+        #region Getting Players Overrides
 
+        public override VRCPlayerApi _GetPlayerInInstance()
+        {
+            UpdateTxlData();
+            return base._GetPlayerInInstance();
+        }
         #endregion
+        
     }
 
 }

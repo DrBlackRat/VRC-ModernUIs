@@ -27,6 +27,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected DataDictionary connectedBehaviours = new DataDictionary(); // Key: Udon Behaviour, Value: DataList of events (some scripts could try to connect with multiple events)
         
         protected string localName;
+        private VRCPlayerApi leavingPlayer;
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
 
@@ -34,7 +35,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             localName = Networking.LocalPlayer.displayName;
         }
-        
+
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            leavingPlayer = player;
+        }
+
         /// <summary>
         /// Allows checking if this whitelist can be written to. Useful to check before casting to <see cref="WhitelistSetterBase"/>.
         /// </summary>
@@ -210,6 +216,29 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 }
             }
 
+            return null;
+        }
+        #endregion
+        
+        #region Getting Players
+        /// <summary>
+        /// Returns the <see cref="VRCPlayerApi"/> of a whitelisted player in the instance.
+        /// Useful for getting a player to move ownership of an object to.
+        /// </summary>
+        /// <returns>A <see cref="VRCPlayerApi"/> of a whitelisted player in the instance, or <c>null</c> if none are present.</returns>
+        public virtual VRCPlayerApi _GetPlayerInInstance()
+        {
+            var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
+            VRCPlayerApi.GetPlayers(players);
+            
+            foreach (var player in players)
+            {
+                if (!player.IsValid()) continue;
+                if (!_IsPlayerWhitelisted(player)) continue;
+                if (player == leavingPlayer) continue;
+                return player;
+            }
+            
             return null;
         }
         #endregion

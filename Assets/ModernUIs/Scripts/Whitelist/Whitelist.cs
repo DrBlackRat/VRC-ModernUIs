@@ -31,6 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
+            base.OnPlayerLeft(player);
             if (autoRemoveOnLeave)
                 _RemoveUser(player.displayName);
         }

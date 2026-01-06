@@ -74,6 +74,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public override void OnOwnershipTransferred(VRCPlayerApi player)
         {
             UpdateLock(locked, true);
+            base.OnOwnershipTransferred(player);
         }
 
         public override void _DelayedLoad()

@@ -12,7 +12,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     public class SyncedSelectorUI : WhitelistSelectorUI
     {
         [UdonSynced] protected int netSelectedState;
-        protected VRCPlayerApi lastOwner;
+        protected int queuedDeserializations = 0;
 
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
@@ -22,16 +22,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         public override void OnDeserialization()
         {
-            if (whitelist != null)
+            var owner = Networking.GetOwner(gameObject);
+            if (whitelist != null && !whitelist._IsPlayerWhitelisted(owner))
             {
-                lastOwner = Networking.GetOwner(gameObject);
-                if (whitelist._IsPlayerWhitelisted(lastOwner))
-                {
-                    UpdateSelection(netSelectedState, true, false, true);
-                    return;
-                }
-                
-                MUIDebug.LogWarning($"{lastOwner.displayName} is not whitelisted but tried to deserialize a synced SelectorUI. Delaying deserialization by {loadDelay}s.");
+                MUIDebug.LogWarning($"{owner.displayName} is not whitelisted but tried to deserialize {gameObject.name}. Delaying deserialization by {loadDelay}s.", gameObject);
+                queuedDeserializations++;
                 SendCustomEventDelayedSeconds(nameof(_DelayedOnDeserialization), loadDelay);
                 return;
             }
@@ -41,40 +36,63 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         public void _DelayedOnDeserialization()
         {
-            var newOwner = Networking.GetOwner(gameObject);
-            if (newOwner != lastOwner)
+            if (queuedDeserializations > 1)
             {
-                MUIDebug.Log($"Delayed On Deserialization | Owner changed since original deserialization, aborting delayed deserialization.  Current owner: {newOwner.displayName}.");
+                MUIDebug.Log(
+                    $"Delayed On Deserialization | {queuedDeserializations} queued deserializations," +
+                    $" aborting delayed deserialization on {gameObject.name}.", gameObject);
+                queuedDeserializations--;
                 return;
             }
             
-            if (!whitelist._IsPlayerWhitelisted(lastOwner))
+            var owner = Networking.GetOwner(gameObject);
+            if (!whitelist._IsPlayerWhitelisted(owner))
             {
-                MUIDebug.LogError($"Delayed On Deserialization | {lastOwner.displayName} is still not whitelisted! Aborting deserialization.");
+                MUIDebug.LogError($"Delayed On Deserialization | {owner.displayName} is not whitelisted! Aborting deserialization on {gameObject.name}.", gameObject);
+                queuedDeserializations--;
                 return;
             }
             
-            MUIDebug.Log($"Delayed On Deserialization | {lastOwner.displayName} is now whitelisted! Running Deserialization.");
+            MUIDebug.Log($"Delayed On Deserialization | {owner.displayName} is whitelisted! Running Deserialization on {gameObject.name}.", gameObject);
+            queuedDeserializations--;
             UpdateSelection(netSelectedState, true, false, true);
         }
 
         public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
         {
-            if (whitelist != null)
+            if (whitelist != null && !whitelist._IsPlayerWhitelisted(newOwner))
             {
-                if (whitelist._IsPlayerWhitelisted(newOwner))
-                {
-                    MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner.");
-                    return true; 
-                }
-                else
-                {
-                    MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
-                    return false;
-                }
+                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner of {gameObject.name}, but isn't allowed to!", gameObject);
+                return false;
             }
-            MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner.");
+            MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner of {gameObject.name}.", gameObject);
             return true;
+        }
+        
+        public override void OnOwnershipTransferred(VRCPlayerApi player)
+        {
+            CheckOwnership();
+        }
+
+        private void CheckOwnership()
+        {
+            if (!Networking.LocalPlayer.isMaster) return;
+            var owner = Networking.GetOwner(gameObject);
+            
+            if (whitelist == null || whitelist._IsPlayerWhitelisted(owner)) return;
+            MUIDebug.LogWarning($"{owner.displayName} is the Network Owner of {gameObject.name}, but isn't whitelisted. " +
+                                $"Trying to move ownership to a whitelisted player.", gameObject);
+
+            var newOwner = whitelist._GetPlayerInInstance();
+            if (newOwner == null)
+            {
+                MUIDebug.LogWarning($"Could not find a whitelisted player to transfer ownership of {gameObject.name} to. " +
+                                    $"Keeping current owner, but synced data may get lost." , gameObject);
+                return;
+            }
+            
+            MUIDebug.Log($"Found whitelisted player \"{newOwner.displayName}\" to transfer ownership of {gameObject.name} to.", gameObject);
+            Networking.SetOwner(newOwner, gameObject);
         }
 
         protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)

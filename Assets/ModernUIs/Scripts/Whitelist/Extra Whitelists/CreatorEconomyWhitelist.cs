@@ -70,6 +70,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
+            base.OnPlayerLeft(player);
             if (getAllProductOwners) return;
             var displayName = player.displayName;
             if (whitelist.Contains(displayName))
