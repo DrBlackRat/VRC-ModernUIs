@@ -1,4 +1,5 @@
 ﻿using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Data;
@@ -13,9 +14,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistPermissionManagerInstance : UdonSharpBehaviour
     {
+        [HideInInspector] public string[] permissionNames;
         [HideInInspector] public WhitelistGetterBase[] whitelists;
         [HideInInspector] public WhitelistGetterBase[] adminWhitelists;
-        [HideInInspector] public bool[] readOnly;
+        [HideInInspector] public bool[] isReadOnly;
+        [HideInInspector] public bool[] showConformationDialog;
+        
+        [HideInInspector] public GameObject confirmationDialog;
+        [HideInInspector] public TextMeshProUGUI confirmationDialogText;
+
+        [HideInInspector] public string confirmationDialogAddString;
+        [HideInInspector] public string confirmationDialogRemoveString;
         
         // PM = PermissionManager
         [HideInInspector] public GameObject pmUserPrefab;
@@ -28,6 +37,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected VRCPlayerApi localPlayer;
         protected string localDisplayName;
         
+        protected int showingConfirmationDialogFor = -1; // Index of the permission that is currently being changed.
+        protected bool isAddConfirmationDialog = false; // True if the dialog is for adding a user, false if it's for removing a user.'
+        protected string confirmationDialogUsername;
+        
         protected bool[] hasAccess;
 
         private const int MAX_WHITELISTS = 8; // Currently set to 8 due to UI limitations, actual max is 8
@@ -35,13 +48,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Unity & VRChat Events
         private void Start()
         {
-            if (whitelists.Length > MAX_WHITELISTS || adminWhitelists.Length > MAX_WHITELISTS || readOnly.Length > MAX_WHITELISTS)
+            if (whitelists.Length > MAX_WHITELISTS || adminWhitelists.Length > MAX_WHITELISTS || isReadOnly.Length > MAX_WHITELISTS)
             {
                 MUIDebug.LogError($"Permission Manager | Only a max of {MAX_WHITELISTS} Whitelists can be used!");
                 return;
             }
 
-            if (whitelists.Length != adminWhitelists.Length || whitelists.Length != readOnly.Length)
+            if (whitelists.Length != adminWhitelists.Length || whitelists.Length != isReadOnly.Length)
             {
                 MUIDebug.LogError($"Permission Manager | There needs to be an equal amount of Whitelists, Admin Whitelists and Read Only toggles!");
                 return;
@@ -58,11 +71,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 var whitelist = whitelists[i];
                 var adminWhitelist = adminWhitelists[i];
                 
-                readOnly[i] = whitelist._IsReadOnly() || readOnly[i];
+                isReadOnly[i] = whitelist._IsReadOnly() || isReadOnly[i];
                 
                 whitelist._SetUpConnection((IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
 
-                if (!readOnly[i])
+                if (!isReadOnly[i])
                 {
                     if (adminWhitelist != null)
                     {
@@ -98,6 +111,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected void UpdatePermissionState(int i)
         {
+            if (showingConfirmationDialogFor == i) 
+                HideConfirmationDialog();
+            
             var pmUsersKeys = pmUsers.GetKeys();
             for (int j = 0; j < pmUsersKeys.Count; j++)
             {
@@ -140,6 +156,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (hasAccess[i] == access) return;
             hasAccess[i] = access;
+
+            if (showingConfirmationDialogFor == i && !access)
+                CancelChange();
             
             var pmUsersKeys = pmUsers.GetKeys();
             for (int j = 0; j < pmUsersKeys.Count; j++)
@@ -170,6 +189,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _AdminWhitelistUpdated15() => AdminWhitelistUpdated(15);
         #endregion
 
+        #region UI Events
         /// <summary>
         /// Called by Permission Manager users if a button was pressed.
         /// </summary>
@@ -178,8 +198,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <param name="state">True if this permission was enabled, false when not.</param>
         public void ButtonStateChange(string username, int i, bool state)
         {
-            if (!hasAccess[i] || readOnly[i]) return;
+            if (!hasAccess[i] || isReadOnly[i]) return;
             var whitelist = (WhitelistSetterBase)whitelists[i];
+
+            if (showConformationDialog[i])
+            {
+                ShowConformationDialog(username, i, state);
+                return;
+            }
             
             if (state)
             {
@@ -191,6 +217,59 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
         }
 
+        private void ShowConformationDialog(string username, int i, bool state)
+        {
+            confirmationDialogUsername = username;
+            isAddConfirmationDialog = state;
+            showingConfirmationDialogFor = i;
+            
+            confirmationDialog.SetActive(true);
+            var text = state ? confirmationDialogAddString : confirmationDialogRemoveString;
+            confirmationDialogText.text = text.Replace("<username>", username).Replace("<permissionName>", permissionNames[i]);
+        }
+        
+        private void HideConfirmationDialog()
+        {
+            confirmationDialog.SetActive(false);
+            showingConfirmationDialogFor = -1;
+        }
+
+        public void ConfirmChange()
+        {
+            var i = showingConfirmationDialogFor;
+            if (i == -1) return;
+            
+            if (!hasAccess[i] || isReadOnly[i]) return;
+            var whitelist = (WhitelistSetterBase)whitelists[i];
+            
+            if (isAddConfirmationDialog)
+            {
+                whitelist._AddUser(confirmationDialogUsername, (IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
+            }
+            else
+            {
+                whitelist._RemoveUser(confirmationDialogUsername, (IUdonEventReceiver)this, $"_WhitelistUpdated{i}");
+            }
+
+            HideConfirmationDialog();
+        }
+        
+        public void CancelChange()
+        {
+            var i = showingConfirmationDialogFor;
+            if (i == -1) return;
+            
+            // Revert the toggle state
+            if (pmUsers.TryGetValue(confirmationDialogUsername, TokenType.Reference, out DataToken value))
+            {
+                var pmUserScript = (PermissionManagerUser)value.Reference;
+                pmUserScript._UpdatePermissionState(i, !isAddConfirmationDialog);
+            }
+            HideConfirmationDialog();
+        }
+        #endregion
+
+        #region Adding / Removing Users
         private void AddUser(string username)
         {
             if (!hasInitialized || pmUsers.ContainsKey(username)) return;
@@ -222,5 +301,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 pmUsers.Remove(username);
             }
         }
+        #endregion
     }
 }

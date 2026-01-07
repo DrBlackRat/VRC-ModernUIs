@@ -6,9 +6,19 @@
     <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Allows for easy editing of multiple Whitelists at once. Displays all users in the instance and what permission they have." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" enable-rich-text="false" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
     </ui:VisualElement>
-    <ui:Foldout text="Settings" view-data-key="WhitelistPermissionManmagerSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+    <ui:Foldout text="Permissions" view-data-key="WhitelistPermissionManmagerPermissions" name="Permissions" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <uie:PropertyField binding-path="permissions" name="permissions" label="Permissions" style="font-size: 12px;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="Settings" view-data-key="WhitelistPermissionManmagerSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Confirmation Dialog" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="confirmationDialog" name="confirmationDialog" label="Confirmation Dialog Object" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="confirmationDialogText" name="confirmationDialogText" label="Text" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
+            <uie:PropertyField binding-path="popAudioSource" name="popAudioSource" label="Pop Audio Source" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
+            <uie:PropertyField binding-path="confirmationDialogAddString" name="confirmationDialogAddString" label="Add String" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="confirmationDialogRemoveString" name="confirmationDialogRemoveString" label="Remove String" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="UI Prefabs" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="pmUserPrefab" name="pmUserPrefab" label="Prefab" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="pmUserTransform" name="pmUserTransform" label="Transform" style="font-size: 12px; -unity-font-style: normal;" />

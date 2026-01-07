@@ -32,7 +32,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <param name="newPermissionManagerInstance">Refernce to the Permission Manager</param>
         /// <param name="permissions">Amount of permissions this user can have.</param>
         /// <param name="newUsername">Username / Display name of this user.</param>
-        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess, bool[] hasPermission,string newUsername)
+        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess, bool[] hasPermission, string newUsername)
         {
             _permissionManagerInstance = newPermissionManagerInstance;
             username = newUsername;

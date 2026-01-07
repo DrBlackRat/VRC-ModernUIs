@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
 using UdonSharpEditor;
@@ -22,15 +23,29 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Transform of which the position and rotation will be used for the Prefab, as well as be it's parent.")]
         [SerializeField] protected Transform pmUserTransform;
         
+        [Tooltip("Conformation Dialog that can be shown when adding or removing a user from the whitelist.")]
+        [SerializeField] protected GameObject confirmationDialog;
+        [Tooltip("Text Mesh Pro UGUI component that will be used in the Conformation Dialog.")]
+        [SerializeField] protected TextMeshProUGUI confirmationDialogText;
+        
+        [TextArea(1, 3)][Tooltip("Text that will be used in the Conformation Dialog for adding a user.")]
+        [SerializeField] protected string confirmationDialogAddString = $"Are you sure you want to add \"<username>\" to <permissionName>?";
+        [TextArea(1, 3)][Tooltip("Text that will be used in the Conformation Dialog for removing a user.")]
+        [SerializeField] protected string confirmationDialogRemoveString = $"Are you sure you want to remove \"<username>\" from <permissionName>?";
+        
         [Serializable]
         private class Permission
         {
+            [Tooltip("Name of the Whitelist, currently only used by the conformation dialog.")]
+            public string permissionName = "Whitelist";
             [Tooltip("Whitelists that are being managed. \nIf the provided whitelist is getter only, it will be treated as read only.")]
             public WhitelistGetterBase whitelist;
             [Tooltip("Admin Whitelists that controls access of the permission. \nIf left empty it will be treated as if the local player is an Admin.")]
             public WhitelistGetterBase adminWhitelist;
             [Tooltip("If enabled the permission will be read only. \nEnabled automatically for getter only Whitelists.")]
             public bool readOnly;
+            [Tooltip("If enabled a conformation dialog will be shown when adding or removing a user from the whitelist.")]
+            public bool showConformationDialog;
         }
 
         /// <summary>
@@ -45,23 +60,35 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 return;
             }
             
+            string[] permissionNames = new string[permissions.Length];
             WhitelistGetterBase[] whitelists = new WhitelistGetterBase[permissions.Length];
             WhitelistGetterBase[] adminWhitelists = new WhitelistGetterBase[permissions.Length];
-            bool[] readOnly = new bool[permissions.Length];
+            bool[] isReadOnly = new bool[permissions.Length];
+            bool[] showConfirmationDialog = new bool[permissions.Length];
 
             for (int i = 0; i < permissions.Length; i++)
             {
+                permissionNames[i] = permissions[i].permissionName;
                 whitelists[i] = permissions[i].whitelist;
                 adminWhitelists[i] = permissions[i].adminWhitelist;
-                readOnly[i] = permissions[i].readOnly;
+                isReadOnly[i] = permissions[i].readOnly;
+                showConfirmationDialog[i] = permissions[i].showConformationDialog;
             }
 
+            instance.permissionNames = permissionNames;
             instance.whitelists = whitelists;
             instance.adminWhitelists = adminWhitelists;
-            instance.readOnly = readOnly;
+            instance.isReadOnly = isReadOnly;
+            instance.showConformationDialog = showConfirmationDialog;
 
             instance.pmUserPrefab = pmUserPrefab;
             instance.pmUserTransform = pmUserTransform;
+
+            instance.confirmationDialog = confirmationDialog;
+            instance.confirmationDialogText = confirmationDialogText;
+            
+            instance.confirmationDialogAddString = confirmationDialogAddString;
+            instance.confirmationDialogRemoveString = confirmationDialogRemoveString;
             
             UdonSharpEditorUtility.CopyProxyToUdon(instance);
         }
