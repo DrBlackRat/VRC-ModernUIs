@@ -15,6 +15,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedWhitelist : WhitelistSetterBase
     {
+        [Range(1, 10)][Tooltip("Hoe long to wait before retrying deserialization if the network isn't allowed to edit yet.")]
+        [SerializeField] protected float deserializationRetryDelay = 5f;
+        [Range(1, 10)][Tooltip("How many times to attempt deserialization if the network owner isn't allowed to edit yet.")]
+        [SerializeField] protected int maxDeserializationAttempts = 4;
+        
         [Tooltip("Display Name of each User you would want to be whitelisted by default.")]
         [SerializeField] protected string[] startWhitelist;
         
@@ -34,7 +39,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         protected bool canEdit;
         protected bool noneAdminAccess;
-        protected int queuedDeserializations = 0;
+        
+        protected int deserializationAttempts = 0;
+        protected int scheduledDeserializations = 0;
 
         public override bool _IsSynced() => true;
 
@@ -109,43 +116,47 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             return true;
         }
         
+        #region Deserialization
         public override void OnDeserialization()
         {
-            var owner = Networking.GetOwner(gameObject);
-            if (!CanEdit(owner))
-            {
-                MUIDebug.LogWarning($"{owner.displayName} is not an admin but tried to deserialize {gameObject.name}. Delaying deserialization by 5s.", gameObject);
-                queuedDeserializations++;
-                SendCustomEventDelayedSeconds(nameof(_DelayedOnDeserialization), 5);
-                return;
-            }
-            
-            ApplyNetData();
+            deserializationAttempts = 0;
+            HandleDeserialization();
+        }
+        
+        public void _DelayedDeserialization()
+        {
+            scheduledDeserializations--;
+            if (scheduledDeserializations > 0) return;
+            if (deserializationAttempts == 0) return; // 0th = finished / new start
+            HandleDeserialization();
         }
 
-        public void _DelayedOnDeserialization()
+        private void HandleDeserialization()
         {
-            if (queuedDeserializations > 1)
-            {
-                MUIDebug.Log(
-                    $"Delayed On Deserialization | {queuedDeserializations} queued deserializations," +
-                    $" aborting delayed deserialization on {gameObject.name}.", gameObject);
-                queuedDeserializations--;
-                return;
-            }
+            deserializationAttempts++;
             
             var owner = Networking.GetOwner(gameObject);
             if (!CanEdit(owner))
             {
-                MUIDebug.LogError($"Delayed On Deserialization | {owner.displayName} is not whitelisted! Aborting deserialization on {gameObject.name}.", gameObject);
-                queuedDeserializations--;
+                if (deserializationAttempts >= maxDeserializationAttempts)
+                {
+                    MUIDebug.LogError($"{owner.displayName} is still not whitelisted! Aborting deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
+                    deserializationAttempts = 0;
+                    return;
+                }
+                
+                MUIDebug.LogWarning($"{owner.displayName} is not whitelisted but tried to send network data on {gameObject.name}. Retrying in {deserializationRetryDelay}s, Attempt {deserializationAttempts} / {maxDeserializationAttempts}.", gameObject);
+                scheduledDeserializations++;
+                SendCustomEventDelayedSeconds(nameof(_DelayedDeserialization), deserializationRetryDelay);
                 return;
             }
             
-            MUIDebug.Log($"Delayed On Deserialization | {owner.displayName} is whitelisted! Running Deserialization on {gameObject.name}.", gameObject);
-            queuedDeserializations--;
+            if (deserializationAttempts > 1)
+                MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
+            deserializationAttempts = 0;
             ApplyNetData();
         }
+        #endregion
 
         private void ApplyNetData()
         {

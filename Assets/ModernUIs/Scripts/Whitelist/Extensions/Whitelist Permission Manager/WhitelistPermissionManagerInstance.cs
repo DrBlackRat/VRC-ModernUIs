@@ -111,13 +111,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected void UpdatePermissionState(int i)
         {
-            if (showingConfirmationDialogFor == i) 
-                HideConfirmationDialog();
+            var checkConfirmationDialog = showingConfirmationDialogFor == i;
             
             var pmUsersKeys = pmUsers.GetKeys();
             for (int j = 0; j < pmUsersKeys.Count; j++)
             {
                 var isWhitelisted = whitelists[i]._IsPlayerWhitelisted(pmUsersKeys[j].String);
+
+                if (checkConfirmationDialog &&
+                    isAddConfirmationDialog == isWhitelisted &&
+                    pmUsersKeys[j].String == confirmationDialogUsername)
+                {
+                    HideConfirmationDialog();
+                }
+                
                 if (pmUsers.TryGetValue(pmUsersKeys[j], TokenType.Reference, out DataToken value))
                 {
                     var pmUserScript = (PermissionManagerUser)value.Reference;
