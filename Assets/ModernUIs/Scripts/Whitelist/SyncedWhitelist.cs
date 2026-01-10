@@ -184,18 +184,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 serializedAddedBy = addedByResult.String;
             }
         }
-
-        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
-        {
-            if (CanEdit(newOwner))
-            {
-                MUIDebug.Log($"Synced Whitelist: {requester.displayName} has made {newOwner.displayName} the new Network Owner of {gameObject.name}.", gameObject);
-                return true; 
-            }
-
-            MUIDebug.LogError($"Synced Whitelist: {requester.displayName} has tried to make {newOwner.displayName} the Network Owner of {gameObject.name}, but isn't allowed to!", gameObject);
-            return false;
-        }
         
         public override void OnOwnershipTransferred(VRCPlayerApi player)
         {

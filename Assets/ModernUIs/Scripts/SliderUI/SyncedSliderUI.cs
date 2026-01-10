@@ -73,17 +73,6 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         }
         #endregion
         
-        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
-        {
-            if (whitelist != null && !whitelist._IsPlayerWhitelisted(newOwner))
-            {
-                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner of {gameObject.name}, but isn't allowed to!", gameObject);
-                return false;
-            }
-            MUIDebug.Log($"{requester.displayName} has made {newOwner.displayName} the new Network Owner of {gameObject.name}.", gameObject);
-            return true;
-        }
-        
         public override void OnOwnershipTransferred(VRCPlayerApi player)
         {
             CheckOwnership();
