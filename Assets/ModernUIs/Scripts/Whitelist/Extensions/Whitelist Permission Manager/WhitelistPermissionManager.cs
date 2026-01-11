@@ -33,6 +33,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [TextArea(1, 3)][Tooltip("Text that will be used in the Conformation Dialog for removing a user.")]
         [SerializeField] protected string confirmationDialogRemoveString = $"Are you sure you want to remove \"<username>\" from <permissionName>?";
         
+        [Tooltip("If enabled the the users shown in the Permission Manager will automatically be sorted alphabetically.\n This does come with a slight performance impact, otherwise you can call \"_SortUsers\" manually.")]
+        [SerializeField] protected bool autoSort = true;
+        
         [Serializable]
         private class Permission
         {
@@ -89,6 +92,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             instance.confirmationDialogAddString = confirmationDialogAddString;
             instance.confirmationDialogRemoveString = confirmationDialogRemoveString;
+            
+            instance.autoSort = autoSort;
             
             UdonSharpEditorUtility.CopyProxyToUdon(instance);
         }

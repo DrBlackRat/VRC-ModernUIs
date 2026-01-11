@@ -5,6 +5,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
@@ -13,22 +14,49 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [Tooltip("Whitelist Setter to add all users to.")] 
         [SerializeField] private WhitelistSetterBase whitelist;
-        [Tooltip("If enabled the Whitelist will only be added to if the local player is the owner of it.\nWill be force enabled for synced whitelists.")]
-        [SerializeField] private bool onlyAddIfOwner;
+        
+        [Tooltip("If provided you have to be the owner of the whitelist and be on the admin whitelist to add all players to it.")] 
+        [SerializeField] private WhitelistGetterBase adminWhitelist;
+
         [Range(0, 20)] [Tooltip("Initial delay before the Whitelist is filled with all players. Useful if you want to wait for persistence to finish loading.")]
         [SerializeField] private float initialDelay = 5;
         
         private bool hasInitialized;
         private bool isFillQueued;
+        
+        private bool whitelistIsSynced;
+        private bool isAdmin;
 
-        private bool CanAdd() => whitelist != null && enabled && gameObject.activeInHierarchy &&
-                                 (!onlyAddIfOwner || Networking.LocalPlayer.IsOwner(whitelist.gameObject));
+        private void Start()
+        {
+            if (adminWhitelist != null)
+            {
+                adminWhitelist._SetUpConnection((IUdonEventReceiver)this, nameof(_AdminWhitelistUpdated));
+            }
+            else
+            {
+                isAdmin = true;
+            }
+        }
 
+        public void _AdminWhitelistUpdated()
+        {
+            isAdmin = adminWhitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
+        }
+        
         private void OnEnable()
         {
             if (isFillQueued) return;
             isFillQueued = true;
             SendCustomEventDelayedSeconds(nameof(_FillEntireWhitelist), hasInitialized ? 0 : initialDelay);
+        }
+
+        private bool CanAdd()
+        {
+            if (!enabled || !gameObject.activeInHierarchy)
+                return false;
+
+            return !whitelistIsSynced || (isAdmin && Networking.LocalPlayer.IsOwner(whitelist.gameObject));
         }
 
         public void _FillEntireWhitelist()
@@ -42,6 +70,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
             VRCPlayerApi.GetPlayers(players);
 
+            whitelist._ClearWhitelist(null, null, false);
             whitelist._AddUsers(players);
         }
 
@@ -57,7 +86,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private void OnValidate()
         {
             if (whitelist?._IsSynced() == true)
-                onlyAddIfOwner = true;
+                whitelistIsSynced = true;
         }
 #endif
     }

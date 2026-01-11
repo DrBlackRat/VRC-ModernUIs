@@ -25,13 +25,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         [FormerlySerializedAs("whitelistManager")] 
         [SerializeField] private WhitelistGetterBase whitelist;
+        
+        [Tooltip("If enabled the the users shown will automatically be sorted alphabetically.\n This does come with a slight performance impact, otherwise you can call \"_SortUsers\" manually.")]
+        [SerializeField] protected bool autoSort = true;
 
         private DataDictionary whitelistDisplays = new DataDictionary();
         protected bool collapsed;
+        protected bool sortCooldownEnabled = true;
 
         private void Start()
         {
             whitelist._SetUpConnection((IUdonEventReceiver)this);
+            
+            SendCustomEventDelayedSeconds(nameof(_EndSortCooldown), 11f);
+        }
+        
+        public void _EndSortCooldown()
+        {
+            sortCooldownEnabled = false;
+            if (autoSort) _SortUsers();
         }
         
         public virtual void _UpdateCollapsed(bool newCollapsed)
@@ -80,6 +92,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newUserObj.SetActive(!collapsed);
             
             whitelistDisplays.Add(username, newUserObj);
+            if (autoSort && !sortCooldownEnabled) _SortUsers();
         }
         
         private void RemoveUsernameDisplay(string username)
@@ -92,7 +105,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 Destroy(gameObject);
                 whitelistDisplays.Remove(username);
             } 
-            
         }
+        
+        /// <summary>
+        /// Sorts the users alphabetically.
+        /// </summary>
+        public void _SortUsers()
+        {
+            var userKeys = whitelistDisplays.GetKeys();
+            userKeys.Sort();
+
+            for (int i = 0; i < userKeys.Count; i++)
+                ((GameObject)whitelistDisplays[userKeys[i]].Reference).transform.SetSiblingIndex(i + 2); // +2 as the first two elements are placeholder objects
+        }
+        
+        
     }
 }

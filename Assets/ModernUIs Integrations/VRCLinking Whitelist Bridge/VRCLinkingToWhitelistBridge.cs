@@ -35,7 +35,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
                     allMembers.AddRange(members);
                 }
             }
-            whitelist._ReplaceWhitelist(allMembers);
+            whitelist._ReplaceWhitelist(allMembers, null, null, true);
         }
     }
 }

@@ -45,6 +45,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Range(0, 40)] [Tooltip("The amount of users a single admin can add.")]
         [SerializeField] protected int maxAddAmount = 2;
         
+        // Sorting
+        [Tooltip("If enabled the the users shown will automatically be sorted alphabetically.\n This does come with a slight performance impact, otherwise you can call \"_SortWhitelistedUsers\" and \"_SortOtherUsers\" manually.")]
+        [SerializeField] protected bool autoSort = true;
+        
         protected DataDictionary whitelistedUsers = new DataDictionary();
         protected DataDictionary otherUsers = new DataDictionary();
 
@@ -57,6 +61,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         protected bool whitelistCollapsed;
         protected bool otherUsersCollapsed;
+        protected bool sortCooldownEnabled = true;
 
         #region Unity, VRChat & ModernUIs Events
         protected virtual void Start()
@@ -76,6 +81,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             CheckMaxUsersAdded(true);
             UpdateCountDisplays(); 
+            
+            SendCustomEventDelayedSeconds(nameof(_EndWhitelistSortCooldown), 12f);
+            SendCustomEventDelayedSeconds(nameof(_EndOtherSortCooldown), 13f);
+        }
+        
+        public void _EndWhitelistSortCooldown()
+        {
+            sortCooldownEnabled = false;
+            if (autoSort) _SortWhitelistedUsers();
+        }
+        
+        public void _EndOtherSortCooldown()
+        {
+            sortCooldownEnabled = false;
+            if (autoSort) _SortOtherUsers();
         }
         
         public virtual void _WhitelistUpdated()
@@ -228,6 +248,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             RemoveOtherUser(username, false);
             
+            if (autoSort && !sortCooldownEnabled) _SortWhitelistedUsers();
             return true;
         }
 
@@ -265,6 +286,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             UpdateCountDisplays();
 
+            if (autoSort && !sortCooldownEnabled) _SortOtherUsers();
             return true;
         }
         
@@ -280,6 +302,32 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
 
             return true;
+        }
+        #endregion
+        
+        #region Sorting
+        /// <summary>
+        /// Sorts the whitelisted users alphabetically.
+        /// </summary>
+        public void _SortWhitelistedUsers()
+        {
+            var userKeys = whitelistedUsers.GetKeys();
+            userKeys.Sort();
+
+            for (int i = 0; i < userKeys.Count; i++)
+                ((WhitelistUser)whitelistedUsers[userKeys[i]].Reference).transform.SetSiblingIndex(i + 2); // +2 as the first two elements are placeholder objects
+        }
+        
+        /// <summary>
+        /// Sorts the other users alphabetically.
+        /// </summary>
+        public void _SortOtherUsers()
+        {
+            var userKeys = otherUsers.GetKeys();
+            userKeys.Sort();
+
+            for (int i = 0; i < userKeys.Count; i++)
+                ((WhitelistUser)otherUsers[userKeys[i]].Reference).transform.SetSiblingIndex(i + 2); // +2 as the first two elements are placeholder objects
         }
         #endregion
         

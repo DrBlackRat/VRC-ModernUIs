@@ -26,6 +26,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [HideInInspector] public string confirmationDialogAddString;
         [HideInInspector] public string confirmationDialogRemoveString;
         
+        [HideInInspector] public bool autoSort;
+        
         // PM = PermissionManager
         [HideInInspector] public GameObject pmUserPrefab;
         [HideInInspector] public Transform pmUserTransform;
@@ -42,6 +44,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected string confirmationDialogUsername;
         
         protected bool[] hasAccess;
+        
+        protected bool sortCooldownEnabled = true;
 
         private const int MAX_WHITELISTS = 8; // Currently set to 8 due to UI limitations, actual max is 8
         
@@ -88,6 +92,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 }
             }
             
+            SendCustomEventDelayedSeconds(nameof(_EndSortCooldown), 10f);
             hasInitialized = true;
         }
 
@@ -101,6 +106,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (player == localPlayer) return;
             RemoveUser(player.displayName);
         }
+        
+        public void _EndSortCooldown()
+        {
+            sortCooldownEnabled = false;
+            _SortUsers();
+        }
+
         #endregion
 
         #region Whitelist Updates
@@ -282,6 +294,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasInitialized || pmUsers.ContainsKey(username)) return;
 
             var newPmUserObj = Instantiate(pmUserPrefab, pmUserTransform.position, pmUserTransform.rotation, pmUserTransform);
+            newPmUserObj.name = username + " | PM User";
             newPmUserObj.transform.localScale = Vector3.one;
             newPmUserObj.SetActive(true);
 
@@ -295,6 +308,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             newPmUser._Setup(this, permissions, hasAccess, hasPermission, username);
             
             pmUsers.Add(username, newPmUser);
+            
+            if (autoSort && !sortCooldownEnabled) _SortUsers();
         }
 
         private void RemoveUser(string username)
@@ -307,6 +322,18 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 pmUser._Destroy();
                 pmUsers.Remove(username);
             }
+        }
+
+        /// <summary>
+        /// Sorts the users alphabetically.
+        /// </summary>
+        public void _SortUsers()
+        {
+            var userKeys = pmUsers.GetKeys();
+            userKeys.Sort();
+
+            for (int i = 0; i < userKeys.Count; i++)
+                ((PermissionManagerUser)pmUsers[userKeys[i]].Reference).transform.SetSiblingIndex(i + 2); // +2 as the first two elements are placeholder objects
         }
         #endregion
     }
