@@ -52,6 +52,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         private bool showingNotification;
         private float currentShownDuration;
+        private int currentShownId = -1;
         private float elapsedTime;
         
         // Notification Data:
@@ -147,14 +148,21 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         /// <summary>
         /// Removes a notification from the queue.
-        /// If the notification is already playing it will not be removed.
+        /// If the notification is already playing, it will not be removed.
         /// </summary>
         /// <param name="id">ID of the notification to remove.</param>
+        /// <param name="removeWhileShown">If enabled, the notification will be instantly hidden if it's already being shown.</param>
         /// <returns>True if successful, false if not.</returns>
-        public bool _RemoveNotification(int id)
+        public bool _RemoveNotification(int id, bool removeWhileShown = false)
         {
             if (id <= 0 || id >= lastNotificationId)
                 return false;
+
+            if (showingNotification && !removeWhileShown && currentShownId == id)
+            {
+                _HideShownNotification();
+                return true;
+            }
 
             if (!notificationIds.Contains(id))
                 return false;
@@ -192,6 +200,19 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             NotificationQueueChanged();
         }
+
+        /// <summary>
+        /// Hides the currently shown notification.
+        /// </summary>
+        /// <returns>Bool | True if successful, false if not.</returns>
+        public bool _HideShownNotification()
+        {
+            if (!showingNotification) 
+                return false;
+            
+            elapsedTime = currentShownDuration + startAnimDuration;
+            return true;
+        }
         #endregion
 
         public void NotificationQueueChanged()
@@ -203,7 +224,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (notifications.Count == 0 || showingNotification) 
                 return;
-            
+
+            currentShownId = notificationIds[0].Int;
             var notificationDict = notifications[notificationIds[0]].DataDictionary;
 
             // Notification Sound
@@ -277,6 +299,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             if (totalPercentageComplete >= 1)
             {
                 elapsedTime = 0f;
+                currentShownId = -1;
                 showingNotification = false;
                 notificationObject.SetActive(false);
                 
