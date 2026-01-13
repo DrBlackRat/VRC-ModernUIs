@@ -25,6 +25,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected DataDictionary usersAddedBy = new DataDictionary(); // Key: User Who added, Value: DataList of users they added
         
         protected DataDictionary connectedBehaviours = new DataDictionary(); // Key: Udon Behaviour, Value: DataList of events (some scripts could try to connect with multiple events)
+
+        protected bool formattedNamesChanged = true;
+        protected string formattedNames;
         
         protected string localName;
         private VRCPlayerApi leavingPlayer;
@@ -107,6 +110,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <returns>Formatted string with all whitelisted display names. Formatted to one line per display name.</returns>
         public virtual string _GetNamesFormatted()
         {
+            if (!formattedNamesChanged)
+                return formattedNames;
+
+            formattedNamesChanged = false;
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < whitelist.Count; i++)
             {
@@ -116,7 +123,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                     sb.Append("\n");
                 }
             }
-            return sb.ToString();
+            formattedNames = sb.ToString();
+            return formattedNames;
         }
         
         /// <summary>
@@ -254,6 +262,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             if (debugLogging)
                 MUIDebug.Log($"Whitelist: {gameObject.name} Whitelist Updated.", this);
+            
+            formattedNamesChanged = true;
             
             if (connectedBehaviours == null || connectedBehaviours.Count == 0) return;
             var behaviours = connectedBehaviours.GetKeys();

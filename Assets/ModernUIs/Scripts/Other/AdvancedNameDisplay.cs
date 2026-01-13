@@ -21,10 +21,10 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Text Mesh Pro UGUI components to display the amount of users.")]
         [SerializeField] private TextMeshProUGUI[] counterTextMeshes;
         [Tooltip("How the names will be displayed, either separated by a new line, a \", \" or a \" | \"")]
-        [SerializeField] private NameDisplayType nameDisplayType = NameDisplayType.NewLine;
-        [Tooltip("If enabled duplicate names will be removed from the list. This has a slight performance impact.")]
+        [SerializeField] private NameSeparatorType nameSeparatorType = NameSeparatorType.NewLine;
+        [Tooltip("If enabled duplicate names will be removed from the list.")]
         [SerializeField] private bool removeDuplicateNames = true;
-        [Tooltip("If enabled the names will be sorted alphabetically. This has a slight performance impact.")]
+        [Tooltip("If enabled the names will be sorted alphabetically.")]
         [SerializeField] private bool sortNames = true;
         
         [Tooltip("If enabled the display will automatically update every Update Interval minutes. Otherwise it will only update the data once on Start.")]
@@ -40,14 +40,16 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private WhitelistGetterBase[] whitelists;
 
         private DataList nameList = new DataList();
+        private string nameText;
         
         private int productCount;
+        private int receivedProductInfoCount;
         private int whitelistCount;
         
         private int gatheringCounter = -1; // -1 = not gathering, > -1 = gathering
         private bool autoUpdateScheduled;
-
         private bool startedInitialGather;
+        
         private const string LOGPrefix = "Advanced Name Display | ";
         
         private void Start()
@@ -67,14 +69,13 @@ namespace DrBlackRat.VRC.ModernUIs
                     whitelist._SetUpConnection((IUdonEventReceiver)this, nameof(_OnWhitelistChanged));
             }
             
-            SendCustomEventDelayedSeconds(nameof(_StartInitialLoading), 10f + Random.Range(0f, 5f));
+            SendCustomEventDelayedSeconds(nameof(_StartInitialLoading), 5f + Random.Range(0f, 5f));
         }
 
         public void _OnWhitelistChanged()
         {
             if (!updateOnWhitelistChange || !startedInitialGather) return;
             if (gatheringCounter > -1) return;
-            Debug.LogError("WHITELIST CHANGE: RUNNING UPDATE!");
             _StartGatheringNames();
         }
 
@@ -91,7 +92,8 @@ namespace DrBlackRat.VRC.ModernUIs
             autoUpdateScheduled = false;
             _StartGatheringNames();
         }
-        
+
+        #region Gathering Names
         public void _StartGatheringNames()
         {
             if (gatheringCounter > -1)
@@ -102,6 +104,7 @@ namespace DrBlackRat.VRC.ModernUIs
             
             MUIDebug.Log(LOGPrefix + $"Started gathering names for {gameObject.name}.", gameObject);
             
+            receivedProductInfoCount = 0;
             gatheringCounter = productCount + whitelistCount;
             nameList.Clear();
             
@@ -135,16 +138,62 @@ namespace DrBlackRat.VRC.ModernUIs
         
         public override void OnListProductOwners(IProduct product, string[] owners)
         {
+            receivedProductInfoCount++;
             nameList.AddRange(owners.ToDataList());
         }
-        
+        #endregion
+
+        #region Finish Gathering
         public void _FinishGatheringNames()
         {
-            CleanUpNameList();
-            var text = GenerateString();
+            if (receivedProductInfoCount != productCount)
+            {
+                SendCustomEventDelayedSeconds(nameof(_FinishGatheringNames), 1f);
+                return;
+            }
             
+            SendCustomEventDelayedFrames(nameof(_CleanUpNameList), 1);
+            SendCustomEventDelayedFrames(nameof(_GenerateString), 2);
+            SendCustomEventDelayedFrames(nameof(_FinishUpdate), 3);
+        }
+        public void _CleanUpNameList()
+        {
+            if (removeDuplicateNames)
+                nameList = nameList.RemoveDuplicates();
+            if (sortNames)
+                nameList.Sort();
+        }
+
+        public void _GenerateString()
+        {
+            var stringBuilder = new StringBuilder();
+            
+            for (int i = 0; i < nameList.Count; i++)
+            {
+                if (i > 0)
+                {
+                    switch (nameSeparatorType)
+                    {
+                        case NameSeparatorType.NewLine:
+                            stringBuilder.Append("\n");
+                            break;
+                        case NameSeparatorType.Comma:
+                            stringBuilder.Append(", ");
+                            break;
+                        case NameSeparatorType.VerticalBar:
+                            stringBuilder.Append(" | ");
+                            break;
+                    }
+                } 
+                stringBuilder.Append(nameList[i].String);
+            }
+            nameText = stringBuilder.ToString();
+        }
+
+        public void _FinishUpdate()
+        {
             foreach (var textMesh in textMeshes)
-                textMesh.text = text;
+                textMesh.text = nameText;
             
             var counterText = nameList.Count.ToString();
             foreach (var counterTextMesh in counterTextMeshes)
@@ -160,44 +209,10 @@ namespace DrBlackRat.VRC.ModernUIs
                 MUIDebug.Log(LOGPrefix + $"Next update on {gameObject.name} in {updateInterval} minutes.", gameObject);
             }
         }
-
-        private void CleanUpNameList()
-        {
-            if (removeDuplicateNames)
-                nameList = nameList.RemoveDuplicates();
-            if (sortNames)
-                nameList.Sort();
-        }
-        
-        private string GenerateString()
-        {
-            var stringBuilder = new StringBuilder();
-            
-            for (int i = 0; i < nameList.Count; i++)
-            {
-                if (i > 0)
-                {
-                    switch (nameDisplayType)
-                    {
-                        case NameDisplayType.NewLine:
-                            stringBuilder.Append("\n");
-                            break;
-                        case NameDisplayType.Comma:
-                            stringBuilder.Append(", ");
-                            break;
-                        case NameDisplayType.VerticalBar:
-                            stringBuilder.Append(" | ");
-                            break;
-                    }
-                } 
-                stringBuilder.Append(nameList[i].String);
-            }
-            
-            return stringBuilder.ToString();
-        }
+        #endregion
     }
 
-    internal enum NameDisplayType
+    internal enum NameSeparatorType
     {
         NewLine,
         Comma,

@@ -14,24 +14,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [Tooltip("List of Udon Products a player must at least own one of to be added to the whitelist.")]
         [SerializeField] protected UdonProduct[] products;
-        
-        [Tooltip("If enabled the Whitelist will be filled with all players that own at least one of the products. Otherwise only players in the instance will be added.")]
-        [SerializeField] protected bool getAllProductOwners;
-        [Range(5, 60)][Tooltip("How often the whitelist should be refreshed in Get All Mode in minutes.")]
-        [SerializeField] protected float allProductOwnersRefreshRate = 10;
-        
-        protected override void Start()
-        {
-            base.Start();
-            
-            if (getAllProductOwners)
-                _FillWithAllProductOwners();
-        }
 
-        #region Normal Mode
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
-            if (getAllProductOwners) return;
             var username = player.displayName;
             if (whitelist.Contains(username)) return;
 
@@ -54,7 +39,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public override void OnPurchaseExpired(IProduct result, VRCPlayerApi player)
         {
-            if (getAllProductOwners) return;
             var username = player.displayName;
             if (!whitelist.Contains(username)) return;
             
@@ -71,7 +55,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             base.OnPlayerLeft(player);
-            if (getAllProductOwners) return;
             var displayName = player.displayName;
             if (whitelist.Contains(displayName))
             {
@@ -79,35 +62,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 WhitelistUpdated();
             }
         }
-        #endregion
-
-        #region Get All Mode
-        public void _FillWithAllProductOwners()
-        {
-            whitelist.Clear();
-
-            foreach (var product in products)
-            {
-                if (product == null) continue;
-                Store.ListProductOwners((IUdonEventReceiver)this, product);
-            }
-            WhitelistUpdated();
-            
-            SendCustomEventDelayedSeconds(nameof(_FillWithAllProductOwners), allProductOwnersRefreshRate * 60);
-            if (debugLogging)
-                MUIDebug.Log($"{gameObject.name} CE Whitelist | Finished grabbing all Supporters. Next update in {allProductOwnersRefreshRate} minutes.", gameObject);
-        }
-
-        public override void OnListProductOwners(IProduct product, string[] owners)
-        {
-            foreach (var owner in owners)
-            {
-                if (whitelist.Contains(owner)) continue;
-                whitelist.Add(owner);
-            }
-        }
-        #endregion
-
         
         #region Get Added By Overrides
         public override DataList _GetUsersAddedBy(string username)
