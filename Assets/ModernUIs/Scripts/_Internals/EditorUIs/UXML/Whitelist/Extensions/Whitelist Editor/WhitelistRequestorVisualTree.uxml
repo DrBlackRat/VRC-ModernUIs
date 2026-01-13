@@ -26,6 +26,22 @@
             <uie:PropertyField binding-path="removeRequestText" name="removeRequestText" label="Remove Request Text" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>
+    <ui:Foldout text="Notification" view-data-key="WhitelistRequestorNotification" name="Notification" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="notificationManager" name="notificationManager" label="Notification Manager" style="font-size: 12px; -unity-font-style: normal; padding-bottom: 10px;" />
+            <uie:PropertyField binding-path="notificationHeader" name="notificationHeader" label="Header" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notificationText" name="notificationText" label="Text" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Image &amp; Sound" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="notificationImage" name="notificationImage" label="Image" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="playNotificationSound" name="playNotificationSound" label="Play Sound" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notificationSoundClip" name="notificationSoundClip" label="Sound Clip" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notificationVolume" name="notificationVolume" label="Sound Volume" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Other" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="notificationDuration" name="notificationDuration" label="Duration" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notificationWidth" name="notificationWidth" label="Width" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
     <ui:Foldout text="UI Prefabs" view-data-key="WhitelistRequestorPrefabSettings" name="UIPrefab" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="Whitelisted" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />

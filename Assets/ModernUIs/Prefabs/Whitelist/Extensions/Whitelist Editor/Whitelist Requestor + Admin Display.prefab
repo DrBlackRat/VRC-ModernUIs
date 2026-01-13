@@ -1146,7 +1146,7 @@ PrefabInstance:
     - target: {fileID: 6798810265078039205, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6881844160607779181, guid: c584f53b5c724724eb0b59f277303599,
         type: 3}
@@ -1475,11 +1475,21 @@ MonoBehaviour:
   showOrAllowAdmins: 0
   limitAdding: 0
   maxAddAmount: 2
+  autoSort: 1
   requestButton: {fileID: 4676116046370900021}
   whitelistedText: {fileID: 3455929984038085307}
   adminText: {fileID: 1983257494173933777}
   requestText: {fileID: 8017091067332282619}
   removeRequestText: {fileID: 560864646116467796}
+  notificationManager: {fileID: 0}
+  notificationHeader: User Is Requesting Access
+  notificationText: <b>{user}</b> is requesting access to the whitelist!
+  notificationImage: {fileID: 21300000, guid: 44a7eec8ab4907943b6a6a7163943b58, type: 3}
+  playNotificationSound: 1
+  notificationSoundClip: {fileID: 0}
+  notificationVolume: 0.25
+  notificationDuration: 5
+  notificationWidth: 100
 --- !u!114 &5889592607255745873
 MonoBehaviour:
   m_ObjectHideFlags: 0

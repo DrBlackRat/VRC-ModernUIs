@@ -15,9 +15,11 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSliderUI : WhitelistSliderUI
     {
-        [Range(1, 10)][Tooltip("Hoe long to wait before retrying deserialization if the network owner is not whitelisted yet.")]
+        [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
+        [SerializeField] protected bool secureNetworking = true;
+        [Range(1, 10)][Tooltip("Hoe long to wait before retrying deserialization if the network owner is not whitelisted yet. (Only used by Secure Networking)")]
         [SerializeField] protected float deserializationRetryDelay = 5f;
-        [Range(1, 10)][Tooltip("How many times to attempt deserialization if the network owner is not whitelisted yet.")]
+        [Range(1, 10)][Tooltip("How many times to attempt deserialization if the network owner is not whitelisted yet. (Only used by Secure Networking)")]
         [SerializeField] protected int maxDeserializationAttempts = 4;
         
         [UdonSynced] protected float netValue;
@@ -48,6 +50,12 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
         private void HandleDeserialization()
         {
+            if (!secureNetworking)
+            {
+                UpdateValue(netValue, true, false, true);
+                return;
+            }
+            
             deserializationAttempts++;
             
             var owner = Networking.GetOwner(gameObject);

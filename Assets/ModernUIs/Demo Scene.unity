@@ -7612,6 +7612,7 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 366706944}
   debugLogging: 1
+  secureNetworking: 1
   deserializationRetryDelay: 5
   maxDeserializationAttempts: 4
   startWhitelist: []
@@ -10375,6 +10376,7 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 593163893}
   debugLogging: 1
+  secureNetworking: 1
   deserializationRetryDelay: 5
   maxDeserializationAttempts: 4
   startWhitelist: []
@@ -10840,8 +10842,6 @@ MonoBehaviour:
   products:
   - {fileID: 11400000, guid: 9ecf159afb3aaf142b174f8849f6fa4e, type: 2}
   - {fileID: 11400000, guid: e316d75a1edfa384dbbe3df82114a514, type: 2}
-  getAllProductOwners: 0
-  allProductOwnersRefreshRate: 10
 --- !u!114 &611530025
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -22959,6 +22959,7 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1284654832}
   debugLogging: 1
+  secureNetworking: 1
   deserializationRetryDelay: 5
   maxDeserializationAttempts: 4
   startWhitelist: []
@@ -25287,6 +25288,7 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1432454434}
   debugLogging: 0
+  secureNetworking: 1
   deserializationRetryDelay: 5
   maxDeserializationAttempts: 4
   startWhitelist: []
@@ -51022,6 +51024,11 @@ PrefabInstance:
       propertyPath: prefabTextColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2012993242950927238, guid: b02e434aac640d2458d67e0db576e6b8,
+        type: 3}
+      propertyPath: notificationManager
+      value: 
+      objectReference: {fileID: 950623718}
     - target: {fileID: 2012993242950927238, guid: b02e434aac640d2458d67e0db576e6b8,
         type: 3}
       propertyPath: prefabBackgroundColor.a
@@ -94954,6 +94961,11 @@ PrefabInstance:
       propertyPath: prefabTextColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
+        type: 3}
+      propertyPath: notificationManager
+      value: 
+      objectReference: {fileID: 950623718}
     - target: {fileID: 9125241762169984877, guid: f91b31302138a004aaf65fe126526676,
         type: 3}
       propertyPath: adminWhitelistManager

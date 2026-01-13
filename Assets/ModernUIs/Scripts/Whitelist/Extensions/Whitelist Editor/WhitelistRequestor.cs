@@ -1,4 +1,5 @@
-﻿using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+﻿using DrBlackRat.VRC.ModernUIs.Notifications;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
@@ -25,6 +26,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected GameObject requestText;
         [Tooltip("GameObject that is enabled on the Request Button if you aren't whitelisted and are currently requesting")]
         [SerializeField] protected GameObject removeRequestText;
+        
+        [Tooltip("Notification Manager that will be used to display a \"User Is Requesting\" notification to admins. Leave empty if you don't want to show one.")]
+        [SerializeField] protected NotificationManager notificationManager;
+        [Tooltip("Header of the notification that will be shown to admins.")]
+        [SerializeField] protected string notificationHeader = "User Is Requesting Access";
+        [TextArea(1, 3)] [Tooltip("Text of the notification that will be shown to admins, {user} will be replaced with the username.")]
+        [SerializeField] protected string notificationText = "<b>{user}</b> is requesting access to the whitelist!";
+        [Tooltip("Image of the notification that will be shown to admins, if not provided the image will be disabled.")]
+        [SerializeField] private Sprite notificationImage;
+        [Tooltip("If a notification sound should be played.")]
+        [SerializeField] protected bool playNotificationSound = true;
+        [Tooltip("Audio Clip used for the notification, if not provided the default will be used.")]
+        [SerializeField] protected AudioClip notificationSoundClip;
+        [Tooltip("Volume of the notification sound. Default is 0.25, clamped between 0 and 1.")]
+        [SerializeField] protected float notificationVolume = 0.25f;
+        [Tooltip("Duration of the notification that will be shown to admins.")]
+        [SerializeField] protected float notificationDuration = 5f;
+        [Tooltip("Width of the notification that will be shown to admins.")]
+        [SerializeField] protected float notificationWidth = 80;
 
         [UdonSynced]
         protected string serializedRequestingUsers;
@@ -121,6 +141,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 if (!Networking.LocalPlayer.IsOwner(gameObject)) Networking.SetOwner(Networking.LocalPlayer, gameObject);
                 RequestSerialization();
             }
+            
+            SendRequestNotification(username);
 
             return true;
         }
@@ -179,6 +201,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             UpdateCountDisplays(); 
         }
         #endregion
+
+        private void SendRequestNotification(string username)
+        {
+            if (notificationManager == null || !hasAccess)
+                return;
+
+            notificationManager._AddNotification(notificationHeader, notificationText.Replace("{user}", username),
+                notificationImage, playNotificationSound, notificationSoundClip, notificationVolume,
+                notificationDuration, notificationWidth);
+        }
 
     }
 }
