@@ -1,0 +1,58 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Modern UI | Synced Selector UI" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="A Selector UI with support for being network synced, also supports whitelisting." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-center; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+    </ui:VisualElement>
+    <ui:Foldout text="Settings" view-data-key="SelectorUISettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="State" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="selectedState" name="selectedState" label="Default State" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Second Click" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="secondClick" name="secondClick" label="Enable Second Click" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="secondClickState" name="secondClickState" label="Second Click State" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Persistence" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="usePersistence" name="usePersistence" label="Enable Persistence" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="dataKey" name="dataKey" label="Data Key" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelist" name="whitelist" label="Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="External Connections " view-data-key="SelectorUIExternalConnections" name="ExternalConnections" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Game Objects" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="itemObjs" name="itemObjs" label="Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Udon Behaviours" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="externalBehaviours" name="secondClick" label="External Behaviours" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="idValueName" name="idValueName" label="Selection ID Value Name" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="changeEventName" name="changeEventName" label="Changed Event Name" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="Defaults" view-data-key="SelectorUIDefaults" name="Defaults" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Animation" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="smoothingCurve" name="smoothingCurve" label="Smoothing Curve" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="movementDuration" name="movementDuration" label="Duration" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Color" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="normalColor" name="normalColor" label="Normal Color" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="selectedColor" name="selectedColor" label="Selected Color" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Selector Color" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelistedColor" name="whitelistedColor" label="Whitelisted Color" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="notWhitelistedColor" name="notWhitelistedColor" label="Not Whitelisted Color" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Button Scale" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="buttonNormalScale" name="buttonNormalScale" label="Normal Scale" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="buttonSelectedScale" name="buttonSelectedScale" label="Selected Scale" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Button Rounding" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="buttonNormalPixelPerUnit" name="buttonNormalPixelPerUnit" label="Normal Pixel Per Unit" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="buttonSelectedPixelPerUnit" name="buttonSelectedPixelPerUnit" label="Selected Pixel Per Unit" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Icon Position" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="iconNormalPos" name="iconNormalPos" label="Normal Position" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="iconSelectedPos" name="iconSelectedPos" label="Selected Position" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Text Position" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="textNormalPos" name="textNormalPos" label="Normal Position" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="textSelectedPos" name="textSelectedPos" label="Selected Position" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>
