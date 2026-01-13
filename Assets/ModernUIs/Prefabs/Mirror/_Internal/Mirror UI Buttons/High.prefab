@@ -65,16 +65,8 @@ MonoBehaviour:
   iconObj: {fileID: 9070382635691713254}
   textObj: {fileID: 6182250044327484270}
   overrideDefaults: 0
-  buttonNormalScale: {x: 0, y: 0}
-  buttonSelectedScale: {x: 0, y: 0}
-  buttonNormalPixelPerUnit: 0
-  buttonSelectedPixelPerUnit: 0
   normalColor: {r: 0, g: 0, b: 0, a: 0}
   selectedColor: {r: 0, g: 0, b: 0, a: 0}
-  iconNormalPos: {x: 0, y: 0}
-  iconSelectedPos: {x: 0, y: 0}
-  textNormalPos: {x: 0, y: 0}
-  textSelectedPos: {x: 0, y: 0}
   smoothingCurve:
     serializedVersion: 2
     m_Curve: []
@@ -82,6 +74,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0
+  buttonNormalScale: {x: 0, y: 0}
+  buttonSelectedScale: {x: 0, y: 0}
+  buttonNormalPixelPerUnit: 0
+  buttonSelectedPixelPerUnit: 0
+  iconNormalPos: {x: 0, y: 0}
+  iconSelectedPos: {x: 0, y: 0}
+  textNormalPos: {x: 0, y: 0}
+  textSelectedPos: {x: 0, y: 0}
 --- !u!114 &9156853477540854722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
-  _syncMethod: 0
+  _syncMethod: 1
   serializedProgramAsset: {fileID: 11400000, guid: 80bc529c0152dc74abf5a5149a744fcf,
     type: 2}
   programSource: {fileID: 11400000, guid: 9e269d36f833dac45a1b14b33a65d7fb, type: 2}
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: -1
+  m_PreferredWidth: 50
   m_PreferredHeight: 14
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 4800480423400082662}
   - component: {fileID: 8114632292219871745}
   - component: {fileID: 244078480215844455}
+  - component: {fileID: 1492354528061887261}
   m_Layer: 17
   m_Name: Text
   m_TagString: Untagged
@@ -262,6 +263,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1492354528061887261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6182250044327484270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 6
+  graphic: {fileID: 244078480215844455}
+  selectorUI: {fileID: 0}
 --- !u!1 &6845834576697844120
 GameObject:
   m_ObjectHideFlags: 0
@@ -407,6 +423,7 @@ GameObject:
   - component: {fileID: 8063870419512843336}
   - component: {fileID: 5419277623056194847}
   - component: {fileID: 2233519933030242244}
+  - component: {fileID: 7620039510821374765}
   m_Layer: 17
   m_Name: Icon
   m_TagString: Untagged
@@ -471,3 +488,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 13
+--- !u!114 &7620039510821374765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9070382635691713254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 752ccb45dbf3d8b4582eab74370422bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  themeColor: 6
+  graphic: {fileID: 2233519933030242244}
+  selectorUI: {fileID: 0}

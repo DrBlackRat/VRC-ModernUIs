@@ -1,19 +1,20 @@
 ﻿using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Economy;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class CreatorEconomyWhitelist : WhitelistGetterBase
     {
         [Tooltip("List of Udon Products a player must at least own one of to be added to the whitelist.")]
         [SerializeField] protected UdonProduct[] products;
-        
+
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
             var username = player.displayName;
@@ -51,7 +52,39 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             WhitelistUpdated();
         }
 
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            base.OnPlayerLeft(player);
+            var displayName = player.displayName;
+            if (whitelist.Contains(displayName))
+            {
+                whitelist.Remove(displayName);
+                WhitelistUpdated();
+            }
+        }
+        
+        #region Get Added By Overrides
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
+        }
 
+        public override int _GetUsersAddedByCount(string username)
+        {
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            if (whitelist.Contains(username))
+                return localName;
+            return null;
+        }
+        #endregion
     }
     
 

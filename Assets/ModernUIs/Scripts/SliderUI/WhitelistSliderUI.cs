@@ -17,9 +17,12 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistSliderUI : SliderUI
     {
+        [Range(0f, 30f)] [Tooltip("Persistence Load delay, useful if you need to wait for the Whitelist to finish updating etc.")]
+        [SerializeField] protected float loadDelay = 5f;
+        
         [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist that is storing info on which user is whitelisted. If left empty, the whitelist wont be used.")]
-        [SerializeField] protected WhitelistSetterBase whitelist;
+        [SerializeField] protected WhitelistGetterBase whitelist;
         
         protected bool hasAccess;
         
@@ -36,8 +39,17 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
+            if (!player.isLocal || !usePersistence) return;
+            SendCustomEventDelayedSeconds(nameof(_DelayedLoad), loadDelay);
+        }
+        
+        public virtual void _DelayedLoad()
+        {
             if (!hasAccess) return;
-            base.OnPlayerRestored(player);
+            if (PlayerData.TryGetFloat(Networking.LocalPlayer, dataKey, out float newValue))
+            {
+                UpdateValue(newValue, true, false, false);
+            }
         }
         
         public virtual void _WhitelistUpdated()

@@ -18,8 +18,9 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         [SerializeField] protected AccessControl accessControl;
         protected bool txlHasChanged = true;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             accessControl._Register(AccessControl.EVENT_VALIDATE, this, nameof(_UpdateAccessList));
             _UpdateAccessList();
         }
@@ -35,6 +36,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             if (!txlHasChanged) return;
 
             whitelist = new DataList();
+            usersAddedBy = new DataDictionary();
             
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
             VRCPlayerApi.GetPlayers(players);
@@ -43,6 +45,8 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
                 if (!player.IsValid() || !accessControl._HasAccess(player)) continue;
                 whitelist.Add(player.displayName);
             }
+            
+            usersAddedBy.SetValue(localName, whitelist.DeepClone());
             
             txlHasChanged = false;
         }
@@ -87,7 +91,46 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             UpdateTxlData();
             return base._GetUsersAsList();
         }
+
+        public override int _GetCount()
+        {
+            UpdateTxlData();
+            return base._GetCount();
+        }
         #endregion
+
+        #region Get Added By Overrides
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
+        }
+
+        public override int _GetUsersAddedByCount(string username)
+        {
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            if (whitelist.Contains(username))
+                return localName;
+            return null;
+        }
+        #endregion
+        
+        #region Getting Players Overrides
+
+        public override VRCPlayerApi _GetPlayerInInstance()
+        {
+            UpdateTxlData();
+            return base._GetPlayerInInstance();
+        }
+        #endregion
+        
     }
 
 }

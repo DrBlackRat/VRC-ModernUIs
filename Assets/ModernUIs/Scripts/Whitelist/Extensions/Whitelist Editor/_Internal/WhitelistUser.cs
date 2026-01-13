@@ -1,8 +1,11 @@
-﻿using TMPro;
+﻿using System.Drawing;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
+using Color = UnityEngine.Color;
+using Image = UnityEngine.UI.Image;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
@@ -11,13 +14,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public class WhitelistUser : UdonSharpBehaviour
     {
         [SerializeField] protected TextMeshProUGUI usernameTMP;
+        
         [SerializeField] protected GameObject buttonObj;
+        [SerializeField] protected GameObject declineButtonObj;
         
         protected bool isRemover;
 
-        protected IWhitelistEditor whitelistEditor;
+        protected WhitelistEditorBase WhitelistEditorBase;
         
         protected string displayName;
+        protected bool isRequestor;
         public string DisplayName
         {
             set
@@ -39,12 +45,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             get => hasAccess;
         }
         
-        public void _Setup(IWhitelistEditor newWhitelistEditor, string newDisplayname, bool newIsRemover, bool newHasAccess)
+        public void _Setup(WhitelistEditorBase newWhitelistEditorBase, string newDisplayname, bool newIsRemover, bool newHasAccess)
         {
-            whitelistEditor = newWhitelistEditor;
+            WhitelistEditorBase = newWhitelistEditorBase;
             DisplayName = newDisplayname;
             isRemover = newIsRemover;
             HasAccess = newHasAccess;
+
+            isRequestor = WhitelistEditorBase.GetUdonTypeID() == GetUdonTypeID<WhitelistRequestor>();
+            if (declineButtonObj != null) declineButtonObj.SetActive(isRequestor && !isRemover);
         }
 
         public void _ButtonPressed()
@@ -52,12 +61,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasAccess) return;
             if (isRemover)
             {
-                whitelistEditor._Remove(displayName);
+                WhitelistEditorBase._Remove(displayName);
             }
             else
             {
-                whitelistEditor._Add(displayName);
+                WhitelistEditorBase._Add(displayName);
             }
+        }
+        
+        public void _DeclinePressed()
+        {
+            if (!hasAccess || isRemover) return;
+            var requestor = (WhitelistRequestor)WhitelistEditorBase;
+            requestor._Decline(displayName);
         }
 
         public void _Destroy()

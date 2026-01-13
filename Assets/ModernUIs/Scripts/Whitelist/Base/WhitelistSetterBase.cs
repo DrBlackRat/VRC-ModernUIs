@@ -1,6 +1,7 @@
 using System.Text;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,51 +13,63 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     /// Extends <see cref="WhitelistGetterBase"/> to add functionality for modifying the whitelist.
     /// Provides methods to add and remove users.
     /// </summary>
-    [DefaultExecutionOrder(1000)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class WhitelistSetterBase : WhitelistGetterBase
     {
         /// <summary>
+        /// If adding / removing users should log which users were added / removed.
+        /// </summary>
+
+        public override bool _IsReadOnly() => false;
+
+        #region Adding
+
+        /// <summary>
         /// Adds a specific user to the white list. Skips duplicate username.
         /// </summary>
         /// <param name="username">The username to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
-        public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null)
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
+        public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
         {
             if (whitelist.Contains(username))
             {
-                MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
+                if (debugLogging)
+                    MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
                 return;
             }
-            whitelist.Add(username);
-            MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
-            WhitelistUpdated(senderBehaviour);
-        }
-        
-        /// <summary>
-        /// Removes a specific user from the white list.
-        /// </summary>
-        /// <param name="username">The username to remove from the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
-        public virtual void _RemoveUser(string username , IUdonEventReceiver senderBehaviour = null)
-        {
-            if (!whitelist.Contains(username))
+            
+            if (usersAddedBy.TryGetValue(localName, out DataToken added))
             {
-                MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
-                return;
+                added.DataList.Add(username);
+                usersAddedBy.SetValue(localName, added);
             }
-
-            whitelist.Remove(username);
-            MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
-            WhitelistUpdated(senderBehaviour);
+            else
+            {
+                DataList newAdded = new DataList();
+                newAdded.Add(username);
+                usersAddedBy.Add(localName, newAdded);
+            }
+            
+            whitelist.Add(username);
+            
+            if (debugLogging)
+                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
         /// <summary>
         /// Adds a DataList of usernames to the whitelist. Skips duplicate usernames.
         /// </summary>
-        /// <param name="newUsernames">DataList usernames to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
-        public virtual void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
+        /// <param name="newUsernames">DataList of usernames to add to the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
+        public virtual void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
         {
             if (newUsernames == null || newUsernames.Count == 0) return;
 
@@ -66,49 +79,244 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 if (token.IsNull) continue;
                 
                 var username = token.String;
-
-                if (whitelist.Contains(username))
-                {
-                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
-                    continue;
-                }
-                whitelist.Add(username);
-                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                _AddUser(username, null, null,false);
             }
-            WhitelistUpdated(senderBehaviour);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
         /// <summary>
         /// Adds an Array of usernames to the whitelist. Skips duplicate usernames.
         /// </summary>
         /// <param name="newUsernames">Array of usernames to add to the whitelist.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
-        public virtual void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null)
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
+        public virtual void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
         {
             if (newUsernames == null || newUsernames.Length == 0) return;
 
             foreach (var username in newUsernames)
             {
-                if (whitelist.Contains(username))
-                {
-                    MUIDebug.LogWarning($"Whitelist Manager: Skipped adding {username} to the whitelist as they are already on it!");
-                    continue;
-                }
-                whitelist.Add(username);
-                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                _AddUser(username, null, null, false);
             }
-            WhitelistUpdated(senderBehaviour);
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
+        /// <summary>
+        /// Adds an Array of <see cref="VRCPlayerApi"/>s to the whitelist. Skips duplicate usernames.
+        /// </summary>
+        /// <param name="newPlayers">Array of usernames to add to the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
+        public virtual void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
+        {
+            if (newPlayers == null || newPlayers.Length == 0) return;
+
+            foreach (var player in newPlayers)
+            {
+                _AddUser(player.displayName, null, null, false);
+            }
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+        #endregion
+
+        #region Removing
+
+        /// <summary>
+        /// Removes a specific user from the white list.
+        /// </summary>
+        /// <param name="username">The username to remove from the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was removed. Defaults to true.</param>
+        public virtual void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
+        {
+            if (!whitelist.Contains(username))
+            {
+                if (debugLogging)
+                    MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
+                return;
+            }
+            
+            if (usersAddedBy.TryGetValue(localName, out DataToken added))
+            {
+                DataList addedList = added.DataList;
+                if (addedList.Contains(username))
+                {
+                    addedList.Remove(username);
+                    usersAddedBy.SetValue(localName, added);
+                }
+                else
+                {
+                    TryRemoveOther(username);
+                }
+            }
+            else 
+            {
+                TryRemoveOther(username);
+            }
+
+            whitelist.Remove(username);
+            
+            if (debugLogging)
+                MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+
+        // I do not like doing this as this is slow but it *should* only be an edge case, and it only ever runs on one client
+        private void TryRemoveOther(string username)
+        {
+            string adder = _GetWhoAdded(username);
+            if (adder != null)
+            {
+                if (usersAddedBy.TryGetValue(adder, out DataToken added))
+                {
+                    DataList addedList = added.DataList;
+                    if (addedList.Contains(username))
+                    {
+                        addedList.Remove(username);
+                        usersAddedBy.SetValue(adder, added);
+                    }
+                    else
+                    {
+                        MUIDebug.LogError($"Whitelist Manager: Unexpected Error when trying to remove user!");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes a DataList of usernames from the whitelist. Skips duplicate names.
+        /// </summary>
+        /// <param name="usernamesToRemove">DataList of usernames to remove from the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            if (usernamesToRemove == null || usernamesToRemove.Count == 0) return;
+
+            for (int i = 0; i < usernamesToRemove.Count; i++)
+            {
+                var token = usernamesToRemove[i];
+                if (token.IsNull) continue;
+                
+                var username = token.String;
+                _RemoveUser(username, null, null, false);
+            }
+            WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+        
+        /// <summary>
+        /// Removes an Array of usernames from the whitelist. Skips duplicate names.
+        /// </summary>
+        /// <param name="usernamesToRemove">Array of usernames to remove from the whitelist.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            if (usernamesToRemove == null || usernamesToRemove.Length == 0) return;
+
+            foreach (var username in usernamesToRemove)
+            {
+                _RemoveUser(username, null, null, false);
+            }
+            WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+
+        /// <summary>
+        /// Resets / clears out the whitelist.
+        /// </summary>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was removed. Defaults to true.</param>
+        public virtual void _ClearWhitelist(IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool notify = true)
+        {
+            whitelist = new DataList();
+            usersAddedBy = new DataDictionary();
+            
+            if (notify) 
+                WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+        #endregion
+
+        #region Replacing
         /// <summary>
         /// Fully replaces the current whitelist with a new one. This is usually not recommended, try _AddUsers or _RemoveUser first.
         /// </summary>
         /// <param name="newUsernames">DataList of usernames to replace the whitelist with.</param>
-        /// <param name="senderBehaviour">Optional | The behaviour that triggered the method. Prevents <c>_WhitelistUpdated</c> being called on it.</param>
-        public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null)
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="directReplacement">Optional | If enabled, none of the normal duplication and safety checks will be done. Only enable if you know what you are doing!</param>
+        public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null, bool directReplacement = false)
         {
-            whitelist = newUsernames;
-            WhitelistUpdated(senderBehaviour);
+            if (newUsernames == null) return;
+            
+            usersAddedBy = new DataDictionary();
+
+            if (directReplacement)
+            {
+                whitelist = newUsernames.ShallowClone();
+                usersAddedBy.Add(localName, newUsernames.ShallowClone());
+            }
+            else
+            {
+                whitelist = new DataList();
+                _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
+                
+            }
+            WhitelistUpdated(senderBehaviour, senderEvent);
         }
+
+        /// <summary>
+        /// Fully replaces the current whitelist with a new one. This is usually not recommended, try _AddUsers or _RemoveUser first.
+        /// </summary>
+        /// <param name="newUsernames">Array of usernames to replace the whitelist with</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            if (newUsernames == null) return;
+            whitelist = new DataList();
+            usersAddedBy = new DataDictionary();
+            
+            _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
+            WhitelistUpdated(senderBehaviour, senderEvent);
+        }
+        #endregion
+        
+        #region Added By
+        /// <summary>
+        /// Removed everyone that was added by the provided user.
+        /// </summary>
+        /// <param name="username">Display Name of the user who you want to remove ever added user of.</param>
+        /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
+        /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        public virtual void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null,
+            string senderEvent = null)
+        {
+            if (usersAddedBy.TryGetValue(username, out DataToken added))
+            {
+                _RemoveUsers(added.DataList.DeepClone(), senderBehaviour, senderEvent);
+            }
+            else
+            {
+                if (debugLogging)
+                    MUIDebug.LogWarning($"Whitelist Manager: Could not remove users, as {username} has not added any yet!");
+            }
+        }
+        #endregion
     }
 }

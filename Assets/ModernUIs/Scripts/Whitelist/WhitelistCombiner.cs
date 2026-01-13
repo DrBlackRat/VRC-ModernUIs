@@ -11,7 +11,6 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
-    [DefaultExecutionOrder(800)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistCombiner : WhitelistGetterBase
     {
@@ -21,36 +20,54 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("Whitelists that you want to combine into one. Useful for combining a local and synced whitelist.")]
         [SerializeField] protected WhitelistGetterBase[] whitelists;
         
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+            
             foreach (var whitelist in whitelists)
             {
                 whitelist._SetUpConnection((IUdonEventReceiver)this);
             }
-            WhitelistUpdated();
         }
 
         public void _WhitelistUpdated()
         {
             if (whitelists == null || whitelists.Length == 0) return;
-            
             whitelist.Clear();
-            
-            foreach (var whitelistManager in whitelists)
+
+            for (int i = 0; i < whitelists.Length; i++)
             {
-                var users = whitelistManager._GetUsersAsList();
-                if (users == null) continue;
+                var users = whitelists[i]._GetUsersAsList();
                 whitelist.AddRange(users);
             }
-
+            
             if (removeDuplicates)
             {
-                whitelist = DataListExtensions.RemoveDuplicates(whitelist);
+                whitelist = whitelist.RemoveDuplicates();
             }
-            
+
             WhitelistUpdated();
         }
 
+        public override DataList _GetUsersAddedBy(string username)
+        {
+            if (username == localName) 
+                return whitelist.DeepClone();
+            return new DataList();
+        }
 
+        public override int _GetUsersAddedByCount(string username)
+        {
+            if (username == localName) 
+                return whitelist.Count;
+            return 0;
+        }
+
+        public override string _GetWhoAdded(string username)
+        {
+            if (whitelist.Contains(username))
+                return localName;
+            return null;
+        }
     }
 }

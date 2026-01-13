@@ -3,6 +3,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -14,14 +15,27 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     {
         [SerializeField] protected GameObject buttonObj;
         [SerializeField] protected GameObject iconObj;
-        [SerializeField] protected GameObject textObj;
+        [FormerlySerializedAs("textObj")] [SerializeField] protected GameObject graphicObj;
         
         [Tooltip("If enabled the Color, Icon, Text and Animation Settings can be overriden, otherwise the defaults provided by the Selector UI will be used.")]
         public bool overrideDefaults;
         
         [SerializeField] protected Color normalColor;
         [SerializeField] protected Color selectedColor;
+
+        public virtual Color NormalColor
+        {
+            get => normalColor;
+            set => normalColor = value;
+        }
         
+        public virtual Color SelectedColor
+        {
+            get => selectedColor;
+            set => selectedColor = value;
+        }
+    
+
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
         
@@ -36,15 +50,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         [SerializeField] protected Vector2 textNormalPos;
         [SerializeField] protected Vector2 textSelectedPos;
-        
-
 
         protected Button button;
         protected RectTransform buttonTransform;
         protected Image buttonImage;
         protected Image icon;
         protected RectTransform iconTransform;
-        protected TextMeshProUGUI text;
+        protected Graphic graphic;
         protected RectTransform textTransform;
 
         protected RectTransform parentTransform;
@@ -71,6 +83,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected int buttonId;
 
         protected bool locked;
+        // Only used by versions that implement it
+        protected bool selectable = true;
+        protected bool selected;
+
+        /// <summary>
+        /// If this selector UI button can be selected. Can be false due to CE or Whitelists.
+        /// </summary>
+        public bool Selectable => selectable;
 
         #region SelectorUI Connection
         public virtual void _Setup(SelectorUI newSelectorUI, int newButtonId)
@@ -87,10 +107,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 icon = iconObj.GetComponent<Image>();
                 iconTransform = iconObj.GetComponent<RectTransform>();
             }
-            if (textObj != null)
+            if (graphicObj != null)
             {
-                text = textObj.GetComponent<TextMeshProUGUI>();
-                textTransform = textObj.GetComponent<RectTransform>();
+                graphic = graphicObj.GetComponent<Graphic>();
+                textTransform = graphicObj.GetComponent<RectTransform>();
             }
 
             parentTransform = GetComponent<RectTransform>();
@@ -100,7 +120,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             buttonId = newButtonId;
             
             // Reset
-            _UpdateLocked(locked);
+            UpdateInteractable();
             UpdateUIState(false);
             UpdateUI(1f);
         }
@@ -141,7 +161,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         public virtual void _ButtonPressed()
         {
-            if (locked) return;
+            if (locked && !selectable)
+            {
+                MUIDebug.LogError($"Selector UI Button {buttonId} | Locked: {locked}, Selectable: {selectable} | You should not be ale to press this button!");
+                return;
+            }
             selectorUI._ButtonSelected(buttonId);
         }
         
@@ -170,8 +194,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             return buttonSelectedPixelPerUnit;
         }
 
-        public void _UpdateSelected(bool selected)
+        public void _UpdateSelected(bool newSelected)
         {
+            selected = newSelected;
             UpdateUIState(selected);
             
             // UI Animation
@@ -189,20 +214,26 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public virtual void _UpdateLocked(bool newLocked)
         {
             locked = newLocked;
-            button.interactable = !locked;
+            UpdateInteractable();
         }
+
+        protected virtual void UpdateInteractable()
+        {
+            button.interactable = !locked && selectable;
+        }
+        
         #endregion
         #region UI Animation
-        protected void UpdateUIState(bool selected)
+        protected void UpdateUIState(bool newSelected)
         {
             if (buttonTransform) prevButtonScale = buttonTransform.sizeDelta;
             if (buttonImage) prevButtonPixelPerUnit = buttonImage.pixelsPerUnitMultiplier;
             if (iconTransform) prevIconPos = iconTransform.anchoredPosition;
             if (icon) prevIconColor = icon.color;
             if (textTransform) prevTextPos = textTransform.anchoredPosition;
-            if (text) prevTextColor = text.color;
+            if (graphic) prevTextColor = graphic.color;
 
-            if (selected)
+            if (newSelected)
             {
                 newButtonScale = buttonSelectedScale;
                 newButtonPixelPerUnit = buttonSelectedPixelPerUnit;
@@ -243,7 +274,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected void UpdateUI(float transition)
         {
             if (icon) icon.color = Color.LerpUnclamped(prevIconColor, newIconColor, transition);
-            if (text) text.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
+            if (graphic) graphic.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
             
             if (buttonTransform) buttonTransform.sizeDelta = Vector2.LerpUnclamped(prevButtonScale, newButtonScale, transition);
             if (buttonImage) buttonImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevButtonPixelPerUnit, newButtonPixelPerUnit, transition);

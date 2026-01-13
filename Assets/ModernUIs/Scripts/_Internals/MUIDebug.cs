@@ -9,17 +9,17 @@ namespace DrBlackRat.VRC.ModernUIs
         private const string logPrefix = "[<color=#cfa463>ModernUIs</color>]";
         
         // Normal
-        public static void Log(object message)
+        public static void Log(object message, Object context = null)
         {
-            Debug.Log($"{logPrefix} {message}");
+            Debug.Log($"{logPrefix} {message}", context);
         }
-        public static void LogWarning(object message)
+        public static void LogWarning(object message, Object context = null)
         {
-            Debug.LogWarning($"{logPrefix} {message}");
+            Debug.LogWarning($"{logPrefix} {message}", context);
         }
-        public static void LogError(object message)
+        public static void LogError(object message, Object context = null)
         {
-            Debug.LogError($"{logPrefix} {message}");
+            Debug.LogError($"{logPrefix} {message}", context);
         }
     }
 }

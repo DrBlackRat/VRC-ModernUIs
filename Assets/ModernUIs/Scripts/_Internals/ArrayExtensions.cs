@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using UnityEngine;
+using VRC.SDK3.Data;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -8,9 +9,12 @@ namespace DrBlackRat.VRC.ModernUIs
     {
         public static T[] Add<T>(this T[] array, T item)
         {
-            T[] newArray = new T[array == null ? 1 : array.Length + 1];
-            if (array != null) Array.Copy(array, newArray, array.Length);
-            newArray[newArray.Length - 1] = item;
+            if (array == null)
+                return new[] { item };
+
+            var newArray = new T[array.Length + 1];
+            Array.Copy(array, newArray, array.Length);
+            newArray[array.Length] = item;
             return newArray;
         }
 

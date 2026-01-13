@@ -12,9 +12,6 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class EulaScreen : UdonSharpBehaviour
     {
-        [Tooltip("Object to disable if Eula has been accepted. Use full for things like a collider box.")]
-        [SerializeField] private GameObject disableObject;
-
         [Tooltip("Object to disable, move and scale when the Eula has been accepted.")]
         [SerializeField] private GameObject eulaObject;
         [Tooltip("Transform the Eula will animate it's scale and position to.")]
@@ -32,6 +29,22 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Current version of the Eula, if the accepted one is lower than the current a user will have to accept it again.")]
         [SerializeField] private int ruleVer;
         
+        [Tooltip("Objects that should be turned on when the Eula has been accepted.")]
+        [SerializeField] protected GameObject[] enableObjects;
+        [FormerlySerializedAs("disableObject")]
+        [Tooltip("Objects that should be turned off when the Eula has been accepted. Use full for things like a collider box.")]
+        [SerializeField] private GameObject[] disableObjects;
+        
+        [Tooltip("Animators that should have an bool with the given parameter name set to true when accepted.")]
+        [SerializeField] protected Animator[] animators;
+        [Tooltip("Parameter Name of the bool that should be set.")]
+        [SerializeField] protected string animParamName = "eulaAccepted";
+        
+        [Tooltip("Udon Behaviours that the accepted event will be send to.")]
+        [SerializeField] protected UdonBehaviour[] externalBehaviours;
+        [Tooltip("Name of Event that will be fired if the selection changes.")]
+        [SerializeField] protected string acceptedEventName = "_EulaAccepted";
+        
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
@@ -44,6 +57,7 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             // Disable Changed Info if left on in editor by accident
             if (versionChangeInfo != null) versionChangeInfo.SetActive(false);
+            UpdateExternal(false);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
@@ -68,7 +82,7 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void _HideEula()
         {
-            disableObject.SetActive(false);
+            UpdateExternal(true);
 
             oldUiPos = eulaObject.transform.position;
             oldUiScale = eulaObject.transform.localScale;
@@ -99,6 +113,45 @@ namespace DrBlackRat.VRC.ModernUIs
                 eulaObject.SetActive(false);
                 movementElapsedTime = 0f;
                 animate = false;
+            }
+        }
+
+        private void UpdateExternal(bool accepted)
+        {
+            if (enableObjects != null && enableObjects.Length != 0)
+            {
+                foreach (var enableObject in enableObjects)
+                {
+                    if (enableObject == null) continue;
+                    enableObject.SetActive(accepted);
+                }
+            }
+            
+            if (disableObjects != null && disableObjects.Length != 0)
+            {
+                foreach (var disableObject in disableObjects)
+                {
+                    if (disableObject == null) continue;
+                    disableObject.SetActive(!accepted);
+                }
+            }
+            
+            if (animators != null && animators.Length > 0)
+            {
+                foreach (var animator in animators)
+                {
+                    if (animator == null) continue;
+                    animator.SetBool(animParamName, accepted);
+                }
+            }
+            
+            if (accepted && externalBehaviours != null && externalBehaviours.Length > 0)
+            {
+                foreach (var behaviour in externalBehaviours)
+                {
+                    if (behaviour == null) continue;
+                    behaviour.SendCustomEvent(acceptedEventName);
+                }
             }
         }
     }

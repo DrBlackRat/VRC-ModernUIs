@@ -61,25 +61,19 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             UpdateLock(netLocked, true);
             base.OnDeserialization();
         }
-        public override bool OnOwnershipRequest(VRCPlayerApi requester, VRCPlayerApi newOwner)
-        {
-            if (!canChangeState && !Networking.LocalPlayer.IsOwner(gameObject) )
-            {
-                MUIDebug.LogError($"{requester.displayName} has tried to make {newOwner.displayName} the Network Owner, but isn't allowed to!");
-                return false;
-            }
-
-            return base.OnOwnershipRequest(requester, newOwner);
-        }        
+      
         public override void OnOwnershipTransferred(VRCPlayerApi player)
         {
             UpdateLock(locked, true);
+            base.OnOwnershipTransferred(player);
         }
-        public override void OnPlayerRestored(VRCPlayerApi player)
+
+        public override void _DelayedLoad()
         {
             if (!canChangeState) return;
-            base.OnPlayerRestored(player);
+            base._DelayedLoad();
         }
+
         #endregion
 
         protected void UpdateLock(bool newlocked, bool fromNet)

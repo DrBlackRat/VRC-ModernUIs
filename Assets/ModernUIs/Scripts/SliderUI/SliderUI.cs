@@ -19,8 +19,23 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected float value = 0f;
         public virtual float Value => value;
 
+        [Tooltip("If enabled, the curve below will be used to evaluate the slider value")]
+        [SerializeField] protected bool useCurve;
+        [Tooltip("Requires \"Use Curve\" to be enabled. E.g. can be changed to be logarithmic for volume sliders.")]
+        [SerializeField] protected AnimationCurve sliderCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        [FormerlySerializedAs("postProcessVolume")]
         [Tooltip("Post Process Volume of which the weight will be set by the slider.")]
-        [SerializeField] protected PostProcessVolume postProcessVolume;
+        [SerializeField] protected PostProcessVolume[] postProcessVolumes;
+        [FormerlySerializedAs("audioSource")]
+        [Tooltip("Audio Source of which the volume will be set by the slider.")]
+        [SerializeField] protected AudioSource[] audioSources;
+        
+        [Tooltip("Animators that should have a float with the given parameter name set for the Slider Value.")]
+        [SerializeField] private Animator[] animators;
+        [Tooltip("Parameter Name of the float that should be set.")]
+        [SerializeField] private string animParamName = "sliderValue";
+        
         [Tooltip("Udon Behaviours that should be updated.")]
         [SerializeField] protected UdonBehaviour[] externalBehaviours;
         [Tooltip("Event that will be called on the Slider Behaviour if the value changes.")]
@@ -52,7 +67,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
 
         protected virtual void Start()
         {
-            UpdateValue(value, false, true, true);
+            UpdateValue(value, true, true, true);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
@@ -60,7 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             if (!player.isLocal || !usePersistence) return;
             if (PlayerData.TryGetFloat(player, dataKey, out float newValue))
             {
-                UpdateValue(value, true, false, false);
+                UpdateValue(newValue, true, false, false);
             }
 
         }
@@ -102,7 +117,35 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         
         protected void UpdateExternal(float newValue)
         {
-            if (postProcessVolume != null) postProcessVolume.weight = newValue;
+            if (useCurve)
+                newValue = EvaluateCurve(newValue);
+            
+            if (audioSources != null && audioSources.Length > 0)
+            {
+                foreach (var audioSource in audioSources)
+                {
+                    if (audioSource == null) continue;
+                    audioSource.volume = newValue;
+                }
+            }
+
+            if (postProcessVolumes != null && postProcessVolumes.Length > 0)
+            {
+                foreach (var postProcessVolume in postProcessVolumes)
+                {
+                    if (postProcessVolume == null) continue;
+                    postProcessVolume.weight = newValue;
+                }
+            }
+
+            if (animators != null && animators.Length > 0)
+            {
+                foreach (var animator in animators)
+                {
+                    if (animator == null) continue;
+                    animator.SetFloat(animParamName, newValue);
+                }
+            }
 
             if (externalBehaviours != null && externalBehaviours.Length > 0)
             {
@@ -113,6 +156,18 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
                     behaviour.SendCustomEvent(updateEventName);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Normalizes the given value and evaluates it on a curve, then expands it back to the actual range.
+        /// </summary>
+        /// <param name="newValue">Float that should be evaluated.</param>
+        /// <returns>The provided float evaluated along a curve.</returns>
+        protected float EvaluateCurve(float newValue)
+        {
+            newValue = (newValue - slider.minValue) / (slider.maxValue - slider.minValue);
+            newValue = sliderCurve.Evaluate(newValue);
+            return slider.minValue + (newValue * (slider.maxValue - slider.minValue));
         }
 
         protected void UpdateSliderText(float newValue)

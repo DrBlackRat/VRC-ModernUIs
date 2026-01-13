@@ -9,7 +9,7 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(WhitelistEditor))]
+    [CustomEditor(typeof(Whitelist.WhitelistEditor))]
     public class WhitelistEditorEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
