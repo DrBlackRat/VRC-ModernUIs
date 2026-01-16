@@ -21,7 +21,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         [UdonSynced] protected int netSelectedState;
         protected int deserializationAttempts = 0;
         protected int scheduledDeserializations = 0;
-
+        
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
             if (!player.IsOwner(gameObject)) return;
