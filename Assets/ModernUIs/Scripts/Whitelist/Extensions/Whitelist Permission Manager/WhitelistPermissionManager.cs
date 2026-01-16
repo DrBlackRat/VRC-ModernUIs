@@ -36,6 +36,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [Tooltip("If enabled the the users shown in the Permission Manager will automatically be sorted alphabetically.\n This does come with a slight performance impact, otherwise you can call \"_SortUsers\" manually.")]
         [SerializeField] protected bool autoSort = true;
         
+        [Tooltip("If enabled a Teleport button will be added to each user in the Permission Manager.")]
+        [SerializeField] protected bool allowTeleport = false;
+        [Tooltip("Whitelist of users that are allowed to teleport.")]
+        [SerializeField] protected WhitelistGetterBase teleportWhitelist;
+        
         [Serializable]
         private class Permission
         {
@@ -94,6 +99,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             instance.confirmationDialogRemoveString = confirmationDialogRemoveString;
             
             instance.autoSort = autoSort;
+            
+            instance.allowTeleport = allowTeleport;
+            instance.teleportWhitelist = teleportWhitelist;
             
             UdonSharpEditorUtility.CopyProxyToUdon(instance);
         }

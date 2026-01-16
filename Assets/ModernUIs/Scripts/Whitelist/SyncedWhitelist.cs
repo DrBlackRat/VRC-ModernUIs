@@ -111,7 +111,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!canEdit)
             {
-                MUIDebug.LogError("Whitelist Manager: You are not allowed to edit this whitelist!");
+                MUIDebug.LogError("$Synced Whitelist | You are not allowed to edit {gameObject.name}!", gameObject);
                 return false;
             }
 
@@ -226,7 +226,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (!CanEdit(localPlayer))
             {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                MUIDebug.LogError("Synced Whitelist: You are not whitelisted!", gameObject);
                 return;
             }
             

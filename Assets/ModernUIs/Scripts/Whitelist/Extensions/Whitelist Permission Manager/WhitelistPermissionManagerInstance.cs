@@ -27,6 +27,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [HideInInspector] public string confirmationDialogRemoveString;
         
         [HideInInspector] public bool autoSort;
+
+        [HideInInspector] public bool allowTeleport;
+        [HideInInspector] public WhitelistGetterBase teleportWhitelist;
         
         // PM = PermissionManager
         [HideInInspector] public GameObject pmUserPrefab;
@@ -43,11 +46,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected bool isAddConfirmationDialog = false; // True if the dialog is for adding a user, false if it's for removing a user.'
         protected string confirmationDialogUsername;
         
-        protected bool[] hasAccess;
+        protected bool[] hasAccess; // Last index is used for Teleport
         
         protected bool sortCooldownEnabled = true;
 
-        private const int MAX_WHITELISTS = 8; // Currently set to 8 due to UI limitations, actual max is 8
+        private const int MAX_WHITELISTS = 8; // Currently set to 8 due to UI limitations
         
         #region Unity & VRChat Events
         private void Start()
@@ -65,10 +68,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
 
             permissions = whitelists.Length;
-            hasAccess = new bool[permissions]; ;
+            hasAccess = new bool[permissions + (allowTeleport ? 1 : 0)];
             
             localPlayer = Networking.LocalPlayer;
             localDisplayName = localPlayer.displayName;
+
+            if (allowTeleport)
+            {
+                if (teleportWhitelist == null)
+                {
+                    hasAccess[permissions] = true;
+                }
+                else
+                {
+                    adminWhitelists = adminWhitelists.Add(teleportWhitelist);
+                    teleportWhitelist._SetUpConnection((IUdonEventReceiver)this, $"_AdminWhitelistUpdated{permissions}");
+                }
+            }
 
             for (int i = 0; i < permissions; i++)
             {
@@ -305,7 +321,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             var newPmUser = newPmUserObj.GetComponent<PermissionManagerUser>();
-            newPmUser._Setup(this, permissions, hasAccess, hasPermission, username);
+            newPmUser._Setup(this, permissions, hasAccess, hasPermission, username, allowTeleport);
             
             pmUsers.Add(username, newPmUser);
             
