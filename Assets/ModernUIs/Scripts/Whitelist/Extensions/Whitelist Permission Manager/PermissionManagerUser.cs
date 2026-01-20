@@ -113,10 +113,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 Networking.LocalPlayer.TeleportTo(player.GetPosition(), player.GetRotation());
             }
-            else
-            {
-                Debug.LogError($"COULD NOT FIND PLAYER BY DISPLAY NAME: {username}");
-            }
         }
         
         private void ChangeState(int i)
