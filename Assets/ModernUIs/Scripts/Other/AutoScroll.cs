@@ -70,23 +70,30 @@ namespace DrBlackRat.VRC.ModernUIs
             switch (startAt)
             {
                 case StartAt.Start:
-                    scrollRect.verticalNormalizedPosition = 1f;
-                    scrollRect.horizontalNormalizedPosition = 0f;
+                    SetNormalizedPosition(horizontal ? 0f : 1f);
                     state = ScrollState.ScrollToEnd;
                     break;
                 case StartAt.End:
-                    scrollRect.verticalNormalizedPosition = 0f;
-                    scrollRect.horizontalNormalizedPosition = 1f;
+                    SetNormalizedPosition(horizontal ? 1f : 0f);
                     state = ScrollState.ScrollToStart;
                     break;
                 case StartAt.Random:
-                    scrollRect.verticalNormalizedPosition = Random.Range(0f, 1f);
-                    scrollRect.horizontalNormalizedPosition = Random.Range(0f, 1f);
-                    state = Random.Range(0, 2) == 0 ? ScrollState.ScrollToEnd : ScrollState.ScrollToStart;
+                    Random.InitState(System.DateTime.Now.Millisecond);
+                    var random = Random.Range(0f, 1f);
+                    SetNormalizedPosition(random);
+                    state = random < 0.5f ? ScrollState.ScrollToEnd : ScrollState.ScrollToStart;
                     break;
             }
 
             _UpdateScrollInfo();
+        }
+        
+        private void SetNormalizedPosition(float value)
+        {
+            if (horizontal)
+                scrollRect.horizontalNormalizedPosition = value;
+            else
+                scrollRect.verticalNormalizedPosition = value;
         }
 
         private void Update()
