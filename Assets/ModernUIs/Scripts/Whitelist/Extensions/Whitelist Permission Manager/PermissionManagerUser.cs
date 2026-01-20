@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
@@ -75,6 +75,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (hasTeleport && i == permissions)
             {
+                hasTeleportAccess = access;
                 teleportButton.interactable = access;
             }
             
