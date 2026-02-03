@@ -51,6 +51,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public override void OnDeserialization()
         {
+            if (!masterMode)
+            {
+                var newOwner = Networking.GetOwner(gameObject);
+                MUIDebug.LogError($"{DEBUG_PREFIX}{newOwner.displayName}tried to update the {gameObject.name}, but it is in local mode!"); 
+                return;
+            }
             ApplyString(netString, true);
         }
         
