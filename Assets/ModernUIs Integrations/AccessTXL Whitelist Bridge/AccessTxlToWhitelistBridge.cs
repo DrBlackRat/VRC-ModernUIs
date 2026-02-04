@@ -122,15 +122,6 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         }
         #endregion
         
-        #region Getting Players Overrides
-
-        public override VRCPlayerApi _GetPlayerInInstance()
-        {
-            UpdateTxlData();
-            return base._GetPlayerInInstance();
-        }
-        #endregion
-        
     }
 
 }

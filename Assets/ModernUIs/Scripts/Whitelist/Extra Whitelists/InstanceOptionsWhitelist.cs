@@ -47,6 +47,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
+            base.OnPlayerJoined(player);
             var displayName = player.displayName;
             
             if (allowInstanceOwner && player.isInstanceOwner)
