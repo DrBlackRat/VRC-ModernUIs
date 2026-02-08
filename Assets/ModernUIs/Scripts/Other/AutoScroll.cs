@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VRC.SDKBase;
 using VRC.Udon;
+using Random = UnityEngine.Random;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -16,7 +17,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private float unitsPerSec = 25f;
         [Tooltip("Whether to scroll horizontally or vertically.")]
         [SerializeField] private bool horizontal = false;
-        [Tooltip("Whether to start scrolling from the \"Start\" (Top / Left) or the \"End\" (Bottom / Right) ")]
+        [Tooltip("Whether to start scrolling from the \"Start\" (Top / Left), the \"End\" (Bottom / Right) or a random point.")]
         [SerializeField] private StartAt startAt = StartAt.Start;
 
         [Tooltip("Curve used for smoothing the start & end.")] [SerializeField]
@@ -69,18 +70,30 @@ namespace DrBlackRat.VRC.ModernUIs
             switch (startAt)
             {
                 case StartAt.Start:
-                    scrollRect.verticalNormalizedPosition = 1f;
-                    scrollRect.horizontalNormalizedPosition = 0f;
+                    SetNormalizedPosition(horizontal ? 0f : 1f);
                     state = ScrollState.ScrollToEnd;
                     break;
                 case StartAt.End:
-                    scrollRect.verticalNormalizedPosition = 0f;
-                    scrollRect.horizontalNormalizedPosition = 1f;
+                    SetNormalizedPosition(horizontal ? 1f : 0f);
                     state = ScrollState.ScrollToStart;
+                    break;
+                case StartAt.Random:
+                    Random.InitState(System.DateTime.Now.Millisecond);
+                    var random = Random.Range(0f, 1f);
+                    SetNormalizedPosition(random);
+                    state = random < 0.5f ? ScrollState.ScrollToEnd : ScrollState.ScrollToStart;
                     break;
             }
 
             _UpdateScrollInfo();
+        }
+        
+        private void SetNormalizedPosition(float value)
+        {
+            if (horizontal)
+                scrollRect.horizontalNormalizedPosition = value;
+            else
+                scrollRect.verticalNormalizedPosition = value;
         }
 
         private void Update()
@@ -209,7 +222,8 @@ namespace DrBlackRat.VRC.ModernUIs
     internal enum StartAt
     {
         Start, // Top or Left
-        End // Bottom or Right
+        End, // Bottom or Right
+        Random
     }
 }
 

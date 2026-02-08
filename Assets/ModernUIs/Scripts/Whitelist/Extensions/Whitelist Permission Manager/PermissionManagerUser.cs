@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
@@ -16,23 +16,33 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] protected Image backgroundImage;
 
         [Header("Per Button:")]
-        [SerializeField] protected GameObject[] toggleObjs;
         [SerializeField] protected Toggle[] toggles;
         [SerializeField] protected Image[] buttonImages;
         [SerializeField] protected Image[] checkmarkImages;
+        
+        [Header("Teleport:")]
+        [SerializeField] protected Button teleportButton;
 
         private string username;
         private int permissions;
+        
+        private bool hasTeleport;
+        private bool hasTeleportAccess;
+        
         private WhitelistPermissionManagerInstance _permissionManagerInstance;
 
         #region Permission Manager To User Api
+
         /// <summary>
         /// Sets up this Permission Manger User.
         /// </summary>
         /// <param name="newPermissionManagerInstance">Refernce to the Permission Manager</param>
-        /// <param name="permissions">Amount of permissions this user can have.</param>
+        /// <param name="newPermissions">Number of permissions this user can have.</param>
+        /// <param name="hasPermission">State of each permission.</param>
         /// <param name="newUsername">Username / Display name of this user.</param>
-        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess, bool[] hasPermission, string newUsername)
+        /// <param name="hasAccess">Access state of each permission.</param>
+        /// <param name="newHasTeleport">If a teleport button should be displayed.</param>
+        public void _Setup(WhitelistPermissionManagerInstance newPermissionManagerInstance, int newPermissions, bool[] hasAccess, bool[] hasPermission, string newUsername, bool newHasTeleport)
         {
             _permissionManagerInstance = newPermissionManagerInstance;
             username = newUsername;
@@ -41,9 +51,18 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             for (int i = 0; i < permissions; i++)
             {
-                toggleObjs[i].SetActive(true);
+                toggles[i].gameObject.SetActive(true);
                 toggles[i].interactable = hasAccess[i];
                 toggles[i].SetIsOnWithoutNotify(hasPermission[i]);
+            }
+
+            if (newHasTeleport)
+            {
+                hasTeleport = true;
+                hasTeleportAccess = hasAccess[permissions];
+                
+                teleportButton.gameObject.SetActive(hasTeleport);
+                teleportButton.interactable = hasTeleportAccess;
             }
         }
         
@@ -54,6 +73,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         /// <param name="access">True if this permission can be changed, false when not.</param>
         public void _UpdatePermissionAccess(int i, bool access)
         {
+            if (hasTeleport && i == permissions)
+            {
+                hasTeleportAccess = access;
+                teleportButton.interactable = access;
+            }
+            
             toggles[i].interactable = access;
         }
 
@@ -76,7 +101,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         #endregion
 
-        #region User To Permission Manager Api
+        #region Button / Toggle Events
+
+        public void _Teleport()
+        {
+            if (!hasTeleport || !hasTeleportAccess)
+                return;
+
+            var player = GeneralExtensions.GetPlayerByDisplayName(username);
+            if (player != null)
+            {
+                Networking.LocalPlayer.TeleportTo(player.GetPosition(), player.GetRotation());
+            }
+        }
+        
         private void ChangeState(int i)
         {
             _permissionManagerInstance.ButtonStateChange(username, i, toggles[i].isOn);

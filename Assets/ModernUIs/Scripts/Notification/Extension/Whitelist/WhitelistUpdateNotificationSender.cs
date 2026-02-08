@@ -109,17 +109,23 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (!cooldownFinished || !canSeeNotification) 
                 return;
-            
-            for (var i = 0; i < previousWhitelist.Count; i++)
+
+            if (showRemoveNotification)
             {
-                if (currentWhitelist.Contains(previousWhitelist[i])) continue;
-                ShowRemoveNotification(previousWhitelist[i].String);
+                for (var i = 0; i < previousWhitelist.Count; i++)
+                {
+                    if (currentWhitelist.Contains(previousWhitelist[i])) continue;
+                    ShowRemoveNotification(previousWhitelist[i].String);
+                }
             }
-            
-            for (var j = 0; j < currentWhitelist.Count; j++)
+
+            if (showAddNotification)
             {
-                if (previousWhitelist.Contains(currentWhitelist[j])) continue;
-                ShowAddNotification(currentWhitelist[j].String);
+                for (var j = 0; j < currentWhitelist.Count; j++)
+                {
+                    if (previousWhitelist.Contains(currentWhitelist[j])) continue;
+                    ShowAddNotification(currentWhitelist[j].String);
+                }
             }
         }
 

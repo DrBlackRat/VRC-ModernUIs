@@ -17,6 +17,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [FormerlySerializedAs("whitelistManager")]
         [Tooltip("Whitelist Manager that is storing info on which user is whitelisted.")]
         [SerializeField] private WhitelistGetterBase whitelist;
+        [Tooltip("If enabled this Whitelist Toggler will act as turned on if a whitelisted player is present in the instance. If disabled the local player needs to be whitelisted.")]
+        [SerializeField] private bool allowIfWhitelistedPlayerPresent;
 
         [Tooltip("Toggle Helpers to allow user to toggle more things using a whitelist.")]
         [SerializeField] private ToggleHelper[] toggleHelpers;
@@ -50,9 +52,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             whitelist._SetUpConnection((IUdonEventReceiver)this);
         }
 
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            if (allowIfWhitelistedPlayerPresent) _WhitelistUpdated();
+        }
+
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            if (allowIfWhitelistedPlayerPresent) _WhitelistUpdated();
+        }
+        
         public void _WhitelistUpdated()
         {
-            var isWhitelisted = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
+            var isWhitelisted = allowIfWhitelistedPlayerPresent ? whitelist._IsWhitelistPlayerPresent() : whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
 
             // Toggle Helper
             if (toggleHelpers != null && toggleHelpers.Length != 0)

@@ -66,21 +66,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 noneAdminAccess = true;
             }
         }
-        
+
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             base.OnPlayerLeft(player);
-            if (!Networking.LocalPlayer.IsOwner(gameObject)) return;
             var displayName = player.displayName;
             
             if (autoRemoveOnAdderLeft)
             {
-                _RemoveAddedBy(displayName);
+                base._RemoveAddedBy(displayName);
             }
             
             if (autoRemoveOnLeave)
             {
-                _RemoveUser(displayName);
+                base._RemoveUser(displayName);
             }
         }
 
@@ -111,7 +110,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!canEdit)
             {
-                MUIDebug.LogError("Whitelist Manager: You are not allowed to edit this whitelist!");
+                MUIDebug.LogError("$Synced Whitelist | You are not allowed to edit {gameObject.name}!", gameObject);
                 return false;
             }
 
@@ -199,7 +198,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         private void CheckOwnership()
         {
-            canEdit = CanEdit(Networking.LocalPlayer);
             if (!Networking.LocalPlayer.isMaster) return;
             
             var owner = Networking.GetOwner(gameObject);
@@ -226,7 +224,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (!CanEdit(localPlayer))
             {
-                MUIDebug.LogError("Whitelist Manager: You are not whitelisted!");
+                MUIDebug.LogError("Synced Whitelist: You are not whitelisted!", gameObject);
                 return;
             }
             

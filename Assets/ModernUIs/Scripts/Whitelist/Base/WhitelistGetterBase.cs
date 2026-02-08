@@ -26,8 +26,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         
         protected DataDictionary connectedBehaviours = new DataDictionary(); // Key: Udon Behaviour, Value: DataList of events (some scripts could try to connect with multiple events)
 
+        // Cached values
         protected bool formattedNamesChanged = true;
         protected string formattedNames;
+        protected bool whitelistedPlayerPresentChanged = true;
+        protected bool whitelistedPlayerPresent;
         
         protected string localName;
         private VRCPlayerApi leavingPlayer;
@@ -39,8 +42,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             localName = Networking.LocalPlayer.displayName;
         }
 
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            whitelistedPlayerPresentChanged = true;
+        }
+        
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
+            whitelistedPlayerPresentChanged = true;
             leavingPlayer = player;
         }
 
@@ -83,6 +92,33 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         }
 
         #region Whitelist Checks
+        /// <summary>
+        /// Checks if a whitelisted player is currently present in the instance.
+        /// Needs to be checked in <see cref="UdonSharpBehaviour.OnPlayerJoined(VRCPlayerApi)"/> and <see cref="UdonSharpBehaviour.OnPlayerLeft(VRCPlayerApi)"/> to work properly.
+        /// </summary>
+        /// <returns>bool | True if a whitelisted player is present, false otherwise.</returns>
+        public virtual bool _IsWhitelistPlayerPresent()
+        {
+            if (!whitelistedPlayerPresentChanged)
+                return whitelistedPlayerPresent;
+            
+            whitelistedPlayerPresentChanged = false;
+            var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
+            VRCPlayerApi.GetPlayers(players);
+            
+            foreach (var player in players)
+            {
+                if (!player.IsValid()) continue;
+                if (!_IsPlayerWhitelisted(player)) continue;
+                if (player == leavingPlayer) continue;
+                whitelistedPlayerPresent = true;
+                return true;
+            }
+            
+            whitelistedPlayerPresent = false;
+            return false;  
+        }
+        
         /// <summary>
         /// Checks if a player is whitelisted.
         /// </summary>
@@ -263,6 +299,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             if (debugLogging)
                 MUIDebug.Log($"Whitelist: {gameObject.name} Whitelist Updated.", this);
             
+            // Reset cached values
+            whitelistedPlayerPresentChanged = true;
             formattedNamesChanged = true;
             
             if (connectedBehaviours == null || connectedBehaviours.Count == 0) return;
