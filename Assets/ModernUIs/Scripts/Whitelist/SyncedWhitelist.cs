@@ -72,9 +72,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base.OnPlayerLeft(player);
             var displayName = player.displayName;
             
-            if (autoRemoveOnAdderLeft)
+            if (autoRemoveOnAdderLeft && usersAddedBy.TryGetValue(displayName, out DataToken added))
             {
-                base._RemoveAddedBy(displayName, null, null, false);
+                var addedList = added.DataList.ShallowClone();
+                for (int i = 0; i < addedList.Count; i++)
+                {
+                    base._RemoveUser(addedList[i].String, null, null, false);
+                }
             }
             
             if (autoRemoveOnLeave)
@@ -113,7 +117,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!canEdit)
             {
-                MUIDebug.LogError("$Synced Whitelist | You are not allowed to edit {gameObject.name}!", gameObject);
+                MUIDebug.LogError($"Synced Whitelist | You are not allowed to edit {gameObject.name}!", gameObject);
                 return false;
             }
 

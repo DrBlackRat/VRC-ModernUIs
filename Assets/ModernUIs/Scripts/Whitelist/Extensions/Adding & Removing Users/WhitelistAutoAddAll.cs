@@ -2,6 +2,9 @@
 using System;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+using UdonSharpEditor;
+#endif
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -87,6 +90,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (whitelist?._IsSynced() == true)
                 whitelistIsSynced = true;
+            UdonSharpEditorUtility.CopyProxyToUdon(this);
         }
 #endif
     }
