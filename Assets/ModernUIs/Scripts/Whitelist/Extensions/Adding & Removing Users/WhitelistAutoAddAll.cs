@@ -56,7 +56,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!enabled || !gameObject.activeInHierarchy)
                 return false;
 
-            return !whitelistIsSynced || (isAdmin && Networking.LocalPlayer.IsOwner(whitelist.gameObject));
+            return isAdmin && (!whitelistIsSynced || Networking.IsOwner(whitelist.gameObject));
         }
 
         public void _FillEntireWhitelist()

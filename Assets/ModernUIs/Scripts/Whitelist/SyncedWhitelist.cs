@@ -74,13 +74,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (autoRemoveOnAdderLeft)
             {
-                base._RemoveAddedBy(displayName);
+                base._RemoveAddedBy(displayName, null, null, false);
             }
             
             if (autoRemoveOnLeave)
             {
-                base._RemoveUser(displayName);
+                base._RemoveUser(displayName, null, null, false);
             }
+            
+            if (autoRemoveOnAdderLeft || autoRemoveOnLeave)
+                base.WhitelistUpdated();
         }
 
         // Only for Admin Whitelist
@@ -266,16 +269,16 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._RemoveUser(username, senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent);
+            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent);
+            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
         }
 
         public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool directReplacement = false)
@@ -297,10 +300,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._ClearWhitelist(senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
+        public override void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
             if (!EditCheck()) return;
-            base._RemoveAddedBy(username, senderBehaviour, senderEvent);
+            base._RemoveAddedBy(username, senderBehaviour, senderEvent, notify);
         }
 
         #endregion

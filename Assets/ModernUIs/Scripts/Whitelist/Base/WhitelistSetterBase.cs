@@ -199,8 +199,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="usernamesToRemove">DataList of usernames to remove from the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that users were removed. Defaults to true.</param>
         public virtual void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (usernamesToRemove == null || usernamesToRemove.Count == 0) return;
 
@@ -212,7 +213,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 var username = token.String;
                 _RemoveUser(username, null, null, false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify)
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         
         /// <summary>
@@ -221,8 +223,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="usernamesToRemove">Array of usernames to remove from the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">>Optional | If other scripts should be notified that users were removed. Defaults to true</param>
         public virtual void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (usernamesToRemove == null || usernamesToRemove.Length == 0) return;
 
@@ -230,7 +233,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 _RemoveUser(username, null, null, false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify)
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
 
         /// <summary>
@@ -304,12 +308,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="username">Display Name of the user who you want to remove ever added user of.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was removed. Defaults to true.</param>
         public virtual void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool notify = true)
         {
             if (usersAddedBy.TryGetValue(username, out DataToken added))
             {
-                _RemoveUsers(added.DataList.DeepClone(), senderBehaviour, senderEvent);
+                _RemoveUsers(added.DataList.DeepClone(), senderBehaviour, senderEvent, notify);
             }
             else
             {
