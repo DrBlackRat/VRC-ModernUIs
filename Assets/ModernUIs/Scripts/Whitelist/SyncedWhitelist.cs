@@ -85,9 +85,18 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 base._RemoveUser(displayName, null, null, false);
             }
-            
+
             if (autoRemoveOnAdderLeft || autoRemoveOnLeave)
-                base.WhitelistUpdated();
+            {
+                if (Networking.IsOwner(gameObject) && canEdit)
+                {
+                    WhitelistUpdated();
+                }
+                else
+                {
+                    base.WhitelistUpdated();
+                }
+            }
         }
 
         // Only for Admin Whitelist
