@@ -16,12 +16,17 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [SerializeField] private TextMeshProUGUI notificationHeader;
         [SerializeField] private TextMeshProUGUI notificationMessage;
         [SerializeField] private TextMeshProUGUI notificationTime;
+        
+        [Header("Source Elements")]
+
+        [SerializeField] private TextMeshProUGUI notificationSource;
+        [SerializeField] private GameObject notificationSourceObject;
 
         [Header("Image Elements")] 
         [SerializeField] private Image notificationImage;
         [SerializeField] private GameObject notificationImageObject;
         
-        public void _Setup(string header, string message, string timeString, Sprite image)
+        public void _Setup(string header, string message, string timeString, Sprite image, string source)
         {
             if (image)
             {
@@ -31,6 +36,16 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             else
             {
                 notificationImageObject.SetActive(false);
+            }
+
+            if (!string.IsNullOrEmpty(source))
+            {
+                notificationSourceObject.SetActive(true);
+                notificationSource.text = source;
+            }
+            else
+            {
+                notificationSourceObject.SetActive(false);
             }
             
             notificationHeader.text = header;

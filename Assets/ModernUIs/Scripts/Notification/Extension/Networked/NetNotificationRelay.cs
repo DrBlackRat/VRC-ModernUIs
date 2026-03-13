@@ -125,14 +125,15 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [NetworkCallable(2)]
         public void ReceiveNetNotification(string notificationData)
         {
+            var callingPlayerName = NetworkCalling.CallingPlayer.displayName;
             if (!NetworkCalling.InNetworkCall)
             {
                 MUIDebug.LogWarning("Net Notification Relay | You are not allowed to call \"ReceiveNetNotification\" outside of a network call!");
                 return;
             }
-            if (hasWhitelist && !whitelist._IsPlayerWhitelisted(NetworkCalling.CallingPlayer))
+            if (hasWhitelist && !whitelist._IsPlayerWhitelisted(callingPlayerName))
             {
-                MUIDebug.LogWarning($"Net Notification Relay | {NetworkCalling.CallingPlayer.displayName} tried to send a notification but isn't allowed to!");
+                MUIDebug.LogWarning($"Net Notification Relay | {callingPlayerName} tried to send a notification but isn't allowed to!");
                 return;
             }
 
@@ -206,7 +207,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 width = (float)widthToken.Double;
             
             notificationManager._AddNotification(header, text, image, playSound, soundClip, soundVolume, duration,
-                width);
+                width, callingPlayerName);
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
