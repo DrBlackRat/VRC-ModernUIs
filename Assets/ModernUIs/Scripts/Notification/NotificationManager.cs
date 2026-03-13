@@ -21,6 +21,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Range(1, 50)][Tooltip("How long the notification queue can get before new notifications can't be added.")]
         [SerializeField] private int maxNotificationQueueLength = 10;
         
+        [Tooltip("Optional | Can be to display past notifications.")]
+        [SerializeField] private NotificationHistory notificationHistory;
+        
         [SerializeField] private GameObject notificationObject;
         [SerializeField] private Transform notificationTransform;
         [SerializeField] private RectTransform canvasRootTransform;
@@ -227,6 +230,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
             currentShownId = notificationIds[0].Int;
             var notificationDict = notifications[notificationIds[0]].DataDictionary;
+            
+            // History
+            if (notificationHistory != null)
+                notificationHistory._AddNotification(notificationDict);
 
             // Notification Sound
             if (notificationAudioSource != null && notificationDict[PlaySoundKey].Boolean)
