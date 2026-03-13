@@ -14,6 +14,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     {
         [Tooltip("Notification Manager / System used to actually display the notification.")]
         [SerializeField] private NotificationManager notificationManager;
+        [Tooltip("If enabled the notification will be shown in the notification history screen.")]
+        [SerializeField] private bool showInHistory = true;
+        [Tooltip("Name of the source of the notification. If left empty, none will be displayed.")]
+        [SerializeField] private string sourceName = "";
         
         [Tooltip("If provided the notification will only be send to members of this whitelist.")]
         [SerializeField] private WhitelistGetterBase whitelist;
@@ -67,7 +71,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         public void _SendNotification()
         {
             if (!isWhitelisted) return;
-            notificationManager._AddNotification(header, message, image, playSound, soundClip, soundVolume, duration, width);
+            notificationManager._AddNotification(header, message, image, playSound, soundClip, soundVolume, duration, width, showInHistory, sourceName);
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP

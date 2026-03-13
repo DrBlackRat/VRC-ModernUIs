@@ -14,6 +14,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     {
         [Tooltip("Notification Manager / System used to actually display the notification.")] 
         [SerializeField] private NotificationManager notificationManager;
+        [Tooltip("If enabled the notification will be shown in the notification history screen.")]
+        [SerializeField] private bool showInHistory = true;
+        [Tooltip("Name of the source of the notification. If left empty, none will be displayed.")]
+        [SerializeField] private string sourceName = "";
 
         [Tooltip("Whitelist to send add / remove notifications for.")] 
         [SerializeField] private WhitelistGetterBase whitelist;
@@ -136,13 +140,13 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             if (showAdder)
                 newMessage = newMessage.Replace("{adder}", whitelist._GetWhoAdded(username));
             
-            notificationManager._AddNotification(headerAdded, newMessage, imageAdded, playSoundAdded, soundClipAdded, soundVolumeAdded, duration, width);
+            notificationManager._AddNotification(headerAdded, newMessage, imageAdded, playSoundAdded, soundClipAdded, soundVolumeAdded, duration, width, showInHistory, sourceName);
         }
         
         private void ShowRemoveNotification(string username)
         {
             var newMessage = messageRemoved.Replace("{user}", username);
-            notificationManager._AddNotification(headerRemoved, newMessage, imageRemoved, playSoundRemoved, soundClipRemoved, soundVolumeRemoved, duration, width);
+            notificationManager._AddNotification(headerRemoved, newMessage, imageRemoved, playSoundRemoved, soundClipRemoved, soundVolumeRemoved, duration, width, showInHistory, sourceName);
         }
         
         

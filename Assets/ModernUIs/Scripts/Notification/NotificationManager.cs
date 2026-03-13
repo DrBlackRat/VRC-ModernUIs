@@ -71,6 +71,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private readonly DataToken SoundVolumeKey = new DataToken("soundVolume"); // float | volume of the notification sound
         private readonly DataToken DurationKey    = new DataToken("duration");    // float | how long the notification stays on screen
         private readonly DataToken WidthKey       = new DataToken("width");       // float | how wide the notification should be
+        private readonly DataToken SaveHistoryKey = new DataToken("saveHistory"); // bool | if the notification should be saved / shown in the history
         private readonly DataToken SourceKey      = new DataToken("source");      // string | name of the system that sent the notification
         
         private VRCPlayerApi localPlayer;
@@ -121,11 +122,12 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// <param name="soundVolume">Volume of the notification sound. Default is 0.25, clamped between 0 and 1.</param>
         /// <param name="duration">How long the notification should be shown for in seconds. Default is 3, clamped between 0 and 60.</param>
         /// <param name="width">How wide the canvas should be. Default is 80, clamped between 50 and 150.</param>
-        /// <param name="source">Where this notification comes from, usually the name of the system that send it.</param>
+        /// <param name="source">Where this notification comes from, usually the name of the system that sends it.</param>
+        /// <param name="showInHistory">If the notification should be displayed in the notification history.</param>
         /// <returns>-1 if the notification could not be added, otherwise id of the notification.</returns>
         public int _AddNotification(string header, string text, Sprite image = null, 
             bool playSound = true, AudioClip soundClip = null, float soundVolume = 0.25f, 
-            float duration = 3f, float width = 80f, string source = "")
+            float duration = 3f, float width = 80f, bool showInHistory = true, string source = "")
         {
             if (!enabled || !gameObject.activeInHierarchy) 
                 return -1;
@@ -143,6 +145,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             notificationDict.SetValue(SoundVolumeKey, Mathf.Clamp(soundVolume, 0, 1));
             notificationDict.SetValue(DurationKey, Mathf.Clamp(duration, 0, 60));
             notificationDict.SetValue(WidthKey, Mathf.Clamp(width, 50, 150));
+            notificationDict.SetValue(SaveHistoryKey, showInHistory);
             notificationDict.SetValue(SourceKey, source);
             
             notifications.Add(lastNotificationId,notificationDict);
@@ -227,6 +230,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             PlayNextNotification();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void PlayNextNotification()
         {
             if (notifications.Count == 0 || showingNotification) 
@@ -236,7 +240,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             var notificationDict = notifications[notificationIds[0]].DataDictionary;
             
             // History
-            if (notificationHistory != null)
+            if (notificationHistory && notificationDict[SaveHistoryKey].Boolean)
                 notificationHistory._AddNotification(notificationDict);
 
             // Notification Sound
