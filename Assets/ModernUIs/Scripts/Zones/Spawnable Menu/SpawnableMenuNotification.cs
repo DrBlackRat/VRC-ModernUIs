@@ -15,6 +15,11 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private SpawnableMenu spawnableMenu;
         [SerializeField] private NotificationManager notificationManager;
         
+        [Tooltip("If enabled the notification will be shown in the notification history screen.")]
+        [SerializeField] private bool showInHistory = true;
+        [Tooltip("Name of the source of the notification. If left empty, none will be displayed.")]
+        [SerializeField] private string sourceName = "";
+        
         [Tooltip("If enabled a player will only see the notification the first time they join the world.")]
         [SerializeField] private bool onlyShowOnce = false;
         [Tooltip("Key used for storing if they have already seen it.")]
@@ -82,7 +87,7 @@ namespace DrBlackRat.VRC.ModernUIs
                 PlayerData.SetBool(persistenceKey, true);
 
             notificationManager._AddNotification(header, GenerateMessage(), image, playSound, soundClip, soundVolume,
-                duration, width);
+                duration, width, showInHistory, sourceName);
             hasSeenNotification = true;
         }
 
