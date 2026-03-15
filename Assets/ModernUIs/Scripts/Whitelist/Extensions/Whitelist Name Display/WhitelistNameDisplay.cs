@@ -32,7 +32,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         public void _WhitelistUpdated()
         {
-            textMesh.text = whitelist._GetNamesFormatted();
+            if (textMesh == null) return;
+                textMesh.text = whitelist._GetNamesFormatted();
             if (countDisplay != null)
                 countDisplay.text = whitelist._GetCount().ToString();
         }
