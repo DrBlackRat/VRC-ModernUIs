@@ -19,6 +19,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [FormerlySerializedAs("whitelistManager")] [Tooltip("Whitelist that should be updated.")]
         [SerializeField] private WhitelistSetterBase whitelist;
         
+        [Range(0, 60)] [Tooltip("Time in seconds to wait before starting to load the whitelist.")]
+        [SerializeField] private float initialDelay = 0f;
+        
         [Tooltip("If enabled, the whitelist will be redownloaded after a certain amount of time.")]
         [SerializeField] private bool autoReload = true;
         [Range(1, 60)]
@@ -34,7 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         private void Start()
         {
-            _LoadString();
+            SendCustomEventDelayedSeconds(nameof(_LoadString), initialDelay);
         }
         
         public void _LoadString()
@@ -62,7 +65,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (autoReloadOnError)
             {
                 MUIDebug.LogError($"{DEBUG_PREFIX}Couldn't load whitelist from {url} because {result.Error}! Tying again in 20s.");
-                SendCustomEventDelayedSeconds("_LoadString", 20);
+                SendCustomEventDelayedSeconds(nameof(_LoadString), 20);
             }
             else
             {
@@ -84,7 +87,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!autoReload) return;
             MUIDebug.Log($"{DEBUG_PREFIX}Auto Reload Enabled: Next update in {autoReloadTime} minutes.");
-            SendCustomEventDelayedSeconds("_LoadString", autoReloadTime * 60);
+            SendCustomEventDelayedSeconds(nameof(_LoadString), autoReloadTime * 60);
         }
     }
 }
