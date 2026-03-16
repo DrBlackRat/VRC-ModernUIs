@@ -334,7 +334,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Button API
         public virtual void _Add(string username)
         {
-            if (!hasAccess) return;
+            if (!hasAccess || !canAdd) return;
             
             addedList.Add(username);
             CheckMaxUsersAdded(); 

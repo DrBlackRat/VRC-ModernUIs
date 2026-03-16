@@ -49,6 +49,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [UdonSynced]
         protected string serializedRequestingUsers;
 
+        [HideInInspector]
+        public int autoAccept = 0; // Set by Selector UI, 0 = Off, 1 = On
+
         #region Unity, VRChat & ModernUIs Events
         protected override void Start()
         {
@@ -77,7 +80,20 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._AdminWhitelistUpdated();
             UpdateRequestButton();
         }
+        
+        public void _CheckAutoAdd()
+        {
+            if (autoAccept == 0 || !hasAccess || !canAdd)
+                return;
 
+            var usersToAdd = otherUsers.GetKeys();
+            for (int i = 0; i < usersToAdd.Count; i++)
+            {
+                if (!canAdd) break;
+                _Add(usersToAdd[i].String);
+            }
+        }
+        
         #endregion
 
         #region Networking
@@ -103,6 +119,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             UpdateRequestButton();
             UpdateCountDisplays();
+            
+            SendCustomEventDelayedFrames(nameof(_CheckAutoAdd), 1);
         }
 
         public override void OnPreSerialization()
@@ -175,6 +193,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             base._Remove(username);
             UpdateRequestButton();
+            
+            SendCustomEventDelayedFrames(nameof(_CheckAutoAdd), 1);
         }
 
         public void _Decline(string username)
@@ -184,7 +204,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             RemoveOtherUser(username, true);
             
             UpdateRequestButton();
-            UpdateCountDisplays(); 
+            UpdateCountDisplays();
         }
 
         public void _RequestAccess()
