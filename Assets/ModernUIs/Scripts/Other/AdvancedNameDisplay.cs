@@ -27,6 +27,11 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("If enabled the names will be sorted alphabetically.")]
         [SerializeField] private bool sortNames = true;
         
+        [Tooltip("How to behave when the received name list is empty.\n- Nothing: Just displays an empty string.\n- Hide: Hides the section.\n- EmptyString: Displays the string provided below.")]
+        [SerializeField] private EmptyBehaviour emptyBehaviour = EmptyBehaviour.EmptyString;
+        [Tooltip("Text to display if the name list is empty. Only used if Empty Behaviour is set to Empty String.")]
+        public string emptyString = "No names to display.";
+        
         [Tooltip("If enabled the display will automatically update every Update Interval minutes. Otherwise it will only update the data once on Start.")]
         [SerializeField] private bool autoUpdate = true;
         [Range(1f, 30f)] [Tooltip("Time in minutes between auto updates.")]
@@ -107,8 +112,16 @@ namespace DrBlackRat.VRC.ModernUIs
             receivedProductInfoCount = 0;
             gatheringCounter = productCount + whitelistCount;
             nameList.Clear();
+
+            if (gatheringCounter > 0)
+            {
+                _GetNextData();
+            }
+            else
+            {
+                _FinishGatheringNames();
+            }
             
-            _GetNextData();
         }
 
         public void _GetNextData()
@@ -192,12 +205,19 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _FinishUpdate()
         {
-            foreach (var textMesh in textMeshes)
-                textMesh.text = nameText;
-            
-            var counterText = nameList.Count.ToString();
-            foreach (var counterTextMesh in counterTextMeshes)
-                counterTextMesh.text = counterText;
+            gameObject.SetActive(true);
+            if (nameList.Count > 0 || emptyBehaviour == EmptyBehaviour.Nothing)
+            {
+                ApplyData(nameText, nameList.Count);
+            }
+            else if (emptyBehaviour == EmptyBehaviour.EmptyString)
+            {
+                ApplyData(emptyString, 0);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
             
             gatheringCounter = -1;
             MUIDebug.Log(LOGPrefix + $"Finished gathering names for {gameObject.name}!", gameObject);
@@ -210,6 +230,16 @@ namespace DrBlackRat.VRC.ModernUIs
             }
         }
         #endregion
+        
+        private void ApplyData(string text, int counter)
+        {
+            foreach (var textMesh in textMeshes)
+                textMesh.text = text;
+            
+            var counterText = counter.ToString();
+            foreach (var counterTextMesh in counterTextMeshes)
+                counterTextMesh.text = counterText;
+        }
     }
 
     internal enum NameSeparatorType
@@ -217,5 +247,12 @@ namespace DrBlackRat.VRC.ModernUIs
         NewLine,
         Comma,
         VerticalBar,
+    }
+    
+    internal enum EmptyBehaviour
+    {
+        Nothing,
+        Hide,
+        EmptyString,
     }
 }
