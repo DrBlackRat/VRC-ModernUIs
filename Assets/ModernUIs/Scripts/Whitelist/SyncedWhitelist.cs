@@ -171,7 +171,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 if (deserializationAttempts >= maxDeserializationAttempts)
                 {
-                    MUIDebug.LogError($"{owner.displayName} is still not whitelisted! Aborting deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
+                    MUIDebug.LogError($"{owner.displayName} is still not whitelisted! Aborting deserialization on {gameObject.name} after {deserializationAttempts} / {maxDeserializationAttempts} attempts.", gameObject);
                     deserializationAttempts = 0;
                     return;
                 }
@@ -184,11 +184,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (deserializationAttempts > 1)
             {
-                MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
-            }
-            else
-            {
-                MUIDebug.Log($"Received network data on {gameObject.name} from {owner.displayName}.");
+                MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} / {maxDeserializationAttempts} attempts.", gameObject);
             }
             
             deserializationAttempts = 0;

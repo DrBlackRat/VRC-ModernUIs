@@ -80,11 +80,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
             if (deserializationAttempts > 1)
             {
-                MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
-            }
-            else
-            {
-                MUIDebug.Log($"Received network data on {gameObject.name} from {owner.displayName}.");
+                MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} / {maxDeserializationAttempts} attempts.", gameObject);
             }
                 
             deserializationAttempts = 0;
