@@ -44,6 +44,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         protected int deserializationAttempts = 0;
         protected int scheduledDeserializations = 0;
+        protected VRCPlayerApi deserializationPlayer;
 
         public override bool _IsSynced() => true;
 
@@ -137,6 +138,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void OnDeserialization()
         {
             deserializationAttempts = 0;
+            deserializationPlayer = Networking.GetOwner(gameObject);
             HandleDeserialization();
         }
         
@@ -158,6 +160,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             deserializationAttempts++;
             var owner = Networking.GetOwner(gameObject);
+            if (owner != deserializationPlayer)
+            {
+                MUIDebug.LogError($"Network Owner has changed from {deserializationPlayer.displayName} to {owner.displayName} on {gameObject.name}! Aborting deserialization on {gameObject.name} after {deserializationAttempts} / {maxDeserializationAttempts} attempts.", gameObject);
+                deserializationAttempts = 0;
+                return;
+            }
+            
             if (!CanEdit(owner))
             {
                 if (deserializationAttempts >= maxDeserializationAttempts)
@@ -174,7 +183,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             if (deserializationAttempts > 1)
+            {
                 MUIDebug.Log($"{owner.displayName} is now whitelisted! Running Deserialization on {gameObject.name} after {deserializationAttempts} attempts.", gameObject);
+            }
+            else
+            {
+                MUIDebug.Log($"Received network data on {gameObject.name} from {owner.displayName}.");
+            }
+            
             deserializationAttempts = 0;
             ApplyNetData();
         }
