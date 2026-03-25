@@ -46,7 +46,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         public virtual void _DelayedLoad()
         {
             if (!hasAccess) return;
-            if (PlayerData.TryGetFloat(Networking.LocalPlayer, dataKey, out float newValue))
+            if (PlayerData.TryGetFloat(localPlayer, dataKey, out float newValue))
             {
                 UpdateValue(newValue, true, false, false);
             }
@@ -67,7 +67,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             }
             else
             {
-                access = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
+                access = whitelist._IsPlayerWhitelisted(localPlayer);
             }
             return access;
         }
