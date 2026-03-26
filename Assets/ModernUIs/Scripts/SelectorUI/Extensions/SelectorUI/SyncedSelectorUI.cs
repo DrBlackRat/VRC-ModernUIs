@@ -21,11 +21,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected int netData;
         
         protected int netAttempts;
-        protected int scheduledNetAttempts;
+        protected bool netRetryScheduled;
         protected VRCPlayerApi netSendingPlayer;
         
-        protected const int NET_MAX_QUEUE_SIZE = 2;
         protected bool netSendScheduled;
+        
+        protected const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
+        protected const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
         
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
@@ -51,8 +53,8 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
             if (!fromNet)
             {
-                ResetNetAttempts();
-                ScheduleSendNetworkedData();
+                DiscardNetAttempts();
+                ScheduleSendingNetworkedData();
             }
             
             return true;
@@ -122,18 +124,20 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             netData = newData;
             netSendingPlayer = NetworkCalling.CallingPlayer;
             
-            ResetNetAttempts();
+            DiscardNetAttempts();
             TryApplyNetData();
         }
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
+        /// Handles receiving network data after a retry.
         /// </summary>
         public void _DelayedNetAttempt()
         {
-            scheduledNetAttempts--;
-            if (scheduledNetAttempts > 0) return; // Prevent scheduling multiple delayed attempts
-            if (netAttempts == 0) return; // 0th = finished or received new data
+            netRetryScheduled = false;
+            if (netAttempts == 0) // 0th = finished or received new data
+                return; 
+            
             TryApplyNetData();
         }
 
@@ -154,13 +158,17 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 if (netAttempts >= maxNetRetryAttempts)
                 {
                     MUIDebug.LogError($"{netSendingPlayer.displayName} is still not allowed to send data! Aborting applying net data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
-                    ResetNetAttempts();
+                    DiscardNetAttempts();
                     return;
                 }
+
+                if (!netRetryScheduled)
+                {
+                    netRetryScheduled = true;
+                    MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
+                    SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
+                }
                 
-                MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
-                scheduledNetAttempts++;
-                SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
                 return;
             }
             
@@ -173,14 +181,15 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 MUIDebug.Log($"{netSendingPlayer.displayName} has send network data on {gameObject.name}.", gameObject);
             }
             
-            ResetNetAttempts();
+            DiscardNetAttempts();
             ApplyNetData();
         }
         
         /// <summary>
-        /// Resets the number of attempts to apply network data which in return cancels all scheduled attempts.
+        /// Resets the current retry state.
+        /// Already scheduled retry callbacks will be disregarded when they fire.
         /// </summary>
-        protected void ResetNetAttempts()
+        protected void DiscardNetAttempts()
         {
             netAttempts = 0;
         }
@@ -188,9 +197,9 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         #region Sending Networked Data
         /// <summary>
-        /// Sends networked data to other players in the instance.
+        /// Attempts to send networked data immediately, or schedules a retry if sending is currently blocked.
         /// </summary>
-        protected void ScheduleSendNetworkedData()
+        protected void ScheduleSendingNetworkedData()
         {
             if (netSendScheduled)
                 return;
@@ -198,41 +207,36 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (NetworkCalling.GetQueuedEvents((IUdonEventReceiver)this, nameof(OnNetworkedDataReceived)) != 0)
             {
                 netSendScheduled = true;
-                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), 1);
+                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), NET_SEND_DELAY);
                 return;
             }
 
             TrySendNet();
         }
-        
+
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
-        /// Checks if there are any queued events and if not, tries to send the data, otherwise schedules a retry.
+        /// Handles delayed network data transmission retry.
         /// </summary>
-        public virtual void _SendNetDelayed()
+        public void _SendNetDelayed()
         {
             netSendScheduled = false;
-            
-            if (NetworkCalling.GetQueuedEvents((IUdonEventReceiver)this, nameof(OnNetworkedDataReceived)) != 0)
-            {
-                netSendScheduled = true;
-                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), 1);
-                return;
-            }
-
-            TrySendNet();
+            ScheduleSendingNetworkedData();
         }
 
         /// <summary>
         /// Attempts to send network data to other players if the local player is allowed to send.
-        /// Usually only used internally, use <see cref="ScheduleSendNetworkedData"/> when possible.
+        /// Usually only used internally, use <see cref="ScheduleSendingNetworkedData"/> when possible.
         /// </summary>
         /// <returns>True if the network data was successfully sent; otherwise, false.</returns>
-        protected virtual bool TrySendNet()
+        protected bool TrySendNet()
         {
             if (!CanSendNet(localPlayer))
                 return false;
             
+            if (!localPlayer.IsOwner(gameObject)) 
+                Networking.SetOwner(localPlayer, gameObject);
+
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, selectedState);
             return true;
         }  
@@ -251,7 +255,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
                 return;
             if (!localPlayer.IsOwner(gameObject))
                 return;
-            if (!CanSendNet(localPlayer))
+            if (secureNetworking && !CanSendNet(localPlayer))
                 return;
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), player.playerId, selectedState);
@@ -266,7 +270,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected void TransferOwnershipIfNeeded()
         {
             if (!localPlayer.isMaster) return;
+            
             var owner = Networking.GetOwner(gameObject);
+            if (!Utilities.IsValid(owner))
+                return;
             if (CanSendNet(owner))
                 return;
             
@@ -277,7 +284,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (newOwner == null)
             {
                 MUIDebug.LogWarning($"Could not find a new player to transfer ownership of {gameObject.name} to. " +
-                                    $"Keeping current owner, but new players wont receive the current state." , gameObject);
+                                    $"Keeping current owner, but new players may not receive the current state." , gameObject);
                 return;
             }
             

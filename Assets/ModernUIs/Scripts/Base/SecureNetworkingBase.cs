@@ -6,6 +6,14 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Base
 {
+    
+    /// Networking model:
+    /// - Only the latest received network state is kept.
+    /// - If validation is temporarily not possible (e.g. whitelist not initialized yet),
+    ///   applying that latest state may be retried.
+    /// - If newer network data arrives before a retry completes, the older pending state is discarded.
+    /// This is intentional to ensure "latest state wins" behavior and avoid stale state application.
+    
     /// <summary>
     /// This class is used as a base for everything that requires secure networking.
     /// Either inherit from it or use it as a template. (Due to type limitations, I feel like the later will probably be the case)
@@ -26,15 +34,16 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         protected string netData; // Networked example data
         
         protected int netAttempts;
-        protected int scheduledNetAttempts;
+        protected bool netRetryScheduled;
         protected VRCPlayerApi netSendingPlayer;
         
-        protected const int NET_MAX_QUEUE_SIZE = 2;
         protected bool netSendScheduled;
 
         protected VRCPlayerApi localPlayer;
         
-
+        protected const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
+        protected const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
+        
         #region VRChat / Unity Events
         public void Start()
         {
@@ -101,25 +110,27 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             
             netData = newData;
             netSendingPlayer = NetworkCalling.CallingPlayer;
-            ResetNetAttempts();
+            DiscardNetAttempts();
             TryApplyNetData();
         }
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
+        /// Handles receiving network data after a retry.
         /// </summary>
         public void _DelayedNetAttempt()
         {
-            scheduledNetAttempts--;
-            if (scheduledNetAttempts > 0) return; // Prevent scheduling multiple delayed attempts
-            if (netAttempts == 0) return; // 0th = finished or received new data
+            netRetryScheduled = false;
+            if (netAttempts == 0) // 0th = finished or received new data
+                return; 
+            
             TryApplyNetData();
         }
 
         /// <summary>
         /// Attempts to apply network data, validating sender if secure networking is enabled, will retry if the sender couldn't be validated.
         /// </summary>
-        protected virtual void TryApplyNetData()
+        protected void TryApplyNetData()
         {
             if (!secureNetworking)
             {
@@ -133,13 +144,17 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 if (netAttempts >= maxNetRetryAttempts)
                 {
                     MUIDebug.LogError($"{netSendingPlayer.displayName} is still not allowed to send data! Aborting applying net data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
-                    ResetNetAttempts();
+                    DiscardNetAttempts();
                     return;
                 }
+
+                if (!netRetryScheduled)
+                {
+                    netRetryScheduled = true;
+                    MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
+                    SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
+                }
                 
-                MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
-                scheduledNetAttempts++;
-                SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
                 return;
             }
             
@@ -152,14 +167,15 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 MUIDebug.Log($"{netSendingPlayer.displayName} has send network data on {gameObject.name}.", gameObject);
             }
             
-            ResetNetAttempts();
+            DiscardNetAttempts();
             ApplyNetData();
         }
         
         /// <summary>
-        /// Resets the number of attempts to apply network data which in return cancels all scheduled attempts.
+        /// Resets the current retry state.
+        /// Already scheduled retry callbacks will be disregarded when they fire.
         /// </summary>
-        protected void ResetNetAttempts()
+        protected void DiscardNetAttempts()
         {
             netAttempts = 0;
         }
@@ -167,9 +183,9 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         
         #region Sending Networked Data
         /// <summary>
-        /// Sends networked data to other players in the instance.
+        /// Attempts to send networked data immediately, or schedules a retry if sending is currently blocked.
         /// </summary>
-        protected void ScheduleSendNetworkedData()
+        protected void ScheduleSendingNetworkedData()
         {
             if (netSendScheduled)
                 return;
@@ -177,7 +193,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             if (NetworkCalling.GetQueuedEvents((IUdonEventReceiver)this, nameof(OnNetworkedDataReceived)) != 0)
             {
                 netSendScheduled = true;
-                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), 1);
+                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), NET_SEND_DELAY);
                 return;
             }
 
@@ -186,25 +202,17 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
-        /// Checks if there are any queued events and if not, tries to send the data, otherwise schedules a retry.
+        /// Handles delayed network data transmission retry.
         /// </summary>
         public void _SendNetDelayed()
         {
             netSendScheduled = false;
-            
-            if (NetworkCalling.GetQueuedEvents((IUdonEventReceiver)this, nameof(OnNetworkedDataReceived)) != 0)
-            {
-                netSendScheduled = true;
-                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), 1);
-                return;
-            }
-
-            TrySendNet();
+            ScheduleSendingNetworkedData();
         }
 
         /// <summary>
         /// Attempts to send network data to other players if the local player is allowed to send.
-        /// Usually only used internally, use <see cref="ScheduleSendNetworkedData"/> when possible.
+        /// Usually only used internally, use <see cref="ScheduleSendingNetworkedData"/> when possible.
         /// </summary>
         /// <returns>True if the network data was successfully sent; otherwise, false.</returns>
         protected virtual bool TrySendNet()
@@ -212,6 +220,9 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             if (!CanSendNet(localPlayer))
                 return false;
             
+            if (!localPlayer.IsOwner(gameObject)) 
+                Networking.SetOwner(localPlayer, gameObject);
+
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, data);
             return true;
         }
@@ -230,7 +241,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 return;
             if (!localPlayer.IsOwner(gameObject))
                 return;
-            if (!CanSendNet(localPlayer))
+            if (secureNetworking && !CanSendNet(localPlayer))
                 return;
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), player.playerId, data);
@@ -245,7 +256,10 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         protected virtual void TransferOwnershipIfNeeded()
         {
             if (!localPlayer.isMaster) return;
+            
             var owner = Networking.GetOwner(gameObject);
+            if (!Utilities.IsValid(owner))
+                return;
             if (CanSendNet(owner))
                 return;
             
@@ -256,7 +270,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             if (newOwner == null)
             {
                 MUIDebug.LogWarning($"Could not find a new player to transfer ownership of {gameObject.name} to. " +
-                                    $"Keeping current owner, but new players wont receive the current state." , gameObject);
+                                    $"Keeping current owner, but new players may not receive the current state." , gameObject);
                 return;
             }
             
