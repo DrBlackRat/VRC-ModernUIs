@@ -23,7 +23,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
     {
         [SerializeField] [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
         protected bool secureNetworking = true;
-        [SerializeField] [Range(1, 10)][Tooltip("Hoe long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
+        [SerializeField] [Range(1, 10)][Tooltip("How long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected float netRetryDelay = 5f;
         [SerializeField] [Range(1, 10)][Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected int maxNetRetryAttempts = 4;

@@ -20,8 +20,12 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private TextMeshProUGUI[] textMeshes;
         [Tooltip("Text Mesh Pro UGUI components to display the amount of users.")]
         [SerializeField] private TextMeshProUGUI[] counterTextMeshes;
+        
         [Tooltip("How the names will be displayed, either separated by a new line, a \", \" or a \" | \"")]
         [SerializeField] private NameSeparatorType nameSeparatorType = NameSeparatorType.NewLine;
+        [Tooltip("If the Name Separator Type is set to Custom, this will be used as the separator.")]
+        [SerializeField] private string customNameSeparator = "";
+        
         [Tooltip("If enabled duplicate names will be removed from the list.")]
         [SerializeField] private bool removeDuplicateNames = true;
         [Tooltip("If enabled the names will be sorted alphabetically.")]
@@ -196,6 +200,9 @@ namespace DrBlackRat.VRC.ModernUIs
                         case NameSeparatorType.VerticalBar:
                             stringBuilder.Append(" | ");
                             break;
+                        case NameSeparatorType.Custom:
+                            stringBuilder.Append(customNameSeparator);
+                            break;
                     }
                 } 
                 stringBuilder.Append(nameList[i].String);
@@ -247,6 +254,7 @@ namespace DrBlackRat.VRC.ModernUIs
         NewLine,
         Comma,
         VerticalBar,
+        Custom
     }
     
     internal enum EmptyBehaviour
