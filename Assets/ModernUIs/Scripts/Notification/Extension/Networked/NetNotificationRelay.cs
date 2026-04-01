@@ -20,6 +20,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Tooltip("If provided only people on the whitelist will be able to send notifications.")]
         [SerializeField] private WhitelistGetterBase whitelist;
         
+        [Tooltip("If enabled the notification will be shown in the notification history screen.")]
+        [SerializeField] private bool showInHistory = true;
+        [Tooltip("If enabled the player who send the notification will be shown as the  source of the notification.")]
+        [SerializeField] private bool showSendingPlayerAsSource = true;
+        
         [Tooltip("Images available for networked notifications, when sending provide the corresponding index that should be used.")]
         public Sprite[] images;
         [Tooltip("Audio Clips available for networked notifications, when sending provide the corresponding index that should be used.")]
@@ -125,14 +130,15 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [NetworkCallable(2)]
         public void ReceiveNetNotification(string notificationData)
         {
+            var callingPlayerName = NetworkCalling.CallingPlayer.displayName;
             if (!NetworkCalling.InNetworkCall)
             {
                 MUIDebug.LogWarning("Net Notification Relay | You are not allowed to call \"ReceiveNetNotification\" outside of a network call!");
                 return;
             }
-            if (hasWhitelist && !whitelist._IsPlayerWhitelisted(NetworkCalling.CallingPlayer))
+            if (hasWhitelist && !whitelist._IsPlayerWhitelisted(callingPlayerName))
             {
-                MUIDebug.LogWarning($"Net Notification Relay | {NetworkCalling.CallingPlayer.displayName} tried to send a notification but isn't allowed to!");
+                MUIDebug.LogWarning($"Net Notification Relay | {callingPlayerName} tried to send a notification but isn't allowed to!");
                 return;
             }
 
@@ -206,7 +212,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 width = (float)widthToken.Double;
             
             notificationManager._AddNotification(header, text, image, playSound, soundClip, soundVolume, duration,
-                width);
+                width, showInHistory, showSendingPlayerAsSource ? callingPlayerName : "");
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP

@@ -20,12 +20,21 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private TextMeshProUGUI[] textMeshes;
         [Tooltip("Text Mesh Pro UGUI components to display the amount of users.")]
         [SerializeField] private TextMeshProUGUI[] counterTextMeshes;
+        
         [Tooltip("How the names will be displayed, either separated by a new line, a \", \" or a \" | \"")]
         [SerializeField] private NameSeparatorType nameSeparatorType = NameSeparatorType.NewLine;
+        [Tooltip("If the Name Separator Type is set to Custom, this will be used as the separator.")]
+        [SerializeField] private string customNameSeparator = "";
+        
         [Tooltip("If enabled duplicate names will be removed from the list.")]
         [SerializeField] private bool removeDuplicateNames = true;
         [Tooltip("If enabled the names will be sorted alphabetically.")]
         [SerializeField] private bool sortNames = true;
+        
+        [Tooltip("How to behave when the received name list is empty.\n- Nothing: Just displays an empty string.\n- Hide: Hides the section.\n- EmptyString: Displays the string provided below.")]
+        [SerializeField] private EmptyBehaviour emptyBehaviour = EmptyBehaviour.EmptyString;
+        [Tooltip("Text to display if the name list is empty. Only used if Empty Behaviour is set to Empty String.")]
+        public string emptyString = "No names to display.";
         
         [Tooltip("If enabled the display will automatically update every Update Interval minutes. Otherwise it will only update the data once on Start.")]
         [SerializeField] private bool autoUpdate = true;
@@ -107,8 +116,16 @@ namespace DrBlackRat.VRC.ModernUIs
             receivedProductInfoCount = 0;
             gatheringCounter = productCount + whitelistCount;
             nameList.Clear();
+
+            if (gatheringCounter > 0)
+            {
+                _GetNextData();
+            }
+            else
+            {
+                _FinishGatheringNames();
+            }
             
-            _GetNextData();
         }
 
         public void _GetNextData()
@@ -183,6 +200,9 @@ namespace DrBlackRat.VRC.ModernUIs
                         case NameSeparatorType.VerticalBar:
                             stringBuilder.Append(" | ");
                             break;
+                        case NameSeparatorType.Custom:
+                            stringBuilder.Append(customNameSeparator);
+                            break;
                     }
                 } 
                 stringBuilder.Append(nameList[i].String);
@@ -192,12 +212,19 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _FinishUpdate()
         {
-            foreach (var textMesh in textMeshes)
-                textMesh.text = nameText;
-            
-            var counterText = nameList.Count.ToString();
-            foreach (var counterTextMesh in counterTextMeshes)
-                counterTextMesh.text = counterText;
+            gameObject.SetActive(true);
+            if (nameList.Count > 0 || emptyBehaviour == EmptyBehaviour.Nothing)
+            {
+                ApplyData(nameText, nameList.Count);
+            }
+            else if (emptyBehaviour == EmptyBehaviour.EmptyString)
+            {
+                ApplyData(emptyString, 0);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
             
             gatheringCounter = -1;
             MUIDebug.Log(LOGPrefix + $"Finished gathering names for {gameObject.name}!", gameObject);
@@ -210,6 +237,16 @@ namespace DrBlackRat.VRC.ModernUIs
             }
         }
         #endregion
+        
+        private void ApplyData(string text, int counter)
+        {
+            foreach (var textMesh in textMeshes)
+                textMesh.text = text;
+            
+            var counterText = counter.ToString();
+            foreach (var counterTextMesh in counterTextMeshes)
+                counterTextMesh.text = counterText;
+        }
     }
 
     internal enum NameSeparatorType
@@ -217,5 +254,13 @@ namespace DrBlackRat.VRC.ModernUIs
         NewLine,
         Comma,
         VerticalBar,
+        Custom
+    }
+    
+    internal enum EmptyBehaviour
+    {
+        Nothing,
+        Hide,
+        EmptyString,
     }
 }

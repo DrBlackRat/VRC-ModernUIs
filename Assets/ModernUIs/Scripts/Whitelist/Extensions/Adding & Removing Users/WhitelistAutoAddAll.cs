@@ -2,6 +2,9 @@
 using System;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+using UdonSharpEditor;
+#endif
 using UnityEngine;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -56,7 +59,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!enabled || !gameObject.activeInHierarchy)
                 return false;
 
-            return !whitelistIsSynced || (isAdmin && Networking.LocalPlayer.IsOwner(whitelist.gameObject));
+            return isAdmin && (!whitelistIsSynced || Networking.IsOwner(whitelist.gameObject));
         }
 
         public void _FillEntireWhitelist()
@@ -87,6 +90,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (whitelist?._IsSynced() == true)
                 whitelistIsSynced = true;
+            UdonSharpEditorUtility.CopyProxyToUdon(this);
         }
 #endif
     }

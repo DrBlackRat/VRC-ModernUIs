@@ -15,6 +15,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     {
         [Tooltip("Notification Manager / System used to actually display the notification.")]
         [SerializeField] private NotificationManager notificationManager;
+        [Tooltip("If enabled the notification will be shown in the notification history screen.")]
+        [SerializeField] private bool showInHistory = false;
+        [Tooltip("Name of the source of the notification. If left empty, none will be displayed.")]
+        [SerializeField] private string sourceName = "";
         
         [Tooltip("If provided only people on the whitelist will have send a notification from them.")]
         [SerializeField] private WhitelistGetterBase whitelist;
@@ -121,7 +125,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             if (!ShowPlayerCheck(player) || !canSeeNotification) return;
             
             var newMessage = message.Replace("{user}", player.displayName);
-            notificationManager._AddNotification(header, newMessage, image, playSound, soundClip, soundVolume, duration, width);
+            notificationManager._AddNotification(header, newMessage, image, playSound, soundClip, soundVolume, duration, width, showInHistory, sourceName);
         }
         
         private bool ShowPlayerCheck(VRCPlayerApi player)

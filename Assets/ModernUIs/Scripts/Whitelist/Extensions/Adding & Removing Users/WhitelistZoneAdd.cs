@@ -70,7 +70,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             zoneCollider.enabled = false;
             SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
         }
-
+        
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             var playerName = player.displayName;

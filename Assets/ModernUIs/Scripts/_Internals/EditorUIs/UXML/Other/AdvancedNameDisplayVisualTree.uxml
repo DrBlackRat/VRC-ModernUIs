@@ -8,19 +8,23 @@
     </ui:VisualElement>
     <ui:Foldout text="Settings" view-data-key="ANDSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
-            <ui:Label tabindex="-1" text="Text Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <ui:Label tabindex="-1" text="References" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="textMeshes" name="textMeshes" label="Text Meshes" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="counterTextMeshes" name="counterTextMeshes" label="Counter Text Meshes" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="nameSeparatorType" name="nameDisplayType" label="Separator Style" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
-            <uie:PropertyField binding-path="removeDuplicateNames" name="removeDuplicateNames" label="Remove Duplicates" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="sortNames" name="sortNames" label="Sort Names" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Text Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="nameSeparatorType" name="nameSeparatorType" label="Separator Style" style="font-size: 12px; -unity-font-style: normal; padding-top: 0;" />
+            <uie:PropertyField binding-path="customNameSeparator" name="customNameSeparator" label="Custom Name Seperator" style="font-size: 12px; -unity-font-style: normal; padding-top: 0;" />
+            <uie:PropertyField binding-path="removeDuplicateNames" name="removeDuplicateNames" label="Remove Duplicates" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
+            <uie:PropertyField binding-path="sortNames" name="sortNames" label="Sort Names" style="font-size: 12px; -unity-font-style: normal; padding-top: 0;" />
+            <uie:PropertyField binding-path="emptyBehaviour" name="emptyBehaviour" label="Empty Behaviour" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
+            <uie:PropertyField binding-path="emptyString" name="emptyString" label="Empty String Replacement" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Auto Update" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="autoUpdate" name="autoUpdate" label="Auto Update" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="updateInterval" name="updateInterval" label="Auto Update Interval" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="updateOnWhitelistChange" name="updateOnWhitelistChange" label="Update On Whitelist Change" style="font-size: 12px; -unity-font-style: normal; padding-top: 10px;" />
         </ui:VisualElement>
     </ui:Foldout>
-    <ui:Foldout text="Data Sources" view-data-key="ANDDataSources" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+    <ui:Foldout text="Data Sources" view-data-key="ANDDataSources" name="DataSources" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <uie:PropertyField binding-path="udonProducts" name="udonProducts" label="Udon Products" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="whitelists" name="whitelists" label="Whitelists" style="font-size: 12px; -unity-font-style: normal;" />
