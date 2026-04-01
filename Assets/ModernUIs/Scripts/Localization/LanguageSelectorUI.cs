@@ -18,6 +18,7 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
         // Set by callback script
         [HideInInspector] public LocalizedComponent[] localizedComponents;
         [HideInInspector] public CustomLocalizedComponent[] customLocalizedComponents;
+        [HideInInspector] public PlayerNameReplacer[] playerNameReplacers;
         
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
@@ -64,6 +65,14 @@ namespace DrBlackRat.VRC.ModernUIs.Localization
             {
                 if (customLocalizedComponent == null) continue;
                 customLocalizedComponent.ApplyLocalization(id);
+            }
+
+            foreach (var playerNameReplacer in playerNameReplacers)
+            {
+                if (playerNameReplacer == null) continue;
+                if (!playerNameReplacer.ReplaceOnLocalizationChange) continue;
+                
+                playerNameReplacer.ReplacePlayerName();
             }
         }
     }
