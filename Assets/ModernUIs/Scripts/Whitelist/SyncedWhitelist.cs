@@ -101,21 +101,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             if (autoRemoveOnLeave)
-            {
                 base._RemoveUser(displayName, null, null, false);
-            }
+
 
             if (autoRemoveOnAdderLeft || autoRemoveOnLeave)
-            {
-                if (Networking.IsOwner(gameObject) && canEdit)
-                {
-                    WhitelistUpdated();
-                }
-                else
-                {
-                    base.WhitelistUpdated();
-                }
-            }
+                base.WhitelistUpdated();
         }
 
         // Only for Admin Whitelist
@@ -209,12 +199,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 usersAddedBy = addedByResult.DataDictionary;
             }
+            else
+            {
+                MUIDebug.LogError($"Failed to deserialize addedBy data on {gameObject.name}! Data may be malformed, skipping applying net data.", gameObject);
+                return;
+            }
             
             if (VRCJson.TryDeserializeFromJson(serializedNetWhitelist, out DataToken whitelistResult))
             {
                 whitelist = whitelistResult.DataList;
-                base.WhitelistUpdated(); // Calls base class to skip the added access checks
             }
+            else
+            {
+                MUIDebug.LogError($"Failed to deserialize whitelist data on {gameObject.name}! Data may be malformed, skipping applying net data.", gameObject);
+                return;
+            }
+            
+            base.WhitelistUpdated(); // Calls base class to skip the added access checks
         }
         #endregion
         
@@ -253,7 +254,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             TryApplyNetData();
         }
 
-/// <summary>
+        /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Handles receiving network data after a retry.
         /// </summary>
