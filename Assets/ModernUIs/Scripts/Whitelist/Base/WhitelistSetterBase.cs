@@ -23,22 +23,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         public override bool _IsReadOnly() => false;
 
         #region Adding
-
         /// <summary>
-        /// Adds a specific user to the white list. Skips duplicate username.
+        /// Adds a specific user to the whitelist. Skips duplicate username.
         /// </summary>
         /// <param name="username">The username to add to the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
-        public virtual void _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if the user was added, false if they were already on the whitelist.</returns>
+        public virtual bool _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
             if (whitelist.Contains(username))
             {
                 if (debugLogging)
-                    MUIDebug.LogWarning($"Whitelist Manager: Could not add {username} to the whitelist as they are already on it!");
-                return;
+                    MUIDebug.LogWarning($"Could not add {username} to {gameObject.name} as they are already on it!", gameObject);
+                return false;
             }
             
             if (usersAddedBy.TryGetValue(localName, out DataToken added))
@@ -56,9 +56,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             whitelist.Add(username);
             
             if (debugLogging)
-                MUIDebug.Log($"Whitelist Manager: Added {username} to the whitelist.");
+                MUIDebug.Log($"Added {username} to {gameObject.name}.", gameObject);
             if (notify) 
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return true;
         }
         
         /// <summary>
@@ -68,21 +69,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
-        public virtual void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if all users were added, false if any were already on the whitelist or the provided list was invalid / empty.</returns>
+        public virtual bool _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (newUsernames == null || newUsernames.Count == 0) return;
+            if (newUsernames == null || newUsernames.Count == 0) return false;
 
+            bool allAdded = true;
             for (int i = 0; i < newUsernames.Count; i++)
             {
                 var token = newUsernames[i];
                 if (token.IsNull) continue;
                 
                 var username = token.String;
-                _AddUser(username, null, null,false);
+                if (!_AddUser(username, null, null,false))
+                    allAdded = false;
             }
             if (notify) 
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return allAdded;
         }
         
         /// <summary>
@@ -92,17 +97,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
-        public virtual void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if all users were added, false if any were already on the whitelist or the provided array was invalid / empty.</returns>
+        public virtual bool _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (newUsernames == null || newUsernames.Length == 0) return;
+            if (newUsernames == null || newUsernames.Length == 0) return false;
 
+            bool allAdded = true;
             foreach (var username in newUsernames)
             {
-                _AddUser(username, null, null, false);
+                if (!_AddUser(username, null, null, false))
+                    allAdded = false;
             }
             if (notify) 
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return allAdded;
         }
         
         /// <summary>
@@ -112,37 +121,42 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
-        public virtual void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
+         /// <returns>True if all users were added, false if any were already on the whitelist or the provided list was invalid / empty.</returns>
+        public virtual bool _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (newPlayers == null || newPlayers.Length == 0) return;
+            if (newPlayers == null || newPlayers.Length == 0) return false;
 
+            bool allAdded = true;
             foreach (var player in newPlayers)
             {
-                _AddUser(player.displayName, null, null, false);
+                if (!_AddUser(player.displayName, null, null, false))
+                    allAdded = false;
             }
             if (notify) 
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return allAdded;
         }
         #endregion
 
         #region Removing
 
         /// <summary>
-        /// Removes a specific user from the white list.
+        /// Removes a specific user from the whitelist.
         /// </summary>
         /// <param name="username">The username to remove from the whitelist.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was removed. Defaults to true.</param>
-        public virtual void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if the user was removed, false if they were not on the whitelist.</returns>
+        public virtual bool _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
             if (!whitelist.Contains(username))
             {
                 if (debugLogging)
-                    MUIDebug.LogWarning($"Whitelist Manager: Could not remove {username} from the whitelist as they are not on it!");
-                return;
+                    MUIDebug.LogWarning($"Could not remove {username} from the {gameObject.name} as they are not on it!", gameObject);
+                return false;
             }
             
             if (usersAddedBy.TryGetValue(localName, out DataToken added))
@@ -166,12 +180,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             whitelist.Remove(username);
             
             if (debugLogging)
-                MUIDebug.Log($"Whitelist Manager: Removed {username} from the whitelist.");
+                MUIDebug.Log($"Removed {username} from {gameObject.name}.", gameObject);
             if (notify) 
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return true;
         }
 
-        // I do not like doing this as this is slow but it *should* only be an edge case, and it only ever runs on one client
+        // I do not like doing this as this is slow, but it *should* only be an edge case, and it only ever runs on one client
         private void TryRemoveOther(string username)
         {
             string adder = _GetWhoAdded(username);
@@ -187,7 +202,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                     }
                     else
                     {
-                        MUIDebug.LogError($"Whitelist Manager: Unexpected Error when trying to remove user!");
+                        MUIDebug.LogError($"Unexpected Error when trying to remove {username} from {gameObject.name}!", gameObject);
                     }
                 }
             }
@@ -200,21 +215,25 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that users were removed. Defaults to true.</param>
-        public virtual void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if all users were removed, false if any were not on the whitelist or the provided list was invalid / empty.</returns>
+        public virtual bool _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (usernamesToRemove == null || usernamesToRemove.Count == 0) return;
+            if (usernamesToRemove == null || usernamesToRemove.Count == 0) return false;
 
+            bool allRemoved = true;
             for (int i = 0; i < usernamesToRemove.Count; i++)
             {
                 var token = usernamesToRemove[i];
                 if (token.IsNull) continue;
                 
                 var username = token.String;
-                _RemoveUser(username, null, null, false);
+                if (!_RemoveUser(username, null, null, false))
+                    allRemoved = false;
             }
             if (notify)
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return allRemoved;
         }
         
         /// <summary>
@@ -224,17 +243,21 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">>Optional | If other scripts should be notified that users were removed. Defaults to true</param>
-        public virtual void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
+        /// <returns>True if all users were removed, false if any were not on the whitelist or the provided array was invalid / empty.</returns>
+        public virtual bool _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (usernamesToRemove == null || usernamesToRemove.Length == 0) return;
+            if (usernamesToRemove == null || usernamesToRemove.Length == 0) return false;
 
+            bool allRemoved = true;
             foreach (var username in usernamesToRemove)
             {
-                _RemoveUser(username, null, null, false);
+                if (!_RemoveUser(username, null, null, false))
+                    allRemoved = false;
             }
             if (notify)
                 WhitelistUpdated(senderBehaviour, senderEvent);
+            return allRemoved;
         }
 
         /// <summary>
@@ -278,7 +301,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 whitelist = new DataList();
                 _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
-                
             }
             WhitelistUpdated(senderBehaviour, senderEvent);
         }
@@ -303,24 +325,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         
         #region Added By
         /// <summary>
-        /// Removed everyone that was added by the provided user.
+        /// Removes everyone added by the provided user.
         /// </summary>
         /// <param name="username">Display Name of the user who you want to remove ever added user of.</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was removed. Defaults to true.</param>
-        public virtual void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null,
+        /// <returns> True if users added by the provided player were found and removed, false otherwise.</returns>
+        public virtual bool _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
             if (usersAddedBy.TryGetValue(username, out DataToken added))
             {
                 _RemoveUsers(added.DataList.DeepClone(), senderBehaviour, senderEvent, notify);
+                return true;
             }
-            else
-            {
-                if (debugLogging)
-                    MUIDebug.LogWarning($"Whitelist Manager: Could not remove users, as {username} has not added any yet!");
-            }
+            return false;
         }
         #endregion
     }
