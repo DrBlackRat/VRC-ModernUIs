@@ -19,6 +19,8 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [SerializeField] private Collider[] colliders;
         [Tooltip("Canvases to enable / disable.")]
         [SerializeField] private Canvas[] canvases;
+        [Tooltip("Canvas Groups to set the alpha to 1 / 0 of.")]
+        [SerializeField] private CanvasGroup[] canvasGroups;
         [Tooltip("Pickups to change the Pickupable state of.")]
         [SerializeField] private VRC_Pickup[] pickups;
 
@@ -109,6 +111,15 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                 {
                     if (pickup == null) continue;
                     pickup.pickupable = state;
+                }
+            }
+
+            if (canvasGroups != null && canvasGroups.Length != 0)
+            {
+                foreach (var canvasGroup in canvasGroups)
+                {
+                    if (canvasGroup == null) continue;
+                    canvasGroup.alpha = state ? 1 : 0;
                 }
             }
             
