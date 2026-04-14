@@ -12,8 +12,8 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class TabSwitcher : UdonSharpBehaviour
     {
-        [SerializeField] private VRCTweenEase transitionEasing = VRCTweenEase.OutBack;
-        [SerializeField] private float transitionDuration = 0.75f;
+        [SerializeField] private AnimationCurve transitionCurve;
+        [SerializeField] private float transitionDuration = 1f;
         
         [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
         [SerializeField] private GameObject tabPrefab;
@@ -21,7 +21,11 @@ namespace DrBlackRat.VRC.ModernUIs
         private int prevTabID = 0;
         private int currentTabID = 0;
         private RectTransform tabsTransform;
+        
         private VRCTweenHandle tween;
+        private Vector2 startPos;
+        private Vector2 endPos;
+        [NonSerialized] public float transitionValue;
 
         [HideInInspector] public int tabId;
         [HideInInspector] public Tab[] tabs;
@@ -47,9 +51,19 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
+            startPos = tabsTransform.anchoredPosition;
+            endPos = tabs[currentTabID]._GetPos();
+            
             VRCTween.Kill(tween);
-            tween = VRCTween.TweenAnchorPos(tabsTransform, tabs[currentTabID]._GetPos(), transitionDuration, transitionEasing);
+            tween = VRCTween.TweenFloat(0f, 1f, transitionDuration, (IUdonEventReceiver)this, nameof(transitionValue), nameof(_Transitioning), VRCTweenEase.Linear);
             VRCTween.OnComplete(tween, (IUdonEventReceiver)this ,nameof(_TransitionFinished));
+        }
+
+        public void _Transitioning()
+        {
+            var smoothedTransitionValue = transitionCurve.Evaluate(transitionValue);
+            tabsTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothedTransitionValue);
+            Debug.LogError($"Transitioning from {prevTabID} to {currentTabID}!\nTrans Value: {transitionValue} Smooth Trans Value: {smoothedTransitionValue}");
         }
 
         public void _TransitionFinished()
