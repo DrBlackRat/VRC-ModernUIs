@@ -1,9 +1,10 @@
-﻿
-using System;
+﻿using System;
 using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -11,19 +12,16 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class TabSwitcher : UdonSharpBehaviour
     {
-        [SerializeField] private AnimationCurve animationCurve;
-        [SerializeField] private float movementDuration;
+        [SerializeField] private VRCTweenEase transitionEasing = VRCTweenEase.OutBack;
+        [SerializeField] private float transitionDuration = 0.75f;
         
         [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
         [SerializeField] private GameObject tabPrefab;
-        
-        private bool animate;
-        private float animationElapsedTime;
-        private Vector2 oldTabPos;
+
         private int prevTabID = 0;
         private int currentTabID = 0;
-        
         private RectTransform tabsTransform;
+        private VRCTweenHandle tween;
 
         [HideInInspector] public int tabId;
         [HideInInspector] public Tab[] tabs;
@@ -40,12 +38,6 @@ namespace DrBlackRat.VRC.ModernUIs
 
         public void _SwitchTab()
         {
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
-        }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
-        {
             prevTabID = currentTabID;
             currentTabID = tabId;
             
@@ -55,40 +47,19 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
-            animate = true;
-            animationElapsedTime = 0f;
-            oldTabPos = tabs[prevTabID]._GetPos();
-            _CustomUpdate();
-        }
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI(oldTabPos, currentTabID);
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI(Vector2 startPos, int endTabID)
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
-            // Set Selector Position
-            var pos = tabsTransform.anchoredPosition;
-            tabsTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, tabs[endTabID]._GetPos(), smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
-            {
-                for (int i = 0; i < tabs.Length; i++)
-                {
-                    if (i == endTabID) continue;
-                    tabs[i]._Hide();
-                }
-                
-                animationElapsedTime = 0f;
-                animate = false;
-            }
+            VRCTween.Kill(tween);
+            tween = VRCTween.TweenAnchorPos(tabsTransform, tabs[currentTabID]._GetPos(), transitionDuration, transitionEasing);
+            VRCTween.OnComplete(tween, (IUdonEventReceiver)this ,nameof(_TransitionFinished));
         }
 
+        public void _TransitionFinished()
+        {
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (i == currentTabID) continue;
+                tabs[i]._Hide();
+            }
+        }
         #region Adding Tabs
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
