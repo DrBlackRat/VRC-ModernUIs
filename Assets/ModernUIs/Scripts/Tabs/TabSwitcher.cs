@@ -55,7 +55,15 @@ namespace DrBlackRat.VRC.ModernUIs
             endPos = tabs[currentTabID]._GetPos();
             
             VRCTween.Kill(tween);
-            tween = VRCTween.TweenFloat(0f, 1f, transitionDuration, (IUdonEventReceiver)this, nameof(transitionValue), nameof(_Transitioning), VRCTweenEase.Linear);
+            tween = VRCTween.TweenFloat(
+                0f, 
+                1f, 
+                transitionDuration, 
+                (IUdonEventReceiver)this, 
+                nameof(transitionValue), 
+                nameof(_Transitioning), 
+                VRCTweenEase.Linear
+                );
             VRCTween.OnComplete(tween, (IUdonEventReceiver)this ,nameof(_TransitionFinished));
         }
 
@@ -63,7 +71,6 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             var smoothedTransitionValue = transitionCurve.Evaluate(transitionValue);
             tabsTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothedTransitionValue);
-            Debug.LogError($"Transitioning from {prevTabID} to {currentTabID}!\nTrans Value: {transitionValue} Smooth Trans Value: {smoothedTransitionValue}");
         }
 
         public void _TransitionFinished()
