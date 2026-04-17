@@ -53,14 +53,14 @@ namespace DrBlackRat.VRC.ModernUIs
             if (canvasGroup)
                 canvasGroup.alpha = 0;
             if (disableTabWhenHidden)
-                gameObject.SetActive(true);
+                gameObject.SetActive(false);
         }
         public void _Show()
         {
             if (canvasGroup)
                 canvasGroup.alpha = 1;
             if (disableTabWhenHidden)
-                gameObject.SetActive(false);
+                gameObject.SetActive(true);
         }
     }
 }
