@@ -1,6 +1,7 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -12,8 +13,10 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class TabSwitcher : UdonSharpBehaviour
     {
-        [SerializeField] private AnimationCurve transitionCurve;
-        [SerializeField] private float transitionDuration = 1f;
+        [FormerlySerializedAs("transitionCurve")] 
+        [SerializeField] private AnimationCurve animationCurve;
+        [FormerlySerializedAs("transitionDuration")] 
+        [SerializeField] private float movementDuration = 1f;
         
         [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
         [SerializeField] private GameObject tabPrefab;
@@ -21,11 +24,6 @@ namespace DrBlackRat.VRC.ModernUIs
         private int prevTabID = 0;
         private int currentTabID = 0;
         private RectTransform tabsTransform;
-        
-        private VRCTweenHandle tween;
-        private Vector2 startPos;
-        private Vector2 endPos;
-        [NonSerialized] public float transitionValue;
 
         [HideInInspector] public int tabId;
         [HideInInspector] public Tab[] tabs;
@@ -51,26 +49,10 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
-            startPos = tabsTransform.anchoredPosition;
-            endPos = tabs[currentTabID]._GetPos();
-            
-            VRCTween.Kill(tween);
-            tween = VRCTween.TweenFloat(
-                0f, 
-                1f, 
-                transitionDuration, 
-                (IUdonEventReceiver)this, 
-                nameof(transitionValue), 
-                nameof(_Transitioning), 
-                VRCTweenEase.Linear
-                );
-            VRCTween.OnComplete(tween, (IUdonEventReceiver)this ,nameof(_TransitionFinished));
-        }
-
-        public void _Transitioning()
-        {
-            var smoothedTransitionValue = transitionCurve.Evaluate(transitionValue);
-            tabsTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothedTransitionValue);
+            gameObject.KillAllOnTarget();
+            tabsTransform.TweenAnchorPos(tabs[currentTabID]._GetPos(), movementDuration, VRCTweenEase.None) 
+                .SetEase(animationCurve) 
+                .OnComplete(this ,nameof(_TransitionFinished));
         }
 
         public void _TransitionFinished()

@@ -1,9 +1,11 @@
 ﻿using System;
+using DG.Tweening;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -34,8 +36,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             get => selectedColor;
             set => selectedColor = value;
         }
-    
-
+        
         [SerializeField] protected AnimationCurve smoothingCurve;
         [SerializeField] protected float movementDuration;
         
@@ -61,31 +62,17 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         protected RectTransform parentTransform;
         
-        protected bool animate;
-        protected float animationElapsedTime;
-
-        protected Vector2 prevButtonScale;
-        protected float prevButtonPixelPerUnit;
-        protected Vector2 prevIconPos;
-        protected Color prevIconColor;
-        protected Vector2 prevTextPos;
-        protected Color prevTextColor;
-        
-        protected Vector2 newButtonScale;
-        protected float newButtonPixelPerUnit;
-        protected Vector2 newIconPos;
-        protected Color newIconColor;
-        protected Vector2 newTextPos;
-        protected Color newTextColor;
-        
         // Provided by main script
         protected SelectorUI selectorUI;
         protected int buttonId;
-
+        
         protected bool locked;
+        
         // Only used by versions that implement it
         protected bool selectable = true;
         protected bool selected;
+
+        [NonSerialized] public float buttonPixelPerUnit;
 
         /// <summary>
         /// If this selector UI button can be selected. Can be false due to CE or Whitelists.
@@ -121,8 +108,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             
             // Reset
             UpdateInteractable();
-            UpdateUIState(false);
-            UpdateUI(1f);
+            ResetUI();
         }
 
         public virtual void _SetDefaults(
@@ -197,18 +183,26 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         public void _UpdateSelected(bool newSelected)
         {
             selected = newSelected;
-            UpdateUIState(selected);
             
-            // UI Animation
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            gameObject.KillAllOnTarget();
+            if (buttonTransform) buttonTransform.TweenSizeDelta(newSelected ? buttonSelectedScale : buttonNormalScale, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (iconTransform) iconTransform.TweenAnchorPos(newSelected ? iconSelectedPos : iconNormalPos, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (icon) icon.TweenGraphicColor(newSelected ? selectedColor : normalColor, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (textTransform) textTransform.TweenAnchorPos(newSelected ? textSelectedPos : textNormalPos, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (graphic) graphic.TweenGraphicColor(newSelected ? selectedColor : normalColor, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (buttonImage) VRCTween.TweenFloat(buttonImage.pixelsPerUnitMultiplier, newSelected ? buttonSelectedPixelPerUnit : buttonNormalPixelPerUnit, movementDuration,this , nameof(buttonPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
+                .SetEase(smoothingCurve);
         }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
+
+        public void _TransitionRounding()
         {
-            animate = true;
-            animationElapsedTime = 0f;
-            _CustomUpdate();
+            if (buttonImage == null) return;
+            buttonImage.pixelsPerUnitMultiplier = buttonPixelPerUnit;
         }
 
         public virtual void _UpdateLocked(bool newLocked)
@@ -221,66 +215,17 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             button.interactable = !locked && selectable;
         }
-        
-        #endregion
-        #region UI Animation
-        protected void UpdateUIState(bool newSelected)
-        {
-            if (buttonTransform) prevButtonScale = buttonTransform.sizeDelta;
-            if (buttonImage) prevButtonPixelPerUnit = buttonImage.pixelsPerUnitMultiplier;
-            if (iconTransform) prevIconPos = iconTransform.anchoredPosition;
-            if (icon) prevIconColor = icon.color;
-            if (textTransform) prevTextPos = textTransform.anchoredPosition;
-            if (graphic) prevTextColor = graphic.color;
 
-            if (newSelected)
-            {
-                newButtonScale = buttonSelectedScale;
-                newButtonPixelPerUnit = buttonSelectedPixelPerUnit;
-                newIconPos = iconSelectedPos;
-                newIconColor = selectedColor;
-                newTextPos = textSelectedPos;
-                newTextColor = selectedColor;
-            }
-            else
-            {
-                newButtonScale = buttonNormalScale;
-                newButtonPixelPerUnit = buttonNormalPixelPerUnit;
-                newIconPos = iconNormalPos;
-                newIconColor = normalColor;
-                newTextPos = textNormalPos;
-                newTextColor = normalColor;
-            }
-        }
-        
-        public void _CustomUpdate()
+        protected virtual void ResetUI()
         {
-            if (!animate) return;
-            AnimateUI();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        protected void AnimateUI()
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            UpdateUI(smoothingCurve.Evaluate(percentageComplete));
-            if (percentageComplete >= 1f)
-            {
-                animationElapsedTime = 0f;
-                animate = false;
-            }
-        }
-        protected void UpdateUI(float transition)
-        {
-            if (icon) icon.color = Color.LerpUnclamped(prevIconColor, newIconColor, transition);
-            if (graphic) graphic.color = Color.LerpUnclamped(prevTextColor, newTextColor, transition);
-            
-            if (buttonTransform) buttonTransform.sizeDelta = Vector2.LerpUnclamped(prevButtonScale, newButtonScale, transition);
-            if (buttonImage) buttonImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevButtonPixelPerUnit, newButtonPixelPerUnit, transition);
-            if (iconTransform) iconTransform.anchoredPosition = Vector2.LerpUnclamped(prevIconPos, newIconPos, transition);
-            if (textTransform) textTransform.anchoredPosition = Vector2.LerpUnclamped(prevTextPos, newTextPos, transition);
+            if (buttonImage) buttonTransform.sizeDelta = buttonNormalScale;
+            if (iconTransform) iconTransform.anchoredPosition = iconNormalPos;
+            if (icon) icon.color = normalColor;
+            if (textTransform) textTransform.anchoredPosition = textNormalPos;
+            if (graphic) graphic.color = normalColor;
+            if (buttonImage) buttonImage.pixelsPerUnitMultiplier = buttonNormalPixelPerUnit;
         }
         #endregion
+
     }
 }

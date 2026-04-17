@@ -32,17 +32,17 @@ public class TweenAnimCurveTest : UdonSharpBehaviour
 
     public void StartAnim()
     {
-        VRCTween.Kill(tween);
+        tween.Kill();
         tween = VRCTween.TweenFloat(
             0f, 
             01f, 
             duration, 
-            (IUdonEventReceiver)this, 
+            this, 
             nameof(tweenValue), 
             nameof(AnimUpdate), 
             VRCTweenEase.Linear
             );
-        VRCTween.OnComplete(tween, (IUdonEventReceiver)this, nameof(AnimComplete));
+        tween.OnComplete(this, nameof(AnimComplete));
     }
 
     public void AnimUpdate()
