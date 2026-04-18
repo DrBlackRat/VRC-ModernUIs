@@ -211,7 +211,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             if (!showingNotification) 
                 return false;
 
-            _FinishAnimation();
+            showingNotification = false;
+            ResetAnimation();
             return true;
         }
         #endregion
@@ -278,13 +279,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         private void StartAnimation()
         {
-            gameObject.KillAllOnTarget();
+            ResetAnimation(true);
             
-            notificationObject.SetActive(true);
-            countdownSlider.value = 1;
-            notificationTransform.localPosition = hiddenPos;
-            notificationTransform.localScale = hiddenScale;
-
             countdownSlider.TweenSliderValue(0f, currentShownDuration + startAnimDuration + endAnimDuration, VRCTweenEase.Linear);
             notificationTransform.gameObject.TweenLocalPosition(shownPos, startAnimDuration, VRCTweenEase.None)
                 .SetEase(smoothingCurve);
@@ -292,10 +288,20 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 .SetEase(smoothingCurve);
             VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
         }
+        
+        private void ResetAnimation(bool objectEnabled = false)
+        {
+            gameObject.KillAllOnTarget();
+            
+            notificationObject.SetActive(objectEnabled);
+            countdownSlider.value = 1;
+            notificationTransform.localPosition = hiddenPos;
+            notificationTransform.localScale = hiddenScale;
+        }
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
-        /// Startes the hiding animation for the notification.
+        /// Starts the hiding animation for the notification.
         /// </summary>
         public void _EndAnimation()
         {
@@ -314,11 +320,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// </summary>
         public void _FinishAnimation()
         {
-            gameObject.KillAllOnTarget();
-            
             showingNotification = false;
-            notificationObject.SetActive(false);
-                
+            ResetAnimation();
             PlayNextNotification();
         }
     }
