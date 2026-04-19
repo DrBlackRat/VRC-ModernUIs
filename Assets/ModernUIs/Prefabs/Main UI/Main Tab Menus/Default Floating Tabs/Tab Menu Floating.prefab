@@ -137,13 +137,17 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2522280897286633099}
-  canvasObj: {fileID: 6299008815351387340}
-  hidingCanvases:
+  canvases:
+  - {fileID: 7671473443514650949}
+  canvasGroupsToHide:
   - {fileID: 2605164281963699176}
   - {fileID: 8064094032148973590}
+  canvasGroupsToShow:
+  - {fileID: 6845870363864763473}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 6845870363864763473}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -176,7 +180,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &2522280897286633099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,7 +663,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 843040077855615021}
-  transitionCurve:
+  animationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -701,7 +705,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  transitionDuration: 1
+  movementDuration: 1
   tabPrefab: {fileID: 5171818851526165392, guid: 0855ab028c52c9440ac4c4e58f9e4bbc,
     type: 3}
   tabId: 0
@@ -1685,6 +1689,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2660650836228011691}
+  disableTabWhenHidden: 0
 --- !u!114 &2660650836228011691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1824,6 +1829,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 8397622844024886421}
+  disableTabWhenHidden: 0
 --- !u!114 &8397622844024886421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,6 +1969,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6348998429702058176}
+  disableTabWhenHidden: 0
 --- !u!114 &6348998429702058176
 MonoBehaviour:
   m_ObjectHideFlags: 0

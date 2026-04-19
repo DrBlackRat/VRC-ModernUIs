@@ -74,6 +74,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2627530224385068166}
+  disableTabWhenHidden: 0
 --- !u!114 &2627530224385068166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,6 +566,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6535626892557225544}
+  disableTabWhenHidden: 0
 --- !u!114 &6535626892557225544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -737,6 +739,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4572981558832015874}
+  disableTabWhenHidden: 0
 --- !u!114 &4572981558832015874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,6 +912,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5751250024432974758}
+  disableTabWhenHidden: 0
 --- !u!114 &5751250024432974758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1293,7 +1297,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2092333351331992588}
-  transitionCurve:
+  animationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1335,7 +1339,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  transitionDuration: 1
+  movementDuration: 1
   tabPrefab: {fileID: 5719720510695526568, guid: 7a776fae03b02c74fb9d4edce0b3fc1f,
     type: 3}
   tabId: 0
@@ -1472,13 +1476,17 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 3816764527828216019}
-  canvasObj: {fileID: 3584226104496256221}
-  hidingCanvases:
+  canvases:
+  - {fileID: 9108579932224235196}
+  canvasGroupsToHide:
   - {fileID: 8285523932532353864}
   - {fileID: 1399829017978693736}
+  canvasGroupsToShow:
+  - {fileID: 2705730019176415333}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 2705730019176415333}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -1511,7 +1519,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &3816764527828216019
 MonoBehaviour:
   m_ObjectHideFlags: 0

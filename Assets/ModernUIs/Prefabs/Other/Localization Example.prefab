@@ -56,12 +56,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 7527401877107989450}
-  canvasObj: {fileID: 6859905824462946968}
-  hidingCanvases:
+  canvases:
+  - {fileID: 2505099147184560932}
+  canvasGroupsToHide:
   - {fileID: 8902772128358817304}
+  canvasGroupsToShow:
+  - {fileID: 2811993760044017394}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 2811993760044017394}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -94,7 +98,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &7527401877107989450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +255,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &5376208052896102983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,6 +635,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4924567861752796343}
+  disableTabWhenHidden: 0
 --- !u!114 &4924567861752796343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1064,8 +1070,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!114 &4346538658234889654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1276,8 +1280,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
-  fancyWhitelistNameDisplay: {fileID: 0}
 --- !u!114 &7542067446581782632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1924,6 +1926,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &109186260897143650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2156,7 +2159,7 @@ PrefabInstance:
     - target: {fileID: 1885490190388381214, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
       propertyPath: m_fontSize
-      value: 12.5
+      value: 10.7
       objectReference: {fileID: 0}
     - target: {fileID: 1885490190388381214, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
@@ -2344,7 +2347,7 @@ PrefabInstance:
     - target: {fileID: 4449676100525527457, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
       propertyPath: m_fontSize
-      value: 8.95
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 4449676100525527457, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
@@ -2389,7 +2392,7 @@ PrefabInstance:
     - target: {fileID: 4640559423371590660, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
       propertyPath: m_fontSize
-      value: 8.95
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 4640559423371590660, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
@@ -2450,7 +2453,7 @@ PrefabInstance:
     - target: {fileID: 5624160313800159383, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
       propertyPath: m_fontSize
-      value: 12.5
+      value: 10.7
       objectReference: {fileID: 0}
     - target: {fileID: 5624160313800159383, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
@@ -2649,7 +2652,7 @@ PrefabInstance:
     - target: {fileID: 7164371118445116503, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
       propertyPath: m_fontSize
-      value: 8.95
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 7164371118445116503, guid: 0e595872dee6e7c479aa8825491dc4c5,
         type: 3}
@@ -2974,6 +2977,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &5142705931605589057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3080,6 +3084,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &5054905616498680115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3144,6 +3149,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &1246212105793866038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3220,6 +3226,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &2537184243617565883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3296,6 +3303,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &2002402618791496927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3372,6 +3380,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &5418159069574811975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3460,6 +3469,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &8721448253656468445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3536,6 +3546,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &6363506940014866843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3600,6 +3611,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &6000870380641330833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4292,6 +4304,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &2292598824216407363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4387,6 +4400,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_text
       value: German
+      objectReference: {fileID: 0}
+    - target: {fileID: 5311619603521606963, guid: 80cbcd79dfe5bdd46bdf52990cb21d93,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 7.15
       objectReference: {fileID: 0}
     - target: {fileID: 5872343278906155835, guid: 80cbcd79dfe5bdd46bdf52990cb21d93,
         type: 3}
@@ -4608,6 +4626,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8108415338670217832, guid: 80cbcd79dfe5bdd46bdf52990cb21d93,
         type: 3}
+    - target: {fileID: 8219493581570716479, guid: 80cbcd79dfe5bdd46bdf52990cb21d93,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 10.7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4868,6 +4891,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &883203361495183278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4932,6 +4956,7 @@ MonoBehaviour:
   materials: []
   audioSource: {fileID: 0}
   audioClips: []
+  gameObjects: []
 --- !u!114 &173229660779625047
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 35630e38b4e5ffb40b44ec5348b4333f, type: 2}
-  m_Color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 0.9019608}
+  m_Color: {r: 0.15, g: 0.15, b: 0.15, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -111,7 +111,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 0
   graphic: {fileID: 1592965288181712075}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
 --- !u!1 &522431788175636735
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +300,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   themeColor: 9
   graphic: {fileID: 247732159678074367}
+  overrideAlpha: 0
+  alpha: 0
   selectorUI: {fileID: 0}
+  selectorUIButton: {fileID: 0}
 --- !u!1 &714113102327018433
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,12 +593,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 320656338017533204}
-  canvasObj: {fileID: 8518685250002831263}
-  hidingCanvases:
+  canvases:
+  - {fileID: 1299907931992253697}
+  canvasGroupsToHide:
   - {fileID: 5988828029510665005}
+  canvasGroupsToShow:
+  - {fileID: 2577759517083688202}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 2577759517083688202}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -625,7 +635,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &320656338017533204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -860,6 +870,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   removeLayoutComponents: 1
+  layoutGroupsToIgnore: []
+  layoutElementsToIgnore: []
+  contentSizeFittersToIgnore: []
 --- !u!114 &2491088591474620222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1023,6 +1036,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965155379063554273}
     m_Modifications:
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.9490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 347816774073157586, guid: c40b8ef81e4f497438ca32fa7c11ac61,
         type: 3}
       propertyPath: m_fontSize
@@ -1204,6 +1237,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965155379063554273}
     m_Modifications:
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.9490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 347816774073157586, guid: c40b8ef81e4f497438ca32fa7c11ac61,
         type: 3}
       propertyPath: m_fontSize
@@ -1385,6 +1438,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1965155379063554273}
     m_Modifications:
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.9490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 320688047564154617, guid: c40b8ef81e4f497438ca32fa7c11ac61,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.078431375
+      objectReference: {fileID: 0}
     - target: {fileID: 347816774073157586, guid: c40b8ef81e4f497438ca32fa7c11ac61,
         type: 3}
       propertyPath: m_fontSize

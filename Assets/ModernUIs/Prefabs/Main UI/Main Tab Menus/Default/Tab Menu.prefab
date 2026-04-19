@@ -56,13 +56,17 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1295017697340353359}
-  canvasObj: {fileID: 4351605186289639857}
-  hidingCanvases:
+  canvases:
+  - {fileID: 3200215282442885581}
+  canvasGroupsToHide:
   - {fileID: 1917429617562032904}
   - {fileID: 4457145378864734884}
+  canvasGroupsToShow:
+  - {fileID: 302604406437178262}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 302604406437178262}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -95,7 +99,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &1295017697340353359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,6 +545,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 3316368212126262650}
+  disableTabWhenHidden: 0
 --- !u!114 &3316368212126262650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -886,7 +891,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1308438294190960477}
-  transitionCurve:
+  animationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -928,7 +933,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  transitionDuration: 1
+  movementDuration: 1
   tabPrefab: {fileID: 5719720510695526568, guid: 7a776fae03b02c74fb9d4edce0b3fc1f,
     type: 3}
   tabId: 0
@@ -1385,6 +1390,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 6136606775854796256}
+  disableTabWhenHidden: 0
 --- !u!114 &6136606775854796256
 MonoBehaviour:
   m_ObjectHideFlags: 0

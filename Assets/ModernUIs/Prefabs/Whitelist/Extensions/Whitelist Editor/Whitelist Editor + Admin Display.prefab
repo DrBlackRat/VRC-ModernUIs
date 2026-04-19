@@ -56,12 +56,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 4096071652915305436}
-  canvasObj: {fileID: 2077603319513232163}
-  hidingCanvases:
+  canvases:
+  - {fileID: 4389122298917271607}
+  canvasGroupsToHide:
   - {fileID: 308590135986174006}
+  canvasGroupsToShow:
+  - {fileID: 5462356282373706298}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 5462356282373706298}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -94,7 +98,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &4096071652915305436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,6 +240,7 @@ MonoBehaviour:
   usernameTransform: {fileID: 2187189121021422897}
   countDisplay: {fileID: 8101115043913889346}
   whitelist: {fileID: 0}
+  autoSort: 1
 --- !u!114 &1575812230655316410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +285,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
 --- !u!1 &5420782820536142433
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +474,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
 --- !u!1 &6802642058254983806
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +589,6 @@ MonoBehaviour:
   alpha: 0
   selectorUI: {fileID: 0}
   selectorUIButton: {fileID: 0}
-  whitelistEditorBase: {fileID: 0}
 --- !u!1001 &1643179991955678569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1015,6 +1017,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 512697697608567891, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
+    - target: {fileID: 1171059013430324935, guid: d6af6b9c519d2b745a61839233004cfe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 1171059013430324935, guid: d6af6b9c519d2b745a61839233004cfe,
+        type: 3}
     - target: {fileID: 1562248714024970396, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -1254,12 +1262,12 @@ PrefabInstance:
     - target: {fileID: 5644786740308808962, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_Size
-      value: 0.99998707
+      value: 0.999977
       objectReference: {fileID: 0}
     - target: {fileID: 5644786740308808962, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6278334752919869722, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
@@ -1370,8 +1378,14 @@ PrefabInstance:
     - target: {fileID: 8180443326856560028, guid: d6af6b9c519d2b745a61839233004cfe,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0029101735
+      value: 0.0036142818
       objectReference: {fileID: 0}
+    - target: {fileID: 8925840674939058243, guid: d6af6b9c519d2b745a61839233004cfe,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8925840674939058243, guid: d6af6b9c519d2b745a61839233004cfe,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -1411,15 +1425,15 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!1 &2077603319513232163 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6278334752919869722, guid: d6af6b9c519d2b745a61839233004cfe,
-    type: 3}
-  m_PrefabInstance: {fileID: 5473000579876088377}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &4211645044567480229 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8180443326856560028, guid: d6af6b9c519d2b745a61839233004cfe,
+    type: 3}
+  m_PrefabInstance: {fileID: 5473000579876088377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!223 &4389122298917271607 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 8583098371302019598, guid: d6af6b9c519d2b745a61839233004cfe,
     type: 3}
   m_PrefabInstance: {fileID: 5473000579876088377}
   m_PrefabAsset: {fileID: 0}
