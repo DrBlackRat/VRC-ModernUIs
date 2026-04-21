@@ -13,7 +13,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistLogicCombiner : WhitelistGetterBase
     {
-        [Tooltip("Logic Mode that should be used to combine / evaluate the Whitelists.\nRequire All: Requires the user to be on all provided whitelists.\nRequire Exactly One: Requires the user to only be on one whitelist and not any more.")]
+        [Tooltip("Logic Mode that should be used to combine / evaluate the Whitelists." +
+                 "\nRequire All: Requires the user to be on all provided whitelists." +
+                 "\nRequire Exactly One: Requires the user to only be on one whitelist and not any more." + 
+                 "\nSubtract: Requires exactly 2 whitelists, will subtract the last from the first whitelist.")]
         [SerializeField] private WhitelistLogicMode logicMode;
         [Tooltip("Whitelists that should be combined / evaluated using the selected Logic Mode.")]
         [SerializeField] protected WhitelistGetterBase[] whitelists;
@@ -21,6 +24,12 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         protected override void Start()
         {
             base.Start();
+
+            if (logicMode == WhitelistLogicMode.Subtract && whitelists.Length != 2)
+            {
+                MUIDebug.LogError($"Whitelist Logic Combiner requires exactly 2 whitelists in subtract mode.", gameObject);
+                return;   
+            }
             
             foreach (var whitelist in whitelists)
             {
@@ -47,6 +56,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                     break;
                 case WhitelistLogicMode.RequireExactlyOne:
                     RequireExactlyOne();
+                    break;
+                case WhitelistLogicMode.Subtract:
+                    Subtract();
                     break;
                 default:
                     MUIDebug.LogError($"Whitelist Logic Combiner: Unknown Logic Mode {logicMode}!", gameObject);
@@ -101,6 +113,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             WhitelistUpdated();
         }
+
+        private void Subtract()
+        {
+            if (whitelists == null || whitelists.Length != 2) return;
+            
+            var firstList = whitelists[0]._GetUsersAsList();
+            var secondList = whitelists[1]._GetUsersAsList();
+
+            for (int i = 0; i < firstList.Count; i++)
+            {
+                var userToken = firstList[i];
+                if (secondList.Contains(userToken))
+                    continue;
+                whitelist.Add(userToken);
+            }
+            WhitelistUpdated();
+        }
         
         public override DataList _GetUsersAddedBy(string username)
         {
@@ -127,6 +156,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     public enum WhitelistLogicMode
     {
         RequireAll,     // AND
-        RequireExactlyOne // XOR
+        RequireExactlyOne, // XOR
+        Subtract
     }
 }
