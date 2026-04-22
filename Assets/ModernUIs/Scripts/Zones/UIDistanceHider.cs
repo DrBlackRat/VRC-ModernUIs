@@ -51,6 +51,10 @@ namespace DrBlackRat.VRC.ModernUIs
         [FormerlySerializedAs("movementDuration")] 
         private float transitionDuration;
 
+        private VRCTweenHandle[] hideTweenHandles;
+        private VRCTweenHandle[] showTweenHandles;
+        private VRCTweenHandle finishEventHandle;
+        
         private Collider[] canvasColliders;
         private Collider zoneCollider;
 
@@ -63,8 +67,32 @@ namespace DrBlackRat.VRC.ModernUIs
                 if (!canvases[i]) continue;
                 canvasColliders[i] = canvases[i].GetComponent<Collider>();
             }
+
+            SetupTween();
             SetAllObjectsHidden(true);
             SetAllCanvasGroupsHidden(true);
+        }
+
+        private void SetupTween()
+        {
+            showTweenHandles = new VRCTweenHandle[canvasGroupsToShow.Length];
+            hideTweenHandles = new VRCTweenHandle[canvasGroupsToHide.Length];
+
+            for (int i = 0; i < showTweenHandles.Length; i++)
+            {
+                if (!canvasGroupsToShow[i]) continue;
+                showTweenHandles[i] = canvasGroupsToShow[i].TweenFade(0f, transitionDuration, VRCTweenEase.None)
+                    .SetEase(transitionCurve);
+                showTweenHandles[i].Pause();
+            }
+
+            for (int j = 0; j < hideTweenHandles.Length; j++)
+            {
+                if (!canvasGroupsToHide[j]) continue;
+                hideTweenHandles[j] = canvasGroupsToHide[j].TweenFade(0f, transitionDuration, VRCTweenEase.None)
+                    .SetEase(transitionCurve);
+                hideTweenHandles[j].Pause();
+            }
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
@@ -159,37 +187,36 @@ namespace DrBlackRat.VRC.ModernUIs
         #region Animate Alpha
         private void AnimateAllCanvasGroupsHidden(bool isHidden)
         {
-            gameObject.KillAllOnTarget();
-
-            AnimateCanvasGroupHidden(canvasGroupsToHide, isHidden);
-            AnimateCanvasGroupHidden(canvasGroupsToShow, !isHidden);
-            VRCTween.DelayedCall(this, isHidden ? nameof(_FinishHideTransition) : nameof(_FinishShowTransition), transitionDuration);
+            AnimateCanvasGroupHidden(hideTweenHandles, canvasGroupsToHide, isHidden);
+            AnimateCanvasGroupHidden(showTweenHandles, canvasGroupsToShow, !isHidden);
+            
+            finishEventHandle.Kill();
+            finishEventHandle = VRCTween.DelayedCall(this, isHidden ? nameof(_FinishHideTransition) : nameof(_FinishShowTransition), transitionDuration);
         }
         
-        private void AnimateCanvasGroupHidden(CanvasGroup[] targets, bool isHidden)
+        private void AnimateCanvasGroupHidden(VRCTweenHandle[] handles, CanvasGroup[] canvasGroups, bool isHidden)
         {
             var alpha = isHidden ? 0f : 1f;
-            foreach (var canvasGroup in targets)
+            for (int i = 0; i < canvasGroups.Length; i++)
             {
-                if (!canvasGroup) continue;
-
+                if (!canvasGroups[i]) 
+                    continue;
+                
                 if (alsoDisableCanvasGroupObjects)
-                    canvasGroup.gameObject.SetActive(true);
-
-                canvasGroup.TweenCanvasGroupFade(alpha, transitionDuration, VRCTweenEase.None)
-                    .SetEase(transitionCurve);
+                    canvasGroups[i].gameObject.SetActive(true);
+                
+                handles[i].ChangeEndValue(alpha, true)
+                    .Restart();
             }
         }
         
         public void _FinishHideTransition()
         {
-            gameObject.KillAllOnTarget();
             SetAllCanvasGroupsHidden(true);
         }
         
         public void _FinishShowTransition()
         {
-            gameObject.KillAllOnTarget();
             SetAllCanvasGroupsHidden(false);
         }
         #endregion

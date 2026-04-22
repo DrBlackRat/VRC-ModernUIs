@@ -1,6 +1,7 @@
 ﻿using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -16,49 +17,23 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private AnimationCurve smoothingCurve;
         [SerializeField] private float movementDuration;
         
-        private bool animate;
-        private float animationElapsedTime;
-        
-        private Vector2 prevSeparatorPos;
-        private Vector2 nextSeparatorPos;
+        private VRCTweenHandle tweenHandle;
+        private bool isTweenSetup;
 
         [HideInInspector] public int selectionId;
 
         public void _SelectionChanged()
         {
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
-        }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
-        {
-            prevSeparatorPos = recTransform.anchoredPosition;
-            nextSeparatorPos = positions[selectionId];
-            animate = true;
-            animationElapsedTime = 0f;
-            _CustomUpdate();
-        }
-        
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI(prevSeparatorPos, nextSeparatorPos);
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI(Vector2 startPos, Vector2 endPos)
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
-            // Set Selector Position
-            recTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, endPos, smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
+            if (!isTweenSetup)
             {
-                animationElapsedTime = 0f;
-                animate = false;
+                tweenHandle = recTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                tweenHandle.Pause();
+                isTweenSetup = true;
             }
+            
+            tweenHandle.ChangeEndValue(positions[selectionId], true)
+                .Restart();
         }
     }
 }

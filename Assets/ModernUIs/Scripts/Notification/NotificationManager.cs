@@ -57,6 +57,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private bool showingNotification;
         private float currentShownDuration;
         private int currentShownId = -1;
+
+        private VRCTweenHandle sliderTweenHandle;
+        private VRCTweenHandle posTweenHandle;
+        private VRCTweenHandle scaleTweenHandle;
+        private VRCTweenHandle eventTweenHandle;
         
         // Notification Data:
         private DataDictionary notifications = new DataDictionary(); 
@@ -92,6 +97,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             notificationHeader = notificationHeaderObj.GetComponent<TextMeshProUGUI>();
             notificationText = notificationTextObj.GetComponent<TextMeshProUGUI>();
+            SetupTween();
         }
 
         public override void PostLateUpdate()
@@ -101,7 +107,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         #endregion
         
         # region API
-
         /// <summary>
         /// Adds a notification to the notification queue, if multiple are added they will play one after the other.
         /// </summary>
@@ -210,9 +215,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (!showingNotification) 
                 return false;
-
+            
+            PauseAllTween();
             showingNotification = false;
-            ResetAnimation();
+            notificationObject.SetActive(false);
             return true;
         }
         #endregion
@@ -277,41 +283,68 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             }
         }
 
-        private void StartAnimation()
+        #region Animation
+        private void SetupTween()
         {
-            ResetAnimation(true);
+            sliderTweenHandle = countdownSlider.TweenValue(0f, 0f, VRCTweenEase.Linear);
+            sliderTweenHandle.Pause();
             
-            countdownSlider.TweenSliderValue(0f, currentShownDuration + startAnimDuration + endAnimDuration, VRCTweenEase.Linear);
-            notificationTransform.gameObject.TweenLocalPosition(shownPos, startAnimDuration, VRCTweenEase.None)
+            posTweenHandle = notificationTransform.gameObject.TweenLocalPosition(new Vector3(), 0f, VRCTweenEase.None)
                 .SetEase(smoothingCurve);
-            notificationTransform.gameObject.TweenScale(shownScale, startAnimDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
-        }
-        
-        private void ResetAnimation(bool objectEnabled = false)
-        {
-            gameObject.KillAllOnTarget();
+            posTweenHandle.Pause();
             
-            notificationObject.SetActive(objectEnabled);
-            countdownSlider.value = 1;
-            notificationTransform.localPosition = hiddenPos;
-            notificationTransform.localScale = hiddenScale;
+            scaleTweenHandle = notificationTransform.gameObject.TweenScale(new Vector3(), 0f, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            scaleTweenHandle.Pause();
+            
+            eventTweenHandle = VRCTween.DelayedCall(this, "", 0f);
+            eventTweenHandle.Pause();
         }
 
+        private void PauseAllTween()
+        {
+            sliderTweenHandle.Pause();
+            posTweenHandle.Pause();
+            scaleTweenHandle.Pause();
+            eventTweenHandle.Kill();
+        }
+        
+        private void StartAnimation()
+        {
+            notificationObject.SetActive(true);
+            
+            countdownSlider.value = 1;
+            sliderTweenHandle.SetDuration(currentShownDuration + startAnimDuration + endAnimDuration)
+                .Restart();
+            
+            notificationTransform.localPosition = hiddenPos;
+            posTweenHandle.SetDuration(startAnimDuration)
+                .ChangeEndValue(shownPos, true)
+                .Restart();
+            
+            notificationTransform.localScale = hiddenScale;
+            scaleTweenHandle.SetDuration(startAnimDuration)
+                .ChangeEndValue(shownScale, true)
+                .Restart();
+            
+            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
+        }
+        
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Starts the hiding animation for the notification.
         /// </summary>
         public void _EndAnimation()
         {
-            gameObject.KillAllOnTarget();
+            posTweenHandle.SetDuration(endAnimDuration)
+                .ChangeEndValue(hiddenPos, true)
+                .Restart();
+            scaleTweenHandle.SetDuration(endAnimDuration)
+                .ChangeEndValue(hiddenScale, true)
+                .Restart();
             
-            notificationTransform.gameObject.TweenLocalPosition(hiddenPos, endAnimDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            notificationTransform.gameObject.TweenScale(hiddenScale, endAnimDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            VRCTween.DelayedCall(this, nameof(_FinishAnimation), endAnimDuration);
+            eventTweenHandle.Kill();
+            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_FinishAnimation), endAnimDuration);
         }
 
         /// <summary>
@@ -320,10 +353,14 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// </summary>
         public void _FinishAnimation()
         {
+            eventTweenHandle.Kill();
+            
             showingNotification = false;
-            ResetAnimation();
+            notificationObject.SetActive(false);
+            
             PlayNextNotification();
         }
+        #endregion
     }
 }
 

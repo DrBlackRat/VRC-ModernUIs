@@ -1,11 +1,8 @@
-﻿using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VRC.SDK3.Components;
-using VRC.SDKBase;
-using VRC.Udon;
-using VRC.Udon.Common.Interfaces;
+
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -21,9 +18,10 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
         [SerializeField] private GameObject tabPrefab;
 
-        private int prevTabID = 0;
-        private int currentTabID = 0;
+        private int prevTabID;
+        private int currentTabID;
         private RectTransform tabsTransform;
+        private VRCTweenHandle tweenHandle;
 
         [HideInInspector] public int tabId;
         [HideInInspector] public Tab[] tabs;
@@ -31,11 +29,20 @@ namespace DrBlackRat.VRC.ModernUIs
         private void Start()
         {
             tabsTransform = GetComponent<RectTransform>();
-            // Hide Tabs on Start
+            SetupTween();
+            
             foreach (var tab in tabs)
             {
                 tab._Hide();
             }
+        }
+
+        private void SetupTween()
+        {
+            tweenHandle = tabsTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
+                .SetEase(animationCurve)
+                .OnComplete(this, nameof(_TransitionFinished));
+            tweenHandle.Pause();
         }
 
         public void _SwitchTab()
@@ -49,10 +56,8 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
-            gameObject.KillAllOnTarget();
-            tabsTransform.TweenAnchorPos(tabs[currentTabID]._GetPos(), movementDuration, VRCTweenEase.None) 
-                .SetEase(animationCurve) 
-                .OnComplete(this ,nameof(_TransitionFinished));
+            tweenHandle.ChangeEndValue(tabs[currentTabID]._GetPos(), true);
+            tweenHandle.Restart();
         }
 
         public void _TransitionFinished()

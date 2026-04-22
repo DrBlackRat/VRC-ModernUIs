@@ -72,7 +72,14 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected bool selectable = true;
         protected bool selected;
 
-        [NonSerialized] public float buttonPixelPerUnit;
+        [NonSerialized] public float buttonPixelPerUnit; // Set by Tweening
+        private VRCTweenHandle buttonSizeTween;
+        private VRCTweenHandle iconPosTween;
+        private VRCTweenHandle iconColorTween;
+        private VRCTweenHandle textPosTween;
+        private VRCTweenHandle graphicColorTween;
+        private VRCTweenHandle buttonImagePixelsPerUnitTween;
+        
 
         /// <summary>
         /// If this selector UI button can be selected. Can be false due to CE or Whitelists.
@@ -107,8 +114,49 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             buttonId = newButtonId;
             
             // Reset
+            SetupTween();
             UpdateInteractable();
             ResetUI();
+        }
+
+        private void SetupTween()
+        {
+            if (buttonTransform)
+            {
+                buttonSizeTween = buttonTransform.TweenSizeDelta(new Vector2(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                buttonSizeTween.Pause();
+            }
+            if (iconTransform)
+            {
+                iconPosTween = iconTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                iconPosTween.Pause();
+            }
+            if (icon)
+            {
+                iconColorTween = icon.TweenColor(new Color(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                iconColorTween.Pause();
+            }
+            if (textTransform)
+            {
+                textPosTween = textTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                textPosTween.Pause();
+            }
+            if (graphic)
+            {
+                graphicColorTween = graphic.TweenColor(new Color(), movementDuration, VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                graphicColorTween.Pause();
+            }
+            if (buttonImage)
+            {
+                buttonImagePixelsPerUnitTween = VRCTween.TweenFloat(buttonNormalPixelPerUnit, 0f, movementDuration,this , nameof(buttonPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
+                    .SetEase(smoothingCurve);
+                buttonImagePixelsPerUnitTween.Pause();
+            }
         }
 
         public virtual void _SetDefaults(
@@ -184,19 +232,37 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             selected = newSelected;
             
-            gameObject.KillAllOnTarget();
-            if (buttonTransform) buttonTransform.TweenSizeDelta(newSelected ? buttonSelectedScale : buttonNormalScale, movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (iconTransform) iconTransform.TweenAnchorPos(newSelected ? iconSelectedPos : iconNormalPos, movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (icon) icon.TweenGraphicColor(newSelected ? selectedColor : normalColor, movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (textTransform) textTransform.TweenAnchorPos(newSelected ? textSelectedPos : textNormalPos, movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (graphic) graphic.TweenGraphicColor(newSelected ? selectedColor : normalColor, movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (buttonImage) VRCTween.TweenFloat(buttonImage.pixelsPerUnitMultiplier, newSelected ? buttonSelectedPixelPerUnit : buttonNormalPixelPerUnit, movementDuration,this , nameof(buttonPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
-                .SetEase(smoothingCurve);
+            
+            if (buttonTransform)
+            {
+                buttonSizeTween.ChangeEndValue(newSelected ? buttonSelectedScale : buttonNormalScale, true)
+                    .Restart();
+            }
+            if (iconTransform)
+            {
+                iconPosTween.ChangeEndValue(newSelected ? iconSelectedPos : iconNormalPos, true)
+                    .Restart();
+            }
+            if (icon)
+            {
+                iconColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
+                    .Restart();
+            }
+            if (textTransform)
+            {
+                textPosTween.ChangeEndValue(newSelected ? textSelectedPos : textNormalPos, true)
+                    .Restart();
+            }
+            if (graphic)
+            {
+                graphicColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
+                    .Restart();
+            }
+            if (buttonImage)
+            {
+                buttonImagePixelsPerUnitTween.ChangeEndValue(newSelected ? buttonSelectedPixelPerUnit : buttonNormalPixelPerUnit, true)
+                    .Restart();
+            }
         }
 
         public void _TransitionRounding()
