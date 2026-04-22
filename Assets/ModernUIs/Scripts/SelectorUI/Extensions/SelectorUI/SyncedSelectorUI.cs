@@ -61,7 +61,6 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         }
         
         #region Abstract Methods
-
         /// <summary>
         /// Checks if the provided player can send networked data.
         /// </summary>

@@ -21,13 +21,26 @@ namespace DrBlackRat.VRC.ModernUIs.Base
     /// </summary>
     public abstract class SecureNetworkingBase : UdonSharpBehaviour
     {
-        [SerializeField] [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
+        [SerializeField] 
+        [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
         protected bool secureNetworking = true;
-        [SerializeField] [Range(1, 10)][Tooltip("How long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
+        
+        [SerializeField] 
+        [Range(1, 10)]
+        [Tooltip("How long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected float netRetryDelay = 5f;
-        [SerializeField] [Range(1, 10)][Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
+        
+        [SerializeField] 
+        [Range(1, 10)]
+        [Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected int maxNetRetryAttempts = 4;
-        [SerializeField] [Tooltip("By default only retries or failed attempts are logged. If enabled, other things like successful attempts, updating a newly joined player, etc are logged as well.")]
+        
+        [SerializeField]
+        [Tooltip("If enabled, the networked data will be disregarded if the new network owner is not whitelisted. (Only used by Secure Networking)")]
+        protected bool requireOwnerWhitelisted = false;
+        
+        [SerializeField] 
+        [Tooltip("By default only retries or failed attempts are logged. If enabled, other things like successful attempts, updating a newly joined player, etc are logged as well.")]
         protected bool extraLogging = true;
 
         protected string data; // Local example data
@@ -228,7 +241,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         }
         #endregion
 
-        #region Ownership & Joining
+        #region Ownership, Joining & Leaving
         /// <summary>
         /// Sends the current networked state to a newly joined player.
         /// </summary>
@@ -277,6 +290,42 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             MUIDebug.Log($"Found allowed player \"{newOwner.displayName}\" to transfer ownership of {gameObject.name} to.", gameObject);
             Networking.SetOwner(newOwner, gameObject);
         }
+
+        /*
+        Currently not implemented, clients could force the owner to be someone else, become the master and spam this to force reset stuff...
+        Ideally, the current owner / whitelisted player would send this, but unfortunately, you can't send a Network Event when leaving the instance.
+        
+        I may have to locally check if a whitelisted player is still present if the current owner leaves instead though that could get expensive....
+        -> Do *NOT* check if the owner is that other player though, since that is being set by the master and might have a delay.
+         
+        /// <summary>
+        /// Checks if the current owner is allowed to send data, if not resets the state back to default.
+        /// </summary>
+        [NetworkCallable(NET_MAX_QUEUE_SIZE)]
+        public void DisregardDataIfNeeded()
+        {
+            if (!secureNetworking || !requireOwnerWhitelisted)
+                return;
+            
+            if (!NetworkCalling.InNetworkCall)
+            {
+                MUIDebug.LogError($"DisregardDataIfNeeded can only be called as a network event! ({gameObject.name})", gameObject);
+                return;
+            }
+
+            if (!NetworkCalling.CallingPlayer.isMaster)
+            {
+                MUIDebug.LogError($"{NetworkCalling.CallingPlayer.displayName} is not the Network Master but tried to call \"DisregardDataIfNeeded\" on {gameObject.name}!");
+                return;
+            }
+
+            if (!CanSendNet(Networking.GetOwner(gameObject)))
+               return;
+            
+            MUIDebug.LogWarning($"{NetworkCalling.CallingPlayer.displayName} is currently the Network Owner of {gameObject.name}, but they aren't whitelisted! Resetting back to default data.", gameObject);
+            // Apply the default data here
+        }
+        */
         #endregion
     }
     
