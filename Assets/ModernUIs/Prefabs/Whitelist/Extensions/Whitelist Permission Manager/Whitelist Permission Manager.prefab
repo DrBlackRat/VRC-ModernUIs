@@ -690,12 +690,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 1853626033287464710}
-  canvasObj: {fileID: 1721577291816724390}
-  hidingCanvases:
+  canvases:
+  - {fileID: 7596150934889400795}
+  canvasGroupsToHide:
   - {fileID: 5939763600323024325}
+  canvasGroupsToShow:
+  - {fileID: 2075458211243701372}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 2075458211243701372}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -728,7 +732,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &1853626033287464710
 MonoBehaviour:
   m_ObjectHideFlags: 0

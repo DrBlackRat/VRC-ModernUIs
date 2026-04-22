@@ -1,6 +1,8 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -31,20 +33,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         // Provided by Main Script
         private SelectorUI selectorUI;
         
-        // Animation
-        private bool animate;
-        private float animationElapsedTime;
-
-        private SelectorUIButton selectorUIButton;
-        
-        private Vector3 prevPos;
-        private Vector3 newPos;
-
-        private Vector2 prevSize;
-        private Vector2 newSize;
-
-        private float prevCorner;
-        private float newCorner;
+        [NonSerialized] public float selectorPixelPerUnit;
 
         public void _Setup(SelectorUI newSelectorUI)
         {
@@ -74,51 +63,18 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         public void _MoveTo(SelectorUIButton button)
         {
-            selectorUIButton = button;
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            gameObject.KillAllOnTarget();
+            gameObject.TweenLocalPosition(button.LocalPos(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (!fixedSize) selectorTransform.TweenSizeDelta(button.SelectedSize(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            if (!fixedRounding) VRCTween.TweenFloat(selectorImage.pixelsPerUnitMultiplier, button.SelectedCornerRadius(), movementDuration,this , nameof(selectorPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
+                .SetEase(smoothingCurve);
         }
         
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
+        public void _TransitionRounding()
         {
-            animate = true;
-            animationElapsedTime = 0f;
-            
-            prevPos = selectorTransform.localPosition;;
-            newPos = selectorUIButton.LocalPos();
-
-            prevSize = selectorTransform.sizeDelta;
-            newSize = selectorUIButton.SelectedSize();
-
-            prevCorner = selectorImage.pixelsPerUnitMultiplier;
-            newCorner = selectorUIButton.SelectedCornerRadius();
-            
-            _CustomUpdate();
-        }
-        
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI()
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
-
-            selectorTransform.localPosition = Vector3.LerpUnclamped(prevPos, newPos, smoothPercentageComplete);
-            if (!fixedSize) selectorTransform.sizeDelta = Vector2.LerpUnclamped(prevSize, newSize, smoothPercentageComplete);
-            if (!fixedRounding) selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
-            {
-                animationElapsedTime = 0f;
-                animate = false;
-            }
+            selectorImage.pixelsPerUnitMultiplier = selectorPixelPerUnit;
         }
     }
 }

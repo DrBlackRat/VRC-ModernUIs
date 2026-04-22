@@ -5,6 +5,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using VRC.SDK3.Components;
 using VRC.SDK3.Data;
 using VRC.SDK3.Rendering;
 using VRC.SDKBase;
@@ -56,7 +57,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private bool showingNotification;
         private float currentShownDuration;
         private int currentShownId = -1;
-        private float elapsedTime;
         
         // Notification Data:
         private DataDictionary notifications = new DataDictionary(); 
@@ -80,11 +80,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         #region Unity & VRChat Events
         private void OnDisable()
         {
-            elapsedTime = 0f;
-            showingNotification = false;
-            notificationObject.SetActive(false);
-            
             _ClearNotifications();
+            _HideShownNotification();
         }
 
         private void Start()
@@ -95,12 +92,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             notificationHeader = notificationHeaderObj.GetComponent<TextMeshProUGUI>();
             notificationText = notificationTextObj.GetComponent<TextMeshProUGUI>();
-        }
-
-        private void Update()
-        {
-            if (showingNotification)
-                Animate();
         }
 
         public override void PostLateUpdate()
@@ -219,13 +210,14 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         {
             if (!showingNotification) 
                 return false;
-            
-            elapsedTime = currentShownDuration + startAnimDuration;
+
+            showingNotification = false;
+            ResetAnimation();
             return true;
         }
         #endregion
 
-        public void NotificationQueueChanged()
+        private void NotificationQueueChanged()
         {
             PlayNextNotification();
         }
@@ -271,16 +263,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             currentShownDuration = notificationDict[DurationKey].Float;
             canvasRootTransform.sizeDelta = new Vector2(notificationDict[WidthKey].Float, rootCanvasSizeY);
             
-            // Reset
-            notificationObject.SetActive(true);
-            countdownSlider.value = 1;
-            notificationTransform.localPosition = hiddenPos;
-            notificationTransform.localScale = hiddenScale;
-            
-            // Animation
             showingNotification = true;
-            elapsedTime = 0f;
-            
+            StartAnimation();
             _RemoveFirstNotification();
         }
 
@@ -293,39 +277,52 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             }
         }
 
-        private void Animate()
+        private void StartAnimation()
         {
-            elapsedTime += Time.deltaTime;
-            var totalPercentageComplete = elapsedTime / (currentShownDuration + startAnimDuration + endAnimDuration);
-
-            if (elapsedTime <= startAnimDuration) // Start
-            {
-                var percentageComplete = elapsedTime / startAnimDuration;
-                ApplyTransformLerp(smoothingCurve.Evaluate(percentageComplete));
-                
-            } else if (elapsedTime >= currentShownDuration + startAnimDuration) // End
-            {
-                var percentageComplete = (elapsedTime - currentShownDuration - startAnimDuration) / endAnimDuration;
-                ApplyTransformLerp(smoothingCurve.Evaluate(1f - percentageComplete));
-            }
+            ResetAnimation(true);
             
-            countdownSlider.value = 1f - totalPercentageComplete;
-
-            if (totalPercentageComplete >= 1)
-            {
-                elapsedTime = 0f;
-                currentShownId = -1;
-                showingNotification = false;
-                notificationObject.SetActive(false);
-                
-                PlayNextNotification();
-            }
+            countdownSlider.TweenSliderValue(0f, currentShownDuration + startAnimDuration + endAnimDuration, VRCTweenEase.Linear);
+            notificationTransform.gameObject.TweenLocalPosition(shownPos, startAnimDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            notificationTransform.gameObject.TweenScale(shownScale, startAnimDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
+        }
+        
+        private void ResetAnimation(bool objectEnabled = false)
+        {
+            gameObject.KillAllOnTarget();
+            
+            notificationObject.SetActive(objectEnabled);
+            countdownSlider.value = 1;
+            notificationTransform.localPosition = hiddenPos;
+            notificationTransform.localScale = hiddenScale;
         }
 
-        private void ApplyTransformLerp(float percentageComplete)
+        /// <summary>
+        /// INTERNAL | DO NOT CALL MANUALLY
+        /// Starts the hiding animation for the notification.
+        /// </summary>
+        public void _EndAnimation()
         {
-            notificationTransform.localPosition = Vector3.LerpUnclamped(hiddenPos, shownPos, percentageComplete);
-            notificationTransform.localScale = Vector3.LerpUnclamped(hiddenScale, shownScale, percentageComplete);
+            gameObject.KillAllOnTarget();
+            
+            notificationTransform.gameObject.TweenLocalPosition(hiddenPos, endAnimDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            notificationTransform.gameObject.TweenScale(hiddenScale, endAnimDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            VRCTween.DelayedCall(this, nameof(_FinishAnimation), endAnimDuration);
+        }
+
+        /// <summary>
+        /// INTERNAL | DO NOT CALL MANUALLY
+        /// Ends the hiding animation for the notification and triggers the next notification.
+        /// </summary>
+        public void _FinishAnimation()
+        {
+            showingNotification = false;
+            ResetAnimation();
+            PlayNextNotification();
         }
     }
 }

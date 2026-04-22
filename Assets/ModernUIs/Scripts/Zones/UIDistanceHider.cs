@@ -1,9 +1,11 @@
 ﻿using System;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDKBase;
 using VRC.Udon;
 using UnityEngine.UI;
+using VRC.SDK3.Components;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -11,61 +13,80 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class UIDistanceHider : UdonSharpBehaviour
     {
-        [Tooltip("Root Game Object of the UI, used to grab the UI Collider.")]
-        [SerializeField] private GameObject canvasObj;
-        [Tooltip("Canvas Group that will be hidden when Player is outside of the trigger.")]
-        [SerializeField] private CanvasGroup[] hidingCanvases;
+        // Canvases
+        [SerializeField] 
+        [FormerlySerializedAs("canvasObj"), FormerlySerializedAs("canvasObjs")]
+        [Tooltip("Canvases that will have their collider disabled when hidden. Disables being able to click on them.")]
+        private Canvas[] canvases;
         
-        [Tooltip("GameObjects that will be disabled when Player is outside of the trigger.")]
-        [SerializeField] private GameObject[] objectsToDisable;
-        [Tooltip("Canvas Group that will be shown when Player is outside of the trigger. Use full for things like a distance hidden info message.")]
-        [SerializeField] private CanvasGroup infoCanvas;
+        [SerializeField] 
+        [FormerlySerializedAs("hidingCanvases"), FormerlySerializedAs("canvasesToHide")]
+        [Tooltip("Canvas Groups that will have their alpha set to 0 when hidden. Used for hiding the UI Elements")]
+        private CanvasGroup[] canvasGroupsToHide;
         
-        [SerializeField] private AnimationCurve smoothingCurve;
-        [SerializeField] private float movementDuration;
-        
-        private bool animate;
-        private float animationElapsedTime;
-        
-        private float prevHiddenAlpha;
-        private float newHiddenAlpha;
+        [SerializeField] 
+        [FormerlySerializedAs("infoCanvas"), FormerlySerializedAs("canvasesToShow")]
+        [Tooltip("Canvas Groups that will have their alpha set to 1 when hidden. Useful for info messages about it being distance hidden.")]
+        private CanvasGroup[] canvasGroupsToShow;
 
-        private float prevShownAlpha;
-        private float newShownAlpha;
+        [SerializeField]
+        [Tooltip("If enabled, the Game Objects the Canvas Groups are on will also be disabled / enabled depending on if they are hidden.\nOnly enable this if you know what you are doing! This might break syncing, etc.")]
+        private bool alsoDisableCanvasGroupObjects;
         
+        // GameObjects
+        [SerializeField]
+        [Tooltip("GameObjects that will be disabled when hidden.")]
+        private GameObject[] objectsToDisable;
+        
+        [SerializeField] 
+        [Tooltip("GameObjects that will be enabled when hidden.")]
+        private GameObject[] objectsToEnable;
+        
+        // Animation
+        [SerializeField] 
+        [FormerlySerializedAs("smoothingCurve")] 
+        private AnimationCurve transitionCurve;
+        
+        [SerializeField] 
+        [FormerlySerializedAs("movementDuration")] 
+        private float transitionDuration;
+
+        private Collider[] canvasColliders;
         private Collider zoneCollider;
-
-        private bool hidden;
-
-        private bool hasInfoCanvas;
-
-        private Collider uiCollider;
 
         private void Start()
         {
-            if (canvasObj != null)
-                uiCollider = canvasObj.GetComponent<Collider>();
-            hasInfoCanvas = infoCanvas != null;
-            zoneCollider = GetComponent<Collider>();
-            if (zoneCollider == null)
+            zoneCollider = GetComponent<Collider>(); // Only needed for backwards compatibility, old setups won't grab it in reset.
+            canvasColliders = new Collider[canvases.Length];
+            for (int i = 0; i < canvases.Length; i++)
             {
-                MUIDebug.LogError("UI Distance Hider: No collider found! Add a Box or Sphere Collider set to \"is Trigger\" for this to work correctly!");
-                return;
+                if (!canvases[i]) continue;
+                canvasColliders[i] = canvases[i].GetComponent<Collider>();
             }
-            UpdateHiddenState(true);
+            SetAllObjectsHidden(true);
+            SetAllCanvasGroupsHidden(true);
         }
         
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        private void Reset()
+        {
+            zoneCollider = GetComponent<Collider>();
+            zoneCollider.isTrigger = true;
+            gameObject.layer = 0;
+        }
+#endif
+        
+        #region Trigger Events & Fixes
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            UpdateHiddenState(false);
+            SetAndAnimateHidden(false);
         }
-        
         
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            UpdateHiddenState(true);
+            SetAndAnimateHidden(true);
         }
         
         // Spawn / Respawn Fixes
@@ -85,87 +106,92 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             zoneCollider.enabled = true;
         }
+        #endregion
 
-
-        private void UpdateHiddenState(bool newHidden)
+        private void SetAndAnimateHidden(bool isHidden)
         {
-            hidden = newHidden;
-            
-            //GameObjects
-            if (objectsToDisable != null && objectsToDisable.Length != 0)
-            {
-                foreach (var disableOb in objectsToDisable)
-                {
-                    if (disableOb == null) continue;
-                    disableOb.SetActive(!hidden);
-                }
-            }
-            
-            //UI Collider
-            if (uiCollider != null)
-                uiCollider.enabled = !hidden;
-            
-            // UI Animation
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            SetAllObjectsHidden(isHidden);
+            AnimateAllCanvasGroupsHidden(isHidden);
         }
         
-        public void _StartAnimation()
+        #region Set State And Alpha
+        private void SetAllObjectsHidden(bool isHidden)
         {
-            prevHiddenAlpha = newHiddenAlpha;
-            newHiddenAlpha = hidden ? 0 : 1;
+            foreach (var disableObj in objectsToDisable)
+            {
+                if (!disableObj) continue;
+                disableObj.SetActive(!isHidden);
+            }
+            foreach (var enableObj in objectsToEnable)
+            {
+                if (!enableObj) continue;
+                enableObj.SetActive(isHidden);
+            }
 
-            prevShownAlpha = newShownAlpha;
-            newShownAlpha = hidden ? 1 : 0;
-            
-            animate = true;
-            animationElapsedTime = 0f;
-            _CustomUpdate();
+            foreach (var canvasCollider in canvasColliders)
+            {
+                if (!canvasCollider) continue;
+                canvasCollider.enabled = !isHidden;
+            }
+        }
+
+        private void SetAllCanvasGroupsHidden(bool isHidden)
+        {
+            SetCanvasGroupHidden(canvasGroupsToHide, isHidden);
+            SetCanvasGroupHidden(canvasGroupsToShow, !isHidden);
         }
         
-        public void _CustomUpdate()
+        private void SetCanvasGroupHidden(CanvasGroup[] targets, bool isHidden)
         {
-            if (!animate) return;
-            AnimateUI();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
+            var alpha = isHidden ? 0f : 1f;
+            foreach (var canvasGroup in targets)
+            {
+                if (!canvasGroup) continue;
+
+                if (alsoDisableCanvasGroupObjects)
+                    canvasGroup.gameObject.SetActive(!isHidden);
+
+                canvasGroup.alpha = alpha;
+            }
+        }
+        #endregion
+        
+        #region Animate Alpha
+        private void AnimateAllCanvasGroupsHidden(bool isHidden)
+        {
+            gameObject.KillAllOnTarget();
+
+            AnimateCanvasGroupHidden(canvasGroupsToHide, isHidden);
+            AnimateCanvasGroupHidden(canvasGroupsToShow, !isHidden);
+            VRCTween.DelayedCall(this, isHidden ? nameof(_FinishHideTransition) : nameof(_FinishShowTransition), transitionDuration);
         }
         
-        private void AnimateUI()
+        private void AnimateCanvasGroupHidden(CanvasGroup[] targets, bool isHidden)
         {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            UpdateCanvasAlpha(smoothingCurve.Evaluate(percentageComplete));
-            if (percentageComplete >= 1f)
+            var alpha = isHidden ? 0f : 1f;
+            foreach (var canvasGroup in targets)
             {
-                animationElapsedTime = 0f;
-                animate = false;
+                if (!canvasGroup) continue;
+
+                if (alsoDisableCanvasGroupObjects)
+                    canvasGroup.gameObject.SetActive(true);
+
+                canvasGroup.TweenCanvasGroupFade(alpha, transitionDuration, VRCTweenEase.None)
+                    .SetEase(transitionCurve);
             }
         }
-
-        private void UpdateCanvasAlpha(float transition)
+        
+        public void _FinishHideTransition()
         {
-            foreach (var hidingCanvas in hidingCanvases)
-            {
-                hidingCanvas.alpha = Mathf.Lerp(prevHiddenAlpha, newHiddenAlpha, transition);
-            }
-
-            if (hasInfoCanvas)
-            {
-                infoCanvas.alpha = Mathf.Lerp(prevShownAlpha, newShownAlpha, transition);
-            }
-            
-            if (transition >= 1f)
-            {
-                foreach (var hidingCanvas in hidingCanvases)
-                {
-                    hidingCanvas.alpha = newHiddenAlpha;
-                }
-
-                if (hasInfoCanvas)
-                {
-                    infoCanvas.alpha = newShownAlpha;
-                }
-            }
+            gameObject.KillAllOnTarget();
+            SetAllCanvasGroupsHidden(true);
         }
+        
+        public void _FinishShowTransition()
+        {
+            gameObject.KillAllOnTarget();
+            SetAllCanvasGroupsHidden(false);
+        }
+        #endregion
     }
 }
