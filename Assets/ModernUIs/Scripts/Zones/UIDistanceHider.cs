@@ -82,16 +82,16 @@ namespace DrBlackRat.VRC.ModernUIs
             {
                 if (!canvasGroupsToShow[i]) continue;
                 showTweenHandles[i] = canvasGroupsToShow[i].TweenFade(0f, transitionDuration, VRCTweenEase.None)
-                    .SetEase(transitionCurve);
-                showTweenHandles[i].Pause();
+                    .SetEase(transitionCurve)
+                    .Pause();
             }
 
             for (int j = 0; j < hideTweenHandles.Length; j++)
             {
                 if (!canvasGroupsToHide[j]) continue;
                 hideTweenHandles[j] = canvasGroupsToHide[j].TweenFade(0f, transitionDuration, VRCTweenEase.None)
-                    .SetEase(transitionCurve);
-                hideTweenHandles[j].Pause();
+                    .SetEase(transitionCurve)
+                    .Pause();
             }
         }
         

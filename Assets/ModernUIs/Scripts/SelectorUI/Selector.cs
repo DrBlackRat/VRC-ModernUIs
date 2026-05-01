@@ -50,16 +50,16 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         private void SetupTween()
         {
             posTween = gameObject.TweenLocalPosition(new Vector3(), movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            posTween.Pause();
+                .SetEase(smoothingCurve)
+                .Pause();
             
             sizeTween = selectorTransform.TweenSizeDelta(new Vector2(), movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            sizeTween.Pause();
+                .SetEase(smoothingCurve)
+                .Pause();
             
             roundingTween = VRCTween.TweenFloat(0f, 1f, movementDuration,this , nameof(selectorPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            roundingTween.Pause();
+                .SetEase(smoothingCurve)
+                .Pause();
         }
 
         public void _SetDefaults(AnimationCurve newSmoothingCurve, float newMovementDuration)

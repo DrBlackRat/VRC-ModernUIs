@@ -41,8 +41,8 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             tweenHandle = tabsTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
                 .SetEase(animationCurve)
-                .OnComplete(this, nameof(_TransitionFinished));
-            tweenHandle.Pause();
+                .OnComplete(this, nameof(_TransitionFinished))
+                .Pause();
         }
 
         public void _SwitchTab()

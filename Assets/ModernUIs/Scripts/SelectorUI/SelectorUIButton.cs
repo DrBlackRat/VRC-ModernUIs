@@ -124,38 +124,38 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (buttonTransform)
             {
                 buttonSizeTween = buttonTransform.TweenSizeDelta(new Vector2(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                buttonSizeTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
             if (iconTransform)
             {
                 iconPosTween = iconTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                iconPosTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
             if (icon)
             {
                 iconColorTween = icon.TweenColor(new Color(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                iconColorTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
             if (textTransform)
             {
                 textPosTween = textTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                textPosTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
             if (graphic)
             {
                 graphicColorTween = graphic.TweenColor(new Color(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                graphicColorTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
             if (buttonImage)
             {
                 buttonImagePixelsPerUnitTween = VRCTween.TweenFloat(buttonNormalPixelPerUnit, 0f, movementDuration,this , nameof(buttonPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                buttonImagePixelsPerUnitTween.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
             }
         }
 

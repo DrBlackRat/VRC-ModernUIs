@@ -27,8 +27,8 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!isTweenSetup)
             {
                 tweenHandle = recTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
-                    .SetEase(smoothingCurve);
-                tweenHandle.Pause();
+                    .SetEase(smoothingCurve)
+                    .Pause();
                 isTweenSetup = true;
             }
             
