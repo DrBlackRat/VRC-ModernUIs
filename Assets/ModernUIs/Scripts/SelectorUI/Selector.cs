@@ -33,7 +33,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         // Provided by Main Script
         private SelectorUI selectorUI;
         
-        [NonSerialized] public float selectorPixelPerUnit;
+        [NonSerialized] public float selectorPixelPerUnit; // Set by Tweening
+        private VRCTweenHandle posTween;
+        private VRCTweenHandle sizeTween;
+        private VRCTweenHandle roundingTween;
 
         public void _Setup(SelectorUI newSelectorUI)
         {
@@ -41,6 +44,22 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
             selectorTransform = GetComponent<RectTransform>();
             selectorImage = GetComponent<Image>();
+            SetupTween();
+        }
+
+        private void SetupTween()
+        {
+            posTween = gameObject.TweenLocalPosition(new Vector3(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            posTween.Pause();
+            
+            sizeTween = selectorTransform.TweenSizeDelta(new Vector2(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            sizeTween.Pause();
+            
+            roundingTween = VRCTween.TweenFloat(0f, 1f, movementDuration,this , nameof(selectorPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
+                .SetEase(smoothingCurve);
+            roundingTween.Pause();
         }
 
         public void _SetDefaults(AnimationCurve newSmoothingCurve, float newMovementDuration)
@@ -63,13 +82,21 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         public void _MoveTo(SelectorUIButton button)
         {
-            gameObject.KillAllOnTarget();
-            gameObject.TweenLocalPosition(button.LocalPos(), movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (!fixedSize) selectorTransform.TweenSizeDelta(button.SelectedSize(), movementDuration, VRCTweenEase.None)
-                .SetEase(smoothingCurve);
-            if (!fixedRounding) VRCTween.TweenFloat(selectorImage.pixelsPerUnitMultiplier, button.SelectedCornerRadius(), movementDuration,this , nameof(selectorPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
-                .SetEase(smoothingCurve);
+            posTween.ChangeEndValue(button.LocalPos(), true)
+                    .Restart();
+
+            if (!fixedSize)
+            {
+                sizeTween.ChangeEndValue(button.SelectedSize(), true)
+                    .Restart(); 
+            }
+            
+            if (!fixedRounding)
+            {
+                roundingTween.ChangeEndValue(button.SelectedCornerRadius(), true)
+                    .Restart();
+            }
+                
         }
         
         public void _TransitionRounding()
