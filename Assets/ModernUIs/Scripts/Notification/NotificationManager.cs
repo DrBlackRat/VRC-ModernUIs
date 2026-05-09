@@ -22,8 +22,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Range(1, 50)][Tooltip("How long the notification queue can get before new notifications can't be added.")]
         [SerializeField] private int maxNotificationQueueLength = 10;
         
-        [Tooltip("Optional | Can be to display past notifications.")]
+        [Tooltip("Optional | Can be used to show notifications in a history.")]
         [SerializeField] private NotificationHistory notificationHistory;
+        [Tooltip("If enabled, the notification will be added to the history directly, otherwise it will only be added once the toast shows.\nRemoving a Notification after it was added will not remove it from the history if enabled.")]
+        [SerializeField] private bool directlyAddToHistory = false;
         
         [SerializeField] private GameObject notificationObject;
         [SerializeField] private Transform notificationTransform;
@@ -149,6 +151,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             NotificationQueueChanged();
             
+            if (directlyAddToHistory) 
+                TryAddNotificationToHistory(notificationDict);
+            
             return lastNotificationId;
         }
 
@@ -223,23 +228,31 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         }
         #endregion
 
+        private bool TryAddNotificationToHistory(DataDictionary notificationDict)
+        {
+            if (!notificationHistory || notificationDict == null || !notificationDict[SaveHistoryKey].Boolean)
+                return false;
+                
+            notificationHistory._AddNotification(notificationDict);
+            return true;
+        }
+        
         private void NotificationQueueChanged()
         {
             PlayNextNotification();
         }
-
-        // ReSharper disable Unity.PerformanceAnalysis
+        
         private void PlayNextNotification()
         {
             if (notifications.Count == 0 || showingNotification) 
                 return;
 
             currentShownId = notificationIds[0].Int;
-            var notificationDict = notifications[notificationIds[0]].DataDictionary;
+            var notificationDict = notifications[currentShownId].DataDictionary;
             
             // History
-            if (notificationHistory && notificationDict[SaveHistoryKey].Boolean)
-                notificationHistory._AddNotification(notificationDict);
+            if (!directlyAddToHistory) 
+                TryAddNotificationToHistory(notificationDict);
 
             // Notification Sound
             if (notificationAudioSource != null && notificationDict[PlaySoundKey].Boolean)

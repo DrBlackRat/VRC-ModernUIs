@@ -3,6 +3,7 @@ using System;
 using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VRC.SDK3.Data;
 using VRC.SDKBase;
 using VRC.Udon;
@@ -25,7 +26,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [SerializeField] private string sourcePrefix = "from ";
         
         [SerializeField] private GameObject emptyHistoryInfo;
-        [SerializeField] private TextMeshProUGUI countDisplay;
+        [SerializeField] private TextMeshProUGUI[] countDisplays;
         
         [SerializeField] private Transform historyTransform;
         [SerializeField] private GameObject notificationPrefab;
@@ -85,17 +86,18 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             var isEmpty = notifications.Count == 0;
             emptyHistoryInfo.SetActive(isEmpty);
 
-            if (countDisplay)
+            if (countDisplays == null || countDisplays.Length == 0)
+                return;
+
+            foreach (var countDisplay in countDisplays)
             {
-                if (isEmpty)
-                {
-                    countDisplay.text = string.Empty;
-                    return;
-                }
-                
-                countDisplay.text = $"({notifications.Count.ToString()})";
-            }
+                if (!countDisplay)
+                    continue;
+
+                countDisplay.text = isEmpty ? string.Empty : $"({notifications.Count.ToString()})";
+            } 
         }
+
 
         private void RemoveLastIfFull()
         {
