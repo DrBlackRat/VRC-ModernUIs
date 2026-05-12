@@ -23,6 +23,8 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [SerializeField] private CanvasGroup[] canvasGroups;
         [Tooltip("Pickups to change the Pickupable state of.")]
         [SerializeField] private VRC_Pickup[] pickups;
+        [Tooltip("Audio Sources to change the mute state of.")]
+        [SerializeField] private AudioSource[] audioSources;
 
         [Tooltip("Renderer component to change the material of.")]
         [SerializeField] private Renderer materialRenderer;
@@ -120,6 +122,15 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                 {
                     if (canvasGroup == null) continue;
                     canvasGroup.alpha = state ? 1 : 0;
+                }
+            }
+            
+            if (audioSources != null && audioSources.Length != 0)
+            {
+                foreach (var audioSource in audioSources)
+                {
+                    if (audioSource == null) continue;
+                    audioSource.mute = !state;
                 }
             }
             
