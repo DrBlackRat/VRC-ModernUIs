@@ -299,18 +299,18 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         #region Animation
         private void SetupTween()
         {
-            sliderTweenHandle = countdownSlider.TweenValue(0f, 0f, VRCTweenEase.Linear)
+            sliderTweenHandle = countdownSlider.TweenValue(0f, 1f, VRCTweenEase.Linear)
                 .Pause();
             
-            posTweenHandle = notificationTransform.gameObject.TweenLocalPosition(new Vector3(), 0f, VRCTweenEase.None)
+            posTweenHandle = notificationTransform.gameObject.TweenLocalPosition(new Vector3(), 1f, VRCTweenEase.None)
                 .SetEase(smoothingCurve)
                 .Pause();
             
-            scaleTweenHandle = notificationTransform.gameObject.TweenScale(new Vector3(), 0f, VRCTweenEase.None)
+            scaleTweenHandle = notificationTransform.gameObject.TweenScale(new Vector3(), 1f, VRCTweenEase.None)
                 .SetEase(smoothingCurve)
                 .Pause();
             
-            eventTweenHandle = VRCTween.DelayedCall(this, "", 0f)
+            eventTweenHandle = VRCTween.DelayedCall(this, "", 1f)
                 .Pause();
         }
 
