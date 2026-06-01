@@ -26,6 +26,8 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [Tooltip("Audio Sources to change the mute state of.")]
         [SerializeField] private AudioSource[] audioSources;
 
+        [Tooltip("If enabled, only the \"Enabled Materials\" will be applied once selected / turned on and nothing will happen when becoming unselected / disabled.\nThis allows to use multiple Toggle Helpers to switch through multiple materials.")]
+        [SerializeField] private bool onlyApplyOnEnable;
         [Tooltip("Renderer component to change the material of.")]
         [SerializeField] private Renderer materialRenderer;
         [Tooltip("Materials applied when enabled.")]
@@ -133,9 +135,12 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                     audioSource.mute = !state;
                 }
             }
-            
-            if (materialRenderer != null) 
+
+            if (materialRenderer != null && (!onlyApplyOnEnable || state))
+            {
                 materialRenderer.materials = state ? enabledMaterials : disabledMaterials;
+            }
+                
         }
     }
 }

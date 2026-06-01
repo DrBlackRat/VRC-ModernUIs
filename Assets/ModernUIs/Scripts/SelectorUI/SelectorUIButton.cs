@@ -232,37 +232,18 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             selected = newSelected;
             
-            
-            if (buttonTransform)
-            {
-                buttonSizeTween.ChangeEndValue(newSelected ? buttonSelectedScale : buttonNormalScale, true)
+            if (buttonTransform) buttonSizeTween.ChangeEndValue(newSelected ? buttonSelectedScale : buttonNormalScale, true)
                     .Restart();
-            }
-            if (iconTransform)
-            {
-                iconPosTween.ChangeEndValue(newSelected ? iconSelectedPos : iconNormalPos, true)
+            if (iconTransform) iconPosTween.ChangeEndValue(newSelected ? iconSelectedPos : iconNormalPos, true)
                     .Restart();
-            }
-            if (icon)
-            {
-                iconColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
+            if (icon) iconColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
                     .Restart();
-            }
-            if (textTransform)
-            {
-                textPosTween.ChangeEndValue(newSelected ? textSelectedPos : textNormalPos, true)
+            if (textTransform) textPosTween.ChangeEndValue(newSelected ? textSelectedPos : textNormalPos, true)
                     .Restart();
-            }
-            if (graphic)
-            {
-                graphicColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
+            if (graphic) graphicColorTween.ChangeEndValue(newSelected ? selectedColor : normalColor, true)
                     .Restart();
-            }
-            if (buttonImage)
-            {
-                buttonImagePixelsPerUnitTween.ChangeEndValue(newSelected ? buttonSelectedPixelPerUnit : buttonNormalPixelPerUnit, true)
+            if (buttonImage) buttonImagePixelsPerUnitTween.ChangeEndValue(newSelected ? buttonSelectedPixelPerUnit : buttonNormalPixelPerUnit, true)
                     .Restart();
-            }
         }
 
         public void _TransitionRounding()
