@@ -55,6 +55,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         [SerializeField] private Vector3 shownScale = Vector3.one;
         [SerializeField] private Vector3 hiddenScale = Vector3.zero;
+        [Tooltip("Curve used for scaling the notification based on a desktop players FOV.\nLeft: 50°, Right 100°")]
+        [SerializeField] private AnimationCurve fovScaleCurve = AnimationCurve.Linear(0f,0.8f, 1f, 1.8f);
         
         private bool showingNotification;
         private float currentShownDuration;
@@ -83,6 +85,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         private VRCPlayerApi localPlayer;
         private float rootCanvasSizeY;
+        
+        private const float MinDesktopFov = 50f;
+        private const float MaxDesktopFov = 100f;
         
         #region Unity & VRChat Events
         private void OnDisable()
@@ -322,6 +327,19 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             eventTweenHandle.Kill();
         }
         
+        private Vector3 GetCurrentShownScale()
+        {
+            if (localPlayer.IsUserInVR())
+                return shownScale;
+            
+            var normalizedFov = Mathf.InverseLerp(
+                MinDesktopFov,
+                MaxDesktopFov,
+                VRCCameraSettings.ScreenCamera.FieldOfView);
+
+            return shownScale * fovScaleCurve.Evaluate(normalizedFov);
+        }
+        
         private void StartAnimation()
         {
             notificationObject.SetActive(true);
@@ -334,10 +352,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             posTweenHandle.SetDuration(startAnimDuration)
                 .ChangeEndValue(shownPos, true)
                 .Restart();
-            
+
             notificationTransform.localScale = hiddenScale;
             scaleTweenHandle.SetDuration(startAnimDuration)
-                .ChangeEndValue(shownScale, true)
+                .ChangeEndValue(GetCurrentShownScale(), true)
                 .Restart();
             
             eventTweenHandle = VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
