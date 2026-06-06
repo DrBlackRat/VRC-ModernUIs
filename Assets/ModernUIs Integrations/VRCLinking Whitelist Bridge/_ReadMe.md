@@ -1,10 +1,10 @@
-Version 0.1.4
+Version 0.1.5
 
 Allows importing VRC Linking to Modern UI Whitelists.
 
 Requirements:
-- ModernUIs V0.7.1 or newer
-- VRCLinking SDK V0.1.3 or newer
+- ModernUIs V0.9.0 or newer
+- VRCLinking SDK V0.1.9 or newer
 
 For Documentation please visit:
 https://docs.drblackrat.xyz/docs/modern-ui/about

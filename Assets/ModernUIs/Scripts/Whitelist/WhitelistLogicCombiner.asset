@@ -92,7 +92,8 @@ MonoBehaviour:
       Data: 5|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: If enabled the Whitelist Updated Event will be logged in the console.
+      Data: If enabled you will see logs for things like whitelist updates, adding
+        / removing users, etc.
     - Name: 
       Entry: 8
       Data: 
@@ -677,7 +678,10 @@ MonoBehaviour:
         All: Requires the user to be on all provided whitelists.
 
         Require
-        Exactly One: Requires the user to only be on one whitelist and not any more.'
+        Exactly One: Requires the user to only be on one whitelist and not any more.
+
+        Subtract:
+        Requires exactly 2 whitelists, will subtract the last from the first whitelist.'
     - Name: 
       Entry: 8
       Data: 

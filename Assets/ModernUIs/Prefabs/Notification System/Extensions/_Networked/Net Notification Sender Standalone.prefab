@@ -793,12 +793,16 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2629523754568599204}
-  canvasObj: {fileID: 3694377744549925889}
-  hidingCanvases:
+  canvases:
+  - {fileID: 8393492686991969906}
+  canvasGroupsToHide:
   - {fileID: 4412666438922932529}
+  canvasGroupsToShow:
+  - {fileID: 8416540338380759908}
+  alsoDisableCanvasGroupObjects: 0
   objectsToDisable: []
-  infoCanvas: {fileID: 8416540338380759908}
-  smoothingCurve:
+  objectsToEnable: []
+  transitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -831,7 +835,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  movementDuration: 0.25
+  transitionDuration: 0.25
 --- !u!114 &2629523754568599204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -986,16 +990,22 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5291265684985678238}
   whitelist: {fileID: 0}
+  allowIfWhitelistedPlayerPresent: 0
   toggleHelpers: []
   whitelistedObjs: []
   notWhitelistedObjs: []
   whitelistedCanvases: []
   notWhitelistedCanvases: []
+  whitelistedCanvasGroups: []
+  notWhitelistedCanvasGroups: []
   whitelistedSelectables:
   - {fileID: 4627838171147458638}
   - {fileID: 7528695025687226053}
   - {fileID: 9077442340719042433}
   notWhitelistedSelectables: []
+  materialRenderer: {fileID: 0}
+  whitelistedMaterials: []
+  notWhitelistedMaterials: []
 --- !u!114 &5291265684985678238
 MonoBehaviour:
   m_ObjectHideFlags: 0

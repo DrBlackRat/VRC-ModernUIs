@@ -1,6 +1,8 @@
-﻿using UdonSharp;
+﻿using System;
+using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 
@@ -31,20 +33,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         // Provided by Main Script
         private SelectorUI selectorUI;
         
-        // Animation
-        private bool animate;
-        private float animationElapsedTime;
-
-        private SelectorUIButton selectorUIButton;
-        
-        private Vector3 prevPos;
-        private Vector3 newPos;
-
-        private Vector2 prevSize;
-        private Vector2 newSize;
-
-        private float prevCorner;
-        private float newCorner;
+        [NonSerialized] public float selectorPixelPerUnit; // Set by Tweening
+        private VRCTweenHandle posTween;
+        private VRCTweenHandle sizeTween;
+        private VRCTweenHandle roundingTween;
 
         public void _Setup(SelectorUI newSelectorUI)
         {
@@ -52,6 +44,22 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
             selectorTransform = GetComponent<RectTransform>();
             selectorImage = GetComponent<Image>();
+            SetupTween();
+        }
+
+        private void SetupTween()
+        {
+            posTween = gameObject.TweenLocalPosition(new Vector3(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve)
+                .Pause();
+            
+            sizeTween = selectorTransform.TweenSizeDelta(new Vector2(), movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve)
+                .Pause();
+            
+            roundingTween = VRCTween.TweenFloat(0f, 1f, movementDuration,this , nameof(selectorPixelPerUnit), nameof(_TransitionRounding), VRCTweenEase.None)
+                .SetEase(smoothingCurve)
+                .Pause();
         }
 
         public void _SetDefaults(AnimationCurve newSmoothingCurve, float newMovementDuration)
@@ -74,51 +82,26 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         public void _MoveTo(SelectorUIButton button)
         {
-            selectorUIButton = button;
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
-        }
-        
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
-        {
-            animate = true;
-            animationElapsedTime = 0f;
-            
-            prevPos = selectorTransform.localPosition;;
-            newPos = selectorUIButton.LocalPos();
+            posTween.ChangeEndValue(button.LocalPos(), true)
+                    .Restart();
 
-            prevSize = selectorTransform.sizeDelta;
-            newSize = selectorUIButton.SelectedSize();
-
-            prevCorner = selectorImage.pixelsPerUnitMultiplier;
-            newCorner = selectorUIButton.SelectedCornerRadius();
-            
-            _CustomUpdate();
-        }
-        
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI()
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
-
-            selectorTransform.localPosition = Vector3.LerpUnclamped(prevPos, newPos, smoothPercentageComplete);
-            if (!fixedSize) selectorTransform.sizeDelta = Vector2.LerpUnclamped(prevSize, newSize, smoothPercentageComplete);
-            if (!fixedRounding) selectorImage.pixelsPerUnitMultiplier = Mathf.LerpUnclamped(prevCorner, newCorner, smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
+            if (!fixedSize)
             {
-                animationElapsedTime = 0f;
-                animate = false;
+                sizeTween.ChangeEndValue(button.SelectedSize(), true)
+                    .Restart(); 
             }
+            
+            if (!fixedRounding)
+            {
+                roundingTween.ChangeEndValue(button.SelectedCornerRadius(), true)
+                    .Restart();
+            }
+                
+        }
+        
+        public void _TransitionRounding()
+        {
+            selectorImage.pixelsPerUnitMultiplier = selectorPixelPerUnit;
         }
     }
 }

@@ -2,6 +2,7 @@
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.SDK3.Persistence;
@@ -48,10 +49,7 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private AnimationCurve animationCurve;
         [SerializeField] private float movementDuration;
         
-        private bool animate;
-        private float movementElapsedTime;
-        private Vector3 oldUiPos;
-        private Vector3 oldUiScale;
+        private bool accepted;
 
         private void Start()
         {
@@ -66,7 +64,7 @@ namespace DrBlackRat.VRC.ModernUIs
             if (!PlayerData.TryGetInt(player, dataKey, out int value)) return;
             if (value >= ruleVer)
             {
-                _HideEula();
+                HideEula();
             }
             else
             {
@@ -77,43 +75,30 @@ namespace DrBlackRat.VRC.ModernUIs
         public void _Accepted()
         {
             if (usePersistence) PlayerData.SetInt(dataKey, ruleVer);
-            _HideEula();
+            HideEula();
         }
-
-        private void _HideEula()
+        
+        private void HideEula()
         {
+            if (accepted) return;
+            accepted = true;
+            
             UpdateExternal(true);
 
-            oldUiPos = eulaObject.transform.position;
-            oldUiScale = eulaObject.transform.localScale;
-            animate = true;
-            movementElapsedTime = 0f; 
-            _CustomUpdate();
-        }
-        
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI()
-        {
-            movementElapsedTime += Time.deltaTime;
-            var percentageComplete = movementElapsedTime / movementDuration;
-            var smoothPosPercentageComplete = animationCurve.Evaluate(percentageComplete);
+            eulaObject.TweenPosition(hiddenTransform.position, movementDuration, VRCTweenEase.None)
+                .SetEase(animationCurve)
+                .OnComplete(this, nameof(_AnimationFinished));
+
+            eulaObject.TweenScale(hiddenTransform.localScale, movementDuration, VRCTweenEase.None)
+                .SetEase(animationCurve);
             
-            eulaObject.transform.position = Vector3.LerpUnclamped(oldUiPos, hiddenTransform.position, smoothPosPercentageComplete);
-            eulaObject.transform.localScale = Vector3.LerpUnclamped(oldUiScale, hiddenTransform.localScale, smoothPosPercentageComplete);
-            canvasGroup.alpha = Mathf.LerpUnclamped(1f, 0f, smoothPosPercentageComplete);
-            
-            if (percentageComplete >= 1f)
-            {
-                eulaObject.SetActive(false);
-                movementElapsedTime = 0f;
-                animate = false;
-            }
+            canvasGroup.TweenFade(0f ,movementDuration, VRCTweenEase.None)
+                .SetEase(animationCurve);
+        }
+
+        public void _AnimationFinished()
+        {
+            eulaObject.SetActive(false);
         }
 
         private void UpdateExternal(bool accepted)

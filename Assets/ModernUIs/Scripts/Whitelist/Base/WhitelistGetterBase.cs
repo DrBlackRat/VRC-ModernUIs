@@ -18,7 +18,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public abstract class WhitelistGetterBase : UdonSharpBehaviour
     {
-        [Tooltip("If enabled the Whitelist Updated Event will be logged in the console.")]
+        [Tooltip("If enabled you will see logs for things like whitelist updates, adding / removing users, etc.")]
         [SerializeField] protected bool debugLogging;
         
         protected DataList whitelist = new DataList(); // Note: In the futrue this could be replaced with a Dictionary for better performance.
@@ -299,7 +299,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected virtual void WhitelistUpdated(IUdonEventReceiver senderBehaviour = null, string senderEvent = null)
         {
             if (debugLogging)
-                MUIDebug.Log($"Whitelist: {gameObject.name} Whitelist Updated.", this);
+                MUIDebug.Log($"Whitelist on {gameObject.name} got updated.", gameObject);
             
             // Reset cached values
             whitelistedPlayerPresentChanged = true;

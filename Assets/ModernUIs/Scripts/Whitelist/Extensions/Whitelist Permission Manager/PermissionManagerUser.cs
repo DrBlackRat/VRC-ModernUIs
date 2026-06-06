@@ -77,6 +77,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 hasTeleportAccess = access;
                 teleportButton.interactable = access;
+                return;
             }
             
             toggles[i].interactable = access;

@@ -16,8 +16,10 @@
             <uie:PropertyField binding-path="colliders" name="colliders" label="Colliders" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="canvases" name="canvases" label="Canvases" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="pickups" name="pickups" label="Pickups" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="audioSources" name="audioSources" label="Audio Sources" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Materials" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="materialRenderer" name="materialRenderer" label="Renderer" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
+            <uie:PropertyField binding-path="materialRenderer" name="materialRenderer" label="Renderer" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 0;" />
+            <uie:PropertyField binding-path="onlyApplyOnEnable" name="onlyApplyOnEnable" label="Only Apply On Enable" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="enabledMaterials" name="enabledMaterials" label="Enabled Materials" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="disabledMaterials" name="disabledMaterials" label="Disabled Materials" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>

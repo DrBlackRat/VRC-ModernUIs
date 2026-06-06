@@ -32,6 +32,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         [SerializeField] private Canvas[] whitelistedCanvases;
         [Tooltip("Canvases that should be enabled for everyone, but disabled for whitelisted users.")]
         [SerializeField] private Canvas[] notWhitelistedCanvases;
+        
+        [Tooltip("Canvas groups that should have their alpha set to 1 for whitelisted users and 0 for everyone else.")]
+        [SerializeField] private CanvasGroup[] whitelistedCanvasGroups;
+        [Tooltip("Canvas groups that should have their alpha set to 1 for everyone, but 0 for whitelisted users.")]
+        [SerializeField] private CanvasGroup[] notWhitelistedCanvasGroups;
 
         [Tooltip("\"Selectables\" or Buttons, Toggles, Sliders etc. that should only be interactable for whitelisted users." +
                  "\nDO NOT USE FOR MODERN UIs")]
@@ -128,6 +133,24 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 {
                     if (selectable == null) continue;
                     selectable.interactable = !isWhitelisted;
+                }
+            }
+
+            // Canvas Groups
+            if (whitelistedCanvasGroups != null && whitelistedCanvasGroups.Length != 0)
+            {
+                foreach (var canvasGroup in whitelistedCanvasGroups)
+                {
+                    if (canvasGroup == null) continue;
+                    canvasGroup.alpha = isWhitelisted ? 1 : 0 ;
+                }
+            }
+            if (notWhitelistedCanvasGroups != null && notWhitelistedCanvasGroups.Length != 0)
+            {
+                foreach (var canvasGroup in notWhitelistedCanvasGroups)
+                {
+                    if (canvasGroup == null) continue;
+                    canvasGroup.alpha = isWhitelisted ? 0 : 1;
                 }
             }
 

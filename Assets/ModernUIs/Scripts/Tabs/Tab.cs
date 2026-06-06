@@ -11,6 +11,9 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Tab : UdonSharpBehaviour
     {
+        [SerializeField] [Tooltip("If enabled the Tab and it's children will be disabled when the tab is hidden.")]
+        private bool disableTabWhenHidden = false;
+        
         private RectTransform rectTransform;
         private Vector2 tabPos;
         private CanvasGroup canvasGroup;
@@ -47,13 +50,17 @@ namespace DrBlackRat.VRC.ModernUIs
         }
         public void _Hide()
         {
-            if (canvasGroup == null) return;
-            canvasGroup.alpha = 0;
+            if (canvasGroup)
+                canvasGroup.alpha = 0;
+            if (disableTabWhenHidden)
+                gameObject.SetActive(false);
         }
         public void _Show()
         {
-            if (canvasGroup == null) return;
-            canvasGroup.alpha = 1;
+            if (canvasGroup)
+                canvasGroup.alpha = 1;
+            if (disableTabWhenHidden)
+                gameObject.SetActive(true);
         }
     }
 }

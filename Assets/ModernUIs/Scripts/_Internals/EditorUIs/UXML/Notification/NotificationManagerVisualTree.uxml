@@ -8,10 +8,12 @@
     </ui:VisualElement>
     <ui:Foldout text="Settings" view-data-key="NotificationMangerSettubgs" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
-            <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <ui:Label tabindex="-1" text="Queue" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="limitNotificationQueueLength" name="limitNotificationQueueLength" label="Limit Queue Length" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="maxNotificationQueueLength" name="maxNotificationQueueLength" label="Max Queue Length" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="History" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="notificationHistory" name="notificationHistory" label="Notifiation History" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="directlyAddToHistory" name="directlyAddToHistory" label="Directly Add To History" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Audio" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="notificationAudioSource" name="notificationAudioSource" label="Notification Audio Source" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="defaultAudioClip" name="defaultAudioClip" label="Default Audio Clip" style="font-size: 12px; -unity-font-style: normal;" />
@@ -21,8 +23,9 @@
             <uie:PropertyField binding-path="endAnimDuration" name="endAnimDuration" label="End Animation Time" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Position &amp; Scale" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="shownPos" name="shownPos" label="Shown Pos" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="hiddenPos" name="hiddenPos" label="Hidden Pos" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="hiddenPos" name="hiddenPos" label="Hidden Pos" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="shownScale" name="shownScale" label="Shown Scale" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="fovScaleCurve" name="fovScaleCurve" label="FOV Scale Curve" focusable="false" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="hiddenScale" name="hiddenScale" label="Hidden Scale" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>

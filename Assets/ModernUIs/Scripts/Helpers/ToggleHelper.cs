@@ -19,9 +19,15 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         [SerializeField] private Collider[] colliders;
         [Tooltip("Canvases to enable / disable.")]
         [SerializeField] private Canvas[] canvases;
+        [Tooltip("Canvas Groups to set the alpha to 1 / 0 of.")]
+        [SerializeField] private CanvasGroup[] canvasGroups;
         [Tooltip("Pickups to change the Pickupable state of.")]
         [SerializeField] private VRC_Pickup[] pickups;
+        [Tooltip("Audio Sources to change the mute state of.")]
+        [SerializeField] private AudioSource[] audioSources;
 
+        [Tooltip("If enabled, only the \"Enabled Materials\" will be applied once selected / turned on and nothing will happen when becoming unselected / disabled.\nThis allows to use multiple Toggle Helpers to switch through multiple materials.")]
+        [SerializeField] private bool onlyApplyOnEnable;
         [Tooltip("Renderer component to change the material of.")]
         [SerializeField] private Renderer materialRenderer;
         [Tooltip("Materials applied when enabled.")]
@@ -111,9 +117,30 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
                     pickup.pickupable = state;
                 }
             }
+
+            if (canvasGroups != null && canvasGroups.Length != 0)
+            {
+                foreach (var canvasGroup in canvasGroups)
+                {
+                    if (canvasGroup == null) continue;
+                    canvasGroup.alpha = state ? 1 : 0;
+                }
+            }
             
-            if (materialRenderer != null) 
+            if (audioSources != null && audioSources.Length != 0)
+            {
+                foreach (var audioSource in audioSources)
+                {
+                    if (audioSource == null) continue;
+                    audioSource.mute = !state;
+                }
+            }
+
+            if (materialRenderer != null && (!onlyApplyOnEnable || state))
+            {
                 materialRenderer.materials = state ? enabledMaterials : disabledMaterials;
+            }
+                
         }
     }
 }

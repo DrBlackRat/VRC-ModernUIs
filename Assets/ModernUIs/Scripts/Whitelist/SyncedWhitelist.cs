@@ -16,7 +16,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
     {
         [SerializeField] [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
         protected bool secureNetworking = true;
-        [SerializeField] [Range(1, 10)][Tooltip("Hoe long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
+        [SerializeField] [Range(1, 10)][Tooltip("How long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected float netRetryDelay = 5f;
         [SerializeField] [Range(1, 10)][Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected int maxNetRetryAttempts = 4;
@@ -101,21 +101,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             if (autoRemoveOnLeave)
-            {
                 base._RemoveUser(displayName, null, null, false);
-            }
+
 
             if (autoRemoveOnAdderLeft || autoRemoveOnLeave)
-            {
-                if (Networking.IsOwner(gameObject) && canEdit)
-                {
-                    WhitelistUpdated();
-                }
-                else
-                {
-                    base.WhitelistUpdated();
-                }
-            }
+                base.WhitelistUpdated();
         }
 
         // Only for Admin Whitelist
@@ -209,12 +199,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 usersAddedBy = addedByResult.DataDictionary;
             }
+            else
+            {
+                MUIDebug.LogError($"Failed to deserialize addedBy data on {gameObject.name}! Data may be malformed, skipping applying net data.", gameObject);
+                return;
+            }
             
             if (VRCJson.TryDeserializeFromJson(serializedNetWhitelist, out DataToken whitelistResult))
             {
                 whitelist = whitelistResult.DataList;
-                base.WhitelistUpdated(); // Calls base class to skip the added access checks
             }
+            else
+            {
+                MUIDebug.LogError($"Failed to deserialize whitelist data on {gameObject.name}! Data may be malformed, skipping applying net data.", gameObject);
+                return;
+            }
+            
+            base.WhitelistUpdated(); // Calls base class to skip the added access checks
         }
         #endregion
         
@@ -253,7 +254,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             TryApplyNetData();
         }
 
-/// <summary>
+        /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Handles receiving network data after a retry.
         /// </summary>
@@ -419,52 +420,45 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #endregion
         
         #region Overrides
-        public override void _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
+        public override bool _AddUser(string username, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._AddUser(username, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._AddUser(username, senderBehaviour, senderEvent, notify);
         }
         
-        public override void _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _AddUsers(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._AddUsers(newUsernames, senderBehaviour, senderEvent);
+            return EditCheck() && base._AddUsers(newUsernames, senderBehaviour, senderEvent, notify);
         }
         
-        public override void _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _AddUsers(string[] newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._AddUsers(newUsernames, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._AddUsers(newUsernames, senderBehaviour, senderEvent, notify);
         }
         
-        public override void _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._AddUsers(newPlayers, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._AddUsers(newPlayers, senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _RemoveUser(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._RemoveUser(username, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._RemoveUser(username, senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _RemoveUsers(DataList usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _RemoveUsers(string[] usernamesToRemove, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._RemoveUsers(usernamesToRemove, senderBehaviour, senderEvent, notify);
         }
 
         public override void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool directReplacement = false)
         {
-            if (!EditCheck()) return;
+            if (!EditCheck()) return ;
             base._ReplaceWhitelist(newUsernames, senderBehaviour, senderEvent, directReplacement);
         }
 
@@ -481,10 +475,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             base._ClearWhitelist(senderBehaviour, senderEvent, notify);
         }
 
-        public override void _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
+        public override bool _RemoveAddedBy(string username, IUdonEventReceiver senderBehaviour = null, string senderEvent = null, bool notify = true)
         {
-            if (!EditCheck()) return;
-            base._RemoveAddedBy(username, senderBehaviour, senderEvent, notify);
+            return EditCheck() && base._RemoveAddedBy(username, senderBehaviour, senderEvent, notify);
         }
 
         #endregion

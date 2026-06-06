@@ -1,9 +1,8 @@
-﻿
-using System;
-using UdonSharp;
+﻿using UdonSharp;
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
+using UnityEngine.Serialization;
+using VRC.SDK3.Components;
+
 
 namespace DrBlackRat.VRC.ModernUIs
 {
@@ -11,19 +10,18 @@ namespace DrBlackRat.VRC.ModernUIs
     [DefaultExecutionOrder(-100)]
     public class TabSwitcher : UdonSharpBehaviour
     {
+        [FormerlySerializedAs("transitionCurve")] 
         [SerializeField] private AnimationCurve animationCurve;
-        [SerializeField] private float movementDuration;
+        [FormerlySerializedAs("transitionDuration")] 
+        [SerializeField] private float movementDuration = 1f;
         
         [Tooltip("Prefab that will be instantiated when adding a new Tab.")]
         [SerializeField] private GameObject tabPrefab;
-        
-        private bool animate;
-        private float animationElapsedTime;
-        private Vector2 oldTabPos;
-        private int prevTabID = 0;
-        private int currentTabID = 0;
-        
+
+        private int prevTabID;
+        private int currentTabID;
         private RectTransform tabsTransform;
+        private VRCTweenHandle tweenHandle;
 
         [HideInInspector] public int tabId;
         [HideInInspector] public Tab[] tabs;
@@ -31,20 +29,23 @@ namespace DrBlackRat.VRC.ModernUIs
         private void Start()
         {
             tabsTransform = GetComponent<RectTransform>();
-            // Hide Tabs on Start
+            SetupTween();
+            
             foreach (var tab in tabs)
             {
                 tab._Hide();
             }
         }
 
-        public void _SwitchTab()
+        private void SetupTween()
         {
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 0);
+            tweenHandle = tabsTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
+                .SetEase(animationCurve)
+                .OnComplete(this, nameof(_TransitionFinished))
+                .Pause();
         }
-        // Is called one frame delayed to allow the update loop to stop.
-        public void _StartAnimation()
+
+        public void _SwitchTab()
         {
             prevTabID = currentTabID;
             currentTabID = tabId;
@@ -55,40 +56,18 @@ namespace DrBlackRat.VRC.ModernUIs
                 tabs[i]._Show();
             }
             
-            animate = true;
-            animationElapsedTime = 0f;
-            oldTabPos = tabs[prevTabID]._GetPos();
-            _CustomUpdate();
-        }
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            AnimateUI(oldTabPos, currentTabID);
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 0);
-        }
-        
-        private void AnimateUI(Vector2 startPos, int endTabID)
-        {
-            animationElapsedTime += Time.deltaTime;
-            var percentageComplete = animationElapsedTime / movementDuration;
-            var smoothPercentageComplete = animationCurve.Evaluate(percentageComplete);
-            // Set Selector Position
-            var pos = tabsTransform.anchoredPosition;
-            tabsTransform.anchoredPosition = Vector2.LerpUnclamped(startPos, tabs[endTabID]._GetPos(), smoothPercentageComplete);
-            
-            if (percentageComplete >= 1f)
-            {
-                for (int i = 0; i < tabs.Length; i++)
-                {
-                    if (i == endTabID) continue;
-                    tabs[i]._Hide();
-                }
-                
-                animationElapsedTime = 0f;
-                animate = false;
-            }
+            tweenHandle.ChangeEndValue(tabs[currentTabID]._GetPos(), true);
+            tweenHandle.Restart();
         }
 
+        public void _TransitionFinished()
+        {
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (i == currentTabID) continue;
+                tabs[i]._Hide();
+            }
+        }
         #region Adding Tabs
 
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
