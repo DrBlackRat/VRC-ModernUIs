@@ -17,7 +17,7 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
     public class VRCLinkingToWhitelistBridge : VrcLinkingModuleBase
     { 
         [Tooltip("Whether to remove duplicates from the combined whitelist. This is slow, so only use it when really necessary!")]
-        [SerializeField] private bool removeDuplicates = true;
+        [SerializeField] private bool removeDuplicates;
         
         [FormerlySerializedAs("roleIds")] [Tooltip("IDs of Discord Roles that should be added the to whitelist.")]
         [SerializeField] private string[] discordRoleIds;
