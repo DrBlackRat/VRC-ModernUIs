@@ -23,39 +23,16 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         {
             if (!connectedToWhitelist)
             {
-                whitelist._SetUpConnection((IUdonEventReceiver)this);
+                whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
                 connectedToWhitelist = true;
             }
             base._Init();
         }
 
-        public void _WhitelistUpdated()
-        {
-            _UpdateHandlers(EVENT_REVALIDATE);
-        }
-
-        public override bool _ContainsAnyPlayerInWorld()
-        {
-            var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
-            VRCPlayerApi.GetPlayers(players);
-
-            foreach (var player in players)
-            {
-                if (whitelist._IsPlayerWhitelisted(player)) return true;
-            }
-
-            return false;
-        }
-        
-        public override bool _ContainsPlayer(VRCPlayerApi player)
-        {
-            return whitelist._IsPlayerWhitelisted(player);
-        }
-
-        public override bool _ContainsName(string name)
-        {
-            return whitelist._IsPlayerWhitelisted(name);
-        }
+        public void _WhitelistUpdated() => _UpdateHandlers(EVENT_REVALIDATE);
+        public override bool _ContainsAnyPlayerInWorld() => whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
+        public override bool _ContainsPlayer(VRCPlayerApi player) => whitelist._IsPlayerWhitelisted(player);
+        public override bool _ContainsName(string name) => whitelist._IsPlayerWhitelisted(name);
         
         
     }

@@ -129,7 +129,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         public virtual bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
             if (playerApi == null) return false;
-            return whitelist.Contains(playerApi.displayName);
+            return _IsPlayerWhitelisted(playerApi.displayName);
         }
 
         /// <summary>

@@ -51,7 +51,15 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
             txlHasChanged = false;
         }
         
-        #region Overrides 
+        #region Overrides
+
+        public override bool _IsWhitelistPlayerPresent()
+        {
+            UpdateTxlData();
+            return base._IsWhitelistPlayerPresent();
+        }
+
+
         public override bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
             if (playerApi == null) return false;
@@ -60,18 +68,10 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         
         public override bool _IsPlayerWhitelisted(string username)
         {
-            if (username == null) return false;
+            var player = GeneralExtensions.GetPlayerByDisplayName(username);
+            if (player == null) return false;
             
-            var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
-            VRCPlayerApi.GetPlayers(players);
-            
-            foreach (var player in players)
-            {
-                if (player.displayName != username) continue;
-                return accessControl._HasAccess(player);
-            }
-            
-            return false;
+            return accessControl._HasAccess(player);
         }
         
         public override string _GetNamesFormatted()
@@ -120,6 +120,16 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
                 return localName;
             return null;
         }
+        #endregion
+
+        #region Getting Players
+
+        public override VRCPlayerApi _GetPlayerInInstance()
+        {
+            UpdateTxlData();
+            return base._GetPlayerInInstance();
+        }
+
         #endregion
         
     }
