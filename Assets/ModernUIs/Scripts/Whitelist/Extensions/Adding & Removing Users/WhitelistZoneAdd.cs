@@ -29,7 +29,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasInitialized) return;
             zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
         }
         
         private void OnDisable()
