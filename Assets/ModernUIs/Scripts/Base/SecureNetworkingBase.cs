@@ -35,9 +35,9 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         [Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected int maxNetRetryAttempts = 4;
         
-        [SerializeField]
-        [Tooltip("If enabled, the networked data will be disregarded if the new network owner is not whitelisted. (Only used by Secure Networking)")]
-        protected bool requireOwnerWhitelisted = false;
+        //[SerializeField]
+        //[Tooltip("If enabled, the networked data will be disregarded if the new network owner is not whitelisted. (Only used by Secure Networking)")]
+        //protected bool requireOwnerWhitelisted = false;
         
         [SerializeField] 
         [Tooltip("By default only retries or failed attempts are logged. If enabled, other things like successful attempts, updating a newly joined player, etc are logged as well.")]

@@ -4,6 +4,7 @@ using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VRC.SDK3.Components;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common.Interfaces;
@@ -41,6 +42,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private Collider zoneCollider;
         private VRCPlayerApi localPlayer;
         
+        private VRCTweenHandle advancedUpdateEventHandle;
+        private bool hasInitialized;
         private bool hasAccess;
         private bool inZone;
         
@@ -53,7 +56,28 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             if (advancedProtection) 
                 _AdvancedCheckUpdate();
-            whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
+            
+            if (whitelist == null)
+                whitelist._SetUpConnection(this);
+            hasInitialized = true;
+        }
+
+        private void OnEnable()
+        {
+            if (!hasInitialized) 
+                return;
+            
+            zoneCollider.enabled = false;
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
+            
+            if (advancedProtection)
+                _AdvancedCheckUpdate();
+        }
+
+        private void OnDisable()
+        {
+            inZone = false;
+            advancedUpdateEventHandle.Kill();
         }
 
         public void _WhitelistUpdated()
@@ -66,6 +90,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Zone Breach Checks
         private void CheckForZoneBreach()
         {
+            if (!isActiveAndEnabled)
+                return;
+            
             switch (mode)
             {
                 case WhitelistZoneMode.KeepOut:
@@ -149,8 +176,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 inZone = newInZone;
                 CheckForZoneBreach();
             }
-            
-            SendCustomEventDelayedSeconds(nameof(_AdvancedCheckUpdate), advancedUpdateInterval);
+
+            advancedUpdateEventHandle =
+                VRCTween.DelayedCall(this, nameof(_AdvancedCheckUpdate), advancedUpdateInterval);
         }
         #endregion
         
