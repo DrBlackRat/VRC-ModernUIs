@@ -21,9 +21,6 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField]
         [Tooltip("(Optional) Whitelist used to limit who can lock / unlock.")]
         private WhitelistGetterBase whitelist;
-        [SerializeField]
-        [Tooltip("How the whitelist should be used.\nOnly Allow Whitelist means that only whitelisted players can lock or unlock. \nAlways Allow Whitelist Unlock means everyone can lock, but only the locking player and whitelisted players can unlock.")]
-        private WhitelistLockMode whitelistLockMode = WhitelistLockMode.OnlyAllowWhitelist;
         
         // Networking
         [SerializeField] 
@@ -37,10 +34,11 @@ namespace DrBlackRat.VRC.ModernUIs
 
         
         // UI
-        
-        
         private bool isLocked;
         private VRCPlayerApi lockingPlayer;
+        
+        private bool netIsLocked;
+        private VRCPlayerApi netLockingPlayer;
         
         // "Interface" these will be called / set on the receiving Udon Behaviors
         private const string LockStateChangeEvent = "_OnLockStateChanged";  // public void _OnLockStateChanged();
@@ -80,25 +78,12 @@ namespace DrBlackRat.VRC.ModernUIs
         #region Permission Checks
         private bool CanPlayerLock(VRCPlayerApi player)
         {
-            var isWhitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(player);
-            
-            if (whitelistLockMode == WhitelistLockMode.OnlyAllowWhitelist && !isWhitelisted)
-                return false;
-            
-            return true;
+            return whitelist == null || whitelist._IsPlayerWhitelisted(player);;
         }
         
         private bool CanPlayerUnlock(VRCPlayerApi player)
         {
-            var isWhitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(player);
-            
-            if (player == lockingPlayer) 
-                return true;
-
-            if (whitelistLockMode == WhitelistLockMode.AlwaysAllowWhitelistUnlock && isWhitelisted)
-                return true;
-            
-            return false;
+            return player == lockingPlayer;
         }
         #endregion
 
@@ -144,12 +129,6 @@ namespace DrBlackRat.VRC.ModernUIs
         }
         
         #endregion
-    }
-
-    internal enum WhitelistLockMode
-    {
-        OnlyAllowWhitelist,
-        AlwaysAllowWhitelistUnlock,
     }
 }
 

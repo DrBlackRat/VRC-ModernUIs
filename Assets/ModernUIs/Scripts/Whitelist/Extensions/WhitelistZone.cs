@@ -54,11 +54,10 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             localPlayer = Networking.LocalPlayer;
             isTeleportValid = IsTeleportPositionValid();
             
-            if (advancedProtection) 
-                _AdvancedCheckUpdate();
-            
-            if (whitelist == null)
-                whitelist._SetUpConnection(this);
+            if (whitelist != null)
+                whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
+
+            StartCheckingPlayerInZone();
             hasInitialized = true;
         }
 
@@ -66,12 +65,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (!hasInitialized) 
                 return;
-            
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
-            
-            if (advancedProtection)
-                _AdvancedCheckUpdate();
+
+            StartCheckingPlayerInZone();
         }
 
         private void OnDisable()
@@ -83,12 +78,27 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _WhitelistUpdated()
         {
             hasAccess = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
-            CheckForZoneBreach();
+            _CheckForZoneBreach();
+        }
+        
+        private void StartCheckingPlayerInZone()
+        {
+            if (advancedProtection)
+            {
+                _AdvancedCheckUpdate();
+            } 
+            else
+            {
+                zoneCollider.enabled = false;
+                SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
+            }
+            
+            SendCustomEventDelayedFrames(nameof(_CheckForZoneBreach), 2);
         }
         #endregion
         
         #region Zone Breach Checks
-        private void CheckForZoneBreach()
+        public void _CheckForZoneBreach()
         {
             if (!isActiveAndEnabled)
                 return;
@@ -129,6 +139,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             
             MUIDebug.Log($"You are breaching the zone check of the {gameObject.name} zone! Teleporting...", gameObject);
             Networking.LocalPlayer.TeleportTo(teleportTransform.position, teleportTransform.rotation);
+            inZone = false;
         }
 
         private void SendZoneBreachEvent()
@@ -174,7 +185,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (newInZone != inZone)
             {
                 inZone = newInZone;
-                CheckForZoneBreach();
+                _CheckForZoneBreach();
             }
 
             advancedUpdateEventHandle =
@@ -187,14 +198,14 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (advancedProtection || !player.isLocal || inZone) return;
             inZone = true;
-            CheckForZoneBreach();
+            _CheckForZoneBreach();
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
             if (advancedProtection || !player.isLocal) return;
             inZone = false;
-            CheckForZoneBreach();
+            _CheckForZoneBreach();
         }
         
         // Spawn / Respawn Fixes
