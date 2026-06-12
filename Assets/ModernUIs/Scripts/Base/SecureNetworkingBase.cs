@@ -1,5 +1,6 @@
 using UdonSharp;
 using UnityEngine;
+using VRC.SDK3.Components;
 using VRC.SDK3.Data;
 using VRC.SDK3.UdonNetworkCalling;
 using VRC.SDKBase;
@@ -23,37 +24,40 @@ namespace DrBlackRat.VRC.ModernUIs.Base
     /// </summary>
     public abstract class SecureNetworkingBase : UdonSharpBehaviour
     {
+        // General Settings
         [SerializeField]
         [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
         protected bool secureNetworking = true;
-
         [SerializeField]
         [Tooltip("If enabled, once the last allowed sender leaves the instance, the data will be reset to it's default state to keep it in sync with newly joined players. (Only used by Secure Networking)")]
         protected bool resetIfNoAllowedSenderPresent = true;
 
+        // Retry Settings
         [SerializeField]
         [Range(1, 10)]
         [Tooltip("How long to wait before retrying applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected float netRetryDelay = 5f;
-
         [SerializeField]
-        [Range(1, 10)]
-        [Tooltip("How many times to attempt applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
+        [Range(0, 10)]
+        [Tooltip("How many times to retry applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
         protected int maxNetRetryAttempts = 4;
 
+        // Logging
         [SerializeField]
-        [Tooltip("By default only retries or failed attempts are logged. If enabled, other things like successful attempts, updating a newly joined player, etc are logged as well.")]
+        [Tooltip("If enabled, things like successful attempts, updating a newly joined player, etc are logged in addition to retries or failed attempts.")]
         protected bool extraNetLogging = true;
 
-        private DataDictionary netDataDict;
-
-        private int netAttempts;
-        private bool netRetryScheduled;
+        // Receiving Networked Data
+        private DataDictionary netReceiveDataDict;
         private VRCPlayerApi netSendingPlayer;
-
-        private bool netSendScheduled;
+        private VRCTweenHandle netReceiveRetryEvent;
+        private int netAttempts;
         
+        // Sending Networked Data
+        private string netSendJson;
+        private VRCTweenHandle netSendRetryEvent;
         
+        // Player Stuff
         private VRCPlayerApi localPlayer;
         /// <summary>
         /// The <see cref="VRCPlayerApi"/> of the local player.
@@ -62,13 +66,16 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
         private VRCPlayerApi authoritativeSender;
         /// <summary>
-        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master. Can be null if there is currently no valid sender.
+        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master. Can be null if there is currently no valid sender and secure networking is enabled.
         /// </summary>
         public VRCPlayerApi AuthoritativeSender
         {
             get => authoritativeSender; 
             private set
             {
+                if (authoritativeSender == value)
+                    return;
+                
                 authoritativeSender = value;
                 OnAuthoritativeSenderChanged(value);
             }
@@ -100,7 +107,6 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         #endregion
 
         #region Abstract & Virtual Methods
-
         /// <summary>
         /// Checks if the provided player can send networked data.
         /// </summary>
@@ -137,11 +143,9 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         protected virtual void OnAuthoritativeSenderChanged(VRCPlayerApi newOwner)
         {
         }
-
         #endregion
 
         #region Receiving Networked Data
-
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Handles the receipt of networked data sent to this object.
@@ -153,16 +157,14 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (!NetworkCalling.InNetworkCall)
             {
-                MUIDebug.LogError($"OnNetworkedDataReceived can only be called as a network event! ({gameObject.name})",
-                    gameObject);
+                MUIDebug.LogError($"OnNetworkedDataReceived can only be called as a network event! ({gameObject.name})", gameObject);
                 return;
             }
 
             var callingPlayer = NetworkCalling.CallingPlayer;
             if (!Utilities.IsValid(callingPlayer))
             {
-                MUIDebug.LogError($"OnNetworkedDataReceived called by an invalid player! ({gameObject.name})",
-                    gameObject);
+                MUIDebug.LogError($"OnNetworkedDataReceived called by an invalid player! ({gameObject.name})", gameObject);
                 return;
             }
 
@@ -171,106 +173,68 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
             if (!VRCJson.TryDeserializeFromJson(netJson, out DataToken result))
             {
-                MUIDebug.LogError(
-                    $"OnNetworkedDataReceived could not deserialize from JSON due to {result.ToString()}! ({gameObject.name})",
-                    gameObject);
+                MUIDebug.LogError($"OnNetworkedDataReceived could not deserialize from JSON due to {result.ToString()}! ({gameObject.name})", gameObject);
                 return;
             }
 
             if (result.TokenType != TokenType.DataDictionary)
             {
-                MUIDebug.LogError($"OnNetworkedDataReceived received data is not a dictionary! ({gameObject.name})",
-                    gameObject);
+                MUIDebug.LogError($"OnNetworkedDataReceived received data is not a dictionary! ({gameObject.name})", gameObject);
                 return;
             }
 
-            netDataDict = result.DataDictionary;
+            netReceiveDataDict = result.DataDictionary;
             netSendingPlayer = callingPlayer;
 
-            DiscardNetAttempts();
-            TryApplyNetData();
+            netAttempts = 0;
+            netReceiveRetryEvent.Kill();
+            
+            _TryApplyNetData();
         }
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
-        /// Handles receiving network data after a retry.
-        /// </summary>
-        public void _DelayedNetAttempt()
-        {
-            netRetryScheduled = false;
-            if (netAttempts == 0) // 0th = finished or received new data
-                return;
-
-            TryApplyNetData();
-        }
-
-        /// <summary>
         /// Attempts to apply network data, validating sender if secure networking is enabled, will retry if the sender couldn't be validated.
         /// </summary>
-        private void TryApplyNetData()
+        public void _TryApplyNetData()
         {
             if (!secureNetworking)
             {
                 AuthoritativeSender = netSendingPlayer;
-                ApplyNetData(netDataDict);
+                ApplyNetData(netReceiveDataDict);
 
                 return;
             }
-
-            netAttempts++;
+            
             if (!CanSendNet(netSendingPlayer))
             {
                 if (netAttempts >= maxNetRetryAttempts)
                 {
-                    MUIDebug.LogError(
-                        $"{netSendingPlayer.displayName} is still not allowed to send data! Aborting applying net data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.",
-                        gameObject);
-                    DiscardNetAttempts();
+                    MUIDebug.LogError($"{netSendingPlayer.displayName} is still not allowed to send data! Aborting applying net data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
                     return;
                 }
-
-                if (!netRetryScheduled)
-                {
-                    netRetryScheduled = true;
-                    MUIDebug.LogWarning(
-                        $"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.",
-                        gameObject);
-                    SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
-                }
-
+                
+                MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to send data but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
+                netReceiveRetryEvent = VRCTween.DelayedCall(this, nameof(_TryApplyNetData), netRetryDelay);
+                netAttempts++;
                 return;
             }
 
             if (netAttempts > 1)
             {
-                MUIDebug.Log(
-                    $"{netSendingPlayer.displayName} is now allowed to send data! Applying networked data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.",
-                    gameObject);
+                MUIDebug.Log($"{netSendingPlayer.displayName} is now allowed to send data! Applying networked data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
             }
             else if (extraNetLogging)
             {
                 MUIDebug.Log($"{netSendingPlayer.displayName} has sent network data on {gameObject.name}.", gameObject);
             }
-
-            DiscardNetAttempts();
-
+            
             AuthoritativeSender = netSendingPlayer;
-            ApplyNetData(netDataDict);
+            ApplyNetData(netReceiveDataDict);
         }
-
-        /// <summary>
-        /// Resets the current retry state.
-        /// Already scheduled retry callbacks will be disregarded when they fire.
-        /// </summary>
-        private void DiscardNetAttempts()
-        {
-            netAttempts = 0;
-        }
-
         #endregion
 
         #region Sending Networked Data
-
         /// <summary>
         /// Serializes data into a JSON string for network transmission.
         /// The data to be serialized is obtained from the abstract method <see cref="GetDataForSending"/>.
@@ -280,8 +244,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (!VRCJson.TrySerializeToJson(GetDataForSending(), JsonExportType.Minify, out DataToken result))
             {
-                MUIDebug.LogError($"Failed to serialize data for sending! No data will be sent on ({gameObject.name})",
-                    gameObject);
+                MUIDebug.LogError($"Failed to serialize data for sending! No data will be sent on ({gameObject.name})", gameObject);
                 return null;
             }
 
@@ -293,49 +256,34 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// </summary>
         protected void SendNetworkData()
         {
-            if (netSendScheduled)
+            netSendRetryEvent.Kill();
+            
+            var data = GetSerializedData();
+            if (string.IsNullOrEmpty(data))
                 return;
+            netSendJson = GetSerializedData();
 
             if (NetworkCalling.GetQueuedEvents(this, nameof(OnNetworkedDataReceived)) != 0)
             {
-                netSendScheduled = true;
-                SendCustomEventDelayedSeconds(nameof(_SendNetDelayed), NET_SEND_DELAY);
+                netSendRetryEvent = VRCTween.DelayedCall(this, nameof(_TrySendNet), NET_SEND_DELAY);
                 return;
             }
 
-            TrySendNet();
+            _TrySendNet();
         }
-
+        
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
-        /// Handles delayed network data transmission retry.
-        /// </summary>
-        public void _SendNetDelayed()
-        {
-            netSendScheduled = false;
-            SendNetworkData();
-        }
-
-        /// <summary>
         /// Attempts to send network data to other players if the local player is allowed to send.
-        /// Usually only used internally, use <see cref="SendNetworkData"/> when possible.
         /// </summary>
-        /// <returns>True if the network data was successfully sent; otherwise, false.</returns>
-        private bool TrySendNet()
+        public void _TrySendNet()
         {
             if (!CanSendNet(localPlayer))
-                return false;
+                return;
 
-            var data = GetSerializedData();
-            if (string.IsNullOrEmpty(data))
-                return false;
-
-            SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, data);
+            SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, netSendJson);
             AuthoritativeSender = localPlayer;
-
-            return true;
         }
-
         #endregion
 
         #region Ownership, Joining & Leaving
@@ -423,7 +371,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
                 if (resetIfNoAllowedSenderPresent)
                 {
-                    MUIDebug.Log($"Resetting {gameObject.name} to default state.", gameObject);
+                    MUIDebug.Log($"Resetting {gameObject.name} to its default state.", gameObject);
                     ApplyDefaultData();
                 }
                 return;
