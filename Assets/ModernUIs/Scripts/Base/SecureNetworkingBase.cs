@@ -18,7 +18,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
     /// <summary>
     /// This class is used as a base for everything that requires secure networking.
-    /// Implement all abstract methods to provide the necessary functionality. Call <see cref="SendNetworkData"/> to send networked data. Call <see cref="MoveAuthoritativeSenderIfNeeded"/> when the result of CanSendNet could have changed.
+    /// Implement all abstract methods to provide the necessary functionality. Call <see cref="SendNetworkData"/> to send networked data. Call <see cref="MoveAuthoritativeSenderIfNeeded"/> when the result of IsAllowedSender could have changed.
     /// Either inherit from it or use it as a template. (Due to type limitations, I feel like the later will probably be the case)
     /// Currently used by: SyncedSliderUI, SyncedSelectorUI, and SyncedWhitelist
     /// </summary>
@@ -40,7 +40,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         [SerializeField]
         [Range(0, 10)]
         [Tooltip("How many times to retry applying net data if the sender is not whitelisted yet. (Only used by Secure Networking)")]
-        protected int maxNetRetryAttempts = 4;
+        protected int maxNetRetryAttempts = 3;
 
         // Logging
         [SerializeField]
@@ -57,13 +57,14 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         private string netSendJson;
         private VRCTweenHandle netSendRetryEvent;
         
-        // Player Stuff
+        // Local Stuff
         private VRCPlayerApi localPlayer;
         /// <summary>
         /// The <see cref="VRCPlayerApi"/> of the local player.
         /// </summary>
         protected VRCPlayerApi LocalPlayer => localPlayer;
 
+        // Authoritative Sender
         private VRCPlayerApi authoritativeSender;
         /// <summary>
         /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master. Can be null if there is currently no valid sender and secure networking is enabled.
@@ -80,6 +81,13 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 OnAuthoritativeSenderChanged(value);
             }
         }
+        
+        // Leaving Player
+        private VRCPlayerApi leavingPlayer;
+        /// <summary>
+        /// The <see cref="VRCPlayerApi"/> of the player who is currently leaving the instance.
+        /// </summary>
+        protected VRCPlayerApi LeavingPlayer => leavingPlayer;
 
         private const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
         private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
@@ -99,7 +107,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             base.OnPlayerLeft(player);
-
+            leavingPlayer = player;
             if (player == AuthoritativeSender)
                 MoveAuthoritativeSenderIfNeeded();
         }
@@ -112,7 +120,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// </summary>
         /// <param name="player"><see cref="VRCPlayerApi"/> of the player to check.</param>
         /// <returns>True if they can, false if not.</returns>
-        protected abstract bool CanSendNet(VRCPlayerApi player); // Should essentially be a whitelist._IsPlayerWhitelisted(player)
+        protected abstract bool IsAllowedSender(VRCPlayerApi player); // Should essentially be a whitelist._IsPlayerWhitelisted(player)
 
         /// <summary>
         /// Returns the <see cref="VRCPlayerApi"/> of a player in the instance that is allowed to send networked data.
@@ -153,7 +161,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// <param name="receiverId">The player ID of the intended recipient. Use -1 for broadcast to all players.</param>
         /// <param name="netJson">The networked JSON being transmitted.</param>
         [NetworkCallable(NET_MAX_QUEUE_SIZE)]
-        public virtual void OnNetworkedDataReceived(int receiverId, string netJson)
+        public void OnNetworkedDataReceived(int receiverId, string netJson)
         {
             if (!NetworkCalling.InNetworkCall)
             {
@@ -206,7 +214,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 return;
             }
             
-            if (!CanSendNet(netSendingPlayer))
+            if (!IsAllowedSender(netSendingPlayer))
             {
                 if (netAttempts >= maxNetRetryAttempts)
                 {
@@ -261,7 +269,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             var data = GetSerializedData();
             if (string.IsNullOrEmpty(data))
                 return;
-            netSendJson = GetSerializedData();
+            netSendJson = data;
 
             if (NetworkCalling.GetQueuedEvents(this, nameof(OnNetworkedDataReceived)) != 0)
             {
@@ -278,8 +286,11 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// </summary>
         public void _TrySendNet()
         {
-            if (!CanSendNet(localPlayer))
+            if (!IsAllowedSender(localPlayer))
+            {
+                MUIDebug.LogError($"You are trying to send network data on {gameObject.name} but you are not allowed to!", gameObject);
                 return;
+            }
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, netSendJson);
             AuthoritativeSender = localPlayer;
@@ -299,7 +310,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
                 return;
             if (localPlayer != AuthoritativeSender)
                 return;
-            if (secureNetworking && !CanSendNet(localPlayer))
+            if (secureNetworking && !IsAllowedSender(localPlayer))
                 return;
 
             var data = GetSerializedData();
@@ -325,21 +336,28 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (!Utilities.IsValid(AuthoritativeSender))
             {
-                MUIDebug.LogWarning($"Authoritative Sender of {gameObject.name} is null.", gameObject);
+                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is null.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
 
             if (!AuthoritativeSender.IsValid())
             {
-                MUIDebug.LogWarning($"Authoritative Sender of {gameObject.name} is invalid.", gameObject);
+                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is invalid.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
 
-            if (secureNetworking && !CanSendNet(AuthoritativeSender))
+            if (AuthoritativeSender == LeavingPlayer)
             {
-                MUIDebug.LogWarning($"{AuthoritativeSender.displayName} is the Authoritative Sender of {gameObject.name}, but isn't allowed to send data.", gameObject);
+                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is the player is leaving the instance.", gameObject);
+                FindNewAuthoritativeSender();
+                return;
+            }
+
+            if (secureNetworking && !IsAllowedSender(AuthoritativeSender))
+            {
+                MUIDebug.Log($"{AuthoritativeSender.displayName} is the Authoritative Sender of {gameObject.name}, but isn't allowed to send data.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
@@ -366,7 +384,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             var newOwner = GetAllowedSender();
             if (!Utilities.IsValid(newOwner) || !newOwner.IsValid())
             {
-                MUIDebug.LogWarning($"Could not find a new player to transfer Authoritative Sender of {gameObject.name} to. Removing current Authoritative Sender to prevent syncing issues.", gameObject);
+                MUIDebug.Log($"Could not find a new player to transfer Authoritative Sender of {gameObject.name} to. Removing current Authoritative Sender to prevent syncing issues.", gameObject);
                 AuthoritativeSender = null;
 
                 if (resetIfNoAllowedSenderPresent)
