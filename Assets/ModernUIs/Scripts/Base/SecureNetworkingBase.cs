@@ -31,6 +31,10 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         [SerializeField]
         [Tooltip("If enabled, once the last allowed sender leaves the instance, the data will be reset to it's default state to keep it in sync with newly joined players. (Only used by Secure Networking)")]
         protected bool resetIfNoAllowedSenderPresent = true;
+        
+        [SerializeField]
+        [Tooltip("If enabled, the data will be reset to it's default state if the person who sent data left. Even if another allowed sender would be present.")]
+        protected bool resetIfSenderLeaves = false;
 
         // Retry Settings
         [SerializeField]
@@ -82,12 +86,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             }
         }
         
-        // Leaving Player
         private VRCPlayerApi leavingPlayer;
-        /// <summary>
-        /// The <see cref="VRCPlayerApi"/> of the player who is currently leaving the instance.
-        /// </summary>
-        protected VRCPlayerApi LeavingPlayer => leavingPlayer;
 
         private const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
         private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
@@ -108,10 +107,18 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             base.OnPlayerLeft(player);
             leavingPlayer = player;
-            if (player == AuthoritativeSender)
-                MoveAuthoritativeSenderIfNeeded();
+            CheckPlayerOnLeave();
+            leavingPlayer = null;
         }
 
+        private void CheckPlayerOnLeave()
+        {
+            if (leavingPlayer != authoritativeSender)
+                return;
+            
+            MoveAuthoritativeSenderIfNeeded();
+            ResetDataOnLeave();
+        }
         #endregion
 
         #region Abstract & Virtual Methods
@@ -294,6 +301,9 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, netSendJson);
             AuthoritativeSender = localPlayer;
+            
+            if (extraNetLogging)
+                MUIDebug.Log($"Sending network data on {gameObject.name}.", gameObject);
         }
         #endregion
 
@@ -320,7 +330,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), player.playerId, data);
 
             if (extraNetLogging)
-                MUIDebug.Log($"Send initial net data to {player.displayName} on {gameObject.name}.", gameObject);
+                MUIDebug.Log($"Sending initial network data on {gameObject.name} to {player.displayName}.", gameObject);
         }
 
 
@@ -336,28 +346,32 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (!Utilities.IsValid(AuthoritativeSender))
             {
-                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is null.", gameObject);
+                if (extraNetLogging)
+                    MUIDebug.Log($"Authoritative Sender of {gameObject.name} is null.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
 
             if (!AuthoritativeSender.IsValid())
             {
-                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is invalid.", gameObject);
+                if (extraNetLogging)
+                    MUIDebug.Log($"Authoritative Sender of {gameObject.name} is invalid.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
 
-            if (AuthoritativeSender == LeavingPlayer)
+            if (AuthoritativeSender == leavingPlayer)
             {
-                MUIDebug.Log($"Authoritative Sender of {gameObject.name} is the player is leaving the instance.", gameObject);
+                if (extraNetLogging)
+                    MUIDebug.Log($"Authoritative Sender of {gameObject.name} is the player is leaving the instance.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
 
             if (secureNetworking && !IsAllowedSender(AuthoritativeSender))
             {
-                MUIDebug.Log($"{AuthoritativeSender.displayName} is the Authoritative Sender of {gameObject.name}, but isn't allowed to send data.", gameObject);
+                if (extraNetLogging)
+                    MUIDebug.Log($"{AuthoritativeSender.displayName} is the Authoritative Sender of {gameObject.name}, but isn't allowed to send data.", gameObject);
                 FindNewAuthoritativeSender();
                 return;
             }
@@ -376,27 +390,49 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (!secureNetworking)
             {
-                MUIDebug.Log($"Transferring Authoritative Sender of {gameObject.name} to the Master.", gameObject);
-                AuthoritativeSender = Networking.Master;
+                var master = Networking.Master;
+                MUIDebug.Log($"Transferring Authoritative Sender of {gameObject.name} to the Master ({master.displayName}).", gameObject);
+                AuthoritativeSender = master;
                 return;
             }
 
             var newOwner = GetAllowedSender();
-            if (!Utilities.IsValid(newOwner) || !newOwner.IsValid())
+            if (!Utilities.IsValid(newOwner) || 
+                !newOwner.IsValid() ||
+                newOwner == leavingPlayer)
             {
                 MUIDebug.Log($"Could not find a new player to transfer Authoritative Sender of {gameObject.name} to. Removing current Authoritative Sender to prevent syncing issues.", gameObject);
                 AuthoritativeSender = null;
-
-                if (resetIfNoAllowedSenderPresent)
-                {
-                    MUIDebug.Log($"Resetting {gameObject.name} to its default state.", gameObject);
-                    ApplyDefaultData();
-                }
                 return;
             }
 
-            MUIDebug.Log($"Found allowed player \"{newOwner.displayName}\" to transfer Authoritative Sender of {gameObject.name} to.", gameObject);
+            MUIDebug.Log($"Transferring Authoritative Sender of {gameObject.name} to {newOwner.displayName}.", gameObject);
             AuthoritativeSender = newOwner;
+        }
+
+
+        /// <summary>
+        /// Resets the instance's data to its default state based on certain conditions when players leave the instance.
+        /// This should only be called if the player leaving the instance is the current Authoritative Sender.
+        /// </summary>
+        private void ResetDataOnLeave()
+        {
+            if (resetIfSenderLeaves)
+            {
+                MUIDebug.Log($"Resetting {gameObject.name} to its default state because the sender left the instance.",
+                    gameObject);
+                ApplyDefaultData();
+                return;
+            }
+
+            if (resetIfNoAllowedSenderPresent && authoritativeSender == null)
+            {
+                MUIDebug.Log(
+                    $"Resetting {gameObject.name} to its default state as there is no valid Authoritative Sender.",
+                    gameObject);
+                ApplyDefaultData();
+                return;
+            }
         }
         #endregion
     }
