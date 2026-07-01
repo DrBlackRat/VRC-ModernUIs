@@ -88,9 +88,11 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         protected bool persistenceLoaded; // Currently only used by language selector UI to apply default language if it hasn't
         
         protected VRCPlayerApi localPlayer;
+        protected int defaultState;
         
         protected virtual void Start()
         {
+            defaultState = selectedState;
             localPlayer = Networking.LocalPlayer;
             
             for (int i = 0; i < selectorUIButtons.Length; i++)

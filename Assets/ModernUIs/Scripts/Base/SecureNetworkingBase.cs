@@ -92,7 +92,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
 
         #region VRChat / Unity Events
-        public virtual void Start()
+        protected virtual void Start()
         {
             localPlayer = Networking.LocalPlayer;
         }
@@ -419,17 +419,14 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         {
             if (resetIfSenderLeaves)
             {
-                MUIDebug.Log($"Resetting {gameObject.name} to its default state because the sender left the instance.",
-                    gameObject);
+                MUIDebug.Log($"Resetting {gameObject.name} to its default state because the sender left the instance.", gameObject);
                 ApplyDefaultData();
                 return;
             }
 
             if (resetIfNoAllowedSenderPresent && authoritativeSender == null)
             {
-                MUIDebug.Log(
-                    $"Resetting {gameObject.name} to its default state as there is no valid Authoritative Sender.",
-                    gameObject);
+                MUIDebug.Log($"Resetting {gameObject.name} to its default state as there is no valid Authoritative Sender.", gameObject);
                 ApplyDefaultData();
                 return;
             }

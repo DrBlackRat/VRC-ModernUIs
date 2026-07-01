@@ -23,7 +23,7 @@ namespace DrBlackRat.VRC.ModernUIs.Testing
         
         private const string LogPrefix = "<color=#34c0eb>Toggle</color> | ";
         
-        public override void Start()
+        protected override void Start()
         {
             base.Start();
             defaultState = toggle.isOn;
