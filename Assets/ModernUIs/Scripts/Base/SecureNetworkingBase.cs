@@ -42,6 +42,49 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             NetOnPlayerLeft(player);
         }
         #endregion
+        
+        #region Abstract & Virtual Methods
+        /// <summary>
+        /// Checks if the provided player can send networked data.
+        /// </summary>
+        /// <param name="player"><see cref="VRCPlayerApi"/> of the player to check.</param>
+        /// <returns>True if they can, false if not.</returns>
+        protected abstract bool IsAllowedSender(VRCPlayerApi player); // Should essentially be a whitelist._IsPlayerWhitelisted(player)
+
+        /// <summary>
+        /// Returns the <see cref="VRCPlayerApi"/> of a player in the instance that is allowed to send networked data.
+        /// </summary>
+        /// <returns><see cref="VRCPlayerApi"/> of a player who can send network data if none is found returns null.</returns>
+        protected abstract VRCPlayerApi GetAllowedSender(); // Should essentially be a whitelist._GetPlayerInInstance()
+
+        /// <summary>
+        /// Applies the networked data locally.
+        /// </summary>
+        protected abstract void ApplyNetData(DataDictionary netData); // Should essentially just get the data out of the dict and apply it
+
+        /// <summary>
+        /// Called when ever network data should be sent, should return a <see cref="DataDictionary"/> containing the key value pairs that should be sent.
+        /// </summary>
+        /// <returns><see cref="DataDictionary"/> contating the data that should be sent.</returns>
+        protected abstract DataDictionary GetDataForSending();
+
+        /// <summary>
+        /// Applies the default data and overrides the current net state. Only used if <see cref="resetIfNoAllowedSenderPresent"/> is enabled and no allowed sender is present.
+        /// </summary>
+        protected abstract void ApplyDefaultData();
+    
+        /// <summary>
+        /// Triggered when the authoritative network sender changes.
+        /// </summary>
+        /// <param name="newOwner">The <see cref="VRCPlayerApi"/> representing the new authoritative sender.</param>
+        protected virtual void OnAuthoritativeSenderChanged(VRCPlayerApi newOwner)
+        {
+        }
+        #endregion
+        
+        //////////////////////////////////////
+        // Secure Networking Implementation //
+        //////////////////////////////////////
 
         #region Variables
         // General Settings
@@ -108,8 +151,8 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         
         private VRCPlayerApi leavingPlayer;
 
-        private const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
-        private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued u
+        private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
+        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued u
         #endregion
         
         #region Net VRChat / Unity Event Overrides
@@ -154,45 +197,6 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         }
         #endregion
 
-        #region Abstract & Virtual Methods
-        /// <summary>
-        /// Checks if the provided player can send networked data.
-        /// </summary>
-        /// <param name="player"><see cref="VRCPlayerApi"/> of the player to check.</param>
-        /// <returns>True if they can, false if not.</returns>
-        protected abstract bool IsAllowedSender(VRCPlayerApi player); // Should essentially be a whitelist._IsPlayerWhitelisted(player)
-
-        /// <summary>
-        /// Returns the <see cref="VRCPlayerApi"/> of a player in the instance that is allowed to send networked data.
-        /// </summary>
-        /// <returns><see cref="VRCPlayerApi"/> of a player who can send network data if none is found returns null.</returns>
-        protected abstract VRCPlayerApi GetAllowedSender(); // Should essentially be a whitelist._GetPlayerInInstance()
-
-        /// <summary>
-        /// Applies the networked data locally.
-        /// </summary>
-        protected abstract void ApplyNetData(DataDictionary netData); // Should essentially just get the data out of the dict and apply it
-
-        /// <summary>
-        /// Called when ever network data should be sent, should return a <see cref="DataDictionary"/> containing the key value pairs that should be sent.
-        /// </summary>
-        /// <returns><see cref="DataDictionary"/> contating the data that should be sent.</returns>
-        protected abstract DataDictionary GetDataForSending();
-
-        /// <summary>
-        /// Applies the default data and overrides the current net state. Only used if <see cref="resetIfNoAllowedSenderPresent"/> is enabled and no allowed sender is present.
-        /// </summary>
-        protected abstract void ApplyDefaultData();
-    
-        /// <summary>
-        /// Triggered when the authoritative network sender changes.
-        /// </summary>
-        /// <param name="newOwner">The <see cref="VRCPlayerApi"/> representing the new authoritative sender.</param>
-        protected virtual void OnAuthoritativeSenderChanged(VRCPlayerApi newOwner)
-        {
-        }
-        #endregion
-
         #region Receiving Networked Data
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
@@ -200,7 +204,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// </summary>
         /// <param name="receiverId">The player ID of the intended recipient. Use -1 for broadcast to all players.</param>
         /// <param name="netJson">The networked JSON being transmitted.</param>
-        [NetworkCallable(NET_MAX_QUEUE_SIZE)]
+        [NetworkCallable(NetMaxQueueSize)]
         public void OnNetworkedDataReceived(int receiverId, string netJson)
         {
             if (!NetworkCalling.InNetworkCall)
@@ -313,7 +317,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
             if (NetworkCalling.GetQueuedEvents(this, nameof(OnNetworkedDataReceived)) != 0)
             {
-                netSendRetryEvent = VRCTween.DelayedCall(this, nameof(_TrySendNet), NET_SEND_DELAY);
+                netSendRetryEvent = VRCTween.DelayedCall(this, nameof(_TrySendNet), NetSendDelay);
                 return;
             }
 

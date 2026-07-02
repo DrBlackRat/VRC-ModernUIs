@@ -118,7 +118,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         /// <param name="newOwner">The <see cref="VRCPlayerApi"/> representing the new authoritative sender.</param>
         protected virtual void OnAuthoritativeSenderChanged(VRCPlayerApi newOwner)
         {
-            
+             
         }
         #endregion
 
@@ -189,8 +189,8 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         
         private VRCPlayerApi leavingPlayer;
 
-        private const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
-        private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
+        private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
+        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued up
         #endregion
         
         #region Net VRChat / Unity Event Overrides
@@ -242,7 +242,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         /// </summary>
         /// <param name="receiverId">The player ID of the intended recipient. Use -1 for broadcast to all players.</param>
         /// <param name="netJson">The networked JSON being transmitted.</param>
-        [NetworkCallable(NET_MAX_QUEUE_SIZE)]
+        [NetworkCallable(NetMaxQueueSize)]
         public void OnNetworkedDataReceived(int receiverId, string netJson)
         {
             if (!NetworkCalling.InNetworkCall)
@@ -355,7 +355,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
             if (NetworkCalling.GetQueuedEvents(this, nameof(OnNetworkedDataReceived)) != 0)
             {
-                netSendRetryEvent = VRCTween.DelayedCall(this, nameof(_TrySendNet), NET_SEND_DELAY);
+                netSendRetryEvent = VRCTween.DelayedCall(this, nameof(_TrySendNet), NetSendDelay);
                 return;
             }
 
