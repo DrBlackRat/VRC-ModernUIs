@@ -11,11 +11,31 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSelectorUI : WhitelistSelectorUI
     {
+        #region VRChat / Unity Event Overrides
+        protected override void Start()
+        {
+            NetStart();
+        }
+
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            base.OnPlayerJoined(player);
+            NetOnPlayerJoined(player);
+        }
+
+        public override void OnPlayerLeft(VRCPlayerApi player)
+        {
+            base.OnPlayerLeft(player);
+            NetOnPlayerLeft(player);
+        }
+        
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
             if (!player.IsOwner(gameObject)) return;
             base.OnPlayerRestored(player);
         }
+        #endregion
+        
         
         protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
@@ -106,6 +126,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         // Secure Networking Copy //
         ////////////////////////////
         
+        #region Variables
         // General Settings
         [SerializeField]
         [Tooltip("If enabled before accepting network data, it checks if the network owner is whitelisted.\nThis is more secure, but only works if a whitelisted player is in the instance, disable if you prefer reliability over security.")]
@@ -170,28 +191,40 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
 
         private const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
         private const float NET_SEND_DELAY = 0.5f; // Delay between trying to send network events if there are already ones queued up
-
-        #region VRChat / Unity Events
-        protected override void Start()
+        #endregion
+        
+        #region Net VRChat / Unity Event Overrides
+        /// <summary>
+        /// Unity's <see cref="Start"/> Event but for secure networking.
+        /// </summary>
+        private void NetStart()
         {
-            base.Start();
-            localPlayer = Networking.LocalPlayer;
+            localPlayer = Networking.LocalPlayer; 
         }
-
-        public override void OnPlayerJoined(VRCPlayerApi player)
+        
+        /// <summary>
+        /// VRChat's <see cref="OnPlayerJoined"/> Event but for secure networking.
+        /// </summary>
+        /// <param name="player"><see cref="VRCPlayerApi"/> of the player that joined.</param>
+        private void NetOnPlayerJoined(VRCPlayerApi player)
         {
-            base.OnPlayerJoined(player);
             SendInitialState(player);
         }
-
-        public override void OnPlayerLeft(VRCPlayerApi player)
+        
+        /// <summary>
+        /// VRChat's <see cref="OnPlayerLeft"/> Event but for secure networking.
+        /// </summary>
+        /// <param name="player"><see cref="VRCPlayerApi"/> of the player that left.</param>
+        private void NetOnPlayerLeft(VRCPlayerApi player)
         {
-            base.OnPlayerLeft(player);
             leavingPlayer = player;
             CheckPlayerOnLeave();
             leavingPlayer = null;
         }
 
+        /// <summary>
+        /// Handles player leaving: checks if they're the authoritative sender, then reassigns and resets data if needed.
+        /// </summary>
         private void CheckPlayerOnLeave()
         {
             if (leavingPlayer != authoritativeSender)
@@ -349,7 +382,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         }
         #endregion
 
-        #region Ownership, Joining & Leaving
+        #region Authoritative Sender, Joining & Leaving
         /// <summary>
         /// Sends the current networked state to a newly joined player.
         /// </summary>
