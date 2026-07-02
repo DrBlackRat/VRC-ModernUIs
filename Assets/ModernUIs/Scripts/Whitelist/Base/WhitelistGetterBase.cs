@@ -34,7 +34,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         
         protected VRCPlayerApi localPlayer;
         protected string localName;
-        private VRCPlayerApi leavingPlayer;
+        private VRCPlayerApi playerLeftLast;
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
 
@@ -52,7 +52,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             whitelistedPlayerPresentChanged = true;
-            leavingPlayer = player;
+            playerLeftLast = player;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == leavingPlayer) continue;
+                if (player == playerLeftLast) continue;
                 whitelistedPlayerPresent = true;
                 return true;
             }
@@ -281,7 +281,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == leavingPlayer) continue;
+                if (player == playerLeftLast) continue;
                 return player;
             }
             

@@ -27,6 +27,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         #region VRChat / Unity Event Overrides
         protected virtual void Start()
         {
+            //base.Start();
             NetStart();
         }
 

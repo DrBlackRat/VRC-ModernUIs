@@ -14,6 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         #region VRChat / Unity Event Overrides
         protected override void Start()
         {
+            base.Start();
             NetStart();
         }
 
@@ -49,7 +50,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         }
         
         #region Networking Implementation
-        private const string NetStateKey = "value";
+        private const string NetStateKey = "Value";
         
         /// <summary>
         /// Checks if the provided player can send networked data.
