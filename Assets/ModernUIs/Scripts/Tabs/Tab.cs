@@ -8,6 +8,7 @@ using VRC.Udon;
 
 namespace DrBlackRat.VRC.ModernUIs
 {
+    [DefaultExecutionOrder(-200)]
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class Tab : UdonSharpBehaviour
     {

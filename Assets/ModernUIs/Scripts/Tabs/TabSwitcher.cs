@@ -30,18 +30,16 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             tabsTransform = GetComponent<RectTransform>();
             SetupTween();
-            
-            foreach (var tab in tabs)
-            {
-                tab._Hide();
-            }
+
+            tabsTransform.anchoredPosition = (tabs[currentTabID]._GetPos();
+            _HideNoneCurrentTabs();
         }
 
         private void SetupTween()
         {
             tweenHandle = tabsTransform.TweenAnchorPos(new Vector2(), movementDuration, VRCTweenEase.None)
                 .SetEase(animationCurve)
-                .OnComplete(this, nameof(_TransitionFinished))
+                .OnComplete(this, nameof(_HideNoneCurrentTabs))
                 .Pause();
         }
 
@@ -60,7 +58,7 @@ namespace DrBlackRat.VRC.ModernUIs
             tweenHandle.Restart();
         }
 
-        public void _TransitionFinished()
+        public void _HideNoneCurrentTabs()
         {
             for (int i = 0; i < tabs.Length; i++)
             {
