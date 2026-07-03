@@ -31,7 +31,7 @@ namespace DrBlackRat.VRC.ModernUIs
             tabsTransform = GetComponent<RectTransform>();
             SetupTween();
 
-            tabsTransform.anchoredPosition = (tabs[currentTabID]._GetPos();
+            tabsTransform.anchoredPosition = (tabs[currentTabID]._GetPos());
             _HideNoneCurrentTabs();
         }
 
