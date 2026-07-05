@@ -1,4 +1,4 @@
-Version 0.1.5
+Version 0.2.0
 
 Allows importing DisBridge to Modern UI Whitelists.
 
