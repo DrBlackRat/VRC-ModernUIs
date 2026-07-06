@@ -1,8 +1,11 @@
 ﻿
 using System;
 using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using TMPro;
 using UdonSharp;
 using UnityEngine;
+using UnityEngine.UI;
+using VRC.SDK3.Components;
 using VRC.SDK3.Data;
 using VRC.SDK3.UdonNetworkCalling;
 using VRC.SDKBase;
@@ -27,58 +30,83 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("(Optional) Whitelist used to limit who can lock / unlock.")]
         private WhitelistGetterBase whitelist;
         
-        // Networking
-        [SerializeField] 
+        // Joining / Leaving / Network
+        [SerializeField]
+        [Tooltip("If the Lock Button should be unlocked if the player who locked it leaves the instance. If disabled and a whitelist is used another whitelist player will be chosen to lock if a whitelist is not present the master will become the locking player.")]
+        private bool unlockIfPlayerLeft = true;
+        [SerializeField]
         [Range(1, 10)]
-        [Tooltip("How long to wait before retrying applying net data sender is not allowed to yet.")]
+        [Tooltip("How long to wait before retrying applying net data if the sender is not allowed yet.")]
         protected float netRetryDelay = 5f;
-        [SerializeField] 
-        [Range(1, 10)]
-        [Tooltip("How many times to attempt applying net data sender is not allowed to yet.")]
-        protected int maxNetRetryAttempts = 4;
-        [SerializeField] 
-        [Tooltip("By default only retries or failed attempts are logged. If enabled, other things like successful attempts, updating a newly joined player, etc are logged as well.")]
-        protected bool extraLogging = true;
-
+        [SerializeField]
+        [Range(0, 10)]
+        [Tooltip("How many times to retry applying net data if the sender is not allowed yet.")]
+        protected int maxNetRetryAttempts = 3;
+        
+        // Other
+        [SerializeField] [Tooltip("If enabled, extra debug logging will be printed to the console.")]
+        private bool debugLogging = false;
         
         // UI
+        [SerializeField]
+        [Tooltip("The UI Button that will be used to lock / unlock the Lock Button.")]
+        private Button lockButton;
+        [SerializeField]
+        [Tooltip("GameObjects that will be enabled when the Lock Button is locked. Used for Icons, Text, etc.")]
+        private GameObject[] lockedObjects;
+        [SerializeField]
+        [Tooltip("GameObjects that will be enabled when the Lock Button is unlocked. Used for Icons, Text, etc.")]
+        private GameObject[] unlockedObjects;
+        [SerializeField]
+        [Tooltip("TextMeshProUGUI that will be set to the locking player's name.")]
+        private TextMeshProUGUI lockingPlayerText;
+        
+        // Private
         private VRCPlayerApi localPlayer;
+        private VRCPlayerApi leavingPlayer;
         
         private bool isLocked;
         private VRCPlayerApi lockingPlayer;
-        
-        protected int netAttempts;
-        protected bool netRetryScheduled;
-        protected VRCPlayerApi netSendingPlayer;
-        private bool netIsLocked;
-        private VRCPlayerApi netLockingPlayer;
+
+        // Networking
+        private bool netLocked;
+        private VRCPlayerApi netLocking;
+        private VRCTweenHandle netReceiveRetryEvent;
+        private int netAttempts;
         
         // "Interface" these will be called / set on the receiving Udon Behaviors
+        private const string IdentifierVariableName = "LockButtonIdentifier";   // [HideInInspector] public int LockButtonIdentifier;
         private const string LockStateChangeEvent = "_OnLockStateChanged";      // public void _OnLockStateChanged();
         private const string LockingPlayerVariableName = "LockingPlayer";       // [HideInInspector] public VRCPlayerApi LockingPlayer; (Can be null if no longer present)
         private const string LockStateBoolVariableName = "IsLocked";            // [HideInInspector] public bool IsLocked;
-        private const string IdentifierVariableName = "LockButtonIdentifier";   // [HideInInspector] public int LockButtonIdentifier;
         
-        protected const int NET_MAX_QUEUE_SIZE = 5; // Max number of network events that can be queued at once
-
+        #region Unity, VRChat & ModernUI Events
         private void Start()
         {
             localPlayer = Networking.LocalPlayer;
+            if (whitelist != null)
+                whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
+            
+            UpdateUI(isLocked, lockingPlayer);
         }
         
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
-            if (lockingPlayer != localPlayer)
-                return;
-
-            SetNetLocked(player.playerId, isLocked);
+            TrySendingInitialLockState(player);
         }
         
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
-            if (player == lockingPlayer)
-                Unlock();
+            leavingPlayer = player;
+            HandleLockingPlayerLeaving(player);
+            leavingPlayer = null;
         }
+
+        public void _WhitelistUpdated()
+        {
+            UpdateUI(isLocked, lockingPlayer);
+        }
+        #endregion
 
         public void _OnLockButtonPressed()
         {
@@ -122,6 +150,10 @@ namespace DrBlackRat.VRC.ModernUIs
             lockingPlayer = locked ? player : null; // When not locked, there is no locking player
 
             UpdateExternal(locked, lockingPlayer);
+            UpdateUI(locked, lockingPlayer);
+            
+            if (debugLogging)
+                MUIDebug.Log($"{gameObject.name} is now {(locked ? $"locked by {lockingPlayer.displayName}" : "unlocked")}.", gameObject);
         }
 
         private void UpdateExternal(bool locked, VRCPlayerApi player)
@@ -137,6 +169,79 @@ namespace DrBlackRat.VRC.ModernUIs
                 receiver.SendCustomEvent(LockStateChangeEvent);
             }
         }
+
+        private void UpdateUI(bool locked, VRCPlayerApi player)
+        {
+            foreach (var obj in lockedObjects)
+            {
+                if (obj == null)
+                    continue;
+                obj.SetActive(locked);
+            }
+
+            foreach (var obj in unlockedObjects)
+            {
+                if (obj == null)
+                    continue;
+                obj.SetActive(!locked);
+            }
+            
+            lockingPlayerText.text = locked ? player.displayName : "None";
+            lockButton.interactable = locked ? CanPlayerUnlock(localPlayer) : CanPlayerLock(localPlayer);
+        }
+        #endregion
+        
+        #region Player Joining & Leaving
+        // Joining / Sending Initial State
+        private void TrySendingInitialLockState(VRCPlayerApi player)
+        {
+            if (!isLocked)
+                return;
+            if (lockingPlayer != localPlayer)
+                return;
+            if (player == localPlayer)
+                return;
+            
+            if (debugLogging)
+                MUIDebug.Log($"Sending initial lock state of {gameObject.name} to {player.displayName}!", gameObject);
+            
+            NetLock(player.playerId);
+        }
+        
+        // Leaving
+        private void HandleLockingPlayerLeaving(VRCPlayerApi player)
+        {
+            if (!isLocked)
+                return;
+            if (player != lockingPlayer)
+                return;
+            
+            if (debugLogging)
+                MUIDebug.Log($"Locking player of {gameObject.name} left the instance!");
+
+            if (unlockIfPlayerLeft)
+            {
+                Unlock();
+                return;
+            }
+
+            if (whitelist != null)
+            {
+                var newLockingPlayer = whitelist._GetPlayerInInstance();
+                if (newLockingPlayer != null && newLockingPlayer != leavingPlayer)
+                {
+                    Lock(newLockingPlayer);
+                }
+                else
+                {
+                    Unlock();
+                }
+
+                return;
+            }
+
+            Lock(Networking.Master);
+        }
         #endregion
         
         #region Sending Networking Data
@@ -150,8 +255,8 @@ namespace DrBlackRat.VRC.ModernUIs
         #endregion
         
         #region Receiving Networking Data
-        [NetworkCallable(NET_MAX_QUEUE_SIZE)]
-        public void OnNetLockReceived(int receiverId, bool locked)
+        [NetworkCallable]
+        public void OnNetLockReceived(int receiverId, bool newIsLocked)
         {
             if (!NetworkCalling.InNetworkCall)
             {
@@ -169,65 +274,40 @@ namespace DrBlackRat.VRC.ModernUIs
             if (receiverId != -1 && receiverId != localPlayer.playerId)
                 return;
             
-            if (isLocked == locked)
+            if (isLocked == newIsLocked)
                 return;
             
-            netIsLocked = locked;
-            netLockingPlayer = callingPlayer;
+            netLocked = newIsLocked;
+            netLocking = callingPlayer;
+
+            netAttempts = 0;
+            netReceiveRetryEvent.Kill();
             
-            netSendingPlayer = callingPlayer;
-            DiscardNetAttempts();
-            TryApplyNetData();
+            _TryApplyNetLock();
         }
-        
-        public void _DelayedNetAttempt()
+
+        public void _TryApplyNetLock()
         {
-            netRetryScheduled = false;
-            if (netAttempts == 0) // 0th = finished or received new data
-                return; 
-            
-            TryApplyNetData();
-        }
-        
-        private void TryApplyNetData()
-        {
-            netAttempts++;
-            if ((netIsLocked && !CanPlayerLock(netLockingPlayer)) || (!netIsLocked && !CanPlayerUnlock(netLockingPlayer)))
+            if (netLocked && !CanPlayerLock(netLocking) || !netLocked && !CanPlayerLock(netLocking))
             {
                 if (netAttempts >= maxNetRetryAttempts)
                 {
-                    MUIDebug.LogError($"{netSendingPlayer.displayName} is still not allowed to lock or unlock! Aborting applying net data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
-                    DiscardNetAttempts();
+                    MUIDebug.LogError($"{netLocking.displayName} is still not allowed to lock / unlock! Aborting changing lock on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
                     return;
                 }
-
-                if (!netRetryScheduled)
-                {
-                    netRetryScheduled = true;
-                    MUIDebug.LogWarning($"{netSendingPlayer.displayName} is not allowed to lock or unlock but tried to on {gameObject.name}. Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
-                    SendCustomEventDelayedSeconds(nameof(_DelayedNetAttempt), netRetryDelay);
-                }
                 
+                MUIDebug.LogError($"Player {netLocking.displayName} tried to lock / unlock {gameObject.name} but is not allowed to!  Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
+                netReceiveRetryEvent = VRCTween.DelayedCall(this, nameof(_TryApplyNetLock), netRetryDelay);
+                netAttempts++;
                 return;
             }
-            
+
             if (netAttempts > 1)
             {
-                MUIDebug.Log($"{netSendingPlayer.displayName} is now allowed to lock or unlock! Applying networked data on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
-            } 
-            else if (extraLogging)
-            {
-                MUIDebug.Log($"{netSendingPlayer.displayName} has send network data on {gameObject.name}.", gameObject);
+                MUIDebug.Log($"{netLocking.displayName} is now allowed lock / unlock! Applying changing lock on {gameObject.name} after {netAttempts} / {maxNetRetryAttempts} attempts.", gameObject);
             }
-            
-            DiscardNetAttempts();
-            SetLocked(netIsLocked, netLockingPlayer);
-        }
-        
 
-        private void DiscardNetAttempts()
-        {
-            netAttempts = 0;
+            SetLocked(netLocked, netLocking);
         }
         #endregion
     }

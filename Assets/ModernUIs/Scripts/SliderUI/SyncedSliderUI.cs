@@ -192,7 +192,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         private VRCPlayerApi leavingPlayer;
 
         private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
-        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued up
+        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued u
         #endregion
         
         #region Net VRChat / Unity Event Overrides

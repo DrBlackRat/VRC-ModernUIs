@@ -8,13 +8,16 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Base
 {
-    /// Networking model:
-    /// - Only the latest received network state is kept.
-    /// - The player whose data was most recently accepted becomes the authoritative sender.
-    /// - If validation is temporarily not possible (e.g. whitelist not initialized yet),
-    ///   applying that latest state may be retried.
-    /// - If newer network data arrives before a retry completes, the older pending state is discarded.
-    /// This is intentional to ensure "latest state wins" behavior and avoid stale state application.
+    // Networking model:
+    // - Only the latest received network state is kept.
+    // - The player whose data was most recently accepted becomes the authoritative sender.
+    // - If validation is temporarily not possible (e.g. whitelist not initialized yet),
+    //   applying that latest state may be retried.
+    // - If newer network data arrives before a retry completes, the older pending state is discarded.
+    // This is intentional to ensure "latest state wins" behavior and avoid stale state application.
+    
+    // Everything below the "Secure Networking Implementation" header needs to be copied and pasted into the
+    // SyncedSelectorUI, SyncedSliderUI, and SyncedWhitelist classes.
 
     /// <summary>
     /// This class is used as a base for everything that requires secure networking.
@@ -153,7 +156,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         private VRCPlayerApi leavingPlayer;
 
         private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
-        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued u
+        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued up
         #endregion
         
         #region Net VRChat / Unity Event Overrides
