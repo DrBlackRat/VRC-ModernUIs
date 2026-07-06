@@ -58,7 +58,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
             UpdateInteractable();
         }
 
-        protected bool CheckAccess()
+        protected virtual bool CheckAccess()
         {
             var access = false;
             if (whitelist == null)

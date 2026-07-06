@@ -24,6 +24,11 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField]
         [Tooltip("The identifier of this Lock Button. If a system supports multiple Lock Buttons, this can be used to differentiate them.")]
         private int identifier = 0;
+
+        [SerializeField]
+        [Tooltip("\"Selectables\" or Buttons, Toggles, Sliders etc. that should only be interactable if unlocked or you are the locking person." +
+            "\nShould only be used for none Modern UIs components!")]
+        private Selectable[] selectables;
         
         // Whitelist
         [SerializeField]
@@ -75,9 +80,9 @@ namespace DrBlackRat.VRC.ModernUIs
         private int netAttempts;
         
         // "Interface" these will be called / set on the receiving Udon Behaviors
+        private const string LockStateChangeEvent = "_OnLockStateChanged";      // public void _OnLockStateChanged() {}
         private const string IdentifierVariableName = "LockButtonIdentifier";   // [HideInInspector] public int LockButtonIdentifier;
-        private const string LockStateChangeEvent = "_OnLockStateChanged";      // public void _OnLockStateChanged();
-        private const string LockingPlayerVariableName = "LockingPlayer";       // [HideInInspector] public VRCPlayerApi LockingPlayer; (Can be null if no longer present)
+        private const string LockingPlayerVariableName = "LockingPlayer";       // [HideInInspector] public VRCPlayerApi LockingPlayer; //(Can be null if no longer present)
         private const string LockStateBoolVariableName = "IsLocked";            // [HideInInspector] public bool IsLocked;
         
         #region Unity, VRChat & ModernUI Events
@@ -167,6 +172,14 @@ namespace DrBlackRat.VRC.ModernUIs
                 receiver.SetProgramVariable(LockingPlayerVariableName, player);
                 receiver.SetProgramVariable(IdentifierVariableName, identifier);
                 receiver.SendCustomEvent(LockStateChangeEvent);
+            }
+            
+            var interactable = !locked || lockingPlayer == localPlayer;
+            foreach (var selectable in selectables)
+            {
+                if (selectable == null)
+                    continue;
+                selectable.interactable = interactable;
             }
         }
 

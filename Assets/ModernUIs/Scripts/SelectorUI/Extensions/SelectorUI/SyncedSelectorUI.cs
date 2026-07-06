@@ -11,6 +11,10 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class SyncedSelectorUI : WhitelistSelectorUI
     {
+        [HideInInspector] public int LockButtonIdentifier;
+        [HideInInspector] public VRCPlayerApi LockingPlayer;
+        [HideInInspector] public bool IsLocked;
+        
         #region VRChat / Unity Event Overrides
         protected override void Start()
         {
@@ -37,6 +41,20 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         }
         #endregion
         
+        #region Locking
+        public void _OnLockStateChanged()
+        {
+            hasAccess = CheckAccess();
+            _UpdateInteractable();
+        }
+
+        protected override bool CheckAccess()
+        {
+            var whitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(localPlayerApi);
+            var lockingAccess = !IsLocked || localPlayerApi == LockingPlayer;
+            return whitelisted && lockingAccess;
+        }
+        #endregion
         
         protected override bool UpdateSelection(int newState, bool skipPersistence, bool skipSameCheck, bool fromNet)
         {
@@ -60,13 +78,12 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         /// <returns>True if they can, false if not.</returns>
         protected bool IsAllowedSender(VRCPlayerApi player)
         {
-            if (whitelist == null)
-                return true;
-            
             if (player == localPlayer)
                 return hasAccess;
             
-            return whitelist._IsPlayerWhitelisted(player);
+            var whitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(localPlayerApi);
+            var lockingAccess = !IsLocked || LockingPlayer == player;
+            return whitelisted && lockingAccess;
         }
 
         /// <summary>
