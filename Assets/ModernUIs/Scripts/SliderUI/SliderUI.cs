@@ -64,13 +64,13 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [Range(0.001f, 1f)]
         [SerializeField] protected float snapInterval = 0.001f;
 
-        protected VRCPlayerApi localPlayer;
+        protected VRCPlayerApi localPlayerApi;
         protected float defaultValue;
         
         protected virtual void Start()
         {
             defaultValue = value;
-            localPlayer = Networking.LocalPlayer;
+            localPlayerApi = Networking.LocalPlayer;
             UpdateValue(value, true, true, true);
         }
 

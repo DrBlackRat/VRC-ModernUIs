@@ -164,6 +164,8 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         private string netSendJson;
         private VRCTweenHandle netSendRetryEvent;
         
+        // Local Stuff
+        private VRCPlayerApi localPlayer;
         /// <summary>
         /// The <see cref="VRCPlayerApi"/> of the local player.
         /// </summary>

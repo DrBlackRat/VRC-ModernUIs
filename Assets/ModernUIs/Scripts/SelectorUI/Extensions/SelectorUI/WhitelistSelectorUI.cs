@@ -67,7 +67,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             }
             else
             {
-                access = whitelist._IsPlayerWhitelisted(localPlayer);
+                access = whitelist._IsPlayerWhitelisted(localPlayerApi);
             }
             return access;
         }
@@ -92,12 +92,12 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (!hasAccess) return;
             
             int storedSelected = 0;
-            if (PlayerData.TryGetBool(localPlayer, dataKey, out bool boolValue))
+            if (PlayerData.TryGetBool(localPlayerApi, dataKey, out bool boolValue))
             {
                 storedSelected = boolValue ? 1 : 0;
                 persistenceLoaded = true;
             }
-            else if (PlayerData.TryGetInt(localPlayer, dataKey, out int intValue))
+            else if (PlayerData.TryGetInt(localPlayerApi, dataKey, out int intValue))
             {
                 storedSelected = intValue;
                 persistenceLoaded = true;

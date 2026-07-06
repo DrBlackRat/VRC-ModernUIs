@@ -32,7 +32,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected bool whitelistedPlayerPresentChanged = true;
         protected bool whitelistedPlayerPresent;
         
-        protected VRCPlayerApi localPlayer;
+        protected VRCPlayerApi localPlayerApi;
         protected string localName;
         private VRCPlayerApi playerLeftLast;
 
@@ -40,7 +40,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
 
         protected virtual void Start()
         {
-            localPlayer = Networking.LocalPlayer;
+            localPlayerApi = Networking.LocalPlayer;
             localName = Networking.LocalPlayer.displayName;
         }
 
