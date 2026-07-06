@@ -309,7 +309,7 @@ namespace DrBlackRat.VRC.ModernUIs
                     return;
                 }
                 
-                MUIDebug.LogError($"Player {netLocking.displayName} tried to lock / unlock {gameObject.name} but is not allowed to!  Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
+                MUIDebug.LogWarning($"Player {netLocking.displayName} tried to lock / unlock {gameObject.name} but is not allowed to!  Retrying in {netRetryDelay}s, Attempt {netAttempts} / {maxNetRetryAttempts}.", gameObject);
                 netReceiveRetryEvent = VRCTween.DelayedCall(this, nameof(_TryApplyNetLock), netRetryDelay);
                 netAttempts++;
                 return;

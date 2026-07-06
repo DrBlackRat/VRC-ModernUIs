@@ -81,7 +81,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (player == localPlayer)
                 return hasAccess;
             
-            var whitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(localPlayerApi);
+            var whitelisted = whitelist == null || whitelist._IsPlayerWhitelisted(player);
             var lockingAccess = !IsLocked || LockingPlayer == player;
             return whitelisted && lockingAccess;
         }
