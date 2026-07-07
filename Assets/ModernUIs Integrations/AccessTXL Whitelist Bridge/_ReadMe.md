@@ -3,8 +3,8 @@ Version 0.2.0
 Allows importing & exporting Access TXL to Modern UI Whitelists.
 
 Requirements:
-- ModernUIs V0.0.9 or newer
-- AccessTXL V1.2.3 or newer
+- ModernUIs V0.10.0 or newer
+- AccessTXL V1.2.4 or newer
 
 Access TXL To Whitelist Setup:
 1. Grab the "Access TXL to Whitelist Bridge" Prefab out of the Prefabs folder and drag into your scene.
