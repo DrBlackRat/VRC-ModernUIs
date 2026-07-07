@@ -73,7 +73,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (whitelist != null)
                 whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
 
-            StartCheckingPlayerInZone();
+            SendCustomEventDelayedFrames(nameof(_StartCheckingPlayerInZone), 10);
             hasInitialized = true;
         }
 
@@ -82,7 +82,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasInitialized) 
                 return;
 
-            StartCheckingPlayerInZone();
+            _StartCheckingPlayerInZone();
         }
 
         private void OnDisable()
@@ -99,7 +99,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 _CheckForZoneBreach();
         }
         
-        private void StartCheckingPlayerInZone()
+        public void _StartCheckingPlayerInZone()
         {
             if (advancedProtection)
             {
@@ -109,7 +109,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 zoneCollider.enabled = false;
                 SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
-                SendCustomEventDelayedFrames(nameof(_CheckForZoneBreach), 10); // Prevent triggering when OnTriggerEnter / OnTriggerExit hasn't had the chance to be triggered yet.
+                SendCustomEventDelayedFrames(nameof(_CheckForZoneBreach), 2);
             }
         }
         #endregion
