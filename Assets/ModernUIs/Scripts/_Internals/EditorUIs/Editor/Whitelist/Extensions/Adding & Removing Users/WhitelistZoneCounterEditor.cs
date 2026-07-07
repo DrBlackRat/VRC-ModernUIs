@@ -9,8 +9,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(WhitelistZoneAdd))]
-    public class WhitelistZoneAddEditor : UnityEditor.Editor
+    [CustomEditor(typeof(WhitelistZoneCounter))]
+    public class WhitelistZoneCounterEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 

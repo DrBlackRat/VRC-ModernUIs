@@ -11,7 +11,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     [RequireComponent(typeof(Collider))]
-    public class WhitelistZoneAdd : UdonSharpBehaviour
+    public class WhitelistZoneCounter : UdonSharpBehaviour
     {
         [SerializeField] private WhitelistSetterBase whitelist;
         
