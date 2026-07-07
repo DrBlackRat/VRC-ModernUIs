@@ -53,52 +53,60 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void Start()
         {
-            // Disable Changed Info if left on in editor by accident
-            if (versionChangeInfo != null) versionChangeInfo.SetActive(false);
+            if (versionChangeInfo != null) 
+                versionChangeInfo.SetActive(false);
+            
             UpdateExternal(false);
         }
 
         public override void OnPlayerRestored(VRCPlayerApi player)
         {
-            if (!player.isLocal || !usePersistence) return;
-            if (!PlayerData.TryGetInt(player, dataKey, out int value)) return;
-            if (value >= ruleVer)
+            if (!player.isLocal || !usePersistence) 
+                return;
+            
+            if (!PlayerData.TryGetInt(player, dataKey, out int value)) 
+                return;
+            
+            if (value < ruleVer)
             {
-                HideEula();
+                if (versionChangeInfo != null) 
+                    versionChangeInfo.SetActive(true);
+                return;
             }
-            else
-            {
-                if (versionChangeInfo != null) versionChangeInfo.SetActive(true);
-            }
+            
+            HideEula();
         }
+        
         
         public void _Accepted()
         {
-            if (usePersistence) PlayerData.SetInt(dataKey, ruleVer);
+            if (usePersistence) 
+                PlayerData.SetInt(dataKey, ruleVer);
+            
             HideEula();
         }
         
         private void HideEula()
         {
-            if (accepted) return;
+            MUIDebug.Log("EULA Accepted, hiding EULA screen!");
+            if (accepted)
+            {
+                MUIDebug.LogWarning("EULA already accepted, ignoring hide request. (This should not happen normally!)");
+                return;
+            }
             accepted = true;
             
             UpdateExternal(true);
 
+            VRCTween.DelayedSetActive(eulaObject, false, movementDuration);
             eulaObject.TweenPosition(hiddenTransform.position, movementDuration, VRCTweenEase.None)
-                .SetEase(animationCurve)
-                .OnComplete(this, nameof(_AnimationFinished));
-
+                .SetEase(animationCurve);
             eulaObject.TweenScale(hiddenTransform.localScale, movementDuration, VRCTweenEase.None)
                 .SetEase(animationCurve);
             
             canvasGroup.TweenFade(0f ,movementDuration, VRCTweenEase.None)
                 .SetEase(animationCurve);
-        }
-
-        public void _AnimationFinished()
-        {
-            eulaObject.SetActive(false);
+            
         }
 
         private void UpdateExternal(bool accepted)

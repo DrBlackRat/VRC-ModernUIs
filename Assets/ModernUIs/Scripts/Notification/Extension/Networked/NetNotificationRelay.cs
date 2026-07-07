@@ -29,6 +29,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         public Sprite[] images;
         [Tooltip("Audio Clips available for networked notifications, when sending provide the corresponding index that should be used.")]
         public AudioClip[] soundClips;
+        
+        [Tooltip("If enabled, the notification received (including who send it) will be logged. Otherwise only failures will be logged.")]
+        [SerializeField] private bool logNotification = false;
 
         private VRCPlayerApi localPlayer;
         private string localName;
@@ -213,6 +216,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             
             notificationManager._AddNotification(header, text, image, playSound, soundClip, soundVolume, duration,
                 width, showInHistory, showSendingPlayerAsSource ? callingPlayerName : "");
+            
+            if (logNotification)
+                MUIDebug.Log($"Net Notification Relay | Received Notification from {callingPlayerName}: {header} - {text}");
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP

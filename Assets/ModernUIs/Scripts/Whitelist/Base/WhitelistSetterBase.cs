@@ -121,7 +121,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
-         /// <returns>True if all users were added, false if any were already on the whitelist or the provided list was invalid / empty.</returns>
+        /// <returns>True if all users were added, false if any were already on the whitelist or the provided list was invalid / empty.</returns>
         public virtual bool _AddUsers(VRCPlayerApi[] newPlayers, IUdonEventReceiver senderBehaviour = null,
             string senderEvent = null, bool notify = true)
         {
@@ -285,11 +285,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
         /// <param name="directReplacement">Optional | If enabled, none of the normal duplication and safety checks will be done. Only enable if you know what you are doing!</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
         public virtual void _ReplaceWhitelist(DataList newUsernames, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null, bool directReplacement = false)
+            string senderEvent = null, bool directReplacement = false, bool notify = true)
         {
             if (newUsernames == null) return;
-            
             usersAddedBy = new DataDictionary();
 
             if (directReplacement)
@@ -302,7 +302,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 whitelist = new DataList();
                 _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
             }
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (notify)
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
 
         /// <summary>
@@ -311,15 +312,27 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// <param name="newUsernames">Array of usernames to replace the whitelist with</param>
         /// <param name="senderBehaviour">Optional | The behaviour that called the method. Prevents the update event being called on it.</param>
         /// <param name="senderEvent">Optional | The Whitelist Updated event that called the method. Prevents it specifically from being fired. Treated as "all" when not provided.</param>
+        /// /// <param name="directReplacement">Optional | If enabled, none of the normal duplication and safety checks will be done. Only enable if you know what you are doing!</param>
+        /// <param name="notify">Optional | If other scripts should be notified that a user was added. Defaults to true.</param>
         public virtual void _ReplaceWhitelist(string[] newUsernames, IUdonEventReceiver senderBehaviour = null,
-            string senderEvent = null)
+            string senderEvent = null, bool directReplacement = false, bool notify = true)
         {
             if (newUsernames == null) return;
-            whitelist = new DataList();
             usersAddedBy = new DataDictionary();
             
-            _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
-            WhitelistUpdated(senderBehaviour, senderEvent);
+            if (directReplacement)
+            {
+                whitelist = newUsernames.ToDataList();
+                usersAddedBy.Add(localName, whitelist.ShallowClone());
+            }
+            else
+            {
+                whitelist = new DataList();
+                _AddUsers(newUsernames, senderBehaviour, senderEvent, false);
+            }
+            
+            if (notify)
+                WhitelistUpdated(senderBehaviour, senderEvent);
         }
         #endregion
         

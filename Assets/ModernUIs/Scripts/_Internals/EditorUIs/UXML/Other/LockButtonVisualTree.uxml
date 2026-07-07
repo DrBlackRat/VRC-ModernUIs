@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Modern UI | Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Allows UI systems and other objects to be locked, preventing other players from modifying them.&#10;&#10;Implement the interface below to receive lock state updates, or set the interactable state of other selectables.&#10;&#10;Interface:&#10;[HideInInspector] public int LockButtonIdentifier;&#10;[HideInInspector] public VRCPlayerApi LockingPlayer;&#10;[HideInInspector] public bool IsLocked;&#10;public void _OnLockStateChanged() {}" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+    </ui:VisualElement>
+    <ui:Foldout text="Settings" view-data-key="LockButtonSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Connection" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="identifier" name="identifier" label="Identifier" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="lockStateReceivers" name="lockStateReceivers" label="Lock State Receivers" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="selectables" name="selectables" label="Selectables" style="font-size: 12px; -unity-font-style: normal; margin-top: 10px;" />
+            <ui:Label tabindex="-1" text="Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="whitelist" name="whitelist" label="whitelist" style="font-size: 12px; -unity-font-style: normal; margin-top: 0;" />
+            <ui:Label tabindex="-1" text="Networking" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="unlockIfPlayerLeft" name="unlockIfPlayerLeft" label="Unlock If Player Left" style="font-size: 12px; -unity-font-style: normal; margin-top: 0;" />
+            <uie:PropertyField binding-path="netRetryDelay" name="netRetryDelay" label="Network Retry Delay" style="font-size: 12px; -unity-font-style: normal; margin-top: 10px;" />
+            <uie:PropertyField binding-path="maxNetRetryAttempts" name="maxNetRetryAttempts" label="Max Network Retry Attempts" style="font-size: 12px; -unity-font-style: normal; margin-top: 0;" />
+            <ui:Label tabindex="-1" text="Other" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="debugLogging" name="debugLogging" label="Extra Debug Logging" style="font-size: 12px; -unity-font-style: normal; margin-top: 0;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+    <ui:Foldout text="Button UI" view-data-key="LockButtonUI" name="Settings" value="false" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <uie:PropertyField binding-path="lockButton" name="lockButton" label="Lock Button" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="lockedObjects" name="lockedObjects" label="Locked Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="unlockedObjects" name="unlockedObjects" label="Unlocked Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="lockingPlayerText" name="lockingPlayerText" label="Locking Player Text" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>

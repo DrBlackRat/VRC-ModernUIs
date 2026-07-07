@@ -32,15 +32,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         protected bool whitelistedPlayerPresentChanged = true;
         protected bool whitelistedPlayerPresent;
         
-        protected VRCPlayerApi localPlayer;
+        protected VRCPlayerApi localPlayerApi;
         protected string localName;
-        private VRCPlayerApi leavingPlayer;
+        private VRCPlayerApi playerLeftLast;
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
 
         protected virtual void Start()
         {
-            localPlayer = Networking.LocalPlayer;
+            localPlayerApi = Networking.LocalPlayer;
             localName = Networking.LocalPlayer.displayName;
         }
 
@@ -52,7 +52,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         public override void OnPlayerLeft(VRCPlayerApi player)
         {
             whitelistedPlayerPresentChanged = true;
-            leavingPlayer = player;
+            playerLeftLast = player;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == leavingPlayer) continue;
+                if (player == playerLeftLast) continue;
                 whitelistedPlayerPresent = true;
                 return true;
             }
@@ -129,7 +129,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         public virtual bool _IsPlayerWhitelisted(VRCPlayerApi playerApi)
         {
             if (playerApi == null) return false;
-            return whitelist.Contains(playerApi.displayName);
+            return _IsPlayerWhitelisted(playerApi.displayName);
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == leavingPlayer) continue;
+                if (player == playerLeftLast) continue;
                 return player;
             }
             
