@@ -9,8 +9,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(WhitelistZone))]
-    public class WhitelistZoneEditor : UnityEditor.Editor
+    [CustomEditor(typeof(PlayerZoneConstraint))]
+    public class PlayerZoneConstraintEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 
