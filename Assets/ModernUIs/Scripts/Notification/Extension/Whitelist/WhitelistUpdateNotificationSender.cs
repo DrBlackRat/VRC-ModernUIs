@@ -12,25 +12,38 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class WhitelistUpdateNotificationSender : UdonSharpBehaviour
     {
+        //General
+        [SerializeField] 
         [Tooltip("Notification Manager / System used to actually display the notification.")] 
-        [SerializeField] private NotificationManager notificationManager;
+        private NotificationManager notificationManager;
+        [SerializeField] 
         [Tooltip("If enabled the notification will be shown in the notification history screen.")]
-        [SerializeField] private bool showInHistory = true;
+        private bool showInHistory = true;
+        [SerializeField] 
         [Tooltip("Name of the source of the notification. If left empty, none will be displayed.")]
-        [SerializeField] private string sourceName = "";
+        private string sourceName = "";
 
+        // Whitelist
+        [SerializeField] 
         [Tooltip("Whitelist to send add / remove notifications for.")] 
-        [SerializeField] private WhitelistGetterBase whitelist;
+        private WhitelistGetterBase whitelist;
+        [SerializeField]
+        [Range(0f, 60f)]
+        [Tooltip("Time in seconds before the first change notifications will be send. Used to prevent receiving huge amount of notifications when first joining.")]
+        private float startDelayTime = 15f;
         
+        // Show To Whitelist
+        [SerializeField] 
         [Tooltip("If provided the notifications will only be shown to members of this whitelist.")]
-        [SerializeField] private WhitelistGetterBase showToWhitelist;
+        private WhitelistGetterBase showToWhitelist;
+        [SerializeField] 
         [Tooltip("If enabled notifications will be send to everyone, BUT members on the provided whitelist.")]
-        [SerializeField] private bool invertShowToWhitelist;
+        private bool invertShowToWhitelist;
         
+        // Show Notification
+        [SerializeField] 
         [Tooltip("If whitelist add should be shown.")]
-        [SerializeField] private bool showAddNotification = true;
-        [Tooltip("If enabled, the user who added the user to the whitelist will be shown in the notification, this is done by replacing \"{adder}\" in the addes message")]
-        [SerializeField] private bool showAdder = true;
+        private bool showAddNotification = true;
         [Tooltip("Header / Title of the add notification.")]
         public string headerAdded = "Whitelist User Added";
         [TextArea(1, 3)] [Tooltip("Text / Message / Body of the add notification. \nThe \"{user}\" will be replaced with the user name and \"{adder}\" with who added them.")]
@@ -44,8 +57,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Tooltip("Volume of the add notification sound. Default is 0.25, clamped between 0 and 1.")]
         public float soundVolumeAdded = 0.25f;
         
+        // Remove Notification
+        [SerializeField] 
         [Tooltip("If whitelist remove should be shown.")]
-        [SerializeField] private bool showRemoveNotification = true;
+        private bool showRemoveNotification = true;
         [Tooltip("Header / Title of the remove notification.")]
         public string headerRemoved = "Whitelist User Removed";
         [TextArea(1, 3)] [Tooltip("Text / Message / Body of the remove notification. \nThe \"{user}\" will be replaced with the user name.")]
@@ -70,15 +85,13 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private DataList previousWhitelist = new DataList();
         private DataList currentWhitelist = new DataList();
         
-        // Cooldown system to prevent spamming notifications on join;
-        private float startCooldown = 10f; // in seconds
-        private bool cooldownFinished;
-        
+        private bool startDelayFinished;
+
+        #region Unity, VRChat & Modern UI Events
         private void Start()
         {
             localPlayer = Networking.LocalPlayer;
-            SendCustomEventDelayedSeconds(nameof(_FinishCooldown), startCooldown);
-
+            
             whitelist._SetUpConnection((IUdonEventReceiver)this, nameof(_WhitelistUpdated));
             if (showToWhitelist != null)
             {
@@ -88,30 +101,42 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             {
                 canSeeNotification = true;
             }
+            
+            SendCustomEventDelayedSeconds(nameof(_FinishStartDelay), startDelayTime);
         }
         
-        public void _FinishCooldown()
+        public void _FinishStartDelay()
         {
-            cooldownFinished = true;
+            startDelayFinished = true;
         }
         
         public void _ShowToWhitelistUpdated()
         {
+            var pevCanSeeNotification = canSeeNotification;
+            
             var isWhitelisted = showToWhitelist._IsPlayerWhitelisted(localPlayer);
             canSeeNotification = invertShowToWhitelist ? !isWhitelisted : isWhitelisted ;
+
+            if (!pevCanSeeNotification && canSeeNotification)
+                ResetHistory();
         }
 
         public void _WhitelistUpdated()
         {
+            if (!canSeeNotification)
+                return;
+            
             previousWhitelist = currentWhitelist;
             currentWhitelist = whitelist._GetUsersAsList();
             
             CheckForChanges();
         }
+        #endregion
 
+        #region Checking Changes, Show To, etc,
         private void CheckForChanges()
         {
-            if (!cooldownFinished || !canSeeNotification) 
+            if (!startDelayFinished) 
                 return;
 
             if (showRemoveNotification)
@@ -133,12 +158,20 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             }
         }
 
+        private void ResetHistory()
+        {
+            var currentList =  whitelist._GetUsersAsList();
+            previousWhitelist = currentList;
+            currentWhitelist = currentList;
+        }
+        #endregion
+
+
+        #region Showing Notifications
         private void ShowAddNotification(string username)
         {
             var newMessage = messageAdded.Replace("{user}", username);
-            
-            if (showAdder)
-                newMessage = newMessage.Replace("{adder}", whitelist._GetWhoAdded(username));
+            newMessage = newMessage.Replace("{adder}", whitelist._GetWhoAdded(username));
             
             notificationManager._AddNotification(headerAdded, newMessage, imageAdded, playSoundAdded, soundClipAdded, soundVolumeAdded, duration, width, showInHistory, sourceName);
         }
@@ -148,7 +181,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             var newMessage = messageRemoved.Replace("{user}", username);
             notificationManager._AddNotification(headerRemoved, newMessage, imageRemoved, playSoundRemoved, soundClipRemoved, soundVolumeRemoved, duration, width, showInHistory, sourceName);
         }
-        
+        #endregion
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
