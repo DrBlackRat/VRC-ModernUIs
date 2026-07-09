@@ -58,7 +58,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Tooltip("Curve used for scaling the notification based on a desktop players FOV.\nLeft: 50°, Right 100°")]
         [SerializeField] private AnimationCurve fovScaleCurve = AnimationCurve.Linear(0f,0.8f, 1f, 1.8f);
         
-        private bool showingNotification;
         private float currentShownDuration;
         private int currentShownId = -1;
 
@@ -93,7 +92,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         private void OnDisable()
         {
             _ClearNotifications();
-            _HideShownNotification();
+            
+            PauseAllTween();
+            currentShownId = -1;
+            notificationObject.SetActive(false);
         }
 
         private void Start()
@@ -171,12 +173,9 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// <returns>True if successful, false if not.</returns>
         public bool _RemoveNotification(int id, bool removeWhileShown = false)
         {
-            if (id <= 0 || id >= lastNotificationId)
-                return false;
-
-            if (showingNotification && !removeWhileShown && currentShownId == id)
+            if (removeWhileShown && currentShownId == id)
             {
-                _HideShownNotification();
+                _StartHideAnimation();
                 return true;
             }
 
@@ -207,7 +206,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         }
 
         /// <summary>
-        /// Removes all notifications from the queue.
+        /// Removes all notifications from the queue. Does NOT hide the notification that is currently being shown.
         /// </summary>
         public void _ClearNotifications()
         {
@@ -223,12 +222,10 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// <returns>Bool | True if successful, false if not.</returns>
         public bool _HideShownNotification()
         {
-            if (!showingNotification) 
+            if (currentShownId == -1) 
                 return false;
-            
-            PauseAllTween();
-            showingNotification = false;
-            notificationObject.SetActive(false);
+
+            _StartHideAnimation();
             return true;
         }
         #endregion
@@ -249,7 +246,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         private void PlayNextNotification()
         {
-            if (notifications.Count == 0 || showingNotification) 
+            if (notifications.Count == 0 ||  currentShownId != -1) 
                 return;
 
             currentShownId = notificationIds[0].Int;
@@ -287,18 +284,17 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             currentShownDuration = notificationDict[DurationKey].Float;
             canvasRootTransform.sizeDelta = new Vector2(notificationDict[WidthKey].Float, rootCanvasSizeY);
             
-            showingNotification = true;
             StartAnimation();
             _RemoveFirstNotification();
         }
 
         private void UpdatePlayerHeadData()
         {
-            if (showingNotification)
-            {
-                transform.position = VRCCameraSettings.ScreenCamera.Position;
-                transform.rotation = VRCCameraSettings.ScreenCamera.Rotation;
-            }
+            if (currentShownId == -1) 
+                return;
+            
+            transform.position = VRCCameraSettings.ScreenCamera.Position;
+            transform.rotation = VRCCameraSettings.ScreenCamera.Rotation;
         }
 
         #region Animation
@@ -358,14 +354,14 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 .ChangeEndValue(GetCurrentShownScale(), true)
                 .Restart();
             
-            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_EndAnimation), currentShownDuration + startAnimDuration);
+            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_StartHideAnimation), currentShownDuration + startAnimDuration);
         }
         
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Starts the hiding animation for the notification.
         /// </summary>
-        public void _EndAnimation()
+        public void _StartHideAnimation()
         {
             posTweenHandle.SetDuration(endAnimDuration)
                 .ChangeEndValue(hiddenPos, true)
@@ -375,18 +371,18 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
                 .Restart();
             
             eventTweenHandle.Kill();
-            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_FinishAnimation), endAnimDuration);
+            eventTweenHandle = VRCTween.DelayedCall(this, nameof(_HideAnimationFinished), endAnimDuration);
         }
 
         /// <summary>
         /// INTERNAL | DO NOT CALL MANUALLY
         /// Ends the hiding animation for the notification and triggers the next notification.
         /// </summary>
-        public void _FinishAnimation()
+        public void _HideAnimationFinished()
         {
-            eventTweenHandle.Kill();
+            PauseAllTween();
             
-            showingNotification = false;
+            currentShownId = -1;
             notificationObject.SetActive(false);
             
             PlayNextNotification();
