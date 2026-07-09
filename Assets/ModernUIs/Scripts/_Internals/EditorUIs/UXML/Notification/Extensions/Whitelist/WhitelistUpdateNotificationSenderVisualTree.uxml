@@ -14,6 +14,7 @@
             <uie:PropertyField binding-path="sourceName" name="sourceName" label="Notification Source Name" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="whitelist" name="whitelist" label="Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="startDelayTime" name="startDelayTime" label="Initial Start Delay" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Show To Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="showToWhitelist" name="showToWhitelist" label="Show To Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="invertShowToWhitelist" name="invertShowToWhitelist" label="Invert Show To Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
@@ -22,8 +23,7 @@
     <ui:Foldout text="Notification" view-data-key="JoinLeaveNotifications" name="Notification" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="Added Notifiation" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
-            <uie:PropertyField binding-path="showAddNotification" name="showAddNotification" label="Show Add Notifications" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 0;" />
-            <uie:PropertyField binding-path="showAdder" name="showAdder" label="Show Adder" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 0;" />
+            <uie:PropertyField binding-path="showAddNotification" name="showAddNotification" label="Show Add Notifications" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="headerAdded" name="headerAdded" label="Add Header" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="messageAdded" name="messageAdded" label="Add Message" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="imageAdded" name="imageAdded" label="Add Image" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
