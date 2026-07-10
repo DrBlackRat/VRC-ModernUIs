@@ -53,10 +53,10 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
         
         #region Overrides
 
-        public override bool _IsWhitelistPlayerPresent()
+        public override bool _IsWhitelistPlayerPresent(string playerNameToExclude = null)
         {
             UpdateTxlData();
-            return base._IsWhitelistPlayerPresent();
+            return base._IsWhitelistPlayerPresent(playerNameToExclude);
         }
 
 
@@ -124,10 +124,10 @@ namespace DrBlackRat.VRC.ModernUIs.Integrations
 
         #region Getting Players
 
-        public override VRCPlayerApi _GetPlayerInInstance()
+        public override VRCPlayerApi _GetPlayerInInstance(string playerNameToExclude = null)
         {
             UpdateTxlData();
-            return base._GetPlayerInInstance();
+            return base._GetPlayerInInstance(playerNameToExclude);
         }
 
         #endregion

@@ -1,9 +1,9 @@
-Version 0.2.0
+Version 0.2.1
 
 Allows importing & exporting Access TXL to Modern UI Whitelists.
 
 Requirements:
-- ModernUIs V0.10.0 or newer
+- ModernUIs V0.11.0 or newer
 - AccessTXL V1.2.4 or newer
 
 Access TXL To Whitelist Setup:

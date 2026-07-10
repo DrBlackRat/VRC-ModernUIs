@@ -29,12 +29,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         // Cached values
         protected bool formattedNamesChanged = true;
         protected string formattedNames;
-        protected bool whitelistedPlayerPresentChanged = true;
-        protected bool whitelistedPlayerPresent;
         
         protected VRCPlayerApi localPlayerApi;
         protected string localName;
-        private VRCPlayerApi playerLeftLast;
 
         protected const string WHITELIST_UPDATED_EVENT = "_WhitelistUpdated";
 
@@ -42,17 +39,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         {
             localPlayerApi = Networking.LocalPlayer;
             localName = Networking.LocalPlayer.displayName;
-        }
-
-        public override void OnPlayerJoined(VRCPlayerApi player)
-        {
-            whitelistedPlayerPresentChanged = true;
-        }
-        
-        public override void OnPlayerLeft(VRCPlayerApi player)
-        {
-            whitelistedPlayerPresentChanged = true;
-            playerLeftLast = player;
         }
 
         /// <summary>
@@ -98,26 +84,22 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Checks if a whitelisted player is currently present in the instance.
         /// Needs to be checked in <see cref="UdonSharpBehaviour.OnPlayerJoined(VRCPlayerApi)"/> and <see cref="UdonSharpBehaviour.OnPlayerLeft(VRCPlayerApi)"/> to work properly.
         /// </summary>
+        /// <param name="playerNameToExclude">Optional Display Name of a player to exclude from checking.</param>
         /// <returns>bool | True if a whitelisted player is present, false otherwise.</returns>
-        public virtual bool _IsWhitelistPlayerPresent()
+        public virtual bool _IsWhitelistPlayerPresent(string playerNameToExclude = null)
         {
-            if (!whitelistedPlayerPresentChanged)
-                return whitelistedPlayerPresent;
-            
-            whitelistedPlayerPresentChanged = false;
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
             VRCPlayerApi.GetPlayers(players);
+            var hasNameToExclude = string.IsNullOrEmpty(playerNameToExclude);
             
             foreach (var player in players)
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == playerLeftLast) continue;
-                whitelistedPlayerPresent = true;
+                if (hasNameToExclude && player.displayName == playerNameToExclude) continue;
                 return true;
             }
-            
-            whitelistedPlayerPresent = false;
+
             return false;  
         }
         
@@ -271,17 +253,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Returns the <see cref="VRCPlayerApi"/> of a whitelisted player in the instance.
         /// Useful for getting a player to move ownership of an object to.
         /// </summary>
+        /// <param name="playerNameToExclude">Optional Display Name of a player to exclude from checking.</param>
         /// <returns>A <see cref="VRCPlayerApi"/> of a whitelisted player in the instance, or <c>null</c> if none are present.</returns>
-        public virtual VRCPlayerApi _GetPlayerInInstance()
+        public virtual VRCPlayerApi _GetPlayerInInstance(string playerNameToExclude = null)
         {
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
             VRCPlayerApi.GetPlayers(players);
+            var hasNameToExclude = string.IsNullOrEmpty(playerNameToExclude);
             
             foreach (var player in players)
             {
                 if (!player.IsValid()) continue;
                 if (!_IsPlayerWhitelisted(player)) continue;
-                if (player == playerLeftLast) continue;
+                if (hasNameToExclude && player.displayName == playerNameToExclude) continue;
                 return player;
             }
             
@@ -302,7 +286,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
                 MUIDebug.Log($"Whitelist on {gameObject.name} got updated.", gameObject);
             
             // Reset cached values
-            whitelistedPlayerPresentChanged = true;
             formattedNamesChanged = true;
             
             if (connectedBehaviours == null || connectedBehaviours.Count == 0) return;
