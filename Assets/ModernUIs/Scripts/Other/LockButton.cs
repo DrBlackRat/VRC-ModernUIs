@@ -240,8 +240,8 @@ namespace DrBlackRat.VRC.ModernUIs
 
             if (whitelist != null)
             {
-                var newLockingPlayer = whitelist._GetPlayerInInstance();
-                if (newLockingPlayer != null && newLockingPlayer != leavingPlayer)
+                var newLockingPlayer = whitelist._GetPlayerInInstance(leavingPlayer.displayName);
+                if (newLockingPlayer != null)
                 {
                     Lock(newLockingPlayer);
                 }

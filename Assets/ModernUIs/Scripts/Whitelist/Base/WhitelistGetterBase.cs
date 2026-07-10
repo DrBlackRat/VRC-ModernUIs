@@ -102,7 +102,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
 
             return false;  
         }
-        
+
         /// <summary>
         /// Checks if a player is whitelisted.
         /// </summary>

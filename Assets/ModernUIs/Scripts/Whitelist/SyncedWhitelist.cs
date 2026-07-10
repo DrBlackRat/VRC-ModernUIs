@@ -225,7 +225,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         {
             if (adminWhitelist == null)
                 return Networking.Master;
-            return adminWhitelist._GetPlayerInInstance();
+            return adminWhitelist._GetPlayerInInstance(leavingPlayer.displayName);
         }
 
         /// <summary>
