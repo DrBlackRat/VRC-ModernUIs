@@ -66,7 +66,7 @@ namespace DrBlackRat.VRC.ModernUIs.Testing
         protected override VRCPlayerApi GetAllowedSender()
         {
             Debug.Log(LogPrefix + "Getting Allowed Sender");
-            return whitelist._GetPlayerInInstance(LeavingPlayer.displayName);
+            return whitelist._GetPlayerInInstance(LeavingPlayer);
         }
 
         protected override void ApplyNetData(DataDictionary netData)

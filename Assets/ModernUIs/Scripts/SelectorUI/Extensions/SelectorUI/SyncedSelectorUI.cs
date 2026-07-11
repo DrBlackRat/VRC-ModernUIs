@@ -94,7 +94,7 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
         {
             if (whitelist == null)
                 return Networking.Master;
-            return whitelist._GetPlayerInInstance(leavingPlayer.displayName);
+            return whitelist._GetPlayerInInstance(leavingPlayer);
         }
 
         /// <summary>

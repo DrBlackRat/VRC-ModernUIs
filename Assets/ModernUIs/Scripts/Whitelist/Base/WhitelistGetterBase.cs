@@ -84,13 +84,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Checks if a whitelisted player is currently present in the instance.
         /// Needs to be checked in <see cref="UdonSharpBehaviour.OnPlayerJoined(VRCPlayerApi)"/> and <see cref="UdonSharpBehaviour.OnPlayerLeft(VRCPlayerApi)"/> to work properly.
         /// </summary>
-        /// <param name="playerNameToExclude">Optional Display Name of a player to exclude from checking.</param>
+        /// <param name="playerNameToExclude">Display Name of a player to exclude from checking.</param>
         /// <returns>bool | True if a whitelisted player is present, false otherwise.</returns>
-        public virtual bool _IsWhitelistPlayerPresent(string playerNameToExclude = null)
+        public virtual bool _IsWhitelistPlayerPresent(string playerNameToExclude)
         {
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
             VRCPlayerApi.GetPlayers(players);
-            var hasNameToExclude = string.IsNullOrEmpty(playerNameToExclude);
+            var hasNameToExclude = !string.IsNullOrEmpty(playerNameToExclude);
             
             foreach (var player in players)
             {
@@ -101,6 +101,26 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             }
 
             return false;  
+        }
+        /// <summary>
+        /// Checks if a whitelisted player is currently present in the instance.
+        /// Needs to be checked in <see cref="UdonSharpBehaviour.OnPlayerJoined(VRCPlayerApi)"/> and <see cref="UdonSharpBehaviour.OnPlayerLeft(VRCPlayerApi)"/> to work properly.
+        /// </summary>
+        /// <param name="playerApiToExclude"><see cref="VRCPlayerApi"/> of a player to exclude from checking.</param>
+        /// <returns>bool | True if a whitelisted player is present, false otherwise.</returns>
+        public bool _IsWhitelistPlayerPresent(VRCPlayerApi playerApiToExclude)
+        {
+            return _IsWhitelistPlayerPresent(Utilities.IsValid(playerApiToExclude) ? playerApiToExclude.displayName : null);
+        }
+        
+        /// <summary>
+        /// Checks if a whitelisted player is currently present in the instance.
+        /// Needs to be checked in <see cref="UdonSharpBehaviour.OnPlayerJoined(VRCPlayerApi)"/> and <see cref="UdonSharpBehaviour.OnPlayerLeft(VRCPlayerApi)"/> to work properly.
+        /// </summary>
+        /// <returns>bool | True if a whitelisted player is present, false otherwise.</returns>
+        public bool _IsWhitelistPlayerPresent()
+        {
+            return _IsWhitelistPlayerPresent(string.Empty);
         }
 
         /// <summary>
@@ -253,13 +273,13 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
         /// Returns the <see cref="VRCPlayerApi"/> of a whitelisted player in the instance.
         /// Useful for getting a player to move ownership of an object to.
         /// </summary>
-        /// <param name="playerNameToExclude">Optional Display Name of a player to exclude from checking.</param>
+        /// <param name="playerNameToExclude">Display Name of a player to exclude from checking.</param>
         /// <returns>A <see cref="VRCPlayerApi"/> of a whitelisted player in the instance, or <c>null</c> if none are present.</returns>
-        public virtual VRCPlayerApi _GetPlayerInInstance(string playerNameToExclude = null)
+        public virtual VRCPlayerApi _GetPlayerInInstance(string playerNameToExclude)
         {
             var players = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];  
             VRCPlayerApi.GetPlayers(players);
-            var hasNameToExclude = string.IsNullOrEmpty(playerNameToExclude);
+            var hasNameToExclude = !string.IsNullOrEmpty(playerNameToExclude);
             
             foreach (var player in players)
             {
@@ -270,6 +290,27 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist.Base
             }
             
             return null;
+        }
+        
+        /// <summary>
+        /// Returns the <see cref="VRCPlayerApi"/> of a whitelisted player in the instance.
+        /// Useful for getting a player to move ownership of an object to.
+        /// </summary>
+        /// <param name="playerApiToExclude"><see cref="VRCPlayerApi"/> of a player to exclude from checking.</param>
+        /// <returns>A <see cref="VRCPlayerApi"/> of a whitelisted player in the instance, or <c>null</c> if none are present.</returns>
+        public VRCPlayerApi _GetPlayerInInstance(VRCPlayerApi playerApiToExclude)
+        {
+            return _GetPlayerInInstance(Utilities.IsValid(playerApiToExclude) ? playerApiToExclude.displayName : null);
+        }
+        
+        /// <summary>
+        /// Returns the <see cref="VRCPlayerApi"/> of a whitelisted player in the instance.
+        /// Useful for getting a player to move ownership of an object to.
+        /// </summary>
+        /// <returns>A <see cref="VRCPlayerApi"/> of a whitelisted player in the instance, or <c>null</c> if none are present.</returns>
+        public VRCPlayerApi _GetPlayerInInstance()
+        {
+            return _GetPlayerInInstance(string.Empty);
         }
         #endregion
 
