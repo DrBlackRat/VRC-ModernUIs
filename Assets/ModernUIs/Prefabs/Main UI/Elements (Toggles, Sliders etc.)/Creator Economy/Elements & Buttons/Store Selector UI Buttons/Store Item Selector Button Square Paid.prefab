@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 936679801101587345}
   - component: {fileID: 2475166359185740850}
   m_Layer: 17
-  m_Name: Store Item Selector Button Paid
+  m_Name: Store Item Selector Button Square Paid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,8 +55,8 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 70
-  m_PreferredHeight: 100
+  m_PreferredWidth: 66
+  m_PreferredHeight: 98
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -96,7 +96,7 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 2475166359185740850}
   buttonObj: {fileID: 8960610541016414769}
   iconObj: {fileID: 0}
-  textObj: {fileID: 0}
+  graphicObj: {fileID: 0}
   overrideDefaults: 0
   normalColor: {r: 0, g: 0, b: 0, a: 0}
   selectedColor: {r: 0, g: 0, b: 0, a: 0}
@@ -275,6 +275,11 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 3989214456487051560, guid: 196becb69a29fcb47b7a02902e857a96,
+        type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 3995451679148099878, guid: 196becb69a29fcb47b7a02902e857a96,
         type: 3}
       propertyPath: serializationData.Prefab
@@ -417,11 +422,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7642161541253213046, guid: 196becb69a29fcb47b7a02902e857a96,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 27
-      objectReference: {fileID: 0}
     - target: {fileID: 7742786410296674464, guid: 196becb69a29fcb47b7a02902e857a96,
         type: 3}
       propertyPath: m_fontColor.b
@@ -460,17 +460,12 @@ PrefabInstance:
     - target: {fileID: 7895798792725274527, guid: 196becb69a29fcb47b7a02902e857a96,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7895798792725274527, guid: 196becb69a29fcb47b7a02902e857a96,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -36
-      objectReference: {fileID: 0}
-    - target: {fileID: 7895798792725274527, guid: 196becb69a29fcb47b7a02902e857a96,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -3
+      value: -32
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2758180022552859280, guid: 196becb69a29fcb47b7a02902e857a96, type: 3}
@@ -483,15 +478,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3205574228604823520}
   m_SourcePrefab: {fileID: 100100000, guid: 196becb69a29fcb47b7a02902e857a96, type: 3}
---- !u!224 &6293440611605392710 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4373335383977668578, guid: 196becb69a29fcb47b7a02902e857a96,
-    type: 3}
-  m_PrefabInstance: {fileID: 7775464448363528868}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8030598336087628523 stripped
+--- !u!114 &2869993411183524804 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 330334094036277327, guid: 196becb69a29fcb47b7a02902e857a96,
+  m_CorrespondingSourceObject: {fileID: 5490939581613029728, guid: 196becb69a29fcb47b7a02902e857a96,
     type: 3}
   m_PrefabInstance: {fileID: 7775464448363528868}
   m_PrefabAsset: {fileID: 0}
@@ -501,6 +490,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &6293440611605392710 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4373335383977668578, guid: 196becb69a29fcb47b7a02902e857a96,
+    type: 3}
+  m_PrefabInstance: {fileID: 7775464448363528868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8960610541016414769 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1710669084192176277, guid: 196becb69a29fcb47b7a02902e857a96,
@@ -547,7 +542,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 8030598336087628523}
+  m_TargetGraphic: {fileID: 2869993411183524804}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
