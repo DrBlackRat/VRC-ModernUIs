@@ -74,7 +74,7 @@ namespace DrBlackRat.VRC.ModernUIs
         {
             var prevTabs = GetComponentsInChildren<Tab>();
             
-            var newTab = Instantiate(tabPrefab, transform);
+            var newTab = UnityEditor.PrefabUtility.InstantiatePrefab(tabPrefab, transform) as GameObject;
             newTab.name = $"Page {prevTabs.Length + 1}";
 
             if (prevTabs.Length < 2)
