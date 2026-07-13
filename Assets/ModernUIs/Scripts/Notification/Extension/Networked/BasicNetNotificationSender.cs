@@ -48,8 +48,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
-        private void Reset()
+        private void OnValidate()
         {
+            if (netNotificationRelay != null)
+                return;
+            
             netNotificationRelay = FindObjectOfType<NetNotificationRelay>();
         }
 #endif

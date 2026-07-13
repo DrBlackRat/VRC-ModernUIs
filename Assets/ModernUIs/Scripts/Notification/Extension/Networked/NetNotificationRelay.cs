@@ -222,8 +222,11 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         }
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
-        private void Reset()
+        private void OnValidate()
         {
+            if (notificationManager != null)
+                return;
+            
             notificationManager = FindObjectOfType<NotificationManager>();
         }
 #endif

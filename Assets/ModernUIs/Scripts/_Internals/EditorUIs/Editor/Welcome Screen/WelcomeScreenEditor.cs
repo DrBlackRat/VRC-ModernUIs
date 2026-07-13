@@ -8,8 +8,8 @@ using UnityEditor.UIElements;
 
 namespace DrBlackRat.VRC.ModernUIs.Editor
 {
-    [CustomEditor(typeof(EulaScreen))]
-    public class EulaScreenEditor : UnityEditor.Editor
+    [CustomEditor(typeof(WelcomeScreen))]
+    public class WelcomeScreenEditor : UnityEditor.Editor
     {
         public VisualTreeAsset visualTree;
 
