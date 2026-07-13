@@ -155,11 +155,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5083011523168516134, guid: f6d29db6bb7b8444c90fb8f96706865e,
         type: 3}
-      propertyPath: m_Value
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 5083011523168516134, guid: f6d29db6bb7b8444c90fb8f96706865e,
-        type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 5173791354483161627}
@@ -173,10 +168,15 @@ PrefabInstance:
       propertyPath: m_text
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 5396160544872160536, guid: f6d29db6bb7b8444c90fb8f96706865e,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8939148388600855486, guid: f6d29db6bb7b8444c90fb8f96706865e,
         type: 3}
       propertyPath: m_Name
-      value: Example Slider Whitelist
+      value: Slider Whitelist
       objectReference: {fileID: 0}
     - target: {fileID: 9215388134134455872, guid: f6d29db6bb7b8444c90fb8f96706865e,
         type: 3}
@@ -252,7 +252,36 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 5173791354483161627}
   value: 0.25
-  postProcessVolume: {fileID: 0}
+  useCurve: 0
+  sliderCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  postProcessVolumes:
+  - {fileID: 0}
+  audioSources: []
+  animators: []
+  animParamName: sliderValue
   externalBehaviours: []
   updateEventName: _SliderUpdated
   variableName: sliderValue
@@ -264,7 +293,8 @@ MonoBehaviour:
   sliderDisplayFormat: 0
   sliderDisplaySuffix: 
   snapInterval: 0.001
-  whitelistManager: {fileID: 0}
+  loadDelay: 5
+  whitelist: {fileID: 0}
 --- !u!114 &5173791354483161627
 MonoBehaviour:
   m_ObjectHideFlags: 0
