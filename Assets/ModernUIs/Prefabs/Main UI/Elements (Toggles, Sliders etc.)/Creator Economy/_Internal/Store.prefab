@@ -341,7 +341,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.15
+  m_fontSize: 5.35
   m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -483,12 +483,19 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 308827335978703662}
-  owned: 0
-  product: {fileID: 11400000, guid: e316d75a1edfa384dbbe3df82114a514, type: 2}
+  forceOwned: 0
+  products:
+  - {fileID: 11400000, guid: e316d75a1edfa384dbbe3df82114a514, type: 2}
   audioSource: {fileID: 0}
   purchaseSound: {fileID: 0}
-  purchaseObj: {fileID: 8829289681429260943}
-  ownedObj: {fileID: 1222512201238395738}
+  expiredSound: {fileID: 0}
+  notOwnedObjects:
+  - {fileID: 8829289681429260943}
+  ownedObjects:
+  - {fileID: 1222512201238395738}
+  eventReceivers: []
+  onPurchaseEventName: _OnPurchased
+  onExpiredEventName: _OnExpired
 --- !u!114 &308827335978703662
 MonoBehaviour:
   m_ObjectHideFlags: 0
