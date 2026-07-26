@@ -18,12 +18,15 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField, FormerlySerializedAs("owned")]
         [Tooltip("If enabled, the button will act as if the products are owned by the local player.\nShould only be used for debugging.")]
         private bool forceOwned = false;
+        
+        [SerializeField]
+        [Tooltip("If enabled, the player needs to own all products (including the whitelist if provided) to be counted as owning.")]
+        private bool requireAllProducts = false;
         [SerializeField, FormerlySerializedAs("product")]
         [Tooltip("Udon Products the player needs to own.")]
         private UdonProduct[] products;
-        
         [SerializeField]
-        [Tooltip("Whitelist that can be used as a \"Product\", being on it means you own it.")]
+        [Tooltip("Whitelist that can be used as a \"Product\", being on it is similar to owning it.")]
         private WhitelistGetterBase whitelist;
         
         // Sound Effects
@@ -57,102 +60,97 @@ namespace DrBlackRat.VRC.ModernUIs
         
         private bool isWhitelisted = false;
         
+        private int totalProductsCount = 0;
         private int productsOwnedCount = 0;
         private bool ownsProducts = false;
 
         #region Unity, VRChat & ModernUI Events
         private void Start()
         {
+            totalProductsCount = products.Length;
             ownsProducts = forceOwned;
             UpdateExternal();
             
-            if (forceOwned)
+            if (forceOwned || whitelist == null)
+            {
                 return;
-            
-            if (whitelist == null)
-                whitelist._SetUpConnection(this, nameof(_OnWhitelistUpdated));
+            }
+            totalProductsCount++;
+            whitelist._SetUpConnection(this, nameof(_OnWhitelistUpdated));
         }
 
         public override void OnPurchaseConfirmed(IProduct result, VRCPlayerApi player, bool purchased)
         {
             if (!player.isLocal || forceOwned) 
+            {
                 return;
+            }
 
             foreach (var product in products)
             {
-                if (product == null)
-                    continue;
-
-                if (product.ID == result.ID)
+                if (product == null || product.ID != result.ID)
                 {
-                    productsOwnedCount++;
-                    UpdateOwnershipStateAndPlaySound(purchased);
+                    continue;
                 }
+                
+                productsOwnedCount++;
+                UpdateOwnershipStateAndPlaySound(purchased);
+                break;
             }
         }
 
         public override void OnPurchaseExpired(IProduct result, VRCPlayerApi player)
         {
-            if (!player.isLocal || forceOwned) 
+            if (!player.isLocal || forceOwned)
+            {
                 return;
+            }
 
             foreach (var product in products)
             {
-                if (product == null)
-                    continue;
-
-                if (product.ID == result.ID)
+                if (product == null || product.ID != result.ID)
                 {
-                    productsOwnedCount--;
-                    UpdateOwnershipStateAndPlaySound(true);
+                    continue;
                 }
+                
+                productsOwnedCount--;
+                UpdateOwnershipStateAndPlaySound(true);
+                break;
             }
         }
-
+        
         public void _OnWhitelistUpdated()
         {
             var prevIsWhitelisted = isWhitelisted;
             isWhitelisted = whitelist._IsPlayerWhitelisted(Networking.LocalPlayer);
-            
-            if (prevIsWhitelisted == isWhitelisted)
-                return;
 
-            if (isWhitelisted)
+            if (prevIsWhitelisted == isWhitelisted)
             {
-                productsOwnedCount++;
+                return;
             }
-            else
-            {
-                productsOwnedCount--;
-            }
-            
+
+            productsOwnedCount += isWhitelisted ? 1 : -1;
             UpdateOwnershipStateAndPlaySound(true);
         }
         #endregion
 
         private void UpdateOwnershipStateAndPlaySound(bool playSound)
         {
-            if (productsOwnedCount > 0 && !ownsProducts)
+            var newOwnsProducts = requireAllProducts ? productsOwnedCount == totalProductsCount : productsOwnedCount > 0;
+            
+            if (newOwnsProducts == ownsProducts)
             {
-                ownsProducts = true;
-                UpdateExternal();
-                
-                if (playSound && audioSource != null && purchaseSound != null)
-                    audioSource.PlayOneShot(purchaseSound);
-                
                 return;
             }
             
-            if (productsOwnedCount == 0 && ownsProducts)
+            ownsProducts = newOwnsProducts;
+            UpdateExternal();
+            
+            if (!playSound)
             {
-                ownsProducts = false;
-                UpdateExternal();
-                
-                if (playSound && audioSource != null && expiredSound != null)
-                    audioSource.PlayOneShot(expiredSound);
-                    
                 return;
             }
+            TryPlaySound(ownsProducts ? purchaseSound : expiredSound);
         }
         
         private void UpdateExternal()
@@ -177,6 +175,17 @@ namespace DrBlackRat.VRC.ModernUIs
                 if (obj == null) continue;
                 obj.SetActive(!ownsProducts);
             }
+        }
+
+        private bool TryPlaySound(AudioClip clip)
+        {
+            if (audioSource == null || clip == null)
+            {
+                return false;
+            }
+            
+            audioSource.PlayOneShot(clip);
+            return true;
         }
     }
 }

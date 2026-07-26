@@ -9,9 +9,10 @@
     <ui:Foldout text="Settings" view-data-key="SPBSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
         <ui:VisualElement style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
             <ui:Label tabindex="-1" text="Product &amp; Whitelist" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="forceOwned" name="forceOwned" label="Force Own Products" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
+            <uie:PropertyField binding-path="requireAllProducts" name="requireAllProducts" label="Require Owning All Products" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="whitelist" name="whitelist" label="Prodcut Whitelist" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="products" name="product" label="Udon Products" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="forceOwned" name="forceOwned" label="Force Own Products" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Sound Effect" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
             <uie:PropertyField binding-path="audioSource" name="audioSource" label="Audio Source" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="purchaseSound" name="purchaseSound" label="Purchase Sound" style="font-size: 12px; -unity-font-style: normal;" />
