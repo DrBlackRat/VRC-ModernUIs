@@ -21,8 +21,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
 
         [Range(0, 1)] [Tooltip("Volume of the notification sound. Default is 0.25, clamped between 0 and 1.")]
         [SerializeField] private float soundVolume = 0.25f;
-        [Range(50, 150)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
-        [SerializeField] private float width = 100f;
+        [Range(100f, 200f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
+        [SerializeField] private float width = 120f;
         
         [SerializeField] private TMP_InputField headerInputField;
         [SerializeField] private TMP_InputField messageInputField;

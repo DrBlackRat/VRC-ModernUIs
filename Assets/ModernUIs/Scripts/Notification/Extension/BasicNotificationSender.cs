@@ -40,8 +40,8 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         [Range(0f, 60f)] [Tooltip("How long to show the notification for in seconds, this does NOT include the start / end animation.")]
         public float duration = 3f;
-        [Range(50f, 150f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
-        public float width = 80f;
+        [Range(100f, 200f)] [Tooltip("How wide the notification pop up will be, measured in pixel of the UI canvas.")]
+        public float width = 100f;
 
         private bool isWhitelisted;
         public VRCPlayerApi localPlayer;
