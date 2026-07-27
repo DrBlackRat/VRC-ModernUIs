@@ -55,7 +55,7 @@ namespace DrBlackRat.VRC.ModernUIs.SliderUI
         [SerializeField] protected TextMeshProUGUI sliderText;
         [Tooltip("Changes what the slider number will be multiplied by for display.\n- 1 would keep 0.5 as 0.5\n- 100 would turn 0.5 to 50")]
         [SerializeField] protected float sliderDisplayMultiplier = 100f;
-        [Tooltip("What the slider value will be formated as.\n- 0 means it will always at least show one digit\n- 00 means it will fill always be formated as two digits")]
+        [Tooltip("What the slider value will be formated as.\n- 0 means it will always be formated to show no decimal points\n- 0.0 means it will fill always be formated with one decimal point")]
         [SerializeField] protected string sliderDisplayFormat = "0";
         [Tooltip("Text that would be placed at the end of the slider display value, useful for things like \"%\" or \"°\".")]
         [SerializeField] protected string sliderDisplaySuffix;
