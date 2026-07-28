@@ -30,6 +30,8 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private bool removeDuplicateNames = true;
         [Tooltip("If enabled the names will be sorted alphabetically.")]
         [SerializeField] private bool sortNames = true;
+        [Tooltip("Names in this list will not be displayed.")]
+        [SerializeField] private string[] namesToIgnore;
         
         [Tooltip("How to behave when the received name list is empty.\n- Nothing: Just displays an empty string.\n- Hide: Hides the section.\n- EmptyString: Displays the string provided below.")]
         [SerializeField] private EmptyBehaviour emptyBehaviour = EmptyBehaviour.EmptyString;
@@ -176,9 +178,37 @@ namespace DrBlackRat.VRC.ModernUIs
         public void _CleanUpNameList()
         {
             if (removeDuplicateNames)
+            {
                 nameList = nameList.RemoveDuplicates();
+                // Only need to remove the names a maximum of once if duplicates are removed
+                foreach (var nameToIgnore in namesToIgnore)
+                {
+                    if (string.IsNullOrEmpty(nameToIgnore))
+                    {
+                        continue;
+                    }
+                    nameList.Remove(nameToIgnore);
+                }
+            }
+            else
+            {
+                // if duplicates are not removed, remove the names that are in the ignore list, even if they are in there multiple times
+                foreach (var nameToIgnore in namesToIgnore)
+                {
+                    if (string.IsNullOrEmpty(nameToIgnore))
+                    {
+                        continue;
+                    }
+                    nameList.RemoveAll(nameToIgnore);
+                }
+            }
+            
             if (sortNames)
+            {
                 nameList.Sort();
+            }
+
+
         }
 
         public void _GenerateString()
