@@ -1,0 +1,44 @@
+﻿using System;
+using DrBlackRat.VRC.ModernUIs.Whitelist.Base;
+using TMPro;
+using UdonSharp;
+using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using VRC.SDK3.Data;
+using VRC.SDKBase;
+using VRC.Udon;
+using VRC.Udon.Common.Interfaces;
+
+namespace DrBlackRat.VRC.ModernUIs.Whitelist
+{
+    [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
+    public class WhitelistNameDisplay : UdonSharpBehaviour
+    {
+        [FormerlySerializedAs("whitelistManager")]
+        [Tooltip("Whitelist Manager to grab the names from.")]
+        [SerializeField] private WhitelistGetterBase whitelist;
+        
+        [Tooltip("Text Mesh Pro UGUI component that should get the names added to it.")]
+        [SerializeField] private TextMeshProUGUI textMesh;
+        
+        [Tooltip("Text Mesh Pro UGUI component that will have the amount of people on the whitelist displayed.")]
+        [SerializeField] private TextMeshProUGUI countDisplay;
+
+        private void Start()
+        {
+            if (whitelist == null)
+                return;
+            
+            whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
+        }
+
+        public void _WhitelistUpdated()
+        {
+            if (textMesh != null)
+                textMesh.text = whitelist._GetNamesFormatted();
+            if (countDisplay != null)
+                countDisplay.text = whitelist._GetCount().ToString();
+        }
+    }
+}
