@@ -62,15 +62,22 @@ namespace DrBlackRat.VRC.ModernUIs
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
+            ResetCollider();
         }
         public override void OnPlayerRespawn(VRCPlayerApi player)
         {
             if (!player.isLocal) return;
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
+            ResetCollider();
         }
+
+        private void ResetCollider()
+        {
+            OnPlayerTriggerExit(Networking.LocalPlayer);
+            
+            zoneCollider.enabled = false;
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
+        }
+        
         public void _EnableCollider()
         {
             zoneCollider.enabled = true;
