@@ -236,14 +236,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public override void OnPlayerJoined(VRCPlayerApi player)
         {
             if (!player.isLocal || advancedProtection) return;
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
+            ResetCollider();
         }
         public override void OnPlayerRespawn(VRCPlayerApi player)
         {
             if (!player.isLocal || advancedProtection) return;
+            ResetCollider();
+        }
+        private void ResetCollider()
+        {
+            inZone = false;
+            
             zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 0);
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
         }
         public void _EnableCollider()
         {
