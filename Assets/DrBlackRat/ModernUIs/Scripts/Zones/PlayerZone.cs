@@ -29,58 +29,44 @@ namespace DrBlackRat.VRC.ModernUIs
         [Tooltip("Name of the Event that will be fired if the player leaves the Zone.")]
         [SerializeField] protected string exitedZoneEvent = "_ZoneLeft";
         
-        private Collider zoneCollider;
-        private bool inZone; // Workaround for OnPlayerTriggerEnter being fired twice when respawning
-        
         private void Start()
         {
-            zoneCollider = GetComponent<Collider>();
+            UpdateExternal(false);
+        }
+        
+        private void OnDisable()
+        {
             UpdateExternal(false);
         }
         
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            if (!player.isLocal || inZone) return;
-            inZone = true;
+            if (!Utilities.IsValid(player) || 
+                !player.IsValid() ||
+                !player.isLocal)
+            {
+                return;
+            }
+            
+            UpdateExternal(true);
             
             if (logging)
                 MUIDebug.Log($"Player Zone: {gameObject.name} | Player Entered", gameObject);
-            UpdateExternal(true);
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
-            if (!player.isLocal) return;
-            inZone = false;
+            if (!Utilities.IsValid(player) || 
+                !player.IsValid() ||
+                !player.isLocal)
+            {
+                return;
+            }
+            
+            UpdateExternal(false);
             
             if (logging)
                 MUIDebug.Log($"Player Zone: {gameObject.name} | Player Exited", gameObject);
-            UpdateExternal(false);
-        }
-
-        //Spawn / Respawn Fixes
-        public override void OnPlayerJoined(VRCPlayerApi player)
-        {
-            if (!player.isLocal) return;
-            ResetCollider();
-        }
-        public override void OnPlayerRespawn(VRCPlayerApi player)
-        {
-            if (!player.isLocal) return;
-            ResetCollider();
-        }
-
-        private void ResetCollider()
-        {
-            OnPlayerTriggerExit(Networking.LocalPlayer);
-            
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
-        }
-        
-        public void _EnableCollider()
-        {
-            zoneCollider.enabled = true;
         }
 
         private void UpdateExternal(bool state)
@@ -117,9 +103,35 @@ namespace DrBlackRat.VRC.ModernUIs
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
-            zoneCollider = GetComponent<Collider>();
+            var zoneCollider = GetComponent<Collider>();
             zoneCollider.isTrigger = true;
             gameObject.layer = 0;
+        }
+#endif
+        
+#if UNITY_EDITOR
+        // Fix spawning inside the collider being broken in client sim
+        private Collider _collider;
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            if (!player.isLocal)
+            {
+                return;
+            }
+            
+            _collider = GetComponent<Collider>();
+            if (_collider == null)
+            {
+                return;
+            }
+            
+            _collider.enabled = false;
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
+        }
+
+        public void _EnableCollider()
+        {
+            _collider.enabled = true;
         }
 #endif
     }

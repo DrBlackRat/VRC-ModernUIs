@@ -71,9 +71,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             localPlayer = Networking.LocalPlayer;
             
             if (whitelist != null)
+            {
                 whitelist._SetUpConnection(this, nameof(_WhitelistUpdated));
+            }
 
-            SendCustomEventDelayedFrames(nameof(_StartCheckingPlayerInZone), 10);
+            StartChecks();
             hasInitialized = true;
         }
 
@@ -82,7 +84,19 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!hasInitialized) 
                 return;
 
-            _StartCheckingPlayerInZone();
+            StartChecks();
+        }
+
+        private void StartChecks()
+        {
+            if (advancedProtection)
+            {
+                _AdvancedCheckUpdate();
+            }
+            else
+            {
+                SendCustomEventDelayedFrames(nameof(_CheckForZoneBreach), 5);
+            }
         }
 
         private void OnDisable()
@@ -98,27 +112,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (hasFinishedFirstCheck)
                 _CheckForZoneBreach();
         }
-        
-        public void _StartCheckingPlayerInZone()
-        {
-            if (advancedProtection)
-            {
-                _AdvancedCheckUpdate();
-            } 
-            else
-            {
-                zoneCollider.enabled = false;
-                SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
-                SendCustomEventDelayedFrames(nameof(_CheckForZoneBreach), 2);
-            }
-        }
         #endregion
         
         #region Zone Breach Checks
         public void _CheckForZoneBreach()
         {
             if (!isActiveAndEnabled)
+            {
                 return;
+            }
             
             switch (mode)
             {
@@ -145,7 +147,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private bool IsLocalPlayerAllowed()
         {
             if (whitelist == null)
+            {
                 return false;
+            }
 
             switch (whitelistMode)
             {
@@ -167,7 +171,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         private void TeleportPlayer()
         {
             if (!IsTeleportPositionValid())
+            {
                 return;
+            }
             
             MUIDebug.Log($"You are breaching the zone check of the {gameObject.name} zone! Teleporting...", gameObject);
             Networking.LocalPlayer.TeleportTo(teleportTransform.position, teleportTransform.rotation);
@@ -175,9 +181,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         private void SendZoneBreachEvent()
         {
-            if (zoneBreachEventReceivers == null || zoneBreachEventReceivers.Length <= 0) 
-                return;
-            
             foreach (var behaviour in zoneBreachEventReceivers)
             {
                 if (behaviour == null) continue;
@@ -208,6 +211,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Advanced Protection
         public void _AdvancedCheckUpdate()
         {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+            
             Vector3 headPos = localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.Head).position;
             inZone = zoneCollider.bounds.Contains(headPos);
             _CheckForZoneBreach();
@@ -220,48 +228,69 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Simple Protection
         public override void OnPlayerTriggerEnter(VRCPlayerApi player)
         {
-            if (advancedProtection || !player.isLocal || inZone) return;
+            if (advancedProtection ||
+                !Utilities.IsValid(player) || 
+                !player.IsValid() ||
+                !player.isLocal)
+            {
+                return;
+            }           
+            
+            Debug.LogError("Trigger Enter");
+            
             inZone = true;
             _CheckForZoneBreach();
         }
 
         public override void OnPlayerTriggerExit(VRCPlayerApi player)
         {
-            if (advancedProtection || !player.isLocal) return;
+            if (advancedProtection ||
+                !Utilities.IsValid(player) || 
+                !player.IsValid() ||
+                !player.isLocal)
+            {
+                return;
+            }   
+            
+            Debug.LogError("Trigger Exit");
+            
             inZone = false;
             _CheckForZoneBreach();
-        }
-        
-        // Spawn / Respawn Fixes
-        public override void OnPlayerJoined(VRCPlayerApi player)
-        {
-            if (!player.isLocal || advancedProtection) return;
-            ResetCollider();
-        }
-        public override void OnPlayerRespawn(VRCPlayerApi player)
-        {
-            if (!player.isLocal || advancedProtection) return;
-            ResetCollider();
-        }
-        private void ResetCollider()
-        {
-            inZone = false;
-            
-            zoneCollider.enabled = false;
-            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
-        }
-        public void _EnableCollider()
-        {
-            zoneCollider.enabled = true;
         }
         #endregion
         
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         private void Reset()
         {
-            zoneCollider = GetComponent<Collider>();
+            var zoneCollider = GetComponent<Collider>();
             zoneCollider.isTrigger = true;
             gameObject.layer = 0;
+        }
+#endif
+        
+#if UNITY_EDITOR
+        // Fix spawning inside the collider being broken in client sim
+        private Collider _collider;
+        public override void OnPlayerJoined(VRCPlayerApi player)
+        {
+            if (!player.isLocal)
+            {
+                return;
+            }
+            
+            _collider = GetComponent<Collider>();
+            if (_collider == null)
+            {
+                return;
+            }
+            
+            _collider.enabled = false;
+            SendCustomEventDelayedFrames(nameof(_EnableCollider), 1);
+        }
+
+        public void _EnableCollider()
+        {
+            _collider.enabled = true;
         }
 #endif
     }
