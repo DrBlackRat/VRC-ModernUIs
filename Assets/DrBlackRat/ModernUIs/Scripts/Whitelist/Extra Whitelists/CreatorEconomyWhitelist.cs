@@ -66,23 +66,17 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Get Added By Overrides
         public override DataList _GetUsersAddedBy(string username)
         {
-            if (username == localName) 
-                return whitelist.DeepClone();
-            return new DataList();
+            return username == localName ? whitelist.DeepClone() : new DataList();
         }
 
         public override int _GetUsersAddedByCount(string username)
         {
-            if (username == localName) 
-                return whitelist.Count;
-            return 0;
+            return username == localName ? whitelist.Count : 0;
         }
 
         public override string _GetWhoAdded(string username)
         {
-            if (whitelist.Contains(username))
-                return localName;
-            return null;
+            return whitelist.Contains(username) ? localName : null;
         }
         #endregion
     }
