@@ -92,6 +92,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         public void _WhitelistUpdated()
         {
             canEdit = CanEdit(Networking.LocalPlayer);
+            MoveAuthoritativeSenderIfNeeded();
         }
         
         //Networked Version of update Event, if local only is needed use base instead
@@ -348,9 +349,11 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         
         private VRCPlayerApi leavingPlayer;
+        public VRCPlayerApi LeavingPlayer => leavingPlayer;
+
 
         private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
-        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued u
+        private const float NetSendDelay = 0.5f; // Delay between trying to send network events if there are already ones queued up
         #endregion
         
         #region Net VRChat / Unity Event Overrides
@@ -571,6 +574,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
         /// <summary>
         /// Verifies the validity and permissions of the current authoritative sender and reassigns it to a new eligible sender if necessary.
+        /// Should be called whenever there are changes to the allowed senders
         /// </summary>
         /// <remarks>
         /// This method checks whether the current authoritative sender is valid, meets security requirements when secure networking is enabled,
@@ -638,6 +642,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 MUIDebug.Log($"Could not find a new player to transfer Authoritative Sender of {gameObject.name} to. Removing current Authoritative Sender to prevent syncing issues.", gameObject);
                 AuthoritativeSender = null;
+                ResetIfNoAllowedSenderPresent();
                 return;
             }
 
@@ -658,13 +663,23 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 ApplyDefaultData();
                 return;
             }
+            
+            ResetIfNoAllowedSenderPresent();
+        }
 
-            if (resetIfNoAllowedSenderPresent && authoritativeSender == null)
+        /// <summary>
+        /// Resets the instance's data to its default state if there is no valid Authoritative Sender.
+        /// Only used if <see cref="resetIfNoAllowedSenderPresent"/> is enabled.
+        /// </summary>
+        private void ResetIfNoAllowedSenderPresent()
+        {
+            if (!resetIfNoAllowedSenderPresent || authoritativeSender != null)
             {
-                MUIDebug.Log($"Resetting {gameObject.name} to its default state as there is no valid Authoritative Sender.", gameObject);
-                ApplyDefaultData();
                 return;
             }
+            
+            MUIDebug.Log($"Resetting {gameObject.name} to its default state as there is no valid Authoritative Sender.", gameObject);
+            ApplyDefaultData();
         }
         #endregion
     }
