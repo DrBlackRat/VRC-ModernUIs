@@ -37,7 +37,7 @@ namespace DrBlackRat.VRC.ModernUIs.Helpers
         
         [Tooltip("ID at which everything should be turned on for Selector UIs. Should be left at 1 for a simple two state Selector UI Toggle.")]
         [SerializeField] private int enabledId = 1;
-        [Tooltip("If enabled the enabled state will be inverted.")]
+        [Tooltip("If the state should be inverted.")]
         [SerializeField] private bool invert;
 
         /// <summary>

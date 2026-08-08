@@ -1,4 +1,5 @@
 ﻿using DrBlackRat.VRC.ModernUIs.Notifications;
+using DrBlackRat.VRC.ModernUIs.SelectorUI;
 using DrBlackRat.VRC.ModernUIs.Whitelist;
 using UdonSharpEditor;
 using UnityEditor.Callbacks;
@@ -13,6 +14,7 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
         {
             TransferPermissionManagers();
             TransferCustomNetNotificationSenderPresetSelector();
+            TransferSelectorUIRelays();
         }
 
         private static void TransferPermissionManagers()
@@ -34,6 +36,16 @@ namespace DrBlackRat.VRC.ModernUIs.Editor
             {
                 presetSelector.TransferValues();
                 Object.DestroyImmediate(presetSelector);
+            }
+        }
+
+        private static void TransferSelectorUIRelays()
+        {
+            var selectorUIRelays = Object.FindObjectsOfType<SelectorUIRelay>(true);
+            foreach (var selectorUIRelay in selectorUIRelays)
+            {
+                selectorUIRelay.TransferValues();
+                Object.DestroyImmediate(selectorUIRelay);
             }
         }
     }
