@@ -39,6 +39,13 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
             if (!player.IsOwner(gameObject)) return;
             base.OnPlayerRestored(player);
         }
+
+        public override void _WhitelistUpdated()
+        {
+            base._WhitelistUpdated();
+            MoveAuthoritativeSenderIfNeeded();
+        }
+
         #endregion
         
         #region Locking

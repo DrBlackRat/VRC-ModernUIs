@@ -236,8 +236,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 return;
             }           
             
-            Debug.LogError("Trigger Enter");
-            
             inZone = true;
             _CheckForZoneBreach();
         }
@@ -251,8 +249,6 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             {
                 return;
             }   
-            
-            Debug.LogError("Trigger Exit");
             
             inZone = false;
             _CheckForZoneBreach();
