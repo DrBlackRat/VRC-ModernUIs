@@ -6,6 +6,7 @@
 * Requesting access to the room
 * Viewing who is inside the room
 * Hiding who is inside the room
+* Allowing staff to always enter the room by adding them to the Whitelist Combiner
 
 ## How does this work?
 
