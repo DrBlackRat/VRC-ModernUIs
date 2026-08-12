@@ -59,6 +59,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         #region Unity, VRChat & ModernUIs Events
         private void Start()
         {
+            FetchAllPlayers();
+            
             whitelist._SetUpConnection(this, nameof(_OnWhitelistUpdated));
             _hasInitialized = true;
         }
@@ -70,6 +72,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                 return;
             }
             
+            FetchAllPlayers();
             for (int i = 0; i < _currentWhitelistedUsers.Count; i++)
             {
                 if (_playerCache.TryGetValue(_currentWhitelistedUsers[i], TokenType.Reference, out DataToken playerAPIToken))
@@ -88,6 +91,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
                     SetNotWhitelistedVoice((VRCPlayerApi)playerAPIToken.Reference);
                 }
             }
+            
+            _playerCache.Clear();
         }
 
         public override void OnPlayerJoined(VRCPlayerApi player)
@@ -113,6 +118,15 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             UpdatePlayerVoices();
         }
         #endregion
+
+        private void FetchAllPlayers()
+        {
+            var allPlayers = new VRCPlayerApi[VRCPlayerApi.GetPlayerCount()];
+            foreach (var player in allPlayers)
+            {
+                _playerCache.SetValue((DataToken)player.displayName, new DataToken(player));
+            }
+        }
 
         #region Voice Adjustments
         private void UpdatePlayerVoices()
