@@ -53,7 +53,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         /// </summary>
         /// <param name="player"><see cref="VRCPlayerApi"/> of the player to check.</param>
         /// <returns>True if they can, false if not.</returns>
-        protected abstract bool IsAllowedSender(VRCPlayerApi player); // Should essentially be a whitelist._IsPlayerWhitelisted(player)
+        protected abstract bool IsAllowedSender(VRCPlayerApi player);
 
         /// <summary>
         /// Returns the <see cref="VRCPlayerApi"/> of a player in the instance that is allowed to send networked data.
@@ -138,7 +138,8 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         // Authoritative Sender
         private VRCPlayerApi authoritativeSender;
         /// <summary>
-        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master. Can be null if there is currently no valid sender and secure networking is enabled.
+        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master.
+        /// Can be null if there is currently no valid sender and secure networking is enabled.
         /// </summary>
         public VRCPlayerApi AuthoritativeSender
         {
