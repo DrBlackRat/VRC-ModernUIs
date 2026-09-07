@@ -1,5 +1,9 @@
 # Modern UIs Private Room System V1
 
+## Requirements
+
+* ModernUIs V0.12.0
+
 ## Private Room Features
 
 * Locking and unlocking the room
@@ -33,3 +37,8 @@ To set up a private room, drag the Room System Prefab into the scene and adjust 
 5. Move the Teleport Transforms
     * Move the Teleports > Outside Transform to the outside of the room, preferably in front of the Outside UI.
     * Move the Teleports > Inside Transform to the inside of the room, preferably facing the room from the door.
+
+## Credits
+
+* Made by DrBlackRat
+* <https://drblackrat.xyz>
