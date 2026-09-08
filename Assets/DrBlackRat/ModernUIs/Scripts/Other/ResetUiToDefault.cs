@@ -20,7 +20,6 @@ namespace DrBlackRat.VRC.ModernUIs
         
         [Tooltip("Slider UIs which should be reset when pressing the Reset button.")]
         [SerializeField] private SliderUI.SliderUI[] sliderUIs;
-        private float[] sliderUIDefaultValues;
 
         private void Start()
         {
@@ -30,11 +29,6 @@ namespace DrBlackRat.VRC.ModernUIs
                 selectorUIDefaultValues[i] = selectorUIs[i].SelectedState;
             }
             
-            sliderUIDefaultValues = new float[sliderUIs.Length];
-            for (int i = 0; i < sliderUIs.Length; i++)
-            {
-                sliderUIDefaultValues[i] = sliderUIs[i].Value;
-            }
         }
 
         public void _Reset()
@@ -46,7 +40,7 @@ namespace DrBlackRat.VRC.ModernUIs
             
             for (int i = 0; i < sliderUIs.Length; i++)
             {
-                sliderUIs[i]._UpdateValue(sliderUIDefaultValues[i]);
+                sliderUIs[i]._TryReset();
             }
         }
     }

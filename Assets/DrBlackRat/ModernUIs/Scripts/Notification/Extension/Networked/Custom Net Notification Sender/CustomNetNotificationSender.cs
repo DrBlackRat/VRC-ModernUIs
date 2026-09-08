@@ -40,7 +40,7 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             messageInputField.text = message;
             iconSelector._ButtonSelected(iconId);
             soundSelector._ButtonSelected(soundId);
-            durationSlider._UpdateValue(duration);
+            durationSlider._TrySetValue(duration);
         }
         
         public void _SendNotification()
