@@ -11,8 +11,6 @@ namespace DrBlackRat.VRC.ModernUIs.SelectorUI
     [UdonBehaviourSyncMode(BehaviourSyncMode.Manual)]
     public class LockableSyncedSelectorUI : SyncedSelectorUI
     {
-        // This is a legacy class, it is not used anymore
-        
         [Tooltip("Default locked state of the Selector UI.")]
         [SerializeField] protected bool locked;
 
