@@ -1,6 +1,6 @@
 # Download
 
-Secure Networking is available via the [Creator Companion](https://vcc.docs.vrchat.com/) as a VPM package!
+ModernUIs is available via the [Creator Companion](https://vcc.docs.vrchat.com/) as a VPM package!
 
 ### [VPM / Creator Companion Listing](https://vpm.drblackrat.xyz)
 
