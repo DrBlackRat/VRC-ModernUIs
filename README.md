@@ -44,7 +44,7 @@ Modern UIs includes a collection of prefabs, scripts, themes, and other resource
 
 ### Example Scene
 
-If you're just getting started, I highly recommend checking out the included example scene first!
+If you're just getting started, I highly recommend checking out the included demo scene first!
 
 You can open it in Unity under:
 
@@ -56,10 +56,10 @@ The scene showcases different features and examples of how the included componen
 
 You can find all the included assets directly through the Unity menu:
 
-* **Prefabs:** `Tools > DrBlackRat > ModernUIs > Open Prefabs Folder`
-* **Scripts:** `Tools > DrBlackRat > ModernUIs > Open Scripts Folder`
-* **Themes:** `Tools > DrBlackRat > ModernUIs > Open Themes Folder`
-* **Resources:** `Tools > DrBlackRat > ModernUIs > Open Resources Folder`
+* **Prefabs:** `Tools > DrBlackRat > ModernUIs > Show Prefabs Folder`
+* **Scripts:** `Tools > DrBlackRat > ModernUIs > Show Scripts Folder`
+* **Themes:** `Tools > DrBlackRat > ModernUIs > Show Themes Folder`
+* **Resources:** `Tools > DrBlackRat > ModernUIs > Show Resources Folder`
 
 The Themes folder contains the available UI color themes, while the Resources folder contains things like icons, sprites, sound effects, and other shared resources.
 
