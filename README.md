@@ -1,6 +1,6 @@
 # Download
 
-Secure Networking is available via the [Creator Companion](https://vcc.docs.vrchat.com/) as a VPM package!
+ModernUIs is available via the [Creator Companion](https://vcc.docs.vrchat.com/) as a VPM package!
 
 ### [VPM / Creator Companion Listing](https://vpm.drblackrat.xyz)
 
@@ -39,6 +39,16 @@ It focuses on making UI development easier through modular and flexible componen
 You can visit the [Modern UIs Showcase World](https://vrchat.com/home/world/wrld_9da99c69-cbc1-49bf-8a9c-05f0fc7a329a) in VRChat to see a selection of the features and systems included with Modern UIs.
 
 It's a good way to get an idea of how the different components look and behave in an actual world before integrating them into your own projects.
+
+## Worlds using Modern UIs
+
+You can also go and check out some of the world actively using ModernUIs:
+
+- [Modern UIs Showcase](https://vrchat.com/home/world/wrld_9da99c69-cbc1-49bf-8a9c-05f0fc7a329a/info) by DrBlackRat
+- [Furry Hideout](https://vrchat.com/home/world/wrld_4b341546-65ff-4607-9d38-5b7f8f405132) by Lt_Shadow
+- [Slow Down](https://vrchat.com/home/world/wrld_1d1b48cb-780d-46e2-97ed-85aefc866614) by ~Ashy
+- [Cuddle & Sleep](https://vrchat.com/home/world/wrld_7a0c95e2-476c-4655-9b4e-7380933c4fd3) by 「Jаy」
+- [Midnight Loft](https://vrchat.com/home/world/wrld_9b75aff1-2a17-4e08-9f62-b46dd2c5d930/info) by Itz Soph
 
 # How to use it
 
