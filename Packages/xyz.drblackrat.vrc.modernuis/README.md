@@ -14,6 +14,8 @@ If you have questions / need help feel free to join the support Discord!
 
 # What is Modern UIs?
 
+<img width="2048" height="1536" alt="Thumbnail" src="https://github.com/user-attachments/assets/5909f78f-f3a2-4106-8656-eda7b400d5e7" />
+
 Modern UIs is a collection of prefabs, scripts, and UI elements designed to help creators build clean, modern-looking interfaces and permission systems for VRChat worlds.
 
 It focuses on making UI development easier through modular and flexible components while maintaining a polished, modern appearance. The included systems are designed to be easy to integrate and customize for different world setups.
@@ -22,9 +24,9 @@ It focuses on making UI development easier through modular and flexible componen
 
 * Modular prefabs for fast and flexible UI building
 * Built-in permission systems with support for third-party integrations, including:
-  * VRC Linking
-  * DisBridge
-  * AccessTXL
+  * [VRCLinking](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-VRCLinking)
+  * [DisBridge](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-DisBridge)
+  * [AccessTXL](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-VRCLinking)
 * Support for VRChat's Creator Economy
 * Smooth, animation-driven transitions and feedback
 * Customizable UI color themes
