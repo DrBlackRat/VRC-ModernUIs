@@ -8,22 +8,9 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Base
 {
-    // Networking model:
-    // - Only the latest received network state is kept.
-    // - The player whose data was most recently accepted becomes the authoritative sender.
-    // - If validation is temporarily not possible (e.g. whitelist not initialized yet),
-    //   applying that latest state may be retried.
-    // - If newer network data arrives before a retry completes, the older pending state is discarded.
-    // This is intentional to ensure "latest state wins" behavior and avoid stale state application.
-    
-    // Everything below the "Secure Networking Implementation" header needs to be copied and pasted into the
-    // SyncedSelectorUI, SyncedSliderUI, and SyncedWhitelist classes.
-
     /// <summary>
-    /// This class is used as a base for everything that requires secure networking.
-    /// Implement all abstract methods to provide the necessary functionality. Call <see cref="SendNetworkData"/> to send networked data. Call <see cref="MoveAuthoritativeSenderIfNeeded"/> when the result of IsAllowedSender could have changed.
-    /// Either inherit from it or use it as a template. (Due to type limitations, I feel like the later will probably be the case)
-    /// Currently used by: SyncedSliderUI, SyncedSelectorUI, and SyncedWhitelist
+    /// Implementation of https://github.com/DrBlackRat/VRC-Secure-Networking for Modern UIs.
+    /// Implementation details may vary slightly.
     /// </summary>
     public abstract class SecureNetworkingBase : UdonSharpBehaviour
     {
