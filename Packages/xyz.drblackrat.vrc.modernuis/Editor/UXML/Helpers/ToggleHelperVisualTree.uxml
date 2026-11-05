@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/DrBlackRat/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Modern UI | Toggle Helper" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Info" class="section" style="flex-grow: 1; height: auto; width: auto;">
+        <ui:Label tabindex="-1" text="Allows for turning multiple objects on and off. Can be used with a Selector UI or on it&apos;s own.&#10;&#10;For Selector UI support, you need to:&#10;- Set &quot;selectionId&quot; to the corresponding index&#10;- Call &quot;_SelectionChanged&quot;&#10;&#10;For standalone use you need to:&#10;- Call &quot;_TurnOn&quot; to toggle on&#10;- Call &quot;_TurnOff&quot; to toggle of" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="-unity-text-align: middle-left; opacity: 1; margin-top: 2px; font-size: 14px; margin-right: 2px; margin-bottom: 2px; margin-left: 2px; padding-top: 2px; padding-right: 2px; padding-bottom: 2px; padding-left: 2px; justify-content: flex-start; align-self: auto; -unity-font-style: normal; white-space: normal; align-items: auto; text-overflow: clip; height: auto; flex-direction: column; flex-basis: auto; flex-grow: 0; flex-shrink: 0; min-height: auto;" />
+    </ui:VisualElement>
+    <ui:Foldout text="Settings" view-data-key="ToggleHelpeSettings" name="Settings" class="section" style="font-size: 18px; -unity-font-style: bold; margin-left: 6px; padding-left: 20px;">
+        <ui:VisualElement name="Elements" style="flex-grow: 1; padding-right: 0; margin-left: -30px;">
+            <ui:Label tabindex="-1" text="Settings" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="enabledId" name="enabledId" label="Selector ID" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="invert" name="invert" label="Invert" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="General" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="gameObjects" name="gameObjects" label="Game Objects" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="colliders" name="colliders" label="Colliders" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="canvases" name="canvases" label="Canvases" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="pickups" name="pickups" label="Pickups" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="audioSources" name="audioSources" label="Audio Sources" style="font-size: 12px; -unity-font-style: normal;" />
+            <ui:Label tabindex="-1" text="Materials" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="materialRenderer" name="materialRenderer" label="Renderer" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 0;" />
+            <uie:PropertyField binding-path="onlyApplyOnEnable" name="onlyApplyOnEnable" label="Only Apply On Enable" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
+            <uie:PropertyField binding-path="enabledMaterials" name="enabledMaterials" label="Enabled Materials" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="disabledMaterials" name="disabledMaterials" label="Disabled Materials" style="font-size: 12px; -unity-font-style: normal;" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>
