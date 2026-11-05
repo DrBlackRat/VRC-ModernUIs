@@ -24,9 +24,9 @@ It focuses on making UI development easier through modular and flexible componen
 
 * Modular prefabs for fast and flexible UI building
 * Built-in permission systems with support for third-party integrations, including:
-  * VRC Linking
-  * DisBridge
-  * AccessTXL
+  * [VRCLinking](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-VRCLinking)
+  * [DisBridge](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-DisBridge)
+  * [AccessTXL](https://github.com/DrBlackRat/VRC-ModernUIs-Integration-VRCLinking)
 * Support for VRChat's Creator Economy
 * Smooth, animation-driven transitions and feedback
 * Customizable UI color themes
