@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2574995291561492664}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -85,6 +85,8 @@ MonoBehaviour:
   - {fileID: 9184676145620766678}
   enteredZoneEvent: NOT USED
   exitedZoneEvent: _CloseMenu
+  scaleToLocalPlayer: 1
+  referenceHeight: 1.7
 --- !u!114 &337510083916533198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +103,7 @@ MonoBehaviour:
   interactText: Use
   interactTextGO: {fileID: 0}
   proximity: 2
+  OutlineRenderers: []
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
@@ -298,6 +301,8 @@ MonoBehaviour:
   _udonSharpBackingUdonBehaviour: {fileID: 304755119984778651}
   spawnableMenu: {fileID: 4888605969362303924}
   notificationManager: {fileID: 0}
+  showInHistory: 1
+  sourceName: 
   onlyShowOnce: 0
   persistenceKey: hasSeenMenuNotification
   notificationDelay: 2
@@ -331,6 +336,7 @@ MonoBehaviour:
   interactText: Use
   interactTextGO: {fileID: 0}
   proximity: 2
+  OutlineRenderers: []
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
@@ -697,6 +703,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   movementDuration: 0.5
+  referenceHeight: 1.7
+  distanceDisable: {fileID: 1158267239586288950}
 --- !u!114 &9184676145620766678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,6 +721,7 @@ MonoBehaviour:
   interactText: Use
   interactTextGO: {fileID: 0}
   proximity: 2
+  OutlineRenderers: []
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0

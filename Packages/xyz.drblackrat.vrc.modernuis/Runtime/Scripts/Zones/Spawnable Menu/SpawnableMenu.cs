@@ -42,6 +42,17 @@ namespace DrBlackRat.VRC.ModernUIs
         [SerializeField] private AnimationCurve smoothingCurve;
         [SerializeField] private float movementDuration = 0.5f;
 
+        #region Scaling variables
+
+        [Tooltip("When player's Eye Height differs from this value, zone will be rescaled.")]
+        [SerializeField] private float referenceHeight = 1.7f;
+        [Tooltip("If a Distance Disable is set, it will be scaled too.")]
+        [SerializeField] private Transform distanceDisable;
+        private Vector3 distanceDisableOffset;
+        private Vector3 distanceDisableScale;
+
+        #endregion
+
         private bool animate;
         private float animElapsedTime;
         private Vector3 newScale;
@@ -89,6 +100,12 @@ namespace DrBlackRat.VRC.ModernUIs
             
             openScale = menuTransform.localScale;
             menuTransform.localScale = Vector3.zero;
+
+            if (distanceDisable != null)
+            {
+                distanceDisableOffset = distanceDisable.localPosition;
+                distanceDisableScale = distanceDisable.localScale;
+            }
             
             if (mobileUI != null)
                 mobileUI.SetActive(InputManager.GetLastUsedInputMethod() == VRCInputMethod.Touch);
@@ -214,11 +231,19 @@ namespace DrBlackRat.VRC.ModernUIs
             isOpen = true;
 
             var headData = localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
-            menuTransform.position = headData.position + headData.rotation * headOffset;
+            float sizeRatio = localPlayer.GetAvatarEyeHeightAsMeters() / referenceHeight;
+
+            menuTransform.position = headData.position + headData.rotation * headOffset * sizeRatio;
             menuTransform.rotation = headData.rotation;
             transform.position = headData.position;
 
-            AnimateScale(true);
+            if (distanceDisable != null)
+            {
+                distanceDisable.localPosition = distanceDisableOffset * sizeRatio;
+                distanceDisable.localScale = distanceDisableScale * sizeRatio;
+            }
+
+            AnimateScale(true, sizeRatio);
             objectMover.ForceZone(zoneId);
         }
 
@@ -236,11 +261,11 @@ namespace DrBlackRat.VRC.ModernUIs
         #endregion
 
         #region Animation
-        private void AnimateScale(bool open)
+        private void AnimateScale(bool open, float sizeRatio = 1f)
         {
             if (open)
             {
-                newScale = openScale;
+                newScale = openScale * sizeRatio;
                 prevScale = menuTransform.localScale;
             }
             else
