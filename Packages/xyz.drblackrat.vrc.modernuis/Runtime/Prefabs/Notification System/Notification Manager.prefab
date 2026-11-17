@@ -1656,34 +1656,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   startAnimDuration: 0.5
   endAnimDuration: 0.5
+  autoAdjustScale: 1
+  referenceFieldOfView: 60
   shownPos: {x: 0, y: -0.4, z: 1}
   hiddenPos: {x: 0, y: -1.5, z: 2}
   shownScale: {x: 1, y: 1, z: 1}
   hiddenScale: {x: 0, y: 0, z: 0}
-  fovScaleCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.8
-      inSlope: 0
-      outSlope: 0.99999994
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1.8
-      inSlope: 0.99999994
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &5930323010490677426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1700,6 +1678,7 @@ MonoBehaviour:
   interactText: Use
   interactTextGO: {fileID: 0}
   proximity: 2
+  OutlineRenderers: []
   SynchronizePosition: 0
   AllowCollisionOwnershipTransfer: 0
   Reliable: 0
