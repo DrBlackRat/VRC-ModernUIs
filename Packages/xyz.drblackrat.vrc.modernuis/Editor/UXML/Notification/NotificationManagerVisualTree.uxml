@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/ModernUIs/Scripts/_Internals/EditorUIs/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
+    <Style src="project://database/Packages/xyz.drblackrat.vrc.modernuis/Editor/UXML/ModernUIStyle.uss?fileID=7433441132597879392&amp;guid=d6ca4da10a8b8e14b9d313a7713a9f73&amp;type=3#ModernUIStyle" />
     <ui:VisualElement name="Header" class="section" style="flex-grow: 1; height: auto; width: auto;">
         <ui:Label tabindex="-1" text="Modern UI | Notification Manager" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="-unity-text-align: middle-center; opacity: 1; margin-top: 4px; font-size: 25px; margin-right: 4px; margin-bottom: 4px; margin-left: 4px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; justify-content: flex-start; align-self: center; -unity-font-style: bold; white-space: normal;" />
     </ui:VisualElement>
@@ -22,10 +22,11 @@
             <uie:PropertyField binding-path="startAnimDuration" name="startAnimDuration" label="Start Animation Time" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="endAnimDuration" name="endAnimDuration" label="End Animation Time" style="font-size: 12px; -unity-font-style: normal;" />
             <ui:Label tabindex="-1" text="Position &amp; Scale" parse-escape-sequences="true" display-tooltip-when-elided="true" style="font-size: 14px; -unity-font-style: bold; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 3px; margin-right: 0; margin-top: 5px;" />
+            <uie:PropertyField binding-path="autoAdjustScale" name="autoAdjustScale" label="Auto Adjust Scale" style="font-size: 12px; -unity-font-style: normal;" />
+            <uie:PropertyField binding-path="referenceFieldOfView" name="referenceFieldOfView" label="Reference FOV" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="shownPos" name="shownPos" label="Shown Pos" style="font-size: 12px; -unity-font-style: normal;" />
             <uie:PropertyField binding-path="hiddenPos" name="hiddenPos" label="Hidden Pos" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="shownScale" name="shownScale" label="Shown Scale" style="font-size: 12px; -unity-font-style: normal;" />
-            <uie:PropertyField binding-path="fovScaleCurve" name="fovScaleCurve" label="FOV Scale Curve" focusable="false" style="font-size: 12px; -unity-font-style: normal; margin-bottom: 10px;" />
             <uie:PropertyField binding-path="hiddenScale" name="hiddenScale" label="Hidden Scale" style="font-size: 12px; -unity-font-style: normal;" />
         </ui:VisualElement>
     </ui:Foldout>

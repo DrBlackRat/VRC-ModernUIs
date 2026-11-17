@@ -50,13 +50,19 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         [Tooltip("Time spend animating to hide the UI.")] [Range(0f, 5f)]
         [SerializeField] private float endAnimDuration = 0.5f;
         
+        [SerializeField]
+        [Tooltip("If enabled, the notification will automatically adjust it's scale to match the player's FOV.")]
+        private bool autoAdjustScale = true;
+        [SerializeField] 
+        [Tooltip("FOV of the player's camera at which the notification will have it's normal scale. If a player's FOV differs from this value, the notification will be rescaled.")]
+        private float referenceFieldOfView = 60f;
+        
         [SerializeField] private Vector3 shownPos;
         [SerializeField] private Vector3 hiddenPos;
         
         [SerializeField] private Vector3 shownScale = Vector3.one;
         [SerializeField] private Vector3 hiddenScale = Vector3.zero;
-        [Tooltip("Curve used for scaling the notification based on a desktop players FOV.\nLeft: 50°, Right 100°")]
-        [SerializeField] private AnimationCurve fovScaleCurve = AnimationCurve.Linear(0f,0.8f, 1f, 1.8f);
+
         
         private float currentShownDuration;
         private int currentShownId = -1;
@@ -84,9 +90,6 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         
         private VRCPlayerApi localPlayer;
         private float rootCanvasSizeY;
-        
-        private const float MinDesktopFov = 50f;
-        private const float MaxDesktopFov = 100f;
         
         #region Unity & VRChat Events
         private void OnDisable()
@@ -322,18 +325,16 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             scaleTweenHandle.Pause();
             eventTweenHandle.Kill();
         }
-        
-        private Vector3 GetCurrentShownScale()
-        {
-            if (localPlayer.IsUserInVR())
-                return shownScale;
-            
-            var normalizedFov = Mathf.InverseLerp(
-                MinDesktopFov,
-                MaxDesktopFov,
-                VRCCameraSettings.ScreenCamera.FieldOfView);
 
-            return shownScale * fovScaleCurve.Evaluate(normalizedFov);
+        private float FieldOfViewRatio()
+        {
+            if (localPlayer.IsUserInVR() || 
+                !autoAdjustScale)
+            {
+                return 1;
+            }
+            
+            return VRCCameraSettings.ScreenCamera.FieldOfView / referenceFieldOfView;
         }
         
         private void StartAnimation()
@@ -343,15 +344,17 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
             countdownSlider.value = 1;
             sliderTweenHandle.SetDuration(currentShownDuration + startAnimDuration + endAnimDuration)
                 .Restart();
+            var fovRatio = FieldOfViewRatio();
+            var newPos = new Vector3(shownPos.x, shownPos.y * fovRatio, shownPos.z);
             
             notificationTransform.localPosition = hiddenPos;
             posTweenHandle.SetDuration(startAnimDuration)
-                .ChangeEndValue(shownPos, true)
+                .ChangeEndValue(newPos, true)
                 .Restart();
 
             notificationTransform.localScale = hiddenScale;
             scaleTweenHandle.SetDuration(startAnimDuration)
-                .ChangeEndValue(GetCurrentShownScale(), true)
+                .ChangeEndValue(shownScale * fovRatio, true)
                 .Restart();
             
             eventTweenHandle = VRCTween.DelayedCall(this, nameof(_StartHideAnimation), currentShownDuration + startAnimDuration);
@@ -363,9 +366,12 @@ namespace DrBlackRat.VRC.ModernUIs.Notifications
         /// </summary>
         public void _StartHideAnimation()
         {
+            var newPos = new Vector3(hiddenPos.x, hiddenPos.y * FieldOfViewRatio(), hiddenPos.z);
+            
             posTweenHandle.SetDuration(endAnimDuration)
-                .ChangeEndValue(hiddenPos, true)
+                .ChangeEndValue(newPos, true)
                 .Restart();
+            
             scaleTweenHandle.SetDuration(endAnimDuration)
                 .ChangeEndValue(hiddenScale, true)
                 .Restart();
