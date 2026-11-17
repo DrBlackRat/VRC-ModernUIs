@@ -3,6 +3,8 @@ using System;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VRC.SDK3.Components;
+using VRC.SDK3.Rendering;
 using VRC.SDKBase;
 using VRC.Udon;
 using VRC.Udon.Common;
@@ -12,115 +14,125 @@ namespace DrBlackRat.VRC.ModernUIs
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SpawnableMenu : UdonSharpBehaviour
     {
+        #region Variables
+        // Desktop Open Method
+        [SerializeField]
         [Tooltip("Method used for opening the spawnable menu in Desktop.")]
-        [SerializeField] private KeyCode openKey = KeyCode.E;
+        private KeyCode openKey = KeyCode.E;
         public KeyCode OpenKey => openKey;
         
-        [SerializeField] private VRMenuOpenMethod vrOpenMethod = VRMenuOpenMethod.DownAndUp;
-        [Range(0, 5)] [Tooltip("Only used if VR Open Method is Hold Up or Hold Down.\nTime for how long you have to hold the button.")]
-        [SerializeField] private float vrHoldTime = 1f;
-        [Tooltip("How much the stick has to be moved to be considered pressing it.")]
-        [SerializeField] private float vrStickThreshold = 0.8f;
-        
+        // VR Open Method
+        [SerializeField] 
+        private VRMenuOpenMethod vrOpenMethod = VRMenuOpenMethod.DownAndUp;
         public VRMenuOpenMethod VROpenMethod => vrOpenMethod;
+        [SerializeField]
+        [Range(0, 5)] 
+        [Tooltip("Only used if VR Open Method is Hold Up or Hold Down.\nTime for how long you have to hold the button.")]
+        private float vrHoldTime = 1f;
         public float VRHoldTime => vrHoldTime;
-        public GameObject MobileUI => mobileUI;
-
+        [SerializeField]
+        [Tooltip("How much the stick has to be moved to be considered pressing it.")]
+        private float vrStickThreshold = 0.8f;
+        
+        // Mobile Open Method
+        [SerializeField] 
         [Tooltip("UI that is enabled if a player is on a touch device.")]
-        [SerializeField] private GameObject mobileUI;
+        private GameObject mobileUI;
+        public GameObject MobileUI => mobileUI;
         
+        // Settings
+        [SerializeField] 
         [Tooltip("Transform that should be positioned in front of the player using the offset.")]
-        [SerializeField] private Transform menuTransform;
+        private Transform menuTransform;
+        [SerializeField] 
         [Tooltip("Offset from the players camera used to position the menu.")]
-        [SerializeField] private Vector3 headOffset = new Vector3(0f, 0f, 1f);
+        private Vector3 headOffset = new Vector3(0f, 0f, 1f);
         
+        [SerializeField] 
         [Tooltip("Object Mover used to force the menu to the provided transform.")]
-        [SerializeField] private ObjectMover objectMover;
+        private ObjectMover objectMover;
+        [SerializeField] 
         [Tooltip("Id / Index of the zone the transform is attached on the Object Mover.")]
-        [SerializeField] private int zoneId;
+        private int zoneId;
         
-        [SerializeField] private AnimationCurve smoothingCurve;
-        [SerializeField] private float movementDuration = 0.5f;
+        [SerializeField] 
+        private AnimationCurve smoothingCurve;
+        [SerializeField] 
+        private float movementDuration = 0.5f;
 
-        #region Scaling variables
-
-        [Tooltip("When player's Eye Height differs from this value, zone will be rescaled.")]
-        [SerializeField] private float referenceHeight = 1.7f;
-        [Tooltip("If a Distance Disable is set, it will be scaled too.")]
-        [SerializeField] private Transform distanceDisable;
-        private Vector3 distanceDisableOffset;
-        private Vector3 distanceDisableScale;
-
-        #endregion
-
-        private bool animate;
-        private float animElapsedTime;
-        private Vector3 newScale;
-        private Vector3 prevScale;
-
-        private bool isOpen;
-
-        // VR Hold Mode
-        private bool vrIsHolding;
-        private bool vrHoldingOvertime;
-        private float vrHoldElapsed;
+        [SerializeField]
+        [Tooltip("If enabled, the menu will automatically adjust it's scale to match the player's eye height.")]
+        private bool autoAdjustScale = true;
+        [SerializeField] 
+        [Tooltip("Height of the player at which the menu will have it's normal scale. If a player's eye height differs from this value, the menu will be rescaled.")]
+        private float referenceHeight = 1.7f;
+        [SerializeField]
+        [Tooltip("Transform of the distance disable trigger to also scale with the menu.")]
+        private Transform distanceDisable;
         
-        // VR Up Down Mode
-        private bool vrStickWasDown;
-        private bool vrStickDownOverTime;
-        private float vrStickDownElapsed;
+        // Private Variables
+        private bool _isOpen;
+        
+        private bool _vrIsHolding;
+        private bool _vrHoldingOvertime;
+        private float _vrHoldElapsed;
+        
+        private bool _vrStickWasDown;
+        private bool _vrStickDownOverTime;
+        private float _vrStickDownElapsed;
         private const float VrStickDownResetTime = 0.5f;
         
-        private Vector3 openScale;
-        private VRCPlayerApi localPlayer;
+        private Vector3 _openScale;
+        private Vector3 _distanceDisableScale;
+        
+        private VRCTweenHandle _menuScaleTween;
+        
+        private VRCPlayerApi _localPlayer;
+        #endregion
 
         #region Unity & VRChat Events
-        private void OnDisable()
-        {
-            isOpen = false;
-            animate = false;
-            animElapsedTime = 0f;
-
-            menuTransform.localScale = Vector3.zero;
-            objectMover.UnforceZone();
-            
-            // VR Reset
-            vrStickWasDown = false;
-            vrStickDownOverTime = false;
-            vrStickDownElapsed = 0f;
-
-            vrIsHolding = false;
-            vrHoldingOvertime = false;
-            vrHoldElapsed = 0f;
-        }
-
         private void Start()
         {
-            localPlayer = Networking.LocalPlayer;
+            _localPlayer = Networking.LocalPlayer;
             
-            openScale = menuTransform.localScale;
+            _openScale = menuTransform.localScale;
             menuTransform.localScale = Vector3.zero;
 
             if (distanceDisable != null)
             {
-                distanceDisableOffset = distanceDisable.localPosition;
-                distanceDisableScale = distanceDisable.localScale;
+                _distanceDisableScale = distanceDisable.localScale;
             }
-            
+
             if (mobileUI != null)
+            {
                 mobileUI.SetActive(InputManager.GetLastUsedInputMethod() == VRCInputMethod.Touch);
+            }
         }
 
+        private void OnDisable()
+        {
+            _isOpen = false;
+
+            _menuScaleTween.Kill();
+            menuTransform.localScale = Vector3.zero;
+            objectMover.UnforceZone();
+            
+            _vrStickWasDown = false;
+            _vrStickDownOverTime = false;
+            _vrStickDownElapsed = 0f;
+
+            _vrIsHolding = false;
+            _vrHoldingOvertime = false;
+            _vrHoldElapsed = 0f;
+        }
+        
         private void Update()
         {
             CheckInput();
         }
-
-        private bool IsEnabled() => enabled && gameObject.activeInHierarchy;
         #endregion
 
         #region Input Handling
-        // ReSharper disable Unity.PerformanceAnalysis
         private void CheckInput()
         {
             // Desktop
@@ -142,65 +154,67 @@ namespace DrBlackRat.VRC.ModernUIs
 
         private void VRHoldUpdateCheck()
         {
-            if (!vrIsHolding || vrHoldingOvertime) return;
-            vrHoldElapsed += Time.deltaTime;
+            if (!_vrIsHolding || _vrHoldingOvertime) return;
+            _vrHoldElapsed += Time.deltaTime;
 
-            if (vrHoldElapsed < vrHoldTime) return;
+            if (_vrHoldElapsed < vrHoldTime) return;
             _ToggleMenu();
-            vrHoldingOvertime = true;
+            _vrHoldingOvertime = true;
         }
 
         private void VRDownUpUpdateCheck()
         {
-            if (!vrStickWasDown || vrStickDownOverTime) return;
-            vrStickDownElapsed += Time.deltaTime;
+            if (!_vrStickWasDown || _vrStickDownOverTime) return;
+            _vrStickDownElapsed += Time.deltaTime;
 
-            if (vrStickDownElapsed < VrStickDownResetTime) return;
-            vrStickDownOverTime = true;
+            if (_vrStickDownElapsed < VrStickDownResetTime) return;
+            _vrStickDownOverTime = true;
         }
 
         public override void InputLookVertical(float value, UdonInputEventArgs args)
         {
-            if (!IsEnabled()) return;
-            if (!localPlayer.IsUserInVR())
+            if (!isActiveAndEnabled ||
+                !_localPlayer.IsUserInVR())
+            {
                 return;
+            }
             
             switch (vrOpenMethod)
             {
                 case VRMenuOpenMethod.HoldUp:
-                    vrIsHolding = value >= vrStickThreshold;
+                    _vrIsHolding = value >= vrStickThreshold;
                     break;
 
                 case VRMenuOpenMethod.HoldDown:
-                    vrIsHolding = value <= -vrStickThreshold;
+                    _vrIsHolding = value <= -vrStickThreshold;
                     break;
 
                 case VRMenuOpenMethod.DownAndUp:
-                    if (!vrStickWasDown)
+                    if (!_vrStickWasDown)
                     {
-                        vrStickWasDown = value <= -vrStickThreshold;
+                        _vrStickWasDown = value <= -vrStickThreshold;
                     }
                     
-                    if (vrStickDownOverTime && value >= 0)
+                    if (_vrStickDownOverTime && value >= 0)
                     {
-                        vrStickDownElapsed = 0f;
-                        vrStickDownOverTime = false;
-                        vrStickWasDown = false;
+                        _vrStickDownElapsed = 0f;
+                        _vrStickDownOverTime = false;
+                        _vrStickWasDown = false;
                     }
 
-                    if (vrStickWasDown && !vrStickDownOverTime && value >= vrStickThreshold)
+                    if (_vrStickWasDown && !_vrStickDownOverTime && value >= vrStickThreshold)
                     {
-                        vrStickWasDown = false;
-                        vrStickDownElapsed = 0f;
+                        _vrStickWasDown = false;
+                        _vrStickDownElapsed = 0f;
                         _ToggleMenu();
                     }
                     break;
             }
             
-            if (!vrIsHolding)
+            if (!_vrIsHolding)
             {
-                vrHoldElapsed = 0f;
-                vrHoldingOvertime = false;
+                _vrHoldElapsed = 0f;
+                _vrHoldingOvertime = false;
             }
         }
         #endregion
@@ -211,7 +225,7 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _ToggleMenu()
         {
-            if (isOpen)
+            if (_isOpen)
             {
                 _CloseMenu();
             }
@@ -226,96 +240,49 @@ namespace DrBlackRat.VRC.ModernUIs
         /// </summary>
         public void _OpenMenu()
         {
-            if (!IsEnabled()) return;
-            if (isOpen) return;
-            isOpen = true;
+            if (!isActiveAndEnabled || 
+                _isOpen)
+            {
+                return;
+            }
+            _isOpen = true;
 
-            var headData = localPlayer.GetTrackingData(VRCPlayerApi.TrackingDataType.Head);
-            float sizeRatio = localPlayer.GetAvatarEyeHeightAsMeters() / referenceHeight;
+            var screenCamera = VRCCameraSettings.ScreenCamera;
+            float sizeRatio =  autoAdjustScale ? _localPlayer.GetAvatarEyeHeightAsMeters() / referenceHeight : 1;
 
-            menuTransform.position = headData.position + headData.rotation * headOffset * sizeRatio;
-            menuTransform.rotation = headData.rotation;
-            transform.position = headData.position;
+            menuTransform.position = screenCamera.Position + screenCamera.Rotation * headOffset * sizeRatio;
+            menuTransform.rotation = screenCamera.Rotation;
+            transform.position = screenCamera.Position;
 
             if (distanceDisable != null)
             {
-                distanceDisable.localPosition = distanceDisableOffset * sizeRatio;
-                distanceDisable.localScale = distanceDisableScale * sizeRatio;
+                distanceDisable.position = _localPlayer.GetPosition();
+                distanceDisable.localScale = _distanceDisableScale * sizeRatio;
             }
 
-            AnimateScale(true, sizeRatio);
             objectMover.ForceZone(zoneId);
+            
+            _menuScaleTween.Kill();
+            _menuScaleTween = menuTransform.TweenScale(_openScale * sizeRatio, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve);
         }
 
         /// <summary>
-        /// Closed the spawnable menu if currently open.
+        /// Closes the spawnable menu if currently open.
         /// </summary>
         public void _CloseMenu()
         {
-            if (!IsEnabled()) return;
-            if (!isOpen) return;
-            isOpen = false;
-
-            AnimateScale(false);
-        }
-        #endregion
-
-        #region Animation
-        private void AnimateScale(bool open, float sizeRatio = 1f)
-        {
-            if (open)
+            if (!isActiveAndEnabled || 
+                !_isOpen)
             {
-                newScale = openScale * sizeRatio;
-                prevScale = menuTransform.localScale;
+                return;
             }
-            else
-            {
-                newScale = Vector3.zero;
-                prevScale = menuTransform.localScale;
-            }
-            animate = false;
-            SendCustomEventDelayedFrames(nameof(_StartAnimation), 1);
-        }
-        
-        /// <summary>
-        /// Internal Event | DO NOT CALL MANUALLY
-        /// </summary>
-        public void _StartAnimation()
-        {
-            animate = true;
-            animElapsedTime = 0f;
-            _CustomUpdate();
-        }
-        
-        /// <summary>
-        /// Internal Event | DO NOT CALL MANUALLY
-        /// </summary>
-        public void _CustomUpdate()
-        {
-            if (!animate) return;
-            Animate();
-            SendCustomEventDelayedFrames(nameof(_CustomUpdate), 1);
-        }
+            _isOpen = false;
 
-        private void Animate()
-        {
-            animElapsedTime += Time.deltaTime;
-            var percentageComplete = animElapsedTime / movementDuration;
-            var smoothPercentageComplete = smoothingCurve.Evaluate(percentageComplete);
-
-            var scale = Vector3.LerpUnclamped(prevScale, newScale, smoothPercentageComplete);
-            menuTransform.localScale = Vector3.Max(scale, Vector3.zero);
-            
-            if (percentageComplete >= 1f)
-            {
-                animElapsedTime = 0f;
-                animate = false;
-
-                if (!isOpen)
-                {
-                    objectMover.UnforceZone();
-                }
-            }
+            _menuScaleTween.Kill();
+            _menuScaleTween = menuTransform.TweenScale(Vector3.zero, movementDuration, VRCTweenEase.None)
+                .SetEase(smoothingCurve)
+                .OnComplete(objectMover, nameof(objectMover.UnforceZone));
         }
         #endregion
     }
