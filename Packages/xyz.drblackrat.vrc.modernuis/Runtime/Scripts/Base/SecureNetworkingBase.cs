@@ -8,6 +8,11 @@ using VRC.Udon.Common.Interfaces;
 
 namespace DrBlackRat.VRC.ModernUIs.Base
 {
+    // Currently needs to be manually pasted into:
+    // SyncedSelectorUI
+    // SyncedSliderUI
+    // SyncedWhitelist
+    
     /// <summary>
     /// Implementation of https://github.com/DrBlackRat/VRC-Secure-Networking for Modern UIs.
     /// Implementation details may vary slightly.
@@ -144,6 +149,8 @@ namespace DrBlackRat.VRC.ModernUIs.Base
         
         private VRCPlayerApi leavingPlayer;
         public VRCPlayerApi LeavingPlayer => leavingPlayer;
+        
+        private bool hasSentOrReceivedData = false;
 
 
         private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
@@ -277,6 +284,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             }
             
             AuthoritativeSender = netSendingPlayer;
+            hasSentOrReceivedData = true;
             ApplyNetData(netReceiveDataDict);
         }
         #endregion
@@ -333,6 +341,7 @@ namespace DrBlackRat.VRC.ModernUIs.Base
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, netSendJson);
             AuthoritativeSender = localPlayer;
+            hasSentOrReceivedData = true;
             
             if (extraNetLogging)
                 MUIDebug.Log($"Sending network data on {gameObject.name}.", gameObject);
@@ -347,6 +356,8 @@ namespace DrBlackRat.VRC.ModernUIs.Base
             if (!Utilities.IsValid(player))
                 return;
             if (player.isLocal)
+                return;
+            if (!hasSentOrReceivedData)
                 return;
             if (localPlayer != AuthoritativeSender)
                 return;
