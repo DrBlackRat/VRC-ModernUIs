@@ -281,9 +281,9 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         }
         #endregion
         
-        ////////////////////////////
-        // Secure Networking Copy //
-        ////////////////////////////
+        //////////////////////////////////////
+        // Secure Networking Implementation //
+        //////////////////////////////////////
 
         #region Variables
         // General Settings
@@ -333,7 +333,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         // Authoritative Sender
         private VRCPlayerApi authoritativeSender;
         /// <summary>
-        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master. Can be null if there is currently no valid sender and secure networking is enabled.
+        /// The <see cref="VRCPlayerApi"/> of the player who is responsible for sending the current state to new players, usually the last sender or master.
+        /// Can be null if there is currently no valid sender and secure networking is enabled.
         /// </summary>
         public VRCPlayerApi AuthoritativeSender
         {
@@ -351,6 +352,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
         
         private VRCPlayerApi leavingPlayer;
         public VRCPlayerApi LeavingPlayer => leavingPlayer;
+        
+        private bool hasSentOrReceivedData = false;
 
 
         private const int NetMaxQueueSize = 5; // Max number of network events that can be queued at once
@@ -484,6 +487,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             }
             
             AuthoritativeSender = netSendingPlayer;
+            hasSentOrReceivedData = true;
             ApplyNetData(netReceiveDataDict);
         }
         #endregion
@@ -540,6 +544,7 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
 
             SendCustomNetworkEvent(NetworkEventTarget.Others, nameof(OnNetworkedDataReceived), -1, netSendJson);
             AuthoritativeSender = localPlayer;
+            hasSentOrReceivedData = true;
             
             if (extraNetLogging)
                 MUIDebug.Log($"Sending network data on {gameObject.name}.", gameObject);
@@ -554,6 +559,8 @@ namespace DrBlackRat.VRC.ModernUIs.Whitelist
             if (!Utilities.IsValid(player))
                 return;
             if (player.isLocal)
+                return;
+            if (!hasSentOrReceivedData)
                 return;
             if (localPlayer != AuthoritativeSender)
                 return;
